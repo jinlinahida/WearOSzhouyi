@@ -1,0 +1,10 @@
+六十四卦通用解释数据来源与许可声明
+
+文件：hexagram_interpretations.json
+作者：Boompala 项目原创整理
+许可证：CC0 1.0 Universal
+许可证：https://creativecommons.org/publicdomain/zero/1.0/
+
+本文件依据卦名、八卦取象与《周易》的公有领域概念自行写成简短白话概括，
+不复制版权不明的现代解卦文本，也没有自动用神选择或针对具体问题的吉凶断语。
+其内容仅为“通用卦义参考，不代表针对具体问题的确定结论。”

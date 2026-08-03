@@ -1,0 +1,14 @@
+爻辞数据来源与许可声明
+
+本目录的 yao_text.json 由中文维基文库《周易》固定修订版本生成。
+
+原典作品状态：页面标示为 Public Domain（PD-old）。
+数字转录及本文件的结构化改编：CC BY-SA 4.0。
+许可证：https://creativecommons.org/licenses/by-sa/4.0/
+来源总页：https://zh.wikisource.org/w/index.php?title=周易&oldid=7907208
+
+本项目已去除 MediaWiki 展示标记和版式脚注，并重排为 64 个卦、每卦 6 个位置爻辞；
+同时保留每卦的卦辞、彖传与主象传。未加入译文、断语或现代解释。每个卦页的固定修订号和链接记录在 yao_text.json 中。
+
+代码、算法和 UI 不因该数据文件自动变更为 CC BY-SA；数据许可证仅适用于
+yao_text.json 及其衍生的爻辞文本数据。
