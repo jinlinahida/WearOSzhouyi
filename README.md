@@ -79,4 +79,3 @@ app/build/outputs/apk/release/app-release.apk
 - `NOTICE-*.txt`：对应资料来源和许可说明
 
 新增或修改资料时，应同步更新对应的 NOTICE 文件和数据校验测试。
-
