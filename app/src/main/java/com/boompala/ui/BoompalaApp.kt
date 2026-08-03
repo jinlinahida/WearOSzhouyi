@@ -116,6 +116,7 @@ fun BoompalaApp() {
     var xlrReading by remember { mutableStateOf<XiaoLiuRenReading?>(null) }
     var archiveDraft by remember { mutableStateOf<ArchiveDraft?>(null) }
     var archiveDetailId by remember { mutableStateOf<Long?>(null) }
+    var archiveDetail by remember { mutableStateOf<ArchiveRecord?>(null) }
     var archiveReturnScreen by remember { mutableStateOf(AppScreen.HOME) }
     var archiveRefresh by remember { mutableIntStateOf(0) }
     var browserData by remember { mutableStateOf<BrowserData?>(null) }
@@ -225,8 +226,16 @@ fun BoompalaApp() {
 
                         AppScreen.XIAO_LIU_REN -> XiaoLiuRenScreen(xlrEngine, xlrReading, settings.rotaryScrollingEnabled, { xlrReading = it }, { r -> archiveReturnScreen=AppScreen.XIAO_LIU_REN; archiveDraft = ArchiveDraft("", "", 0xFF4CAF50, ArchiveSource.XIAO_LIU_REN, r.timeInfo.gregorianDateTime.toInstant().toEpochMilli(), "最终${r.finalPalace.displayName}", ArchiveSnapshotCodec.encode(r)); screen = AppScreen.ARCHIVE_TAG }, { screen = AppScreen.HOME })
                         AppScreen.ARCHIVE_TAG -> archiveDraft?.let { d -> ArchiveTagScreen(d, archiveRepository, settings.rotaryScrollingEnabled, { Toast.makeText(context, "已保存归档", Toast.LENGTH_SHORT).show(); screen = archiveReturnScreen }, { screen = archiveReturnScreen }) }
-                        AppScreen.ARCHIVES -> { archiveRefresh; ArchiveListScreen(archiveRepository, settings.rotaryScrollingEnabled, { id -> archiveDetailId=id; screen=AppScreen.ARCHIVE_DETAIL }, { screen = AppScreen.HOME }) }
-                        AppScreen.ARCHIVE_DETAIL -> archiveDetailId?.let { id -> archiveRepository.get(id)?.let { record -> ArchiveDetailScreen(record, archiveRepository, settings.rotaryScrollingEnabled, { archiveRefresh++; screen=AppScreen.ARCHIVES }, { screen=AppScreen.ARCHIVES }) } }
+                        AppScreen.ARCHIVES -> ArchiveListScreen(archiveRepository, settings.rotaryScrollingEnabled, archiveRefresh, { id -> archiveDetail=null; archiveDetailId=id; screen=AppScreen.ARCHIVE_DETAIL }, { screen = AppScreen.HOME })
+                        AppScreen.ARCHIVE_DETAIL -> {
+                            val id = archiveDetailId
+                            LaunchedEffect(id) {
+                                archiveDetail = withContext(Dispatchers.IO) { id?.let(archiveRepository::get) }
+                            }
+                            val record = archiveDetail
+                            if (record == null) ArchiveLoadingScreen(settings.rotaryScrollingEnabled)
+                            else ArchiveDetailScreen(record, archiveRepository, settings.rotaryScrollingEnabled, { archiveRefresh++; screen=AppScreen.ARCHIVES }, { screen=AppScreen.ARCHIVES })
+                        }
                         AppScreen.COMPASS -> CompassScreen(settings.rotaryScrollingEnabled) { screen = AppScreen.HOME }
                         AppScreen.BROWSE -> browserData?.let { d -> BrowseHomeScreen(d, settings.rotaryScrollingEnabled, { screen = AppScreen.HEXAGRAM_BROWSER }, { screen = AppScreen.KNOWLEDGE_LIST }, { screen = AppScreen.HOME }) }
                         AppScreen.HEXAGRAM_BROWSER -> browserData?.let { d -> HexagramBrowserScreen(d, settings.rotaryScrollingEnabled, { selectedHexagram = it; screen = AppScreen.HEXAGRAM_DETAIL }, { screen = AppScreen.BROWSE }) }

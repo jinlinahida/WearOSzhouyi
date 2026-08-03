@@ -39,7 +39,17 @@ class ArchiveRepository(context: Context) {
             return buildList { while (c.moveToNext()) runCatching { add(c.toRecord()) } }
         }
     }
-    fun get(id: Long): ArchiveRecord? = list().firstOrNull { it.id == id }
+    fun get(id: Long): ArchiveRecord? = helper.readableDatabase.query(
+        "archives",
+        null,
+        "id=?",
+        arrayOf(id.toString()),
+        null,
+        null,
+        null,
+    ).use { cursor ->
+        if (cursor.moveToFirst()) runCatching { cursor.toRecord() }.getOrNull() else null
+    }
     fun update(id: Long, name: String, note: String, color: Long): Int = helper.writableDatabase.update("archives", android.content.ContentValues().apply { put("name", name); put("note", note); put("color", color) }, "id=?", arrayOf(id.toString()))
     fun delete(id: Long): Int = helper.writableDatabase.delete("archives", "id=?", arrayOf(id.toString()))
     private fun android.database.Cursor.toRecord() = ArchiveRecord(getLong(0), getString(1), getString(2), getLong(3), ArchiveSource.valueOf(getString(4)), getLong(5), getLong(6), getString(7), getString(8), getInt(9))

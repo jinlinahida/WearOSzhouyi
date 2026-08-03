@@ -19,18 +19,33 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.size
 import androidx.wear.compose.material3.*
 import com.boompala.archive.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
-@Composable fun ArchiveListScreen(repo: ArchiveRepository, rotary: Boolean, onSelect: (Long)->Unit, onBack: ()->Unit) {
+@Composable fun ArchiveLoadingScreen(rotary: Boolean) {
+    val m = LocalUiMetrics.current
+    RotaryScrollColumn(rotaryEnabled = rotary, modifier = Modifier.fillMaxSize(), contentPadding = PaddingValues(m.horizontalPadding, m.verticalPadding), itemSpacing = m.itemSpacing) {
+        item { Text("正在加载归档…") }
+    }
+}
+
+@Composable fun ArchiveListScreen(repo: ArchiveRepository, rotary: Boolean, refreshToken: Int = 0, onSelect: (Long)->Unit, onBack: ()->Unit) {
     var source by remember { mutableStateOf<ArchiveSource?>(null) }; var color by remember { mutableStateOf<Long?>(null) }
-    val records = remember(source, color) { repo.list(source, color) }; val m = LocalUiMetrics.current
+    var records by remember { mutableStateOf<List<ArchiveRecord>?>(null) }
+    LaunchedEffect(source, color, refreshToken) {
+        records = null
+        records = withContext(Dispatchers.IO) { repo.list(source, color) }
+    }
+    val m = LocalUiMetrics.current
     RotaryScrollColumn(rotaryEnabled = rotary, modifier = Modifier.fillMaxSize(), contentPadding = PaddingValues(m.horizontalPadding, m.verticalPadding), itemSpacing = m.itemSpacing) {
         item { Text("归档") }
         item { Text("起卦方式"); Column { listOf(null to "全部", ArchiveSource.LIU_YAO to "六爻", ArchiveSource.MEI_HUA to "时间起卦", ArchiveSource.XIAO_LIU_REN to "小六壬").forEach { (s,t) -> OutlinedButton(onClick={source=s}, modifier=Modifier.fillMaxWidth()) { Text(if(source==s) "● $t" else t) } } } }
         item { Text("分类颜色"); Column { listOf(null to "全部颜色", 0xFF4CAF50L to "绿色", 0xFF2196F3L to "蓝色", 0xFFFF9800L to "橙色", 0xFFE91E63L to "粉色").forEach { (c,t) -> OutlinedButton(onClick={color=c}, modifier=Modifier.fillMaxWidth()) { Row { if (c != null) androidx.compose.foundation.layout.Box(Modifier.padding(end=8.dp).size(10.dp).background(Color(c), RoundedCornerShape(50))); Text(if(color==c) "● $t" else t) } } } } }
-        items(records, key={it.id}) { r -> OutlinedButton(onClick={ onSelect(r.id) }, modifier=Modifier.fillMaxWidth()) { Row { androidx.compose.foundation.layout.Box(Modifier.padding(end=8.dp).size(10.dp).background(Color(r.color), RoundedCornerShape(50))); Text("${r.name}\n${r.source.displayName} · ${r.summary}") } } }
+        if (records == null) item { Text("正在加载归档…") }
+        items(records.orEmpty(), key={it.id}) { r -> OutlinedButton(onClick={ onSelect(r.id) }, modifier=Modifier.fillMaxWidth()) { Row { androidx.compose.foundation.layout.Box(Modifier.padding(end=8.dp).size(10.dp).background(Color(r.color), RoundedCornerShape(50))); Text("${r.name}\n${r.source.displayName} · ${r.summary}") } } }
         item { OutlinedButton(onClick=onBack, modifier=Modifier.fillMaxWidth()) { Text("返回首页") } }
     }
 }
