@@ -69,6 +69,7 @@ data class AppSettings(
     val language: AppLanguage = AppLanguage.CHINESE,
     val homeOrder: List<HomeFeature> = HomeFeature.DEFAULT_ORDER,
     val hiddenHomeFeatures: Set<HomeFeature> = emptySet(),
+    val hasCompletedOnboarding: Boolean = false,
 ) {
     companion object {
         val DEFAULT = AppSettings()

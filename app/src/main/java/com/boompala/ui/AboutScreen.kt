@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -29,6 +30,7 @@ import com.boompala.R
 @Composable
 fun AboutScreen(
     rotaryScrollingEnabled: Boolean,
+    onViewWelcomeClick: () -> Unit = {},
     onBack: () -> Unit,
 ) {
     val metrics = LocalUiMetrics.current
@@ -41,7 +43,7 @@ fun AboutScreen(
     ) {
         item(key = "title") {
             Text(
-                text = "关于应用",
+                text = stringResource(R.string.about_title),
                 style = MaterialTheme.typography.titleLarge,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(),
@@ -52,15 +54,15 @@ fun AboutScreen(
         item(key = "app-info-card") {
             ResultCard {
                 Text(
-                    text = "boompala",
+                    text = stringResource(R.string.welcome_app_name),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                 )
                 Text(
-                    text = "离线东方易学与西方塔罗研习工具，单机独立运行，零网络依赖。",
+                    text = stringResource(R.string.about_app_desc),
                     style = MaterialTheme.typography.bodySmall,
                 )
-                DetailField("当前版本", BuildConfig.VERSION_NAME)
+                DetailField(stringResource(R.string.about_version_label), BuildConfig.VERSION_NAME)
             }
         }
 
@@ -68,7 +70,7 @@ fun AboutScreen(
         item(key = "developer-card") {
             ResultCard {
                 Text(
-                    text = "开发者",
+                    text = stringResource(R.string.about_developer_title),
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
                 )
@@ -106,12 +108,12 @@ fun AboutScreen(
         item(key = "disclaimer-card") {
             ResultCard {
                 Text(
-                    text = "免责声明",
+                    text = stringResource(R.string.about_disclaimer_title),
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
                 )
                 Text(
-                    text = "本应用提供的六爻、梅花易数、小六壬、每日运势及塔罗牌等内容仅供传统文化研究、学习与娱乐参考，不构成医疗、法律、金融或任何专业领域的决策建议，请勿将结果作为现实决定的唯一依据。",
+                    text = stringResource(R.string.about_disclaimer_content),
                     style = MaterialTheme.typography.bodySmall,
                 )
             }
@@ -121,7 +123,7 @@ fun AboutScreen(
         item(key = "license-card") {
             ResultCard {
                 Text(
-                    text = "数据与版权声明",
+                    text = stringResource(R.string.about_license_title),
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
                 )
@@ -144,12 +146,25 @@ fun AboutScreen(
             }
         }
 
+        // 5. 重新查看欢迎与声明入口
+        item(key = "welcome-revisit-card") {
+            OutlinedButton(
+                onClick = onViewWelcomeClick,
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text(
+                    text = stringResource(R.string.welcome_revisit_from_about),
+                    textAlign = TextAlign.Center,
+                )
+            }
+        }
+
         item(key = "back") {
             OutlinedButton(
                 onClick = onBack,
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                Text("返回设置")
+                Text(stringResource(R.string.about_back_to_settings))
             }
         }
     }

@@ -133,4 +133,26 @@
     <string name="about_disclaimer_content">All divination content is for traditional cultural study, research and entertainment only, and does not constitute medical, legal or financial advice.</string>
     <string name="about_license_title">Data &amp; License Notices</string>
     <string name="about_back_to_settings">Back to Settings</string>
+
+    <!-- Welcome & Onboarding -->
+    <string name="welcome_title_prefix">Welcome to</string>
+    <string name="welcome_app_name">Boompala</string>
+    <string name="welcome_badge_text">I Ching</string>
+    <string name="welcome_tagline">Offline Eastern Divination &amp; Western Tarot</string>
+    <string name="welcome_tap_to_start">Tap anywhere to begin</string>
+    <string name="welcome_start_button">Review Terms &amp; Enter</string>
+    <string name="welcome_terms_title">Terms &amp; Privacy Notice</string>
+    <string name="welcome_terms_subtitle">Welcome to Boompala. Please review the following terms regarding content nature and data privacy before getting started:</string>
+    <string name="welcome_disclaimer_card_title">🔮</string>
+    <string name="welcome_disclaimer_card_content">All divination features including Six Yao, Mei Hua, Xiao Liu Ren, Daily Fortune, and Tarot are based on traditional cultural classics and are intended strictly for cultural research, philosophical reflection, and entertainment. They do not constitute professional medical, legal, or financial advice.</string>
+    <string name="welcome_offline_card_title">🛡️</string>
+    <string name="welcome_offline_card_content">Boompala is a completely standalone offline tool. It requires zero network permissions, zero location access, and does not collect any personal data. All readings and settings remain securely stored on your local watch device.</string>
+    <string name="welcome_sources_card_title">📜</string>
+    <string name="welcome_sources_card_content">I Ching canonical texts are derived from Wikisource (CC BY-SA 4.0), Ganzhi calendar algorithms from 6tail/lunar-java (MIT), and Tarot illustrations from 1909 public domain restorations (CC0 1.0). Special thanks to open-source contributors.</string>
+    <string name="welcome_terms_footer_hint">By tapping the button below, you acknowledge and agree to the terms above.</string>
+    <string name="welcome_agree_and_enter">Agree &amp; Open Boompala</string>
+    <string name="welcome_revisit_from_about">Welcome &amp; Disclaimers</string>
+    <string name="welcome_revisit_from_about_desc">Review onboarding guide and disclaimers</string>
+    <string name="welcome_step_welcome">Welcome</string>
+    <string name="welcome_step_disclaimer">Terms</string>
 </resources>

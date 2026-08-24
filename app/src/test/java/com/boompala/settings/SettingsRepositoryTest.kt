@@ -83,4 +83,21 @@ class SettingsRepositoryTest {
         assertEquals(secondFeature, current.effectiveHomeOrder().first())
         assertEquals(firstFeature, current.effectiveHomeOrder()[1])
     }
+
+    @Test
+    fun `onboarding status is false by default and can be marked as completed`() = runBlocking {
+        val dataStore = PreferenceDataStoreFactory.create(
+            scope = dataStoreScope,
+            produceFile = { dataStoreFile },
+        )
+        val repository = SettingsRepository(dataStore)
+
+        assertEquals(false, repository.settings.first().hasCompletedOnboarding)
+
+        repository.setOnboardingCompleted(true)
+        assertEquals(true, repository.settings.first().hasCompletedOnboarding)
+
+        val newRepoInstance = SettingsRepository(dataStore)
+        assertEquals(true, newRepoInstance.settings.first().hasCompletedOnboarding)
+    }
 }

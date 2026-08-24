@@ -19,6 +19,7 @@ class AppSettingsTest {
                 language = AppLanguage.CHINESE,
                 homeOrder = HomeFeature.DEFAULT_ORDER,
                 hiddenHomeFeatures = emptySet(),
+                hasCompletedOnboarding = false,
             ),
             AppSettings.DEFAULT,
         )

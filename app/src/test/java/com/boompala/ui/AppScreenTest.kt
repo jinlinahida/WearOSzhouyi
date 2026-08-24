@@ -23,6 +23,11 @@ class AppScreenTest {
     }
 
     @Test
+    fun welcomeEntersFromHomeAndReturnsHome() {
+        assertEquals(AppScreen.HOME, AppScreen.WELCOME.backDestination())
+    }
+
+    @Test
     fun tarotOneCardEntersFromHomeAndReturnsHome() {
         assertEquals(AppScreen.HOME, AppScreen.TAROT_ONE_CARD.backDestination())
     }

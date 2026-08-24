@@ -62,6 +62,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 internal enum class AppScreen {
+    WELCOME,
     HOME,
     YAO_INPUT,
     RESULT,
@@ -84,6 +85,7 @@ internal enum class AppScreen {
 
 internal fun AppScreen.backDestination(): AppScreen? = when (this) {
     AppScreen.HOME -> null
+    AppScreen.WELCOME -> AppScreen.HOME
     AppScreen.YAO_INPUT -> AppScreen.HOME
     AppScreen.RESULT -> AppScreen.YAO_INPUT
     AppScreen.MEIHUA_TIME -> AppScreen.HOME
@@ -136,7 +138,10 @@ fun BoompalaApp() {
     val settings = settingsState!!
     val screenShape = settings.resolvedScreenShape(configuration.isScreenRound)
     val scope = rememberCoroutineScope()
-    var screen by remember { mutableStateOf(AppScreen.HOME) }
+    var screen by remember {
+        mutableStateOf(if (!settings.hasCompletedOnboarding) AppScreen.WELCOME else AppScreen.HOME)
+    }
+    var welcomeReturnScreen by remember { mutableStateOf(AppScreen.HOME) }
     var reading by remember { mutableStateOf<GeneratedReading?>(null) }
     var meiHuaReading by remember { mutableStateOf<MeiHuaTimeReading?>(null) }
     var generatedMeiHuaReading by remember { mutableStateOf<GeneratedMeiHuaReading?>(null) }
@@ -223,7 +228,8 @@ fun BoompalaApp() {
         }
     }
 
-    BackHandler(enabled = backDestination != null) {
+    val isFirstRunWelcome = screen == AppScreen.WELCOME && !settings.hasCompletedOnboarding
+    BackHandler(enabled = !isFirstRunWelcome && backDestination != null) {
         generationId++
         meiHuaGenerationId++
         isGenerating = false
@@ -236,7 +242,7 @@ fun BoompalaApp() {
         if (screen == AppScreen.TAROT_HOLY_TRIANGLE) {
             tarotHolyTriangleReading = null
         }
-        screen = requireNotNull(backDestination)
+        screen = if (screen == AppScreen.WELCOME) welcomeReturnScreen else requireNotNull(backDestination)
     }
 
     MaterialTheme {
@@ -536,8 +542,28 @@ fun BoompalaApp() {
                             },
                         )
 
+                        AppScreen.WELCOME -> WelcomeScreen(
+                            rotaryScrollingEnabled = settings.rotaryScrollingEnabled,
+                            animationsEnabled = settings.animationsEnabled,
+                            onFinish = {
+                                if (!settings.hasCompletedOnboarding) {
+                                    scope.launch {
+                                        settingsRepository.setOnboardingCompleted(true)
+                                    }
+                                }
+                                screen = welcomeReturnScreen
+                            },
+                            onBack = if (welcomeReturnScreen != AppScreen.HOME) {
+                                { screen = welcomeReturnScreen }
+                            } else null,
+                        )
+
                         AppScreen.ABOUT -> AboutScreen(
                             rotaryScrollingEnabled = settings.rotaryScrollingEnabled,
+                            onViewWelcomeClick = {
+                                welcomeReturnScreen = AppScreen.ABOUT
+                                screen = AppScreen.WELCOME
+                            },
                             onBack = { screen = AppScreen.SETTINGS },
                         )
                     }

@@ -133,4 +133,26 @@
     <string name="about_disclaimer_content">本应用提供的六爻、梅花易数、小六壬、每日运势及塔罗牌等内容仅供传统文化研究、学习与娱乐参考，不构成医疗、法律、金融或任何专业领域的决策建议，请勿将结果作为现实决定的唯一依据。</string>
     <string name="about_license_title">数据与版权声明</string>
     <string name="about_back_to_settings">返回设置</string>
+
+    <!-- Welcome & Onboarding -->
+    <string name="welcome_title_prefix">欢迎使用</string>
+    <string name="welcome_app_name">Boompala</string>
+    <string name="welcome_badge_text">易</string>
+    <string name="welcome_tagline">离线东方易学与西方塔罗研习工具</string>
+    <string name="welcome_tap_to_start">轻点屏幕以开始</string>
+    <string name="welcome_start_button">查看声明并进入</string>
+    <string name="welcome_terms_title">使用须知与协议说明</string>
+    <string name="welcome_terms_subtitle">欢迎使用 Boompala。开始前请阅读以下关于内容性质与数据隐私的说明：</string>
+    <string name="welcome_disclaimer_card_title">🔮</string>
+    <string name="welcome_disclaimer_card_content">本应用提供的六爻排盘、梅花易数、小六壬、每日运势及塔罗牌等内容，均基于传统易学典籍与经典牌义推演，仅供文化研习、哲学思考与日常娱乐参考。推演结果不构成医疗、法律、财务或任何专业领域的决策建议，请勿作为现实重大抉择的唯一依据。</string>
+    <string name="welcome_offline_card_title">🛡️</string>
+    <string name="welcome_offline_card_content">Boompala 为纯单机离线工具，无需网络连接、不申请网络与位置权限、不追踪用户行为。您的所有占断记录、笔记与偏好设置均安全存储在手表本地设备中。</string>
+    <string name="welcome_sources_card_title">📜</string>
+    <string name="welcome_sources_card_content">周易经文爻辞源自维基文库（CC BY-SA 4.0），农历干支历法基于 6tail/lunar-java（MIT 开源），塔罗牌图像基于 1909 年经典公有领域修复版本（CC0 1.0）。感谢开源社区与文化典籍贡献者。</string>
+    <string name="welcome_terms_footer_hint">点击下方按钮即表示您已阅读并同意上述说明</string>
+    <string name="welcome_agree_and_enter">同意并开启 Boompala</string>
+    <string name="welcome_revisit_from_about">查看欢迎与声明</string>
+    <string name="welcome_revisit_from_about_desc">重新浏览首次进入指引与声明</string>
+    <string name="welcome_step_welcome">欢迎</string>
+    <string name="welcome_step_disclaimer">声明</string>
 </resources>

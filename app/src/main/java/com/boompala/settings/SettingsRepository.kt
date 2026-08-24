@@ -40,6 +40,7 @@ class SettingsRepository(
                 language = preferences[LANGUAGE_KEY].toEnumOrDefault(AppLanguage.CHINESE),
                 homeOrder = parseHomeOrder(preferences[HOME_ORDER_KEY]),
                 hiddenHomeFeatures = parseHiddenFeatures(preferences[HIDDEN_HOME_FEATURES_KEY]),
+                hasCompletedOnboarding = preferences[ONBOARDING_COMPLETED_KEY] ?: false,
             )
         }
 
@@ -54,6 +55,7 @@ class SettingsRepository(
                 language = preferences[LANGUAGE_KEY].toEnumOrDefault(AppLanguage.CHINESE),
                 homeOrder = parseHomeOrder(preferences[HOME_ORDER_KEY]),
                 hiddenHomeFeatures = parseHiddenFeatures(preferences[HIDDEN_HOME_FEATURES_KEY]),
+                hasCompletedOnboarding = preferences[ONBOARDING_COMPLETED_KEY] ?: false,
             )
             val next = transform(current)
             preferences[SCREEN_MODE_KEY] = next.screenMode.name
@@ -64,6 +66,7 @@ class SettingsRepository(
             preferences[LANGUAGE_KEY] = next.language.name
             preferences[HOME_ORDER_KEY] = next.homeOrder.joinToString(",") { it.id }
             preferences[HIDDEN_HOME_FEATURES_KEY] = next.hiddenHomeFeatures.joinToString(",") { it.id }
+            preferences[ONBOARDING_COMPLETED_KEY] = next.hasCompletedOnboarding
         }
     }
 
@@ -97,6 +100,10 @@ class SettingsRepository(
 
     suspend fun setHiddenHomeFeatures(hidden: Set<HomeFeature>) {
         update { it.copy(hiddenHomeFeatures = hidden) }
+    }
+
+    suspend fun setOnboardingCompleted(completed: Boolean = true) {
+        update { it.copy(hasCompletedOnboarding = completed) }
     }
 
     suspend fun toggleHomeFeatureVisibility(feature: HomeFeature) {
@@ -136,6 +143,7 @@ class SettingsRepository(
         val LANGUAGE_KEY = stringPreferencesKey("language")
         val HOME_ORDER_KEY = stringPreferencesKey("home_order")
         val HIDDEN_HOME_FEATURES_KEY = stringPreferencesKey("hidden_home_features")
+        val ONBOARDING_COMPLETED_KEY = booleanPreferencesKey("onboarding_completed")
 
         inline fun <reified T : Enum<T>> String?.toEnumOrDefault(default: T): T =
             runCatching { enumValueOf<T>(this.orEmpty()) }.getOrDefault(default)
