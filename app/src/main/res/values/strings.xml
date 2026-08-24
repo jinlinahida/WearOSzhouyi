@@ -1,4 +1,136 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Boompala 易学</string>
+    <string name="app_name">boompala</string>
+
+    <!-- Home Navigation & Feature Names -->
+    <string name="home_feature_six_yao">六爻排盘</string>
+    <string name="home_feature_mei_hua">时间起卦</string>
+    <string name="home_feature_tarot_one">单牌塔罗</string>
+    <string name="home_feature_tarot_three">时间流三牌</string>
+    <string name="home_feature_tarot_holy_triangle">圣三角牌阵</string>
+    <string name="home_feature_daily_fortune">今日运势</string>
+    <string name="home_feature_xiao_liu_ren">小六壬</string>
+    <string name="home_feature_compass">罗盘</string>
+    <string name="home_feature_archives">归档</string>
+    <string name="home_feature_browse">浏览</string>
+    <string name="home_feature_settings">设置</string>
+
+    <!-- Common Actions & Navigation -->
+    <string name="action_back">返回</string>
+    <string name="action_back_home">返回首页</string>
+    <string name="action_cancel">取消</string>
+    <string name="action_confirm">确定</string>
+    <string name="action_save">保存</string>
+    <string name="action_delete">删除</string>
+    <string name="action_archive_result">归档此次结果</string>
+    <string name="action_recast">重新排盘</string>
+    <string name="action_move_up">上移</string>
+    <string name="action_move_down">下移</string>
+    <string name="action_show">显示</string>
+    <string name="action_hide">隐藏</string>
+    <string name="action_enabled">已开启</string>
+    <string name="action_disabled">已关闭</string>
+
+    <!-- Settings Modules -->
+    <string name="settings_title">设置</string>
+    <string name="settings_module_appearance">外观与显示</string>
+    <string name="settings_module_appearance_desc">屏幕形态、字阶与动效</string>
+    <string name="settings_module_language">语言 (Language)</string>
+    <string name="settings_module_language_desc">简体中文 / English</string>
+    <string name="settings_module_home">首页管理</string>
+    <string name="settings_module_home_desc">功能排序与显隐设置</string>
+    <string name="settings_module_haptics">交互与触感</string>
+    <string name="settings_module_haptics_desc">表冠旋转与振动反馈</string>
+    <string name="settings_module_data">数据与归档</string>
+    <string name="settings_module_data_desc">记录统计与本地维护</string>
+    <string name="settings_module_about">关于应用</string>
+    <string name="settings_module_about_desc">版本、开发者与开源许可</string>
+
+    <!-- Settings Detail Options -->
+    <string name="settings_screen_mode">屏幕模式</string>
+    <string name="settings_screen_mode_auto">自动检测</string>
+    <string name="settings_screen_mode_round">圆屏</string>
+    <string name="settings_screen_mode_square">方屏</string>
+    <string name="settings_content_size">内容字阶</string>
+    <string name="settings_content_size_small">小</string>
+    <string name="settings_content_size_standard">标准</string>
+    <string name="settings_content_size_large">大</string>
+    <string name="settings_animations">页面过渡动效</string>
+    <string name="settings_rotary">表冠旋转滚动</string>
+    <string name="settings_haptic">触感振动反馈</string>
+    <string name="settings_language_chinese">简体中文</string>
+    <string name="settings_language_english">English</string>
+    <string name="settings_home_fixed_hint">“设置”入口作为系统基础入口，始终固定显示。</string>
+    <string name="settings_data_total">本地总归档数：%1$d 条</string>
+    <string name="settings_data_clear_all">清空全部归档</string>
+    <string name="settings_data_clear_confirm_title">确认清空所有归档？</string>
+    <string name="settings_data_clear_confirm_desc">此操作不可恢复，所有保存在手表本地的归档都将被删除。</string>
+    <string name="settings_data_clear_success">已清空所有归档</string>
+
+    <!-- Daily Fortune -->
+    <string name="daily_fortune_title">今日运势</string>
+    <string name="daily_fortune_loading">排算今日运势…</string>
+    <string name="daily_fortune_day_hexagram">今日主卦 · %1$s</string>
+    <string name="daily_fortune_day_line">今日值日爻 · %1$s</string>
+    <string name="daily_fortune_colors">今日色彩</string>
+    <string name="daily_fortune_lucky_color">幸运色</string>
+    <string name="daily_fortune_support_color">辅助色</string>
+    <string name="daily_fortune_avoid_color">忌色</string>
+    <string name="daily_fortune_numbers">幸运数字</string>
+    <string name="daily_fortune_directions">吉利方位</string>
+    <string name="daily_fortune_hours">黄道吉时</string>
+    <string name="daily_fortune_jianchu">建除十二值 · %1$s</string>
+    <string name="daily_fortune_suitable">宜</string>
+    <string name="daily_fortune_avoid">忌</string>
+    <string name="daily_fortune_disclaimer">传统历法与民俗结构的确定性推演，仅作民俗参考，不断言现实吉凶。</string>
+
+    <!-- Archive Screens -->
+    <string name="archive_title">归档</string>
+    <string name="archive_loading">正在加载归档…</string>
+    <string name="archive_category_title">类别来源</string>
+    <string name="archive_category_all">全部</string>
+    <string name="archive_color_title">分类颜色</string>
+    <string name="archive_color_all">全部颜色</string>
+    <string name="archive_color_green">绿色</string>
+    <string name="archive_color_blue">蓝色</string>
+    <string name="archive_color_orange">橙色</string>
+    <string name="archive_color_pink">粉色</string>
+    <string name="archive_empty">暂无归档记录</string>
+    <string name="archive_field_summary">分类与概要</string>
+    <string name="archive_field_cast_time">起卦时间</string>
+    <string name="archive_field_note">备注</string>
+    <string name="archive_action_edit">修改标记</string>
+    <string name="archive_action_delete">删除归档</string>
+    <string name="archive_tag_title">归档此次结果</string>
+    <string name="archive_tag_summary_prefix">摘要：%1$s</string>
+    <string name="archive_tag_name_required">标记名称（必填）</string>
+    <string name="archive_tag_note_optional">备注（可选）</string>
+    <string name="archive_save_btn">保存归档</string>
+    <string name="archive_edit_dialog_title">修改归档</string>
+    <string name="archive_delete_dialog_title">确认删除？</string>
+    <string name="archive_delete_dialog_desc">删除后不可恢复</string>
+    <string name="archive_save_toast">已保存归档</string>
+    <string name="archive_corrupt_tip">此归档快照损坏或版本不受支持，原始记录仍已保留。</string>
+
+    <!-- Browse -->
+    <string name="browse_title">浏览</string>
+    <string name="browse_hexagrams_title">六十四卦</string>
+    <string name="browse_hexagrams_desc">查看全部卦象与爻辞</string>
+    <string name="browse_tarot_title">塔罗牌库</string>
+    <string name="browse_tarot_desc">78张大/小阿卡纳与牌义</string>
+    <string name="browse_knowledge_title">道教知识</string>
+    <string name="browse_knowledge_desc">了解传统文化体系</string>
+    <string name="browse_basics_title">易学基础</string>
+    <string name="browse_basics_desc">阴阳五行、八卦、干支</string>
+    <string name="browse_filter_category">分类筛选</string>
+
+    <!-- About -->
+    <string name="about_title">关于应用</string>
+    <string name="about_app_desc">离线东方易学与西方塔罗研习工具，单机独立运行，零网络依赖。</string>
+    <string name="about_version_label">当前版本</string>
+    <string name="about_developer_title">开发者</string>
+    <string name="about_disclaimer_title">免责声明</string>
+    <string name="about_disclaimer_content">本应用提供的六爻、梅花易数、小六壬、每日运势及塔罗牌等内容仅供传统文化研究、学习与娱乐参考，不构成医疗、法律、金融或任何专业领域的决策建议，请勿将结果作为现实决定的唯一依据。</string>
+    <string name="about_license_title">数据与版权声明</string>
+    <string name="about_back_to_settings">返回设置</string>
 </resources>

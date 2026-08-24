@@ -1,5 +1,6 @@
 package com.boompala.ui
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.staticCompositionLocalOf
@@ -16,6 +17,10 @@ data class UiMetrics(
     val verticalPadding: Dp,
     val itemSpacing: Dp,
     val cardVerticalPadding: Dp,
+    val screenPadding: PaddingValues = PaddingValues(
+        horizontal = horizontalPadding,
+        vertical = verticalPadding,
+    ),
 )
 
 val LocalUiMetrics = staticCompositionLocalOf {
@@ -44,6 +49,9 @@ fun WithContentScale(
     content: @Composable () -> Unit,
 ) {
     val baseDensity = LocalDensity.current
+    val currentContext = androidx.compose.ui.platform.LocalContext.current
+    val currentConfiguration = androidx.compose.ui.platform.LocalConfiguration.current
+
     val scaledDensity = remember(baseDensity.density, settings.contentSize) {
         androidx.compose.ui.unit.Density(
             density = baseDensity.density,
@@ -53,7 +61,31 @@ fun WithContentScale(
     val metrics = remember(settings.contentSize, screenShape) {
         settings.contentSize.uiMetrics(screenShape)
     }
+
+    val targetLocale = remember(settings.language) {
+        if (settings.language == com.boompala.settings.AppLanguage.ENGLISH) {
+            java.util.Locale.ENGLISH
+        } else {
+            java.util.Locale.SIMPLIFIED_CHINESE
+        }
+    }
+
+    val localizedContext = remember(currentContext, targetLocale) {
+        val config = android.content.res.Configuration(currentContext.resources.configuration).apply {
+            setLocale(targetLocale)
+        }
+        currentContext.createConfigurationContext(config)
+    }
+
+    val localizedConfiguration = remember(currentConfiguration, targetLocale) {
+        android.content.res.Configuration(currentConfiguration).apply {
+            setLocale(targetLocale)
+        }
+    }
+
     CompositionLocalProvider(
+        androidx.compose.ui.platform.LocalContext provides localizedContext,
+        androidx.compose.ui.platform.LocalConfiguration provides localizedConfiguration,
         LocalDensity provides scaledDensity,
         LocalUiMetrics provides metrics,
         content = content,

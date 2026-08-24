@@ -1,6 +1,7 @@
 package com.boompala.ui
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Test
 
@@ -14,6 +15,43 @@ class AppScreenTest {
         assertEquals(AppScreen.HOME, AppScreen.MEIHUA_TIME.backDestination())
         assertEquals(AppScreen.HOME, AppScreen.YAO_INPUT.backDestination())
         assertNull(AppScreen.HOME.backDestination())
+    }
+
+    @Test
+    fun dailyFortuneEntersFromHomeAndReturnsHome() {
+        assertEquals(AppScreen.HOME, AppScreen.DAILY_FORTUNE.backDestination())
+    }
+
+    @Test
+    fun tarotOneCardEntersFromHomeAndReturnsHome() {
+        assertEquals(AppScreen.HOME, AppScreen.TAROT_ONE_CARD.backDestination())
+    }
+
+    @Test
+    fun tarotThreeCardEntersFromHomeAndReturnsHome() {
+        assertEquals(AppScreen.HOME, AppScreen.TAROT_THREE_CARD.backDestination())
+    }
+
+    @Test
+    fun tarotHolyTriangleEntersFromHomeAndReturnsHome() {
+        assertEquals(AppScreen.HOME, AppScreen.TAROT_HOLY_TRIANGLE.backDestination())
+    }
+
+    @Test
+    fun tarotBrowserEntersFromBrowseAndReturnsBrowse() {
+        assertEquals(AppScreen.BROWSE, AppScreen.TAROT_BROWSER.backDestination())
+    }
+
+    @Test
+    fun tarotCardDetailReturnsTarotBrowser() {
+        assertEquals(AppScreen.TAROT_BROWSER, AppScreen.TAROT_CARD_DETAIL.backDestination())
+    }
+
+    @Test
+    fun everyNonHomeScreenKeepsABackDestination() {
+        AppScreen.entries
+            .filter { it != AppScreen.HOME }
+            .forEach { assertNotNull("${it.name} must have a back destination", it.backDestination()) }
     }
 
     @Test

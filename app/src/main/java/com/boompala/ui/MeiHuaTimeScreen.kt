@@ -43,10 +43,7 @@ fun MeiHuaTimeScreen(
     RotaryScrollColumn(
         rotaryEnabled = rotaryScrollingEnabled,
         modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(
-            horizontal = metrics.horizontalPadding,
-            vertical = metrics.verticalPadding,
-        ),
+        contentPadding = metrics.screenPadding,
         itemSpacing = metrics.itemSpacing,
     ) {
         item(key = "meihua-time-title") { Text("时间起卦") }

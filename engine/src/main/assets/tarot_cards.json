@@ -1,0 +1,5595 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "name": "Corpora (English) & Boompala (Chinese Curation)",
+    "license": "CC0 1.0 Universal",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "description": "Standard 78-card Rider-Waite-Smith Tarot dataset: English interpretations from Mark McElroy via CC0 Corpora; Chinese translations, keywords, and structural metadata curated by the Boompala project based on 1909 Public Domain conventions."
+  },
+  "cards": [
+    {
+      "id": 0,
+      "code": "major_00",
+      "nameEn": "The Fool",
+      "nameZh": "愚者",
+      "arcana": "MAJOR",
+      "suit": "MAJOR",
+      "rank": 0,
+      "rankName": "0",
+      "element": "AIR",
+      "keywordsEn": [
+        "freedom",
+        "faith",
+        "inexperience",
+        "innocence"
+      ],
+      "keywordsZh": [
+        "自由",
+        "纯真",
+        "冒险",
+        "新起点"
+      ],
+      "uprightMeanings": [
+        "突破既有限制，开启全新的人生旅程",
+        "保持孩童般的纯真、好奇心与探索潜能",
+        "倾听内在直觉，勇敢迈出信任与冒险的一步",
+        "接纳生活中的变化与未知，以开放的心态拥抱无限可能"
+      ],
+      "reversedMeanings": [
+        "轻率鲁莽，盲目承担不必要的未知风险",
+        "缺乏经验与规划，难以在重要关头保持严谨专注",
+        "忽视现实规则与既有经验，行事过于天真任性",
+        "逃避责任，在错误的时间做出不合时宜的举动"
+      ],
+      "fortuneTelling": [
+        "即将迎来新的机遇或新起点，勇敢迈出第一步",
+        "保持开放与乐观，未知的道路上蕴藏转机"
+      ],
+      "uprightMeaningsEn": [
+        "Freeing yourself from limitation",
+        "Expressing joy and youthful vigor",
+        "Being open-minded",
+        "Taking a leap of faith",
+        "Attuning yourself to your instincts",
+        "Being eager or curious",
+        "Exploring your potential",
+        "Embracing innovation and change"
+      ],
+      "reversedMeaningsEn": [
+        "Being gullible and naive",
+        "Taking unnecessary risks",
+        "Failing to be serious when required",
+        "Being silly or distracted",
+        "Lacking experience",
+        "Failing to honor well-established traditions and limits",
+        "Behaving inappropriately"
+      ],
+      "fortuneTellingEn": [
+        "Watch for new projects and new beginnings",
+        "Prepare to take something on faith",
+        "Something new comes your way; go for it"
+      ],
+      "uprightMeaningsZh": [
+        "突破既有限制，开启全新的人生旅程",
+        "保持孩童般的纯真、好奇心与探索潜能",
+        "倾听内在直觉，勇敢迈出信任与冒险的一步",
+        "接纳生活中的变化与未知，以开放的心态拥抱无限可能"
+      ],
+      "reversedMeaningsZh": [
+        "轻率鲁莽，盲目承担不必要的未知风险",
+        "缺乏经验与规划，难以在重要关头保持严谨专注",
+        "忽视现实规则与既有经验，行事过于天真任性",
+        "逃避责任，在错误的时间做出不合时宜的举动"
+      ],
+      "fortuneTellingZh": [
+        "即将迎来新的机遇或新起点，勇敢迈出第一步",
+        "保持开放与乐观，未知的道路上蕴藏转机"
+      ]
+    },
+    {
+      "id": 1,
+      "code": "major_01",
+      "nameEn": "The Magician",
+      "nameZh": "魔术师",
+      "arcana": "MAJOR",
+      "suit": "MAJOR",
+      "rank": 1,
+      "rankName": "1",
+      "element": "AIR",
+      "keywordsEn": [
+        "capability",
+        "empowerment",
+        "activity"
+      ],
+      "keywordsZh": [
+        "创造力",
+        "意志力",
+        "行动",
+        "专注"
+      ],
+      "uprightMeanings": [
+        "具备将想法转化为现实的强大能力与创造力",
+        "万事俱备，资源、技能与时机高度契合",
+        "专注且有条不紊地推进目标，掌握主动权",
+        "清晰表达自身意志，展现出众的沟通与协调魅力"
+      ],
+      "reversedMeanings": [
+        "才华错用，过度自信导致眼高手低或缺乏执行",
+        "弄巧成拙，试图通过隐瞒或操纵手段达成目的",
+        "缺乏深入沉淀的耐心，总想走捷径或投机取巧",
+        "沟通受阻，承诺难以兑现或言行不一"
+      ],
+      "fortuneTelling": [
+        "你拥有达成目标所需的一切条件，果断采取行动",
+        "当前处于主动掌控局面的有利位置，保持专注"
+      ],
+      "uprightMeaningsEn": [
+        "Taking appropriate action",
+        "Receiving guidance from a higher power",
+        "Becoming a channel of divine will",
+        "Expressing masculine energy in appropriate and constructive ways",
+        "Being yourself in every way"
+      ],
+      "reversedMeaningsEn": [
+        "Inflating your own ego",
+        "Abusing talents",
+        "Manipulating or deceiving others",
+        "Being too aggressive",
+        "Using cheap illusions to dazzle others",
+        "Refusing to invest the time and effort needed to master your craft",
+        "Taking shortcuts"
+      ],
+      "fortuneTellingEn": [
+        "A powerful man may play a role in your day",
+        "Your current situation must be seen as one element of a much larger plan"
+      ],
+      "uprightMeaningsZh": [
+        "具备将想法转化为现实的强大能力与创造力",
+        "万事俱备，资源、技能与时机高度契合",
+        "专注且有条不紊地推进目标，掌握主动权",
+        "清晰表达自身意志，展现出众的沟通与协调魅力"
+      ],
+      "reversedMeaningsZh": [
+        "才华错用，过度自信导致眼高手低或缺乏执行",
+        "弄巧成拙，试图通过隐瞒或操纵手段达成目的",
+        "缺乏深入沉淀的耐心，总想走捷径或投机取巧",
+        "沟通受阻，承诺难以兑现或言行不一"
+      ],
+      "fortuneTellingZh": [
+        "你拥有达成目标所需的一切条件，果断采取行动",
+        "当前处于主动掌控局面的有利位置，保持专注"
+      ]
+    },
+    {
+      "id": 2,
+      "code": "major_02",
+      "nameEn": "The High Priestess",
+      "nameZh": "女祭司",
+      "arcana": "MAJOR",
+      "suit": "MAJOR",
+      "rank": 2,
+      "rankName": "2",
+      "element": "WATER",
+      "keywordsEn": [
+        "intuition",
+        "reflection",
+        "purity",
+        "initiation"
+      ],
+      "keywordsZh": [
+        "直觉",
+        "潜意识",
+        "神秘",
+        "智慧"
+      ],
+      "uprightMeanings": [
+        "倾听内心深处的直觉与潜意识的隐秘智慧",
+        "以静制动，在观察与反思中洞悉事物本质",
+        "保守秘密与沉淀内心，保持超然纯粹的心境",
+        "追求深层灵性认知与内在知识的积累"
+      ],
+      "reversedMeanings": [
+        "过分孤僻冷漠，与外界和他人产生疏离与隔阂",
+        "忽视身体与内心的直觉警告，陷入无端猜忌",
+        "过于压抑真实情感，或过早泄露不宜公开的秘密",
+        "表面平静但内心焦虑，难以获得真正的安宁"
+      ],
+      "fortuneTelling": [
+        "此时宜静不宜动，多向内省察，答案藏在你的直觉中",
+        "某些隐秘信息尚未完全显现，耐心等待时机成熟"
+      ],
+      "uprightMeaningsEn": [
+        "Listening to your feelings and intuitions",
+        "Exploring unconventional spirituality",
+        "Keeping secrets",
+        "Being receptive",
+        "Reflecting instead of acting",
+        "Observing others",
+        "Preserving purity"
+      ],
+      "reversedMeaningsEn": [
+        "Being aloof",
+        "Obsessing on secrets and conspiracies",
+        "Rejecting guidance from spirit or intuition",
+        "Revealing all",
+        "Ignoring gut feelings",
+        "Refusing to become involved, even when involvement is appropriate"
+      ],
+      "fortuneTellingEn": [
+        "A mysterious woman arrives",
+        "A sexual secret may surface",
+        "Someone knows more than he or she will reveal"
+      ],
+      "uprightMeaningsZh": [
+        "倾听内心深处的直觉与潜意识的隐秘智慧",
+        "以静制动，在观察与反思中洞悉事物本质",
+        "保守秘密与沉淀内心，保持超然纯粹的心境",
+        "追求深层灵性认知与内在知识的积累"
+      ],
+      "reversedMeaningsZh": [
+        "过分孤僻冷漠，与外界和他人产生疏离与隔阂",
+        "忽视身体与内心的直觉警告，陷入无端猜忌",
+        "过于压抑真实情感，或过早泄露不宜公开的秘密",
+        "表面平静但内心焦虑，难以获得真正的安宁"
+      ],
+      "fortuneTellingZh": [
+        "此时宜静不宜动，多向内省察，答案藏在你的直觉中",
+        "某些隐秘信息尚未完全显现，耐心等待时机成熟"
+      ]
+    },
+    {
+      "id": 3,
+      "code": "major_03",
+      "nameEn": "The Empress",
+      "nameZh": "女皇",
+      "arcana": "MAJOR",
+      "suit": "MAJOR",
+      "rank": 3,
+      "rankName": "3",
+      "element": "EARTH",
+      "keywordsEn": [
+        "fertility",
+        "productivity",
+        "ripeness",
+        "nurturing"
+      ],
+      "keywordsZh": [
+        "丰饶",
+        "滋养",
+        "母性",
+        "创造力"
+      ],
+      "uprightMeanings": [
+        "享受充盈丰盛的物质与情感滋养，生活和谐美好",
+        "孕育新生命、新创意或具有丰硕产出的项目",
+        "散发包容、温暖与母性关怀的亲和魅力",
+        "沉浸于大自然与艺术之美，感知当下的富足感"
+      ],
+      "reversedMeanings": [
+        "过度沉溺于感官享受或物质贪欲，失去节制",
+        "在人际交往中过分控制或过度保护，令人窒息",
+        "过于注重外在形式而忽略内在创造力的枯竭",
+        "情绪波动较大，在付出与索取之间失去平衡"
+      ],
+      "fortuneTelling": [
+        "当前处于收获与滋养的丰盛周期，尽情感受生活之美",
+        "付出的关怀与努力即将结出甜美的果实"
+      ],
+      "uprightMeaningsEn": [
+        "Nurturing yourself and others",
+        "Bearing fruit",
+        "Celebrating your body",
+        "Bearing (literal or figurative) children",
+        "Reveling in luxury",
+        "Mothering those around you in positive ways",
+        "Enjoying your sexuality",
+        "Getting things done"
+      ],
+      "reversedMeaningsEn": [
+        "Overindulging",
+        "Being greedy",
+        "Smothering someone with attention",
+        "Debilitating someone by being overprotective",
+        "Inhibiting productivity by obsessing on productivity",
+        "Being overcome by addictive behavior"
+      ],
+      "fortuneTellingEn": [
+        "Pregnancy is in the cards",
+        "An opportunity to be involved in luxurious sexuality is coming",
+        "Beware a tendency toward addiction"
+      ],
+      "uprightMeaningsZh": [
+        "享受充盈丰盛的物质与情感滋养，生活和谐美好",
+        "孕育新生命、新创意或具有丰硕产出的项目",
+        "散发包容、温暖与母性关怀的亲和魅力",
+        "沉浸于大自然与艺术之美，感知当下的富足感"
+      ],
+      "reversedMeaningsZh": [
+        "过度沉溺于感官享受或物质贪欲，失去节制",
+        "在人际交往中过分控制或过度保护，令人窒息",
+        "过于注重外在形式而忽略内在创造力的枯竭",
+        "情绪波动较大，在付出与索取之间失去平衡"
+      ],
+      "fortuneTellingZh": [
+        "当前处于收获与滋养的丰盛周期，尽情感受生活之美",
+        "付出的关怀与努力即将结出甜美的果实"
+      ]
+    },
+    {
+      "id": 4,
+      "code": "major_04",
+      "nameEn": "The Emperor",
+      "nameZh": "皇帝",
+      "arcana": "MAJOR",
+      "suit": "MAJOR",
+      "rank": 4,
+      "rankName": "4",
+      "element": "FIRE",
+      "keywordsEn": [
+        "authority",
+        "regulation",
+        "direction",
+        "structure"
+      ],
+      "keywordsZh": [
+        "权威",
+        "秩序",
+        "稳定",
+        "领导力"
+      ],
+      "uprightMeanings": [
+        "建立稳固的秩序、规范与严密的组织架构",
+        "展现坚定果敢的领导力与掌控大局的成熟威望",
+        "凭借经验与理性判断，打造长期可靠的现实基石",
+        "言出必行，承担起守护团队或家庭的重任"
+      ],
+      "reversedMeanings": [
+        "专制固执，以严苛死板的手段压制他人的创造力",
+        "控制欲过强，因缺乏灵活性而导致人际关系紧张",
+        "滥用职权或外强中干，难以真正赢得他人信服",
+        "面对混乱局势感到力不从心，秩序濒临失控"
+      ],
+      "fortuneTelling": [
+        "需要明确界限与规章，依靠理性与自律推进计划",
+        "权威人士或长辈可能为你提供有力的支持与指引"
+      ],
+      "uprightMeaningsEn": [
+        "Exercising authority",
+        "Defining limits",
+        "Directing the flow of work",
+        "Communicating clear guidelines",
+        "Being in control of yourself and others",
+        "Tempering aggressive masculinity with wisdom and experience"
+      ],
+      "reversedMeaningsEn": [
+        "Micromanaging",
+        "Crushing the creativity of others with a rigid, iron-fisted approach",
+        "Insisting on getting your own way",
+        "Assuming a dictatorial mindset",
+        "Using overt force to achieve your goals and maintain order"
+      ],
+      "fortuneTellingEn": [
+        "A father figure arrives",
+        "A new employer or authority figure will give you orders",
+        "Expect discipline or correction in the near future"
+      ],
+      "uprightMeaningsZh": [
+        "建立稳固的秩序、规范与严密的组织架构",
+        "展现坚定果敢的领导力与掌控大局的成熟威望",
+        "凭借经验与理性判断，打造长期可靠的现实基石",
+        "言出必行，承担起守护团队或家庭的重任"
+      ],
+      "reversedMeaningsZh": [
+        "专制固执，以严苛死板的手段压制他人的创造力",
+        "控制欲过强，因缺乏灵活性而导致人际关系紧张",
+        "滥用职权或外强中干，难以真正赢得他人信服",
+        "面对混乱局势感到力不从心，秩序濒临失控"
+      ],
+      "fortuneTellingZh": [
+        "需要明确界限与规章，依靠理性与自律推进计划",
+        "权威人士或长辈可能为你提供有力的支持与指引"
+      ]
+    },
+    {
+      "id": 5,
+      "code": "major_05",
+      "nameEn": "The Hierophant",
+      "nameZh": "教皇",
+      "arcana": "MAJOR",
+      "suit": "MAJOR",
+      "rank": 5,
+      "rankName": "5",
+      "element": "EARTH",
+      "keywordsEn": [
+        "guidance",
+        "knowledge",
+        "revelation",
+        "belief"
+      ],
+      "keywordsZh": [
+        "传统",
+        "信仰",
+        "指引",
+        "道德"
+      ],
+      "uprightMeanings": [
+        "寻求智慧长者、良师益友或专业机构的指引与帮助",
+        "尊重传统价值观、伦理道德与既有的社会契约",
+        "在团队或社群中找到归属感，达成精神层面的共识",
+        "深造学习，探索哲学、心理或精神领域的系统知识"
+      ],
+      "reversedMeanings": [
+        "盲从教条与陈规陋习，缺乏独立思考与批判精神",
+        "遭遇道貌岸然的虚伪指引，或面临价值观念的冲突",
+        "反叛传统权威，因特立独行而承受外界舆论压力",
+        "形式主义严重，空有口号而无实际内涵"
+      ],
+      "fortuneTelling": [
+        "适合向有经验的专家请教，遵循成熟可靠的常规路径",
+        "恪守诚信与道德底线，将为你带来长远的福报"
+      ],
+      "uprightMeaningsEn": [
+        "Teaching or guiding others",
+        "Searching for the truth",
+        "Asking for guidance from a higher power",
+        "Acknowledging the wisdom and experience of others",
+        "Taking vows",
+        "Engaging in heartfelt rituals",
+        "Volunteering"
+      ],
+      "reversedMeaningsEn": [
+        "Using experience as a means of manipulating or misguiding others",
+        "Being dogmatic",
+        "Favoring tradition over what is expedient or necessary",
+        "Going through the motions of empty rituals",
+        "Concealing wisdom",
+        "Restricting access to spiritual truths or the gods"
+      ],
+      "fortuneTellingEn": [
+        "Expect to be caught in a misdeed and punished accordingly",
+        "Pray for forgiveness and confess wrongdoings",
+        "A more experienced man, spiritual leader, or father figure will come into your life"
+      ],
+      "uprightMeaningsZh": [
+        "寻求智慧长者、良师益友或专业机构的指引与帮助",
+        "尊重传统价值观、伦理道德与既有的社会契约",
+        "在团队或社群中找到归属感，达成精神层面的共识",
+        "深造学习，探索哲学、心理或精神领域的系统知识"
+      ],
+      "reversedMeaningsZh": [
+        "盲从教条与陈规陋习，缺乏独立思考与批判精神",
+        "遭遇道貌岸然的虚伪指引，或面临价值观念的冲突",
+        "反叛传统权威，因特立独行而承受外界舆论压力",
+        "形式主义严重，空有口号而无实际内涵"
+      ],
+      "fortuneTellingZh": [
+        "适合向有经验的专家请教，遵循成熟可靠的常规路径",
+        "恪守诚信与道德底线，将为你带来长远的福报"
+      ]
+    },
+    {
+      "id": 6,
+      "code": "major_06",
+      "nameEn": "The Lovers",
+      "nameZh": "恋人",
+      "arcana": "MAJOR",
+      "suit": "MAJOR",
+      "rank": 6,
+      "rankName": "6",
+      "element": "AIR",
+      "keywordsEn": [
+        "love",
+        "passion",
+        "unity",
+        "choice"
+      ],
+      "keywordsZh": [
+        "和谐",
+        "结合",
+        "爱恋",
+        "抉择"
+      ],
+      "uprightMeanings": [
+        "真挚美好的爱恋关系，灵魂深处的共鸣与契合",
+        "面临重要的人生分岔口，需要遵循内心的真实价值观做出抉择",
+        "达成高度和谐的合作关系，彼此互补、互信互助",
+        "身心整合，接纳并包容自我与外界的差异"
+      ],
+      "reversedMeanings": [
+        "感情或合作中出现隔阂、分歧，信任基础产生动摇",
+        "面临艰难抉择时犹豫不决，或做出了违背初心的决定",
+        "价值观出现冲突，沟通不畅导致误解加深",
+        "过度依赖他人，在亲密关系中失去自我独立性"
+      ],
+      "fortuneTelling": [
+        "一段美好的关系或重要盟约正在形成，珍惜彼此的联结",
+        "面对选择时倾听本心，做出符合长远价值的决定"
+      ],
+      "uprightMeaningsEn": [
+        "Being in love",
+        "Showing your love to others",
+        "Expressing passion or romantic feelings",
+        "Aligning yourself with groups or like-minded others",
+        "Bringing people together",
+        "Making well-informed decisions"
+      ],
+      "reversedMeaningsEn": [
+        "Debilitating passion",
+        "Allowing an unhealthy desire for love to motivate destructive behavior",
+        "Disrupting unity",
+        "Working against the best interests of those who care about you",
+        "Ill-informed decisions"
+      ],
+      "fortuneTellingEn": [
+        "A new personal or professional relationship blossoms",
+        "Sexual opportunities abound",
+        "Unexpectedly, a friend becomes a lover"
+      ],
+      "uprightMeaningsZh": [
+        "真挚美好的爱恋关系，灵魂深处的共鸣与契合",
+        "面临重要的人生分岔口，需要遵循内心的真实价值观做出抉择",
+        "达成高度和谐的合作关系，彼此互补、互信互助",
+        "身心整合，接纳并包容自我与外界的差异"
+      ],
+      "reversedMeaningsZh": [
+        "感情或合作中出现隔阂、分歧，信任基础产生动摇",
+        "面临艰难抉择时犹豫不决，或做出了违背初心的决定",
+        "价值观出现冲突，沟通不畅导致误解加深",
+        "过度依赖他人，在亲密关系中失去自我独立性"
+      ],
+      "fortuneTellingZh": [
+        "一段美好的关系或重要盟约正在形成，珍惜彼此的联结",
+        "面对选择时倾听本心，做出符合长远价值的决定"
+      ]
+    },
+    {
+      "id": 7,
+      "code": "major_07",
+      "nameEn": "The Chariot",
+      "nameZh": "战车",
+      "arcana": "MAJOR",
+      "suit": "MAJOR",
+      "rank": 7,
+      "rankName": "7",
+      "element": "WATER",
+      "keywordsEn": [
+        "advancement",
+        "victory",
+        "triumph",
+        "success"
+      ],
+      "keywordsZh": [
+        "意志",
+        "胜利",
+        "自律",
+        "进取"
+      ],
+      "uprightMeanings": [
+        "凭借强大的意志力与坚定的决心克服阻碍、勇往直前",
+        "有效驾驭冲突对立的力量，保持平衡并取得胜利",
+        "高度自律与专注，在竞争中脱颖而出取得突破",
+        "掌控自我命运的航向，向着明确的目标全速进发"
+      ],
+      "reversedMeanings": [
+        "情绪失控或方向偏差，导致行事盲目冲动、四处碰壁",
+        "遭遇强劲阻力难以推进，因急于求成而遭遇挫折",
+        "野心过大但缺乏驾驭能力，陷入内耗与失控状态",
+        "面对挫折产生退缩心理，斗志减退"
+      ],
+      "fortuneTelling": [
+        "胜利属于意志坚定者，保持专注与自律必能攻克难关",
+        "近期可能涉及出行、搬迁或工作节奏的快速推进"
+      ],
+      "uprightMeaningsEn": [
+        "Breaking through barriers",
+        "Moving forward with confidence and authority",
+        "Reaching the pinnacle of success",
+        "Basking in the glory of achievement",
+        "Guiding an effort to total victory",
+        "Establishing yourself as a worthy leader"
+      ],
+      "reversedMeaningsEn": [
+        "Resting on laurels",
+        "Riding roughshod over the feelings or expectations of others",
+        "Focusing more on past successes than future opportunities",
+        "Failing to rein in impulsive behavior"
+      ],
+      "fortuneTellingEn": [
+        "Victory is a certainty",
+        "Move ahead with all plans",
+        "Beware the jealousy of others"
+      ],
+      "uprightMeaningsZh": [
+        "凭借强大的意志力与坚定的决心克服阻碍、勇往直前",
+        "有效驾驭冲突对立的力量，保持平衡并取得胜利",
+        "高度自律与专注，在竞争中脱颖而出取得突破",
+        "掌控自我命运的航向，向着明确的目标全速进发"
+      ],
+      "reversedMeaningsZh": [
+        "情绪失控或方向偏差，导致行事盲目冲动、四处碰壁",
+        "遭遇强劲阻力难以推进，因急于求成而遭遇挫折",
+        "野心过大但缺乏驾驭能力，陷入内耗与失控状态",
+        "面对挫折产生退缩心理，斗志减退"
+      ],
+      "fortuneTellingZh": [
+        "胜利属于意志坚定者，保持专注与自律必能攻克难关",
+        "近期可能涉及出行、搬迁或工作节奏的快速推进"
+      ]
+    },
+    {
+      "id": 8,
+      "code": "major_08",
+      "nameEn": "Strength",
+      "nameZh": "力量",
+      "arcana": "MAJOR",
+      "suit": "MAJOR",
+      "rank": 8,
+      "rankName": "8",
+      "element": "FIRE",
+      "keywordsEn": [
+        "discipline",
+        "boldness",
+        "self-discipline",
+        "power",
+        "vitality"
+      ],
+      "keywordsZh": [
+        "勇气",
+        "柔韧",
+        "自信",
+        "耐力"
+      ],
+      "uprightMeanings": [
+        "以柔克刚，凭借内心的慈悲、耐心与勇气化解危机",
+        "驯服内在的欲望与冲动，展现沉静而强大的内在力量",
+        "在困难面前保持坚定温和，赢得他人的信任与敬佩",
+        "身心韧性极强，具备极佳的自我调节与疗愈能力"
+      ],
+      "reversedMeanings": [
+        "内在信心动摇，被恐惧、怀疑或负面情绪所压垮",
+        "滥用强力或情绪失控，导致矛盾激化难以收场",
+        "身体疲惫精力透支，急需休养与心理复原",
+        "面对强权或挑战时感到无力屈服"
+      ],
+      "fortuneTelling": [
+        "温柔具有超越强硬的恒久力量，用包容与耐心化解纷争",
+        "相信自己的内在韧性，你比想象中更加坚强"
+      ],
+      "uprightMeaningsEn": [
+        "Imposing restrictions on yourself for your own benefit",
+        "Bringing your passions under the control of reason",
+        "Resisting impulses that work against your best interests",
+        "Taking bold action"
+      ],
+      "reversedMeaningsEn": [
+        "Indulging weakness, even when you know it will damage your health and happiness",
+        "Languishing in addiction",
+        "Allowing your instincts to tame and conquer you",
+        "Failing to take a stand when necessary"
+      ],
+      "fortuneTellingEn": [
+        "Your self-control will be tested",
+        "A woman will seek to change her partner or lover",
+        "You are a strong, capable person"
+      ],
+      "uprightMeaningsZh": [
+        "以柔克刚，凭借内心的慈悲、耐心与勇气化解危机",
+        "驯服内在的欲望与冲动，展现沉静而强大的内在力量",
+        "在困难面前保持坚定温和，赢得他人的信任与敬佩",
+        "身心韧性极强，具备极佳的自我调节与疗愈能力"
+      ],
+      "reversedMeaningsZh": [
+        "内在信心动摇，被恐惧、怀疑或负面情绪所压垮",
+        "滥用强力或情绪失控，导致矛盾激化难以收场",
+        "身体疲惫精力透支，急需休养与心理复原",
+        "面对强权或挑战时感到无力屈服"
+      ],
+      "fortuneTellingZh": [
+        "温柔具有超越强硬的恒久力量，用包容与耐心化解纷争",
+        "相信自己的内在韧性，你比想象中更加坚强"
+      ]
+    },
+    {
+      "id": 9,
+      "code": "major_09",
+      "nameEn": "The Hermit",
+      "nameZh": "隐士",
+      "arcana": "MAJOR",
+      "suit": "MAJOR",
+      "rank": 9,
+      "rankName": "9",
+      "element": "EARTH",
+      "keywordsEn": [
+        "solitude",
+        "experience",
+        "stillness",
+        "withdrawal"
+      ],
+      "keywordsZh": [
+        "内省",
+        "独处",
+        "探索",
+        "明灯"
+      ],
+      "uprightMeanings": [
+        "暂时远离喧嚣，向内探寻人生的真正意义与智慧之光",
+        "独立思考与深度复盘，沉淀积累专业素养与见识",
+        "作为明灯指引他人，在孤独中保持清醒与自省",
+        "慎重行事，不盲从世俗潮流，坚持内心的真理"
+      ],
+      "reversedMeanings": [
+        "过度封闭自我，陷入孤立无援或不健康的避世状态",
+        "固步自封，拒绝听取外界的合理建议与时代变化",
+        "感到深刻的孤独与迷茫，在黑暗中迷失前进的方向",
+        "急于求成而忽略了必要的沉淀与反思阶段"
+      ],
+      "fortuneTelling": [
+        "此时适合独处沉淀、复盘总结，不宜盲目扩张",
+        "心中的明灯会为你照亮前路，放慢脚步看清方向"
+      ],
+      "uprightMeaningsEn": [
+        "Becoming or seeking out a guru",
+        "Going on a retreat",
+        "Recharging spiritual or creative batteries",
+        "Lighting the way for those with less experience",
+        "Stepping back to gain perspective"
+      ],
+      "reversedMeaningsEn": [
+        "Being a loner",
+        "Fearing contact with others",
+        "Becoming a know-it-all",
+        "Inflating claims of expertise",
+        "Hiding your skills and talents out of fear of unworthiness"
+      ],
+      "fortuneTellingEn": [
+        "A period of loneliness begins",
+        "One partner in a relationship departs",
+        "A search for love or money proves fruitless"
+      ],
+      "uprightMeaningsZh": [
+        "暂时远离喧嚣，向内探寻人生的真正意义与智慧之光",
+        "独立思考与深度复盘，沉淀积累专业素养与见识",
+        "作为明灯指引他人，在孤独中保持清醒与自省",
+        "慎重行事，不盲从世俗潮流，坚持内心的真理"
+      ],
+      "reversedMeaningsZh": [
+        "过度封闭自我，陷入孤立无援或不健康的避世状态",
+        "固步自封，拒绝听取外界的合理建议与时代变化",
+        "感到深刻的孤独与迷茫，在黑暗中迷失前进的方向",
+        "急于求成而忽略了必要的沉淀与反思阶段"
+      ],
+      "fortuneTellingZh": [
+        "此时适合独处沉淀、复盘总结，不宜盲目扩张",
+        "心中的明灯会为你照亮前路，放慢脚步看清方向"
+      ]
+    },
+    {
+      "id": 10,
+      "code": "major_10",
+      "nameEn": "Wheel of Fortune",
+      "nameZh": "命运之轮",
+      "arcana": "MAJOR",
+      "suit": "MAJOR",
+      "rank": 10,
+      "rankName": "10",
+      "element": "FIRE",
+      "keywordsEn": [
+        "luck",
+        "randomness",
+        "cycles",
+        "karma",
+        "fate",
+        "revolution"
+      ],
+      "keywordsZh": [
+        "转变",
+        "契机",
+        "轮回",
+        "命运"
+      ],
+      "uprightMeanings": [
+        "顺应命运的周期转折，迎来意外的转机与新发展",
+        "把握转瞬即逝的良机，人生格局迎来跃升突破",
+        "认识到事物起伏变化的客观规律，顺势而为",
+        "因果循环，过往的善意与积累在此时结出善果"
+      ],
+      "reversedMeanings": [
+        "遭遇暂时性的运势低谷或突如其来的变故挫折",
+        "抗拒不可逆转的变化，试图强求难以挽回的局面",
+        "错失关键良机，或因准备不足而陷入被动局面",
+        "周期循环中的调整期，需要耐心等待转机再现"
+      ],
+      "fortuneTelling": [
+        "转折点即将到来，顺应势头、把握良机将迎来突破",
+        "塞翁失马焉知非福，保持平常心接纳命运的起伏"
+      ],
+      "uprightMeaningsEn": [
+        "Allowing events to unfold",
+        "Seeing the larger pattern in everyday events",
+        "Trusting your luck",
+        "Watching for cycles",
+        "Believing that \"what goes around, comes around\""
+      ],
+      "reversedMeaningsEn": [
+        "Losing money gambling",
+        "Refusing to do your part to bring a plan to fruition",
+        "Taking a fatalistic approach to life",
+        "Fighting the natural course of events"
+      ],
+      "fortuneTellingEn": [
+        "Some events are in the hands of heaven",
+        "You've lived through this before",
+        "What happened then?"
+      ],
+      "uprightMeaningsZh": [
+        "顺应命运的周期转折，迎来意外的转机与新发展",
+        "把握转瞬即逝的良机，人生格局迎来跃升突破",
+        "认识到事物起伏变化的客观规律，顺势而为",
+        "因果循环，过往的善意与积累在此时结出善果"
+      ],
+      "reversedMeaningsZh": [
+        "遭遇暂时性的运势低谷或突如其来的变故挫折",
+        "抗拒不可逆转的变化，试图强求难以挽回的局面",
+        "错失关键良机，或因准备不足而陷入被动局面",
+        "周期循环中的调整期，需要耐心等待转机再现"
+      ],
+      "fortuneTellingZh": [
+        "转折点即将到来，顺应势头、把握良机将迎来突破",
+        "塞翁失马焉知非福，保持平常心接纳命运的起伏"
+      ]
+    },
+    {
+      "id": 11,
+      "code": "major_11",
+      "nameEn": "Justice",
+      "nameZh": "正义",
+      "arcana": "MAJOR",
+      "suit": "MAJOR",
+      "rank": 11,
+      "rankName": "11",
+      "element": "AIR",
+      "keywordsEn": [
+        "balance",
+        "law",
+        "fairness",
+        "objectivity"
+      ],
+      "keywordsZh": [
+        "公正",
+        "真相",
+        "因果",
+        "均衡"
+      ],
+      "uprightMeanings": [
+        "秉持公平、客观与理性的原则处理事务，是非分明",
+        "承担自身行为的所有后果，因果明确、问心无愧",
+        "签署协议、法律诉讼或重大契约迎来公正合理的结果",
+        "在复杂局面中保持清醒头脑，权衡利弊做出中立判断"
+      ],
+      "reversedMeanings": [
+        "遭遇不公对待，或自身在决策中带有明显偏见与私心",
+        "法律纠纷、合同签署或谈判面临不利波折",
+        "逃避自身应负的责任，试图推卸过错给他人",
+        "过于苛刻死板，缺乏必要的人情味与同理心"
+      ],
+      "fortuneTelling": [
+        "以诚实与公正为准则，真相与正义终将水落石出",
+        "涉及合同、文书或法律事务时务必仔细核对条款"
+      ],
+      "uprightMeaningsEn": [
+        "Making an objective decision",
+        "Weighing an issue carefully before taking action",
+        "Appropriately scaling your reaction to a situation",
+        "Getting all the facts",
+        "Considering evidence",
+        "Deliberating"
+      ],
+      "reversedMeaningsEn": [
+        "Delivering harsh criticism",
+        "Obsessing on rules and regulations",
+        "Playing by the book even when it is destructive or counterproductive to do so",
+        "Confusing snap decisions with timely action",
+        "Playing favorites"
+      ],
+      "fortuneTellingEn": [
+        "A legal verdict will be rendered soon",
+        "Someone is making a decision",
+        "You need to get the facts"
+      ],
+      "uprightMeaningsZh": [
+        "秉持公平、客观与理性的原则处理事务，是非分明",
+        "承担自身行为的所有后果，因果明确、问心无愧",
+        "签署协议、法律诉讼或重大契约迎来公正合理的结果",
+        "在复杂局面中保持清醒头脑，权衡利弊做出中立判断"
+      ],
+      "reversedMeaningsZh": [
+        "遭遇不公对待，或自身在决策中带有明显偏见与私心",
+        "法律纠纷、合同签署或谈判面临不利波折",
+        "逃避自身应负的责任，试图推卸过错给他人",
+        "过于苛刻死板，缺乏必要的人情味与同理心"
+      ],
+      "fortuneTellingZh": [
+        "以诚实与公正为准则，真相与正义终将水落石出",
+        "涉及合同、文书或法律事务时务必仔细核对条款"
+      ]
+    },
+    {
+      "id": 12,
+      "code": "major_12",
+      "nameEn": "The Hanged Man",
+      "nameZh": "倒吊人",
+      "arcana": "MAJOR",
+      "suit": "MAJOR",
+      "rank": 12,
+      "rankName": "12",
+      "element": "WATER",
+      "keywordsEn": [
+        "enlightenment",
+        "sacrifice",
+        "perspective",
+        "suspension",
+        "reversals"
+      ],
+      "keywordsZh": [
+        "牺牲",
+        "换位思考",
+        "顺应",
+        "觉醒"
+      ],
+      "uprightMeanings": [
+        "换个全新的视角审视世界，在停滞中获得深刻顿悟",
+        "为了长远的目标主动做出必要的牺牲与奉献",
+        "顺应局势顺其自然，以耐心与臣服换取心灵成长",
+        "放下执念，在静止的等待中酝酿质的蜕变"
+      ],
+      "reversedMeanings": [
+        "毫无意义的自我感动式牺牲，陷入受害者心态",
+        "固执己见拒绝转变视角，在困境中苦苦挣扎徒劳无功",
+        "因拖延和被动而错失良机，行动力严重受阻",
+        "不愿付出应有的代价，却妄想收获成果"
+      ],
+      "fortuneTelling": [
+        "换个角度看问题，困局之中往往蕴藏意想不到的解法",
+        "当前阶段需要耐心等待，静观其变更胜于盲目折腾"
+      ],
+      "uprightMeaningsEn": [
+        "Seeing growth opportunities in unpleasant events",
+        "Experiencing a dramatic change in personal perspective",
+        "Making the best of an unforeseen change in your life or work",
+        "Suspending disbelief",
+        "Making sacrifices"
+      ],
+      "reversedMeaningsEn": [
+        "Being untrue to yourself and your values",
+        "Refusing to make sacrifices when appropriate",
+        "Refusing to adapt to new situations",
+        "Blaming others",
+        "Profiting at the expense of others"
+      ],
+      "fortuneTellingEn": [
+        "A traitor is revealed",
+        "One of your friends is working against you",
+        "Change your ways or suffer the consequences"
+      ],
+      "uprightMeaningsZh": [
+        "换个全新的视角审视世界，在停滞中获得深刻顿悟",
+        "为了长远的目标主动做出必要的牺牲与奉献",
+        "顺应局势顺其自然，以耐心与臣服换取心灵成长",
+        "放下执念，在静止的等待中酝酿质的蜕变"
+      ],
+      "reversedMeaningsZh": [
+        "毫无意义的自我感动式牺牲，陷入受害者心态",
+        "固执己见拒绝转变视角，在困境中苦苦挣扎徒劳无功",
+        "因拖延和被动而错失良机，行动力严重受阻",
+        "不愿付出应有的代价，却妄想收获成果"
+      ],
+      "fortuneTellingZh": [
+        "换个角度看问题，困局之中往往蕴藏意想不到的解法",
+        "当前阶段需要耐心等待，静观其变更胜于盲目折腾"
+      ]
+    },
+    {
+      "id": 13,
+      "code": "major_13",
+      "nameEn": "Death",
+      "nameZh": "死神",
+      "arcana": "MAJOR",
+      "suit": "MAJOR",
+      "rank": 13,
+      "rankName": "13",
+      "element": "WATER",
+      "keywordsEn": [
+        "ending",
+        "conclusion",
+        "transition",
+        "passage",
+        "departure"
+      ],
+      "keywordsZh": [
+        "结束",
+        "蜕变",
+        "重生",
+        "告别"
+      ],
+      "uprightMeanings": [
+        "旧事物的彻底终结，为崭新的开端扫清障碍",
+        "不可抗拒的深刻蜕变，告别不再适合的旧模式与旧习惯",
+        "断舍离，勇敢放下过去的包袱迎接新生",
+        "经历阵痛后迎来生命维度的升华与觉醒"
+      ],
+      "reversedMeanings": [
+        "死守早已腐朽的过去，恐惧改变导致痛苦不断延续",
+        "抗拒必然到来的终结，在苟延残喘中消耗宝贵精力",
+        "新生停滞不前，沉溺于旧伤痛中无法自拔",
+        "虽有改变意愿但缺乏彻底告别的勇气"
+      ],
+      "fortuneTelling": [
+        "结束是为了更好的开始，坦然告别过去拥抱新生",
+        "旧的篇章已经画上句号，新的黎明即将展现在眼前"
+      ],
+      "uprightMeaningsEn": [
+        "Bringing an unpleasant phase of life to an end",
+        "Recognizing and celebrating the conclusion of something",
+        "Putting bad habits to rest",
+        "Becoming a new person",
+        "Leaving one person, place, or thing for another",
+        "Letting go"
+      ],
+      "reversedMeaningsEn": [
+        "Obsessing on death and dying",
+        "Refusing to give up old habits or unhealthy relationships",
+        "Insisting that everything and everyone should stay the same forever",
+        "Failing to take good care of yourself"
+      ],
+      "fortuneTellingEn": [
+        "A relationship or illness ends suddenly",
+        "Limit travel and risk-taking",
+        "General gloom and doom"
+      ],
+      "uprightMeaningsZh": [
+        "旧事物的彻底终结，为崭新的开端扫清障碍",
+        "不可抗拒的深刻蜕变，告别不再适合的旧模式与旧习惯",
+        "断舍离，勇敢放下过去的包袱迎接新生",
+        "经历阵痛后迎来生命维度的升华与觉醒"
+      ],
+      "reversedMeaningsZh": [
+        "死守早已腐朽的过去，恐惧改变导致痛苦不断延续",
+        "抗拒必然到来的终结，在苟延残喘中消耗宝贵精力",
+        "新生停滞不前，沉溺于旧伤痛中无法自拔",
+        "虽有改变意愿但缺乏彻底告别的勇气"
+      ],
+      "fortuneTellingZh": [
+        "结束是为了更好的开始，坦然告别过去拥抱新生",
+        "旧的篇章已经画上句号，新的黎明即将展现在眼前"
+      ]
+    },
+    {
+      "id": 14,
+      "code": "major_14",
+      "nameEn": "Temperance",
+      "nameZh": "节制",
+      "arcana": "MAJOR",
+      "suit": "MAJOR",
+      "rank": 14,
+      "rankName": "14",
+      "element": "FIRE",
+      "keywordsEn": [
+        "blending",
+        "synthesis",
+        "mediation",
+        "combination",
+        "harmony"
+      ],
+      "keywordsZh": [
+        "平衡",
+        "调和",
+        "耐心",
+        "适度"
+      ],
+      "uprightMeanings": [
+        "调和对立矛盾，达到身心灵的高度平衡与健康和谐",
+        "在沟通与合作中保持适度、耐心与极佳的协调艺术",
+        "将不同资源、文化或想法融会贯通，产生奇妙合力",
+        "心平气和，循序渐进地推进目标，远离极端"
+      ],
+      "reversedMeanings": [
+        "失去平衡与节制，生活作息或人际沟通陷入混乱",
+        "极端行事，缺乏耐心导致各方矛盾加剧、难以调和",
+        "身心失衡或精力透支，健康状态亮起红灯",
+        "合作各方同床异梦，无法达成真正的共识"
+      ],
+      "fortuneTelling": [
+        "凡事讲求中庸之道，保持适度与耐心将化解一切冲突",
+        "身体与心理正在逐步恢复平衡，注重内在调养"
+      ],
+      "uprightMeaningsEn": [
+        "Bringing opposites together",
+        "Moderating your actions or emotions",
+        "Finding middle ground",
+        "Reaching compromises",
+        "Synthesizing solutions that please everyone involved",
+        "Using the old to make something new"
+      ],
+      "reversedMeaningsEn": [
+        "Going to extremes",
+        "Disrupting group efforts",
+        "Ignoring healthy approaches to life",
+        "Becoming an addict",
+        "Practicing gluttony",
+        "Tearing something or someone apart",
+        "Breaking alliances"
+      ],
+      "fortuneTellingEn": [
+        "Someone's using drugs or alcohol to excess",
+        "It's time to get back on that diet"
+      ],
+      "uprightMeaningsZh": [
+        "调和对立矛盾，达到身心灵的高度平衡与健康和谐",
+        "在沟通与合作中保持适度、耐心与极佳的协调艺术",
+        "将不同资源、文化或想法融会贯通，产生奇妙合力",
+        "心平气和，循序渐进地推进目标，远离极端"
+      ],
+      "reversedMeaningsZh": [
+        "失去平衡与节制，生活作息或人际沟通陷入混乱",
+        "极端行事，缺乏耐心导致各方矛盾加剧、难以调和",
+        "身心失衡或精力透支，健康状态亮起红灯",
+        "合作各方同床异梦，无法达成真正的共识"
+      ],
+      "fortuneTellingZh": [
+        "凡事讲求中庸之道，保持适度与耐心将化解一切冲突",
+        "身体与心理正在逐步恢复平衡，注重内在调养"
+      ]
+    },
+    {
+      "id": 15,
+      "code": "major_15",
+      "nameEn": "The Devil",
+      "nameZh": "恶魔",
+      "arcana": "MAJOR",
+      "suit": "MAJOR",
+      "rank": 15,
+      "rankName": "15",
+      "element": "EARTH",
+      "keywordsEn": [
+        "shadow",
+        "materialism",
+        "bondage",
+        "delusion"
+      ],
+      "keywordsZh": [
+        "束缚",
+        "诱惑",
+        "欲望",
+        "执念"
+      ],
+      "uprightMeanings": [
+        "被物欲、执念、成瘾行为或不健康的依附关系所束缚",
+        "深陷恐惧与幻象，误以为自己毫无选择与解脱能力",
+        "过度追求感官刺激、金钱权力而迷失本心与道德准则",
+        "压抑阴暗面导致负面情绪在潜意识中滋生蔓延"
+      ],
+      "reversedMeanings": [
+        "觉醒时刻到来，开始挣脱束缚认清现实真相",
+        "摆脱不良嗜好、有害关系或心理依赖，重获自由",
+        "直面内心的恐惧与阴影，找到自我救赎的道路",
+        "虽然过程艰难，但正逐步打破既有的精神枷锁"
+      ],
+      "fortuneTelling": [
+        "警惕诱惑与不良依赖，审视究竟是什么在束缚你的自由",
+        "锁链其实并未锁死，只要你下定决心就能重获自主"
+      ],
+      "uprightMeaningsEn": [
+        "Appreciating the luxuries that life has to offer",
+        "Being comfortable in your own skin",
+        "Enjoying your sexuality",
+        "Splurging on an expensive personal item",
+        "Embracing the fact that everyone has a darker side",
+        "Dealing with unhealthy impulses in healthy ways"
+      ],
+      "reversedMeaningsEn": [
+        "Putting excessive emphasis on appearances",
+        "Always wanting more",
+        "Valuing possessions more than people or relationships",
+        "Allowing base instincts to govern your life",
+        "Being selfish",
+        "Attributing your own dark impulses to outside forces or other people"
+      ],
+      "fortuneTellingEn": [
+        "Adultery and unfaithfulness",
+        "A string of extremely bad luck is coming your way",
+        "Beware evil influences and wolves in sheep's clothing"
+      ],
+      "uprightMeaningsZh": [
+        "被物欲、执念、成瘾行为或不健康的依附关系所束缚",
+        "深陷恐惧与幻象，误以为自己毫无选择与解脱能力",
+        "过度追求感官刺激、金钱权力而迷失本心与道德准则",
+        "压抑阴暗面导致负面情绪在潜意识中滋生蔓延"
+      ],
+      "reversedMeaningsZh": [
+        "觉醒时刻到来，开始挣脱束缚认清现实真相",
+        "摆脱不良嗜好、有害关系或心理依赖，重获自由",
+        "直面内心的恐惧与阴影，找到自我救赎的道路",
+        "虽然过程艰难，但正逐步打破既有的精神枷锁"
+      ],
+      "fortuneTellingZh": [
+        "警惕诱惑与不良依赖，审视究竟是什么在束缚你的自由",
+        "锁链其实并未锁死，只要你下定决心就能重获自主"
+      ]
+    },
+    {
+      "id": 16,
+      "code": "major_16",
+      "nameEn": "The Tower",
+      "nameZh": "高塔",
+      "arcana": "MAJOR",
+      "suit": "MAJOR",
+      "rank": 16,
+      "rankName": "16",
+      "element": "FIRE",
+      "keywordsEn": [
+        "demolition",
+        "upheaval",
+        "deconstruction",
+        "disaster",
+        "destruction"
+      ],
+      "keywordsZh": [
+        "剧变",
+        "破除",
+        "崩解",
+        "启示"
+      ],
+      "uprightMeanings": [
+        "突如其来的剧烈震荡与变故，虚假的根基轰然倒塌",
+        "谎言被瞬间戳穿，傲慢与侥幸心理遭遇现实的重击",
+        "虽带来强烈的震惊与痛苦，但也彻底粉碎了旧有幻象",
+        "打破僵局的毁灭性力量，迫使一切从零开始重建"
+      ],
+      "reversedMeanings": [
+        "勉强躲过一场危机，但隐患与结构性问题依然存在",
+        "害怕面对不可避免的崩塌，在危墙之下心惊胆战",
+        "痛苦的余波逐渐平息，开始收拾残局进行灾后重建",
+        "意识到危机正在逼近，提前采取避险措施"
+      ],
+      "fortuneTelling": [
+        "突发变故是对不稳固基础的重塑，不必过分恐慌",
+        "摧毁虚幻的空中楼阁，方能在一片废墟中建立真正的基石"
+      ],
+      "uprightMeaningsEn": [
+        "Breaking out of old, confining habits and mindsets",
+        "Clearing the way for new growth",
+        "Dispelling the influence of an inflated ego",
+        "Getting back to basics",
+        "Stripping away harmful illusions",
+        "Receiving sudden insight"
+      ],
+      "reversedMeaningsEn": [
+        "Clinging to traditions that repress growth",
+        "Engaging in willful blindness",
+        "Rejecting evidence that change is needed",
+        "Ignoring guidance from a higher power",
+        "Maliciously engaging in destructive behavior"
+      ],
+      "fortuneTellingEn": [
+        "Impending disaster",
+        "Cancel plans and reverse decisions",
+        "Someone wants to take you down a notch or two",
+        "Don't hold back; say what you really mean"
+      ],
+      "uprightMeaningsZh": [
+        "突如其来的剧烈震荡与变故，虚假的根基轰然倒塌",
+        "谎言被瞬间戳穿，傲慢与侥幸心理遭遇现实的重击",
+        "虽带来强烈的震惊与痛苦，但也彻底粉碎了旧有幻象",
+        "打破僵局的毁灭性力量，迫使一切从零开始重建"
+      ],
+      "reversedMeaningsZh": [
+        "勉强躲过一场危机，但隐患与结构性问题依然存在",
+        "害怕面对不可避免的崩塌，在危墙之下心惊胆战",
+        "痛苦的余波逐渐平息，开始收拾残局进行灾后重建",
+        "意识到危机正在逼近，提前采取避险措施"
+      ],
+      "fortuneTellingZh": [
+        "突发变故是对不稳固基础的重塑，不必过分恐慌",
+        "摧毁虚幻的空中楼阁，方能在一片废墟中建立真正的基石"
+      ]
+    },
+    {
+      "id": 17,
+      "code": "major_17",
+      "nameEn": "The Star",
+      "nameZh": "星星",
+      "arcana": "MAJOR",
+      "suit": "MAJOR",
+      "rank": 17,
+      "rankName": "17",
+      "element": "AIR",
+      "keywordsEn": [
+        "hope",
+        "optimism",
+        "openness",
+        "certainty",
+        "faith",
+        "longing",
+        "truth"
+      ],
+      "keywordsZh": [
+        "希望",
+        "灵感",
+        "疗愈",
+        "宁静"
+      ],
+      "uprightMeanings": [
+        "风雨过后的宁静与希望，心灵获得深度疗愈与重生",
+        "灵感如泉涌，对未来充满坚定的信念与美好憧憬",
+        "无私分享爱与善意，散发出纯净而持久的吸引力",
+        "找到内心的真实愿景，在希望的指引下稳步前行"
+      ],
+      "reversedMeanings": [
+        "失去信心与希望，感到前途迷茫、内心空虚失落",
+        "目标脱离现实，沉溺于不切实际的幻想而缺乏落地行动",
+        "才华得不到施展，情绪低落陷入悲观失望之中",
+        "封闭内心拒绝外界的关爱与疗愈能量"
+      ],
+      "fortuneTelling": [
+        "最艰难的时刻已经过去，希望的星光正在前方闪耀",
+        "保持乐观与信念，你的梦想正在一步步接近现实"
+      ],
+      "uprightMeaningsEn": [
+        "Hoping for the best",
+        "Believing good things happen to good people",
+        "Seeing events in the best possible light",
+        "Adopting a generous spirit",
+        "Seeking guidance from above",
+        "Embracing possibility over probability"
+      ],
+      "reversedMeaningsEn": [
+        "Denying unpleasant truths",
+        "Denying personal accountability and saying, \"Things just happen!\"",
+        "Ignoring signs and omens",
+        "Preferring illusion to reality",
+        "Spreading pessimism and stinginess of spirit"
+      ],
+      "fortuneTellingEn": [
+        "Get an astrology chart drawn up",
+        "Someone is a little too starstruck",
+        "What's happening now has long been fore-ordained"
+      ],
+      "uprightMeaningsZh": [
+        "风雨过后的宁静与希望，心灵获得深度疗愈与重生",
+        "灵感如泉涌，对未来充满坚定的信念与美好憧憬",
+        "无私分享爱与善意，散发出纯净而持久的吸引力",
+        "找到内心的真实愿景，在希望的指引下稳步前行"
+      ],
+      "reversedMeaningsZh": [
+        "失去信心与希望，感到前途迷茫、内心空虚失落",
+        "目标脱离现实，沉溺于不切实际的幻想而缺乏落地行动",
+        "才华得不到施展，情绪低落陷入悲观失望之中",
+        "封闭内心拒绝外界的关爱与疗愈能量"
+      ],
+      "fortuneTellingZh": [
+        "最艰难的时刻已经过去，希望的星光正在前方闪耀",
+        "保持乐观与信念，你的梦想正在一步步接近现实"
+      ]
+    },
+    {
+      "id": 18,
+      "code": "major_18",
+      "nameEn": "The Moon",
+      "nameZh": "月亮",
+      "arcana": "MAJOR",
+      "suit": "MAJOR",
+      "rank": 18,
+      "rankName": "18",
+      "element": "WATER",
+      "keywordsEn": [
+        "mystery",
+        "fantasy",
+        "imagination",
+        "dreams",
+        "uncertainty"
+      ],
+      "keywordsZh": [
+        "潜意识",
+        "不安",
+        "迷惘",
+        "直觉"
+      ],
+      "uprightMeanings": [
+        "深陷迷雾与未知之中，容易产生焦虑、猜忌与恐惧",
+        "潜意识活跃，直觉与幻觉交织，事情真相尚未显现",
+        "警惕隐藏的欺骗、谎言或自我欺骗的危险陷阱",
+        "在不确定性中摸索前行，需要格外谨慎防范风险"
+      ],
+      "reversedMeanings": [
+        "迷雾逐渐消散，真相与隐秘动机开始浮出水面",
+        "克服内心的恐惧与焦虑，逐步重获理智与清醒认知",
+        "看清谎言与假象，摆脱心理阴影走向光明",
+        "虽然仍有些许不安，但最困惑的阶段即将过去"
+      ],
+      "fortuneTelling": [
+        "当前局势不明朗，切勿急于做重大决定，防范暗中风险",
+        "倾听直觉但也需核查事实，不要被心中的恐惧所绑架"
+      ],
+      "uprightMeaningsEn": [
+        "Enjoying healthy fantasies and daydreams",
+        "Using your imagination",
+        "Practicing magic or celebrating the magic of everyday life",
+        "Attuning yourself to the cycles of nature",
+        "Embracing the unknown"
+      ],
+      "reversedMeaningsEn": [
+        "Becoming unable to separate fantasy from reality",
+        "Suffering from delusions",
+        "Losing your appreciation for the fantastic or magical",
+        "Adopting a ruthlessly logical mindset",
+        "Failing to appreciate life's mysteries"
+      ],
+      "fortuneTellingEn": [
+        "Watch for problems at the end of the month",
+        "Someone you know needs to howl at the moon more often",
+        "Someone is about to change his or her mind about an important decision"
+      ],
+      "uprightMeaningsZh": [
+        "深陷迷雾与未知之中，容易产生焦虑、猜忌与恐惧",
+        "潜意识活跃，直觉与幻觉交织，事情真相尚未显现",
+        "警惕隐藏的欺骗、谎言或自我欺骗的危险陷阱",
+        "在不确定性中摸索前行，需要格外谨慎防范风险"
+      ],
+      "reversedMeaningsZh": [
+        "迷雾逐渐消散，真相与隐秘动机开始浮出水面",
+        "克服内心的恐惧与焦虑，逐步重获理智与清醒认知",
+        "看清谎言与假象，摆脱心理阴影走向光明",
+        "虽然仍有些许不安，但最困惑的阶段即将过去"
+      ],
+      "fortuneTellingZh": [
+        "当前局势不明朗，切勿急于做重大决定，防范暗中风险",
+        "倾听直觉但也需核查事实，不要被心中的恐惧所绑架"
+      ]
+    },
+    {
+      "id": 19,
+      "code": "major_19",
+      "nameEn": "The Sun",
+      "nameZh": "太阳",
+      "arcana": "MAJOR",
+      "suit": "MAJOR",
+      "rank": 19,
+      "rankName": "19",
+      "element": "FIRE",
+      "keywordsEn": [
+        "joy",
+        "brilliance",
+        "validation",
+        "attention",
+        "energy"
+      ],
+      "keywordsZh": [
+        "光明",
+        "喜悦",
+        "成功",
+        "活力"
+      ],
+      "uprightMeanings": [
+        "光明普照，充满无尽的活力、喜悦、热情与成功",
+        "一切疑虑与阴霾消散，前途一片光明、充满信心",
+        "真诚透明的人际关系，收获赞誉、成就与丰盛回报",
+        "生命力旺盛，身心健康，享受当下的幸福与辉煌"
+      ],
+      "reversedMeanings": [
+        "遭遇短暂的阴云遮蔽，成功与喜悦略有延迟或打了折扣",
+        "过于盲目乐观，因傲慢自负而忽略了潜在的细节问题",
+        "缺乏足够的精力与热情，感到有些疲惫乏味",
+        "虽有小波折，但整体积极向上的大趋势并未改变"
+      ],
+      "fortuneTelling": [
+        "大吉之兆，光明与成功正伴你左右，尽情展现才华",
+        "保持孩童般的热情与真诚，好运与温暖将持续降临"
+      ],
+      "uprightMeaningsEn": [
+        "Seeing things clearly",
+        "Experiencing intense joy",
+        "Celebrating your own successes",
+        "Knowing you're good at what you do",
+        "Gaining recognition for your personal genius"
+      ],
+      "reversedMeaningsEn": [
+        "Being dazzled by your own accomplishments",
+        "Becoming absorbed in your own self-image",
+        "Feeling rushed and distracted",
+        "Exerting yourself to the point of exhaustion",
+        "Overstating your abilities or misrepresenting your achievements"
+      ],
+      "fortuneTellingEn": [
+        "Everything's coming up roses (or sunflowers, whatever the case may be)",
+        "Whatever's on your mind, go for it because you can't lose today"
+      ],
+      "uprightMeaningsZh": [
+        "光明普照，充满无尽的活力、喜悦、热情与成功",
+        "一切疑虑与阴霾消散，前途一片光明、充满信心",
+        "真诚透明的人际关系，收获赞誉、成就与丰盛回报",
+        "生命力旺盛，身心健康，享受当下的幸福与辉煌"
+      ],
+      "reversedMeaningsZh": [
+        "遭遇短暂的阴云遮蔽，成功与喜悦略有延迟或打了折扣",
+        "过于盲目乐观，因傲慢自负而忽略了潜在的细节问题",
+        "缺乏足够的精力与热情，感到有些疲惫乏味",
+        "虽有小波折，但整体积极向上的大趋势并未改变"
+      ],
+      "fortuneTellingZh": [
+        "大吉之兆，光明与成功正伴你左右，尽情展现才华",
+        "保持孩童般的热情与真诚，好运与温暖将持续降临"
+      ]
+    },
+    {
+      "id": 20,
+      "code": "major_20",
+      "nameEn": "Judgement",
+      "nameZh": "审判",
+      "arcana": "MAJOR",
+      "suit": "MAJOR",
+      "rank": 20,
+      "rankName": "20",
+      "element": "FIRE",
+      "keywordsEn": [
+        "revival",
+        "renewal",
+        "resurrection",
+        "evaluation",
+        "invitation"
+      ],
+      "keywordsZh": [
+        "觉醒",
+        "重估",
+        "召唤",
+        "新生"
+      ],
+      "uprightMeanings": [
+        "听到内心的觉醒号角，迎来人生重大的转折与新生",
+        "对过往进行客观清算与反思，做出明智而彻底的决断",
+        "卸下旧包袱，得到原谅与释怀，开启全新生命篇章",
+        "才华被社会认可与召唤，迎来因果沉淀后的应得回报"
+      ],
+      "reversedMeanings": [
+        "忽视内心的觉醒呼唤，害怕做出决断而一再拖延犹豫",
+        "自我怀疑、悔恨自责，沉溺于过去的过错无法自拔",
+        "做出错误或不公正的评价，难以认清自身真正价值",
+        "错失重要的转折契机，留在原地难以跃升"
+      ],
+      "fortuneTelling": [
+        "重大的人生转折与决断时刻，勇敢响应内心的召唤",
+        "过去的一切沉淀都将转化为新生的力量，准备迎接蜕变"
+      ],
+      "uprightMeaningsEn": [
+        "Receiving a wake-up call",
+        "Discovering a new purpose in life",
+        "Becoming totally and completely yourself",
+        "Receiving a well-deserved reward",
+        "Passing an evaluation or examination",
+        "Welcoming the start of a new phase of life"
+      ],
+      "reversedMeaningsEn": [
+        "Being weighed in the balances and found wanting",
+        "Failing to measure up to a well-defined standard",
+        "Being caught goofing off or misbehaving",
+        "Failing to prepare for an examination you know is coming",
+        "Rejecting an opportunity to reinvent yourself"
+      ],
+      "fortuneTellingEn": [
+        "An old issue you thought was over will come up again today",
+        "Get ready for huge changes: break-ups, sudden calls from old friends, and unexpected setbacks",
+        "God's trying to get your attention"
+      ],
+      "uprightMeaningsZh": [
+        "听到内心的觉醒号角，迎来人生重大的转折与新生",
+        "对过往进行客观清算与反思，做出明智而彻底的决断",
+        "卸下旧包袱，得到原谅与释怀，开启全新生命篇章",
+        "才华被社会认可与召唤，迎来因果沉淀后的应得回报"
+      ],
+      "reversedMeaningsZh": [
+        "忽视内心的觉醒呼唤，害怕做出决断而一再拖延犹豫",
+        "自我怀疑、悔恨自责，沉溺于过去的过错无法自拔",
+        "做出错误或不公正的评价，难以认清自身真正价值",
+        "错失重要的转折契机，留在原地难以跃升"
+      ],
+      "fortuneTellingZh": [
+        "重大的人生转折与决断时刻，勇敢响应内心的召唤",
+        "过去的一切沉淀都将转化为新生的力量，准备迎接蜕变"
+      ]
+    },
+    {
+      "id": 21,
+      "code": "major_21",
+      "nameEn": "The World",
+      "nameZh": "世界",
+      "arcana": "MAJOR",
+      "suit": "MAJOR",
+      "rank": 21,
+      "rankName": "21",
+      "element": "EARTH",
+      "keywordsEn": [
+        "wholeness",
+        "integration",
+        "totality",
+        "completeness",
+        "fullness"
+      ],
+      "keywordsZh": [
+        "圆满",
+        "达成",
+        "整合",
+        "胜利"
+      ],
+      "uprightMeanings": [
+        "圆满达成目标，一个重要周期的完美收官与成功",
+        "身心与外界高度融合，获得广阔的视野与内心的完满",
+        "走向更广阔的天地，可能涉及跨国旅行、升学或晋升",
+        "享受胜利成果，站在新的制高点准备开启更高阶的循环"
+      ],
+      "reversedMeanings": [
+        "临门一脚欠缺火候，事情在最后关头面临停滞或拖延",
+        "缺乏圆满的收尾，留有未解的遗憾或难以割舍的羁绊",
+        "视野受限，固守既有成果而不愿迈向更广阔的世界",
+        "感到虽然完成了任务，但内心并未获得真正的满足感"
+      ],
+      "fortuneTelling": [
+        "功德圆满，巨大的成功与荣耀就在眼前，享受这份成就",
+        "世界为你敞开大门，勇敢迈向更加宏大的人生舞台"
+      ],
+      "uprightMeaningsEn": [
+        "Having it all",
+        "Knowing and loving yourself as completely as possible",
+        "Seeing the interconnection of all things and people",
+        "Enhancing your perspective",
+        "Living life to its fullest",
+        "Understanding the meaning of life"
+      ],
+      "reversedMeaningsEn": [
+        "Allowing greed and envy to prevent you from enjoying what you do possess",
+        "Failing to see the larger design in ordinary events",
+        "Believing that everything that exists can be touched, counted, or measured",
+        "Failing to see the divine reflected in those around you"
+      ],
+      "fortuneTellingEn": [
+        "Winning the lottery",
+        "Getting your heart's desire",
+        "Having everything you ever imagined having"
+      ],
+      "uprightMeaningsZh": [
+        "圆满达成目标，一个重要周期的完美收官与成功",
+        "身心与外界高度融合，获得广阔的视野与内心的完满",
+        "走向更广阔的天地，可能涉及跨国旅行、升学或晋升",
+        "享受胜利成果，站在新的制高点准备开启更高阶的循环"
+      ],
+      "reversedMeaningsZh": [
+        "临门一脚欠缺火候，事情在最后关头面临停滞或拖延",
+        "缺乏圆满的收尾，留有未解的遗憾或难以割舍的羁绊",
+        "视野受限，固守既有成果而不愿迈向更广阔的世界",
+        "感到虽然完成了任务，但内心并未获得真正的满足感"
+      ],
+      "fortuneTellingZh": [
+        "功德圆满，巨大的成功与荣耀就在眼前，享受这份成就",
+        "世界为你敞开大门，勇敢迈向更加宏大的人生舞台"
+      ]
+    },
+    {
+      "id": 22,
+      "code": "wands_01",
+      "nameEn": "Ace Of Wands",
+      "nameZh": "权杖一",
+      "arcana": "MINOR",
+      "suit": "WANDS",
+      "rank": 1,
+      "rankName": "Ace",
+      "element": "FIRE",
+      "keywordsEn": [
+        "desire",
+        "inspiration",
+        "vision",
+        "creation",
+        "invention"
+      ],
+      "keywordsZh": [
+        "权杖一",
+        "权杖牌组",
+        "FIRE元素"
+      ],
+      "uprightMeanings": [
+        "创意的火花迸发，充满激情的全新开端",
+        "拥有充沛的行动力与开启动力",
+        "把握灵感与新机遇，展现进取心"
+      ],
+      "reversedMeanings": [
+        "缺乏动力，计划在启动阶段遇阻",
+        "冲动行事，激情来得快去得也快",
+        "错失启动良机，行动力匮乏"
+      ],
+      "fortuneTelling": [
+        "新的事业或冒险正在招手，充满热情地开启它",
+        "抓住灵光一闪的创意，立即付诸实践"
+      ],
+      "uprightMeaningsEn": [
+        "Being inspired",
+        "Identifying an important goal",
+        "Being given the opportunity to do whatever you want to do",
+        "Giving or receiving direction",
+        "Seeing a solution",
+        "Creating something new",
+        "Being aroused, sexually or creatively"
+      ],
+      "reversedMeaningsEn": [
+        "Failing to take advantage of a great opportunity",
+        "Being ineffectual or lazy",
+        "Making an inadequate effort",
+        "Working toward a goal, but lacking the resources or initiative to achieve success",
+        "Setting inappropriate goals",
+        "Failing to take a stand"
+      ],
+      "fortuneTellingEn": [
+        "Someone has the \"hots\" for you",
+        "A new job offer is coming your way",
+        "Walk softly, and carry a big stick"
+      ],
+      "uprightMeaningsZh": [
+        "创意的火花迸发，充满激情的全新开端",
+        "拥有充沛的行动力与开启动力",
+        "把握灵感与新机遇，展现进取心"
+      ],
+      "reversedMeaningsZh": [
+        "缺乏动力，计划在启动阶段遇阻",
+        "冲动行事，激情来得快去得也快",
+        "错失启动良机，行动力匮乏"
+      ],
+      "fortuneTellingZh": [
+        "新的事业或冒险正在招手，充满热情地开启它",
+        "抓住灵光一闪的创意，立即付诸实践"
+      ]
+    },
+    {
+      "id": 23,
+      "code": "wands_02",
+      "nameEn": "Two Of Wands",
+      "nameZh": "权杖二",
+      "arcana": "MINOR",
+      "suit": "WANDS",
+      "rank": 2,
+      "rankName": "Two",
+      "element": "FIRE",
+      "keywordsEn": [
+        "conflict",
+        "decision",
+        "option",
+        "individuality"
+      ],
+      "keywordsZh": [
+        "权杖二",
+        "权杖牌组",
+        "FIRE元素"
+      ],
+      "uprightMeanings": [
+        "登高望远，立足当下规划未来的宏图伟业",
+        "拥有掌控力与选择权，准备向外拓展",
+        "在稳固基础上寻求更大的突破"
+      ],
+      "reversedMeanings": [
+        "对未知前途感到迷茫，犹豫不决不敢迈出",
+        "计划受阻，脱离实际的空想难以落地",
+        "留守舒适圈，错失外部拓展良机"
+      ],
+      "fortuneTelling": [
+        "站得更高才能看得更远，制定长远规划",
+        "勇敢探索新领域，跨出关键的一步"
+      ],
+      "uprightMeaningsEn": [
+        "Having a choice",
+        "Offering or being offered an option",
+        "Seeing the value of another person's approach",
+        "Understanding there's more than one way to \"skin a cat\"",
+        "Successfully doing more than one thing at a time",
+        "Being empowered to make a choice"
+      ],
+      "reversedMeaningsEn": [
+        "Misrepresenting your intentions",
+        "Doing one thing while desiring another",
+        "Changing course mid-stream for no good reason",
+        "Refusing to change your goal even when pursuing it no longer makes sense",
+        "Disregarding the input of others"
+      ],
+      "fortuneTellingEn": [
+        "Beware false friends",
+        "Don't be mealy-mouthed; say what you think and do what you want to do"
+      ],
+      "uprightMeaningsZh": [
+        "登高望远，立足当下规划未来的宏图伟业",
+        "拥有掌控力与选择权，准备向外拓展",
+        "在稳固基础上寻求更大的突破"
+      ],
+      "reversedMeaningsZh": [
+        "对未知前途感到迷茫，犹豫不决不敢迈出",
+        "计划受阻，脱离实际的空想难以落地",
+        "留守舒适圈，错失外部拓展良机"
+      ],
+      "fortuneTellingZh": [
+        "站得更高才能看得更远，制定长远规划",
+        "勇敢探索新领域，跨出关键的一步"
+      ]
+    },
+    {
+      "id": 24,
+      "code": "wands_03",
+      "nameEn": "Three Of Wands",
+      "nameZh": "权杖三",
+      "arcana": "MINOR",
+      "suit": "WANDS",
+      "rank": 3,
+      "rankName": "Three",
+      "element": "FIRE",
+      "keywordsEn": [
+        "implementation",
+        "action",
+        "exploration"
+      ],
+      "keywordsZh": [
+        "权杖三",
+        "权杖牌组",
+        "FIRE元素"
+      ],
+      "uprightMeanings": [
+        "远见卓识，初战告捷并迎来积极的反馈",
+        "商业拓展顺利，探索更广阔的市场与空间",
+        "与他人建立稳固合作，期待丰厚回报"
+      ],
+      "reversedMeanings": [
+        "进展缓慢，期待的回报或消息出现延迟",
+        "合作遇挫，远期规划遭遇现实阻碍",
+        "视野狭隘，未能把握长远发展大局"
+      ],
+      "fortuneTelling": [
+        "你的远见即将转化为实际成果，保持耐心与信心",
+        "拓展人脉与合作，前路宽广"
+      ],
+      "uprightMeaningsEn": [
+        "Putting a plan into motion",
+        "Taking that critical first step",
+        "Making good things happen",
+        "Going beyond your limits",
+        "Blazing new trails",
+        "Hitting the ground running",
+        "Seeing your plans come to fruition"
+      ],
+      "reversedMeaningsEn": [
+        "Procrastinating",
+        "Knowing what to do, but refusing to do it",
+        "Launching a project without a clear definition of who should do what",
+        "Rejecting an opportunity to try something new",
+        "Failing to finish what you start"
+      ],
+      "fortuneTellingEn": [
+        "You'll be planning a trip soon",
+        "Be on the lookout: your ship is coming in"
+      ],
+      "uprightMeaningsZh": [
+        "远见卓识，初战告捷并迎来积极的反馈",
+        "商业拓展顺利，探索更广阔的市场与空间",
+        "与他人建立稳固合作，期待丰厚回报"
+      ],
+      "reversedMeaningsZh": [
+        "进展缓慢，期待的回报或消息出现延迟",
+        "合作遇挫，远期规划遭遇现实阻碍",
+        "视野狭隘，未能把握长远发展大局"
+      ],
+      "fortuneTellingZh": [
+        "你的远见即将转化为实际成果，保持耐心与信心",
+        "拓展人脉与合作，前路宽广"
+      ]
+    },
+    {
+      "id": 25,
+      "code": "wands_04",
+      "nameEn": "Four Of Wands",
+      "nameZh": "权杖四",
+      "arcana": "MINOR",
+      "suit": "WANDS",
+      "rank": 4,
+      "rankName": "Four",
+      "element": "FIRE",
+      "keywordsEn": [
+        "celebration",
+        "jubilation",
+        "community",
+        "teamwork",
+        "completion"
+      ],
+      "keywordsZh": [
+        "权杖四",
+        "权杖牌组",
+        "FIRE元素"
+      ],
+      "uprightMeanings": [
+        "阶段性成功，家庭或团队的欢庆与团聚",
+        "稳固和谐的安全感，享受温馨与安宁",
+        "乔迁新居、达成合作或迎来喜庆盛典"
+      ],
+      "reversedMeanings": [
+        "家庭或团队内部出现微小摩擦，和谐受扰",
+        "虽有庆祝但内心存有隐忧，缺乏安全感",
+        "暂时性的不稳定，需要加强沟通维护"
+      ],
+      "fortuneTelling": [
+        "喜悦与丰收时刻，与所爱之人共同庆祝",
+        "巩固既有成果，享受安定温馨的氛围"
+      ],
+      "uprightMeaningsEn": [
+        "Sharing in a great celebration",
+        "Sharing in a communal sense of achievement and success",
+        "Preparing for a party",
+        "Working together toward a common goal",
+        "Giving or winning awards"
+      ],
+      "reversedMeaningsEn": [
+        "Keeping your nose to the grindstone",
+        "Recognizing good work by demanding more work",
+        "Failing to share in a group celebration",
+        "Allowing sour grapes to poison your moment in the sun",
+        "Refusing to do your part"
+      ],
+      "fortuneTellingEn": [
+        "Someone is watching and evaluating your work",
+        "You may get a wedding invitation soon"
+      ],
+      "uprightMeaningsZh": [
+        "阶段性成功，家庭或团队的欢庆与团聚",
+        "稳固和谐的安全感，享受温馨与安宁",
+        "乔迁新居、达成合作或迎来喜庆盛典"
+      ],
+      "reversedMeaningsZh": [
+        "家庭或团队内部出现微小摩擦，和谐受扰",
+        "虽有庆祝但内心存有隐忧，缺乏安全感",
+        "暂时性的不稳定，需要加强沟通维护"
+      ],
+      "fortuneTellingZh": [
+        "喜悦与丰收时刻，与所爱之人共同庆祝",
+        "巩固既有成果，享受安定温馨的氛围"
+      ]
+    },
+    {
+      "id": 26,
+      "code": "wands_05",
+      "nameEn": "Five Of Wands",
+      "nameZh": "权杖五",
+      "arcana": "MINOR",
+      "suit": "WANDS",
+      "rank": 5,
+      "rankName": "Five",
+      "element": "FIRE",
+      "keywordsEn": [
+        "confrontation",
+        "disruption",
+        "distinction",
+        "objection",
+        "strife"
+      ],
+      "keywordsZh": [
+        "权杖五",
+        "权杖牌组",
+        "FIRE元素"
+      ],
+      "uprightMeanings": [
+        "激烈的竞争、意见分歧与思想碰撞",
+        "各执己见的混乱争执，需要磨合协调",
+        "在挑战与竞争中激发自身潜能与斗志"
+      ],
+      "reversedMeanings": [
+        "矛盾激化导致内耗，恶性竞争两败俱伤",
+        "逃避必要的竞争，或在混乱中妥协退让",
+        "纷争逐渐平息，找到化解矛盾的契机"
+      ],
+      "fortuneTelling": [
+        "竞争能够促人成长，但在纷争中需保持风度与理智",
+        "理清核心诉求，避免无谓的口舌之争"
+      ],
+      "uprightMeaningsEn": [
+        "Calmly expressing a dissenting opinion",
+        "Allowing someone to use his or her own methods to get a job done",
+        "Opening the floor for discussion or debate",
+        "Comparing progress made so far to standards set earlier"
+      ],
+      "reversedMeaningsEn": [
+        "Berating others for their ridiculous opinions",
+        "Picking fights",
+        "Offering destructive criticism",
+        "Baiting people with barbed remarks",
+        "Disrupting progress with an endless stream of pointless objections"
+      ],
+      "fortuneTellingEn": [
+        "Prepare for a fight with your best friend",
+        "Remember: once you let words loose, you can't take them back"
+      ],
+      "uprightMeaningsZh": [
+        "激烈的竞争、意见分歧与思想碰撞",
+        "各执己见的混乱争执，需要磨合协调",
+        "在挑战与竞争中激发自身潜能与斗志"
+      ],
+      "reversedMeaningsZh": [
+        "矛盾激化导致内耗，恶性竞争两败俱伤",
+        "逃避必要的竞争，或在混乱中妥协退让",
+        "纷争逐渐平息，找到化解矛盾的契机"
+      ],
+      "fortuneTellingZh": [
+        "竞争能够促人成长，但在纷争中需保持风度与理智",
+        "理清核心诉求，避免无谓的口舌之争"
+      ]
+    },
+    {
+      "id": 27,
+      "code": "wands_06",
+      "nameEn": "Six Of Wands",
+      "nameZh": "权杖六",
+      "arcana": "MINOR",
+      "suit": "WANDS",
+      "rank": 6,
+      "rankName": "Six",
+      "element": "FIRE",
+      "keywordsEn": [
+        "victory",
+        "achievement",
+        "success",
+        "triumph"
+      ],
+      "keywordsZh": [
+        "权杖六",
+        "权杖牌组",
+        "FIRE元素"
+      ],
+      "uprightMeanings": [
+        "赢得胜利与荣耀，获得公众的赞誉与认可",
+        "带领团队凯旋，自信满满迈向更高目标",
+        "付出得到应有的回报，士气高涨"
+      ],
+      "reversedMeanings": [
+        "骄兵必败，因傲慢自满而引发他人反感",
+        "胜利果实被窃取，或荣誉未能得到应有承认",
+        "遭遇暂时的失败挫折，自信心受挫"
+      ],
+      "fortuneTelling": [
+        "你的努力赢得了众人的掌声与认可，尽情享受荣光",
+        "保持谦逊与进取，胜利将持续伴随"
+      ],
+      "uprightMeaningsEn": [
+        "Outperforming your peers",
+        "Winning a competition",
+        "Being recognized as a capable person",
+        "Having your \"moment in the spotlight\"",
+        "Being cheered on by the crowd",
+        "Getting an award",
+        "Earning the admiration of others",
+        "Telling someone, \"Good job!\""
+      ],
+      "reversedMeaningsEn": [
+        "Being a bad winner",
+        "Allowing your achievements to inflate your ego",
+        "Looking down on people who seem less capable",
+        "Craving to be the center of attention",
+        "Giving or receiving insincere praise",
+        "Envying the achievements of others"
+      ],
+      "fortuneTellingEn": [
+        "Someone is planning a party for you, but not everyone feels so good about your recent success",
+        "Watch out for envious friends"
+      ],
+      "uprightMeaningsZh": [
+        "赢得胜利与荣耀，获得公众的赞誉与认可",
+        "带领团队凯旋，自信满满迈向更高目标",
+        "付出得到应有的回报，士气高涨"
+      ],
+      "reversedMeaningsZh": [
+        "骄兵必败，因傲慢自满而引发他人反感",
+        "胜利果实被窃取，或荣誉未能得到应有承认",
+        "遭遇暂时的失败挫折，自信心受挫"
+      ],
+      "fortuneTellingZh": [
+        "你的努力赢得了众人的掌声与认可，尽情享受荣光",
+        "保持谦逊与进取，胜利将持续伴随"
+      ]
+    },
+    {
+      "id": 28,
+      "code": "wands_07",
+      "nameEn": "Seven Of Wands",
+      "nameZh": "权杖七",
+      "arcana": "MINOR",
+      "suit": "WANDS",
+      "rank": 7,
+      "rankName": "Seven",
+      "element": "FIRE",
+      "keywordsEn": [
+        "bravery",
+        "resolve",
+        "determination"
+      ],
+      "keywordsZh": [
+        "权杖七",
+        "权杖牌组",
+        "FIRE元素"
+      ],
+      "uprightMeanings": [
+        "居高临下坚守阵地，面对多方挑战毫不退缩",
+        "凭借勇气与信念捍卫自身立场与成果",
+        "在重重压力下展现非凡的韧性与主导力"
+      ],
+      "reversedMeanings": [
+        "寡不敌众，在强压之下防线濒临崩溃",
+        "盲目固执坚守无意义的阵地，消耗过大",
+        "缺乏自信与策略，面临被动挨打的局面"
+      ],
+      "fortuneTelling": [
+        "坚守你的核心原则，勇敢面对一切质疑与挑战",
+        "你占据有利地形，坚定信念就能守住胜利"
+      ],
+      "uprightMeaningsEn": [
+        "Refusing to be silenced through fear or intimidation",
+        "Continuing a fight against all odds",
+        "Being fierce",
+        "Defending yourself against physical and emotional attacks",
+        "Refusing to put up with abuse",
+        "Clinging to your values despite all pressure to abandon them"
+      ],
+      "reversedMeaningsEn": [
+        "Having a chip on your shoulder",
+        "Taking unnecessary risks as a means of proving your fearlessness",
+        "Looking for an opportunity to take offense",
+        "Responding to constructive criticism with defensiveness",
+        "Refusing to stand up for yourself and your beliefs"
+      ],
+      "fortuneTellingEn": [
+        "Don't be surprised by a personal attack",
+        "Prepare to defend yourself or someone you love"
+      ],
+      "uprightMeaningsZh": [
+        "居高临下坚守阵地，面对多方挑战毫不退缩",
+        "凭借勇气与信念捍卫自身立场与成果",
+        "在重重压力下展现非凡的韧性与主导力"
+      ],
+      "reversedMeaningsZh": [
+        "寡不敌众，在强压之下防线濒临崩溃",
+        "盲目固执坚守无意义的阵地，消耗过大",
+        "缺乏自信与策略，面临被动挨打的局面"
+      ],
+      "fortuneTellingZh": [
+        "坚守你的核心原则，勇敢面对一切质疑与挑战",
+        "你占据有利地形，坚定信念就能守住胜利"
+      ]
+    },
+    {
+      "id": 29,
+      "code": "wands_08",
+      "nameEn": "Eight Of Wands",
+      "nameZh": "权杖八",
+      "arcana": "MINOR",
+      "suit": "WANDS",
+      "rank": 8,
+      "rankName": "Eight",
+      "element": "FIRE",
+      "keywordsEn": [
+        "speed",
+        "swiftness",
+        "responsiveness",
+        "change"
+      ],
+      "keywordsZh": [
+        "权杖八",
+        "权杖牌组",
+        "FIRE元素"
+      ],
+      "uprightMeanings": [
+        "迅速推进，事情以极快的速度向前发展",
+        "好消息或重要信息飞速传来，行动敏捷",
+        "扫清障碍，能量顺畅流淌，高效达成目标"
+      ],
+      "reversedMeanings": [
+        "忙乱无序，因匆忙急躁而频频出错",
+        "信息传递受阻或延误，计划遭遇突发停顿",
+        "方向失控，盲目加速导致不可挽回的后果"
+      ],
+      "fortuneTelling": [
+        "加速推进的良机，果断行动将取得立竿见影的成效",
+        "保持敏捷与专注，快速捕捉身边的信息"
+      ],
+      "uprightMeaningsEn": [
+        "Taking swift action",
+        "Moving forward with a plan as quickly as possible",
+        "Energizing yourself",
+        "Adapting to sudden changes",
+        "Taking setbacks in stride",
+        "Embracing the idea that nothing stays the same forever",
+        "Reacting quickly and appropriately to unforeseen problems"
+      ],
+      "reversedMeaningsEn": [
+        "Giving in to panic",
+        "Running in circles and screaming",
+        "Insisting things must always stay the same",
+        "Stirring the pot just to see what will happen",
+        "Rushing others",
+        "Refusing to re-evaluate a schedule or program, even when it's clearly no longer appropriate"
+      ],
+      "fortuneTellingEn": [
+        "Watch for a surprising letter in the mail",
+        "Your whole world is about to be turned on its ear"
+      ],
+      "uprightMeaningsZh": [
+        "迅速推进，事情以极快的速度向前发展",
+        "好消息或重要信息飞速传来，行动敏捷",
+        "扫清障碍，能量顺畅流淌，高效达成目标"
+      ],
+      "reversedMeaningsZh": [
+        "忙乱无序，因匆忙急躁而频频出错",
+        "信息传递受阻或延误，计划遭遇突发停顿",
+        "方向失控，盲目加速导致不可挽回的后果"
+      ],
+      "fortuneTellingZh": [
+        "加速推进的良机，果断行动将取得立竿见影的成效",
+        "保持敏捷与专注，快速捕捉身边的信息"
+      ]
+    },
+    {
+      "id": 30,
+      "code": "wands_09",
+      "nameEn": "Nine Of Wands",
+      "nameZh": "权杖九",
+      "arcana": "MINOR",
+      "suit": "WANDS",
+      "rank": 9,
+      "rankName": "Nine",
+      "element": "FIRE",
+      "keywordsEn": [
+        "toughness",
+        "persistence",
+        "stamina",
+        "loyalty",
+        "release"
+      ],
+      "keywordsZh": [
+        "权杖九",
+        "权杖牌组",
+        "FIRE元素"
+      ],
+      "uprightMeanings": [
+        "历经磨难依然坚守，保持最后的警惕与防御",
+        "虽然疲惫但意志坚韧，胜利已近在咫尺",
+        "吸取过往教训，筑牢防线准备迎接最终考验"
+      ],
+      "reversedMeanings": [
+        "身心俱疲防线崩溃，难以承受最后的压力",
+        "草木皆兵过于多疑，把精力耗费在防备假想敌上",
+        "固步自封拒绝变通，在死撑中耗尽元气"
+      ],
+      "fortuneTelling": [
+        "坚持就是胜利，咬紧牙关跨过这道最后的坎",
+        "保持警觉的同时也要注意休整精力"
+      ],
+      "uprightMeaningsEn": [
+        "Sticking with it for the duration",
+        "Fulfilling your promises and obligations",
+        "Bearing up under incredible duress",
+        "Dragging yourself across the finish line",
+        "Picking yourself up by your own bootstraps",
+        "Refusing to quit",
+        "Going as far as you can go and being satisfied with your performance"
+      ],
+      "reversedMeaningsEn": [
+        "Making yourself a martyr",
+        "Abandoning your post",
+        "Giving up at the first sign of opposition",
+        "Being prevented from fulfilling an obligation",
+        "Failing to be dependable",
+        "Refusing to let something go that needs to be released",
+        "Beating a dead horse"
+      ],
+      "fortuneTellingEn": [
+        "Don't relax yet; there's more to come",
+        "The test you're facing now is happening for one reason: to show you who your real friends are"
+      ],
+      "uprightMeaningsZh": [
+        "历经磨难依然坚守，保持最后的警惕与防御",
+        "虽然疲惫但意志坚韧，胜利已近在咫尺",
+        "吸取过往教训，筑牢防线准备迎接最终考验"
+      ],
+      "reversedMeaningsZh": [
+        "身心俱疲防线崩溃，难以承受最后的压力",
+        "草木皆兵过于多疑，把精力耗费在防备假想敌上",
+        "固步自封拒绝变通，在死撑中耗尽元气"
+      ],
+      "fortuneTellingZh": [
+        "坚持就是胜利，咬紧牙关跨过这道最后的坎",
+        "保持警觉的同时也要注意休整精力"
+      ]
+    },
+    {
+      "id": 31,
+      "code": "wands_10",
+      "nameEn": "Ten Of Wands",
+      "nameZh": "权杖十",
+      "arcana": "MINOR",
+      "suit": "WANDS",
+      "rank": 10,
+      "rankName": "Ten",
+      "element": "FIRE",
+      "keywordsEn": [
+        "exhaustion",
+        "resistance",
+        "burden",
+        "oppression"
+      ],
+      "keywordsZh": [
+        "权杖十",
+        "权杖牌组",
+        "FIRE元素"
+      ],
+      "uprightMeanings": [
+        "背负沉重负担与责任，承受巨大的身心压力",
+        "大包大揽力不从心，目标虽近但步履维艰",
+        "需要学会适当放权与断舍离，减轻负荷"
+      ],
+      "reversedMeanings": [
+        "不堪重负彻底崩溃，被过多责任所压垮",
+        "终于学会放下不属于自己的负担，重获轻松",
+        "推卸责任导致局面失控，逃避现实问题"
+      ],
+      "fortuneTelling": [
+        "审视你肩上的负荷，放下不必要的包袱才能走得更远",
+        "不要独自硬扛，寻求团队协作与分担"
+      ],
+      "uprightMeaningsEn": [
+        "Holding your own in extreme circumstances",
+        "Helping others carry their burdens",
+        "Coming to the aid of the oppressed",
+        "Knowing and being honest about your own limits",
+        "Recognizing when you are not well-suited for a particular task"
+      ],
+      "reversedMeaningsEn": [
+        "Taking on more work than you know you can handle",
+        "Refusing to say \"No\" when you're already overloaded",
+        "Making a habit of working overtime",
+        "Shielding others from facing the consequences of their own poor judgment",
+        "Over-extending yourself on a regular basis"
+      ],
+      "fortuneTellingEn": [
+        "You're worn out",
+        "Back off, take a time out, and let someone else handle things for a while"
+      ],
+      "uprightMeaningsZh": [
+        "背负沉重负担与责任，承受巨大的身心压力",
+        "大包大揽力不从心，目标虽近但步履维艰",
+        "需要学会适当放权与断舍离，减轻负荷"
+      ],
+      "reversedMeaningsZh": [
+        "不堪重负彻底崩溃，被过多责任所压垮",
+        "终于学会放下不属于自己的负担，重获轻松",
+        "推卸责任导致局面失控，逃避现实问题"
+      ],
+      "fortuneTellingZh": [
+        "审视你肩上的负荷，放下不必要的包袱才能走得更远",
+        "不要独自硬扛，寻求团队协作与分担"
+      ]
+    },
+    {
+      "id": 32,
+      "code": "wands_11",
+      "nameEn": "Page Of Wands",
+      "nameZh": "权杖侍从",
+      "arcana": "MINOR",
+      "suit": "WANDS",
+      "rank": 11,
+      "rankName": "Page",
+      "element": "FIRE",
+      "keywordsEn": [
+        "enthusiasm",
+        "eagerness",
+        "confidence",
+        "validation",
+        "affirmation"
+      ],
+      "keywordsZh": [
+        "权杖侍从",
+        "权杖牌组",
+        "FIRE元素"
+      ],
+      "uprightMeanings": [
+        "充满好奇心与探索欲的年轻探险者",
+        "带来令人振奋的新消息、新想法或新契机",
+        "热情洋溢，勇于尝试新事物与新技能"
+      ],
+      "reversedMeanings": [
+        "心浮气躁三分钟热度，缺乏持久的恒心",
+        "带来令人失望或不可靠的信息，言过其实",
+        "任性幼稚，因缺乏自律而难以成事"
+      ],
+      "fortuneTelling": [
+        "保持年轻的好奇心与求知欲，新消息即将到来",
+        "勇敢开启新领域的学习与探索"
+      ],
+      "uprightMeaningsEn": [
+        "Leaping at a new opportunity",
+        "Being a cheerleader or ardent advocate for your cause",
+        "Being a True Believer",
+        "Taking first steps toward independence",
+        "Trusting in your own abilities",
+        "Asking for feedback"
+      ],
+      "reversedMeaningsEn": [
+        "Basing your entire self-image on what others think",
+        "Seizing every new idea that comes your way without question",
+        "Habitually discounting input or feedback from others",
+        "Being so eager to \"do it yourself\" that you hinder your own progress"
+      ],
+      "fortuneTellingEn": [
+        "This card represents a young man or woman with a fiery, enthusiastic demeanor, likely born a Cancer, Leo, or Virgo, who wants to start a new relationship with you"
+      ],
+      "uprightMeaningsZh": [
+        "充满好奇心与探索欲的年轻探险者",
+        "带来令人振奋的新消息、新想法或新契机",
+        "热情洋溢，勇于尝试新事物与新技能"
+      ],
+      "reversedMeaningsZh": [
+        "心浮气躁三分钟热度，缺乏持久的恒心",
+        "带来令人失望或不可靠的信息，言过其实",
+        "任性幼稚，因缺乏自律而难以成事"
+      ],
+      "fortuneTellingZh": [
+        "保持年轻的好奇心与求知欲，新消息即将到来",
+        "勇敢开启新领域的学习与探索"
+      ]
+    },
+    {
+      "id": 33,
+      "code": "wands_12",
+      "nameEn": "Knight Of Wands",
+      "nameZh": "权杖骑士",
+      "arcana": "MINOR",
+      "suit": "WANDS",
+      "rank": 12,
+      "rankName": "Knight",
+      "element": "FIRE",
+      "keywordsEn": [
+        "boldness",
+        "bravado",
+        "passion",
+        "persuasion",
+        "advocacy"
+      ],
+      "keywordsZh": [
+        "权杖骑士",
+        "权杖牌组",
+        "FIRE元素"
+      ],
+      "uprightMeanings": [
+        "雷厉风行充满勇气的行动派，敢于开拓创新",
+        "目标坚定，带着澎湃的激情全速向前冲刺",
+        "富有冒险精神与感染力，极具领袖气质"
+      ],
+      "reversedMeanings": [
+        "鲁莽冲动盲目蛮干，缺乏周密的策略考量",
+        "脾气暴躁易与人冲突，半途而废难以持久",
+        "行事轻率不可靠，破坏力大于建设力"
+      ],
+      "fortuneTelling": [
+        "鼓足勇气果断出击，用行动力打破当前的沉闷",
+        "在快节奏推进中兼顾稳健，避免冲动冒进"
+      ],
+      "uprightMeaningsEn": [
+        "Charging ahead",
+        "Making rapid progress",
+        "Refusing limits",
+        "Dazzling those around you with your wit and charm",
+        "Convincing others of your right to leadership",
+        "Convincing others to follow you",
+        "Being a catalyst for change"
+      ],
+      "reversedMeaningsEn": [
+        "Blundering forward with inadequate skill or information",
+        "Running roughshod over the feelings of others",
+        "Using sex appeal to manipulate others",
+        "Forcing your leadership or ideology on others",
+        "Beginning many projects without finishing any"
+      ],
+      "fortuneTellingEn": [
+        "This card represents a man with a bold, passionate personality, likely born between July 12th and August 11th, who wants to sweep you off your feet"
+      ],
+      "uprightMeaningsZh": [
+        "雷厉风行充满勇气的行动派，敢于开拓创新",
+        "目标坚定，带着澎湃的激情全速向前冲刺",
+        "富有冒险精神与感染力，极具领袖气质"
+      ],
+      "reversedMeaningsZh": [
+        "鲁莽冲动盲目蛮干，缺乏周密的策略考量",
+        "脾气暴躁易与人冲突，半途而废难以持久",
+        "行事轻率不可靠，破坏力大于建设力"
+      ],
+      "fortuneTellingZh": [
+        "鼓足勇气果断出击，用行动力打破当前的沉闷",
+        "在快节奏推进中兼顾稳健，避免冲动冒进"
+      ]
+    },
+    {
+      "id": 34,
+      "code": "wands_13",
+      "nameEn": "Queen Of Wands",
+      "nameZh": "权杖王后",
+      "arcana": "MINOR",
+      "suit": "WANDS",
+      "rank": 13,
+      "rankName": "Queen",
+      "element": "FIRE",
+      "keywordsEn": [
+        "attention",
+        "attraction",
+        "unification",
+        "collaboration"
+      ],
+      "keywordsZh": [
+        "权杖王后",
+        "权杖牌组",
+        "FIRE元素"
+      ],
+      "uprightMeanings": [
+        "自信独立、热情开朗且富有感染力的女性领袖",
+        "善于激励他人，充满活力与坚定的自我认同",
+        "社交魅力出众，兼具温暖与强大的行动魄力"
+      ],
+      "reversedMeanings": [
+        "情绪化严重，嫉妒心或控制欲过强",
+        "傲慢自负，在人际交往中盛气凌人令人反感",
+        "缺乏自信，依赖他人的认可而失去自我"
+      ],
+      "fortuneTelling": [
+        "展现你自信阳光的独特魅力，散发正向感染力",
+        "坚定信任自己的直觉与能力，温暖照亮身边人"
+      ],
+      "uprightMeaningsEn": [
+        "Paying close attention",
+        "Helping others focus on the issue at hand",
+        "Getting everyone to work together",
+        "Identifying common ground",
+        "Bringing people together, despite their differences",
+        "Using reverse psychology"
+      ],
+      "reversedMeaningsEn": [
+        "Being distracted, or using your charms or skills to distract others from the goal",
+        "Calling attention to yourself with negative or unhealthy behaviors",
+        "Disrupting group activities as a means of feeding your own ego"
+      ],
+      "fortuneTellingEn": [
+        "This card represents a woman with an attractive, appealing personality, likely born between March 11th and April 20th, who wants to charm you into doing things her way"
+      ],
+      "uprightMeaningsZh": [
+        "自信独立、热情开朗且富有感染力的女性领袖",
+        "善于激励他人，充满活力与坚定的自我认同",
+        "社交魅力出众，兼具温暖与强大的行动魄力"
+      ],
+      "reversedMeaningsZh": [
+        "情绪化严重，嫉妒心或控制欲过强",
+        "傲慢自负，在人际交往中盛气凌人令人反感",
+        "缺乏自信，依赖他人的认可而失去自我"
+      ],
+      "fortuneTellingZh": [
+        "展现你自信阳光的独特魅力，散发正向感染力",
+        "坚定信任自己的直觉与能力，温暖照亮身边人"
+      ]
+    },
+    {
+      "id": 35,
+      "code": "wands_14",
+      "nameEn": "King Of Wands",
+      "nameZh": "权杖国王",
+      "arcana": "MINOR",
+      "suit": "WANDS",
+      "rank": 14,
+      "rankName": "King",
+      "element": "FIRE",
+      "keywordsEn": [
+        "creativity",
+        "ingenuity",
+        "achievement",
+        "direction"
+      ],
+      "keywordsZh": [
+        "权杖国王",
+        "权杖牌组",
+        "FIRE元素"
+      ],
+      "uprightMeanings": [
+        "富有远见卓识的领袖人物，掌控大局运筹帷幄",
+        "具备成熟稳健的决断力与极强的执行领导力",
+        "激励并带领团队开拓创新，创造辉煌成就"
+      ],
+      "reversedMeanings": [
+        "专横跋扈独断专行，不顾他人感受与合理建议",
+        "固执己见好大喜功，导致团队离心离德",
+        "外强中干缺乏担当，面对危机失去掌控"
+      ],
+      "fortuneTelling": [
+        "以宏观视野统领全局，果断做出权威决策",
+        "用成熟理性的胸怀赢得尊敬与追随"
+      ],
+      "uprightMeaningsEn": [
+        "Putting old things together in new and exciting ways",
+        "Coming up with unexpected solutions",
+        "Using your experience to solve puzzles and problems",
+        "Doing what you set out to do",
+        "Directing the efforts of others"
+      ],
+      "reversedMeaningsEn": [
+        "Using your creativity to get out of honest work",
+        "Investing great energy in avoiding responsibility",
+        "Boasting about achievements without putting your expertise to practical use",
+        "Lording it over others"
+      ],
+      "fortuneTellingEn": [
+        "This card represents an older man with a commanding, charismatic personality, likely born between November 13th and December 12th, who prefers to give directions and have them followed"
+      ],
+      "uprightMeaningsZh": [
+        "富有远见卓识的领袖人物，掌控大局运筹帷幄",
+        "具备成熟稳健的决断力与极强的执行领导力",
+        "激励并带领团队开拓创新，创造辉煌成就"
+      ],
+      "reversedMeaningsZh": [
+        "专横跋扈独断专行，不顾他人感受与合理建议",
+        "固执己见好大喜功，导致团队离心离德",
+        "外强中干缺乏担当，面对危机失去掌控"
+      ],
+      "fortuneTellingZh": [
+        "以宏观视野统领全局，果断做出权威决策",
+        "用成熟理性的胸怀赢得尊敬与追随"
+      ]
+    },
+    {
+      "id": 36,
+      "code": "cups_01",
+      "nameEn": "Ace Of Cups",
+      "nameZh": "圣杯一",
+      "arcana": "MINOR",
+      "suit": "CUPS",
+      "rank": 1,
+      "rankName": "Ace",
+      "element": "WATER",
+      "keywordsEn": [
+        "intuition",
+        "spirituality",
+        "affection",
+        "motivation"
+      ],
+      "keywordsZh": [
+        "圣杯一",
+        "圣杯牌组",
+        "WATER元素"
+      ],
+      "uprightMeanings": [
+        "情感之泉喷涌而出，爱与灵感的丰沛开端",
+        "心灵获得深度滋养，直觉与同理心大幅提升",
+        "迎来一段深厚的新恋情、新友谊或精神寄托"
+      ],
+      "reversedMeanings": [
+        "情感枯竭或封闭内心，压抑真实的感受",
+        "情绪泛滥失控，陷入自怜或过度敏感中",
+        "付出得不到回应，心灵感到空虚与失落"
+      ],
+      "fortuneTelling": [
+        "敞开你的心扉，让爱与善意自由流淌",
+        "滋养你的心灵，美好的情感联结正在萌芽"
+      ],
+      "uprightMeaningsEn": [
+        "Trusting your feelings",
+        "Opening yourself to spirit",
+        "Accepting and returning affection",
+        "Getting in touch with what motivates you",
+        "Taking advantage of an opportunity to express love to others",
+        "Listening to the still, small voice"
+      ],
+      "reversedMeaningsEn": [
+        "Hiding your feelings",
+        "Spurning an opportunity to love or be loved",
+        "Numbing yourself to spiritual yearnings",
+        "Rejecting the counsel of your heart",
+        "Becoming a puppet of your own emotions",
+        "Indulging in hysteria or obsession"
+      ],
+      "fortuneTellingEn": [
+        "Romance is in the cards",
+        "A new relationship or marriage is just around the corner",
+        "Prayers are answered"
+      ],
+      "uprightMeaningsZh": [
+        "情感之泉喷涌而出，爱与灵感的丰沛开端",
+        "心灵获得深度滋养，直觉与同理心大幅提升",
+        "迎来一段深厚的新恋情、新友谊或精神寄托"
+      ],
+      "reversedMeaningsZh": [
+        "情感枯竭或封闭内心，压抑真实的感受",
+        "情绪泛滥失控，陷入自怜或过度敏感中",
+        "付出得不到回应，心灵感到空虚与失落"
+      ],
+      "fortuneTellingZh": [
+        "敞开你的心扉，让爱与善意自由流淌",
+        "滋养你的心灵，美好的情感联结正在萌芽"
+      ]
+    },
+    {
+      "id": 37,
+      "code": "cups_02",
+      "nameEn": "Two Of Cups",
+      "nameZh": "圣杯二",
+      "arcana": "MINOR",
+      "suit": "CUPS",
+      "rank": 2,
+      "rankName": "Two",
+      "element": "WATER",
+      "keywordsEn": [
+        "union",
+        "attraction",
+        "combination",
+        "affection"
+      ],
+      "keywordsZh": [
+        "圣杯二",
+        "圣杯牌组",
+        "WATER元素"
+      ],
+      "uprightMeanings": [
+        "彼此倾心、相互尊重的亲密关系与灵魂共鸣",
+        "平等的合作与深厚的友谊，达成高度默契",
+        "化解隔阂重建信任，身心沉浸在和谐爱意中"
+      ],
+      "reversedMeanings": [
+        "沟通断层产生误解与隔阂，信任受到动摇",
+        "关系失衡一方过度索取，出现权力斗争",
+        "合作破裂或感情遇冷，需要重新寻找平衡点"
+      ],
+      "fortuneTelling": [
+        "珍惜眼前这份真挚的缘分与伙伴关系",
+        "坦诚沟通是维持长期和谐与互信的基石"
+      ],
+      "uprightMeaningsEn": [
+        "Being drawn to someone",
+        "Longing for someone or something",
+        "Acting on your desires",
+        "Discovering a feeling is mutual",
+        "Doing what makes you feel good",
+        "Merging",
+        "Healing broken ties",
+        "Admitting two people feel differently about each other and moving on"
+      ],
+      "reversedMeaningsEn": [
+        "Burning bridges",
+        "Becoming caught up in unhealthy codependency",
+        "Shutting out anyone but your chosen few",
+        "Obsessing on someone who does not return your affections",
+        "Despairing over finding \"The One\"",
+        "Deceiving yourself about your true orientation"
+      ],
+      "fortuneTellingEn": [
+        "Someone has a secret crush on you",
+        "Relationships should be mutual; get rid of a leech"
+      ],
+      "uprightMeaningsZh": [
+        "彼此倾心、相互尊重的亲密关系与灵魂共鸣",
+        "平等的合作与深厚的友谊，达成高度默契",
+        "化解隔阂重建信任，身心沉浸在和谐爱意中"
+      ],
+      "reversedMeaningsZh": [
+        "沟通断层产生误解与隔阂，信任受到动摇",
+        "关系失衡一方过度索取，出现权力斗争",
+        "合作破裂或感情遇冷，需要重新寻找平衡点"
+      ],
+      "fortuneTellingZh": [
+        "珍惜眼前这份真挚的缘分与伙伴关系",
+        "坦诚沟通是维持长期和谐与互信的基石"
+      ]
+    },
+    {
+      "id": 38,
+      "code": "cups_03",
+      "nameEn": "Three Of Cups",
+      "nameZh": "圣杯三",
+      "arcana": "MINOR",
+      "suit": "CUPS",
+      "rank": 3,
+      "rankName": "Three",
+      "element": "WATER",
+      "keywordsEn": [
+        "celebration",
+        "expression",
+        "community",
+        "friendliness"
+      ],
+      "keywordsZh": [
+        "圣杯三",
+        "圣杯牌组",
+        "WATER元素"
+      ],
+      "uprightMeanings": [
+        "与挚友欢聚一堂，分享喜悦与成果的欢庆时刻",
+        "深厚的友谊与社群支持，充满欢笑与温馨",
+        "项目顺利推进迎来阶段性圆满与庆功盛典"
+      ],
+      "reversedMeanings": [
+        "过度沉溺于社交应酬与享乐，荒废正业",
+        "小圈子出现嫉妒、流言蜚语或排他倾向",
+        "感到融不进群体，在热闹中体会孤独"
+      ],
+      "fortuneTelling": [
+        "与好友分享你的快乐，美好的时光值得庆祝",
+        "社群与朋友将为你提供温暖的支持力量"
+      ],
+      "uprightMeaningsEn": [
+        "Celebrating your feelings or connections with others",
+        "Expressing joy through song, dance, or physical affection",
+        "Working together with others who share your feelings",
+        "Performing acts of service as a way of saying, \"I love you\"",
+        "Embracing unconventional romantic arrangements"
+      ],
+      "reversedMeaningsEn": [
+        "Mistaking giddiness for true affection",
+        "Being dominated by manic emotions",
+        "Expecting everyone to always feel the same way you do",
+        "Demanding unreasonable support from friends or family",
+        "Partying to a dangerous or unhealthy extent"
+      ],
+      "fortuneTellingEn": [
+        "Unconventional romance is coming your way: a love affair with someone you've always dismissed"
+      ],
+      "uprightMeaningsZh": [
+        "与挚友欢聚一堂，分享喜悦与成果的欢庆时刻",
+        "深厚的友谊与社群支持，充满欢笑与温馨",
+        "项目顺利推进迎来阶段性圆满与庆功盛典"
+      ],
+      "reversedMeaningsZh": [
+        "过度沉溺于社交应酬与享乐，荒废正业",
+        "小圈子出现嫉妒、流言蜚语或排他倾向",
+        "感到融不进群体，在热闹中体会孤独"
+      ],
+      "fortuneTellingZh": [
+        "与好友分享你的快乐，美好的时光值得庆祝",
+        "社群与朋友将为你提供温暖的支持力量"
+      ]
+    },
+    {
+      "id": 39,
+      "code": "cups_04",
+      "nameEn": "Four Of Cups",
+      "nameZh": "圣杯四",
+      "arcana": "MINOR",
+      "suit": "CUPS",
+      "rank": 4,
+      "rankName": "Four",
+      "element": "WATER",
+      "keywordsEn": [
+        "boredom",
+        "listlessness",
+        "lethargy",
+        "stability",
+        "ingratitude"
+      ],
+      "keywordsZh": [
+        "圣杯四",
+        "圣杯牌组",
+        "WATER元素"
+      ],
+      "uprightMeanings": [
+        "沉浸在倦怠与不满中，对眼前的机会视而不见",
+        "情感疲惫退缩自省，感到生活索然无味",
+        "陷入消极被动态度，拒绝外界伸出的援手"
+      ],
+      "reversedMeanings": [
+        "打破情感瓶颈，重新燃起对生活的热情与希望",
+        "不再执着于缺失，开始接纳新的机遇与善意",
+        "走出封闭低谷，主动拥抱外界的美好"
+      ],
+      "fortuneTelling": [
+        "不要对身边的美好熟视无睹，转换心态发现转机",
+        "走出自我封闭的迷局，新的礼物就在眼前"
+      ],
+      "uprightMeaningsEn": [
+        "Maintaining your emotional stability",
+        "Refusing to give in to overwhelming emotions",
+        "Appreciating what you have and refusing to take it for granted",
+        "Seeing the value of long-term commitments"
+      ],
+      "reversedMeaningsEn": [
+        "Being bored",
+        "Daydreaming at the expense of your work",
+        "Refusing to be engaged by opportunity",
+        "Taking people and relationships for granted",
+        "Ignoring romantic or spiritual opportunities",
+        "Spurning inspiration",
+        "Feeling everything should stay \"just like it is\""
+      ],
+      "fortuneTellingEn": [
+        "A lover is getting restless",
+        "Find out what he or she needs, or new opportunities may lure your partner away"
+      ],
+      "uprightMeaningsZh": [
+        "沉浸在倦怠与不满中，对眼前的机会视而不见",
+        "情感疲惫退缩自省，感到生活索然无味",
+        "陷入消极被动态度，拒绝外界伸出的援手"
+      ],
+      "reversedMeaningsZh": [
+        "打破情感瓶颈，重新燃起对生活的热情与希望",
+        "不再执着于缺失，开始接纳新的机遇与善意",
+        "走出封闭低谷，主动拥抱外界的美好"
+      ],
+      "fortuneTellingZh": [
+        "不要对身边的美好熟视无睹，转换心态发现转机",
+        "走出自我封闭的迷局，新的礼物就在眼前"
+      ]
+    },
+    {
+      "id": 40,
+      "code": "cups_05",
+      "nameEn": "Five Of Cups",
+      "nameZh": "圣杯五",
+      "arcana": "MINOR",
+      "suit": "CUPS",
+      "rank": 5,
+      "rankName": "Five",
+      "element": "WATER",
+      "keywordsEn": [
+        "loss",
+        "despair",
+        "re-evaluation",
+        "regret",
+        "uncertainty",
+        "repentance"
+      ],
+      "keywordsZh": [
+        "圣杯五",
+        "圣杯牌组",
+        "WATER元素"
+      ],
+      "uprightMeanings": [
+        "为失去的三杯水而悲伤流泪，沉溺于悔恨与痛苦",
+        "遭遇失落、背叛或期望落空，感到沮丧心碎",
+        "专注于失去的部分，忽略了身后尚存的希望"
+      ],
+      "reversedMeanings": [
+        "走出悲伤的阴影，从过往伤痛中逐渐疗愈复原",
+        "收拾心情认清现实，珍惜依然留在身边的美好",
+        "宽恕过去的不如意，重整旗鼓向前看"
+      ],
+      "fortuneTelling": [
+        "允许自己悲伤，但不要忽视身后依然挺立的支持",
+        "失去亦是释怀的开始，转过身来迎接新的可能"
+      ],
+      "uprightMeaningsEn": [
+        "Acknowledging loss and moving on",
+        "Focusing on how the glass remains \"half-full\"",
+        "Finding the silver lining in a dark cloud",
+        "Recognizing that loss is a natural part of life",
+        "Embracing healthy grief",
+        "Learning lessons from harsh consequences"
+      ],
+      "reversedMeaningsEn": [
+        "Wallowing in unhealthy grief or self-pity",
+        "Refusing to move on and let go",
+        "Clinging to the past",
+        "Obsessing on past lives and past loves",
+        "Failing to live in the present",
+        "Beating yourself up over past mistakes",
+        "Allowing fear of failure to limit your efforts"
+      ],
+      "fortuneTellingEn": [
+        "A breakup looms",
+        "Don't cry over spilt milk",
+        "Take your lumps and get back in the saddle"
+      ],
+      "uprightMeaningsZh": [
+        "为失去的三杯水而悲伤流泪，沉溺于悔恨与痛苦",
+        "遭遇失落、背叛或期望落空，感到沮丧心碎",
+        "专注于失去的部分，忽略了身后尚存的希望"
+      ],
+      "reversedMeaningsZh": [
+        "走出悲伤的阴影，从过往伤痛中逐渐疗愈复原",
+        "收拾心情认清现实，珍惜依然留在身边的美好",
+        "宽恕过去的不如意，重整旗鼓向前看"
+      ],
+      "fortuneTellingZh": [
+        "允许自己悲伤，但不要忽视身后依然挺立的支持",
+        "失去亦是释怀的开始，转过身来迎接新的可能"
+      ]
+    },
+    {
+      "id": 41,
+      "code": "cups_06",
+      "nameEn": "Six Of Cups",
+      "nameZh": "圣杯六",
+      "arcana": "MINOR",
+      "suit": "CUPS",
+      "rank": 6,
+      "rankName": "Six",
+      "element": "WATER",
+      "keywordsEn": [
+        "charity",
+        "sharing",
+        "sacrifice",
+        "cooperation",
+        "fairness"
+      ],
+      "keywordsZh": [
+        "圣杯六",
+        "圣杯牌组",
+        "WATER元素"
+      ],
+      "uprightMeanings": [
+        "重温童年般的纯真与美好回忆，故人重逢",
+        "纯粹无私的关爱与馈赠，享受温馨安全的庇护",
+        "从过往经验与旧日情谊中汲取前行的力量"
+      ],
+      "reversedMeanings": [
+        "沉溺于过去的旧梦无法自拔，抗拒长大与现实",
+        "旧日创伤再次浮现，或受到过去关系的羁绊",
+        "摆脱幼稚思维，以成熟的姿态独立面对未来"
+      ],
+      "fortuneTelling": [
+        "重拾纯真与初心，旧友或旧日的善意将温暖你",
+        "怀念过去的同时，也要积极活在当下的美好中"
+      ],
+      "uprightMeaningsEn": [
+        "Donating your time and talents to others",
+        "Taking satisfaction in knowing how your efforts will aid others",
+        "Creating a \"win-win\" scenario",
+        "Giving even when you know repayment is not possible",
+        "Being motivated to do a good deed"
+      ],
+      "reversedMeaningsEn": [
+        "Linking your sense of self-worth to the appraisals of others",
+        "Striving to appear more needy than you really are",
+        "Taking undeserved or unmerited charity",
+        "Bragging about your charitable efforts",
+        "Profiteering in times of distress",
+        "Refusing to share a burden"
+      ],
+      "fortuneTellingEn": [
+        "A stingy spirit is strangling your enjoyment of life",
+        "Loosen up and think of others for once, why don't you?"
+      ],
+      "uprightMeaningsZh": [
+        "重温童年般的纯真与美好回忆，故人重逢",
+        "纯粹无私的关爱与馈赠，享受温馨安全的庇护",
+        "从过往经验与旧日情谊中汲取前行的力量"
+      ],
+      "reversedMeaningsZh": [
+        "沉溺于过去的旧梦无法自拔，抗拒长大与现实",
+        "旧日创伤再次浮现，或受到过去关系的羁绊",
+        "摆脱幼稚思维，以成熟的姿态独立面对未来"
+      ],
+      "fortuneTellingZh": [
+        "重拾纯真与初心，旧友或旧日的善意将温暖你",
+        "怀念过去的同时，也要积极活在当下的美好中"
+      ]
+    },
+    {
+      "id": 42,
+      "code": "cups_07",
+      "nameEn": "Seven Of Cups",
+      "nameZh": "圣杯七",
+      "arcana": "MINOR",
+      "suit": "CUPS",
+      "rank": 7,
+      "rankName": "Seven",
+      "element": "WATER",
+      "keywordsEn": [
+        "imagination",
+        "dreams",
+        "illusions",
+        "goals"
+      ],
+      "keywordsZh": [
+        "圣杯七",
+        "圣杯牌组",
+        "WATER元素"
+      ],
+      "uprightMeanings": [
+        "面对形形色色的诱惑与幻想，难以抉择",
+        "白日做梦缺乏现实依据，被不切实际的欲望迷惑",
+        "选项众多但真伪莫辨，需要看清幻象背后的本质"
+      ],
+      "reversedMeanings": [
+        "打破虚妄的幻想，看清现实真相与核心诉求",
+        "从迷茫中清醒过来，做出脚踏实地的清晰选择",
+        "消除内心的杂念，专注于真正可行的目标"
+      ],
+      "fortuneTelling": [
+        "不要被眼花缭乱的表象所迷惑，保持清醒理智",
+        "脚踏实地做选择，行动胜过一切空想"
+      ],
+      "uprightMeaningsEn": [
+        "Motivating yourself with images of future success",
+        "Using visualization to encourage progress",
+        "Taking an imaginative or creative approach to problem solving",
+        "Making dreams come true",
+        "Gleaning insight from personal visions"
+      ],
+      "reversedMeaningsEn": [
+        "Obsessing on imaginary fears or uncertain consequences",
+        "Giving in to emotional or political terrorism",
+        "Spending more time dreaming than working",
+        "Failing to envision the possible repercussions of your choices",
+        "Being controlled by fear"
+      ],
+      "fortuneTellingEn": [
+        "You're being fed a line",
+        "Rather than be dazzled by fancy words and promises, demand something real"
+      ],
+      "uprightMeaningsZh": [
+        "面对形形色色的诱惑与幻想，难以抉择",
+        "白日做梦缺乏现实依据，被不切实际的欲望迷惑",
+        "选项众多但真伪莫辨，需要看清幻象背后的本质"
+      ],
+      "reversedMeaningsZh": [
+        "打破虚妄的幻想，看清现实真相与核心诉求",
+        "从迷茫中清醒过来，做出脚踏实地的清晰选择",
+        "消除内心的杂念，专注于真正可行的目标"
+      ],
+      "fortuneTellingZh": [
+        "不要被眼花缭乱的表象所迷惑，保持清醒理智",
+        "脚踏实地做选择，行动胜过一切空想"
+      ]
+    },
+    {
+      "id": 43,
+      "code": "cups_08",
+      "nameEn": "Eight Of Cups",
+      "nameZh": "圣杯八",
+      "arcana": "MINOR",
+      "suit": "CUPS",
+      "rank": 8,
+      "rankName": "Eight",
+      "element": "WATER",
+      "keywordsEn": [
+        "longing",
+        "dissatisfaction",
+        "quest",
+        "departure",
+        "withdrawal"
+      ],
+      "keywordsZh": [
+        "圣杯八",
+        "圣杯牌组",
+        "WATER元素"
+      ],
+      "uprightMeanings": [
+        "毅然转身离开虽然熟悉但已无滋养的环境与关系",
+        "放弃表面的安稳，踏上追寻更高精神寄托的旅程",
+        "放下过往执念，勇敢迈向未知的自我救赎之路"
+      ],
+      "reversedMeanings": [
+        "害怕未知而迟迟不敢离开有害环境，苦苦纠缠",
+        "逃避现实责任盲目流浪，漫无目的缺乏方向",
+        "终于下定决心告别过去，虽然艰难但势在必行"
+      ],
+      "fortuneTelling": [
+        "勇敢告别不再滋养你的过去，追求更高的人生意义",
+        "离开是为了在更广阔的天地找回真实的自我"
+      ],
+      "uprightMeaningsEn": [
+        "Wanting something better",
+        "Blazing your own trail",
+        "Realizing there must be more to life",
+        "Leaving an unhealthy situation behind",
+        "Starting your own business",
+        "Going on a retreat",
+        "Seeking the \"still, small voice\""
+      ],
+      "reversedMeaningsEn": [
+        "Being implacable",
+        "Finding fault",
+        "Nitpicking",
+        "Refusing to settle down",
+        "Running away from problems or confrontations",
+        "Saying, \"It's my way or the highway!\"",
+        "Harping on past mistakes and disappointments",
+        "Threatening to quit as a strategy to get your way"
+      ],
+      "fortuneTellingEn": [
+        "Someone's \"stepping out\" on you, now or in the near future",
+        "Maybe it's time to quit talking about the problem and just move on"
+      ],
+      "uprightMeaningsZh": [
+        "毅然转身离开虽然熟悉但已无滋养的环境与关系",
+        "放弃表面的安稳，踏上追寻更高精神寄托的旅程",
+        "放下过往执念，勇敢迈向未知的自我救赎之路"
+      ],
+      "reversedMeaningsZh": [
+        "害怕未知而迟迟不敢离开有害环境，苦苦纠缠",
+        "逃避现实责任盲目流浪，漫无目的缺乏方向",
+        "终于下定决心告别过去，虽然艰难但势在必行"
+      ],
+      "fortuneTellingZh": [
+        "勇敢告别不再滋养你的过去，追求更高的人生意义",
+        "离开是为了在更广阔的天地找回真实的自我"
+      ]
+    },
+    {
+      "id": 44,
+      "code": "cups_09",
+      "nameEn": "Nine Of Cups",
+      "nameZh": "圣杯九",
+      "arcana": "MINOR",
+      "suit": "CUPS",
+      "rank": 9,
+      "rankName": "Nine",
+      "element": "WATER",
+      "keywordsEn": [
+        "satisfaction",
+        "sensuality",
+        "luxury",
+        "pleasure"
+      ],
+      "keywordsZh": [
+        "圣杯九",
+        "圣杯牌组",
+        "WATER元素"
+      ],
+      "uprightMeanings": [
+        "愿望达成牌，享受充盈的情感满足与物质安逸",
+        "内心的喜悦与自豪，自给自足的丰盛与幸福感",
+        "梦想成真，对当下的生活状态感到极其满意"
+      ],
+      "reversedMeanings": [
+        "过度沉溺于自我满足与物质享受，自满自大",
+        "表面光鲜亮丽但内心深处依然感到空虚缺憾",
+        "愿望达成伴随着未预料到的隐性代价"
+      ],
+      "fortuneTelling": [
+        "心想事成的大吉之兆，尽情享受当下的幸福与满足",
+        "懂得感恩与分享，这份喜悦将会更加持久"
+      ],
+      "uprightMeaningsEn": [
+        "Being delighted with your own achievements",
+        "Recognizing your own talents and abilities",
+        "Reveling in the good things life has to offer",
+        "Indulging yourself",
+        "Relaxing and unwinding",
+        "Having everything you need in order to feel complete"
+      ],
+      "reversedMeaningsEn": [
+        "Being smug",
+        "Satisfying yourself at the expense of others",
+        "Being selfish",
+        "Over-indulging",
+        "Avoiding work that needs to be done",
+        "Claiming achievements or skills you do not possess",
+        "Never being satisfied, no matter how much you have"
+      ],
+      "fortuneTellingEn": [
+        "Whatever you want, you'll get it"
+      ],
+      "uprightMeaningsZh": [
+        "愿望达成牌，享受充盈的情感满足与物质安逸",
+        "内心的喜悦与自豪，自给自足的丰盛与幸福感",
+        "梦想成真，对当下的生活状态感到极其满意"
+      ],
+      "reversedMeaningsZh": [
+        "过度沉溺于自我满足与物质享受，自满自大",
+        "表面光鲜亮丽但内心深处依然感到空虚缺憾",
+        "愿望达成伴随着未预料到的隐性代价"
+      ],
+      "fortuneTellingZh": [
+        "心想事成的大吉之兆，尽情享受当下的幸福与满足",
+        "懂得感恩与分享，这份喜悦将会更加持久"
+      ]
+    },
+    {
+      "id": 45,
+      "code": "cups_10",
+      "nameEn": "Ten Of Cups",
+      "nameZh": "圣杯十",
+      "arcana": "MINOR",
+      "suit": "CUPS",
+      "rank": 10,
+      "rankName": "Ten",
+      "element": "WATER",
+      "keywordsEn": [
+        "joy",
+        "fulfillment",
+        "overwhelming emotion",
+        "giddiness"
+      ],
+      "keywordsZh": [
+        "圣杯十",
+        "圣杯牌组",
+        "WATER元素"
+      ],
+      "uprightMeanings": [
+        "家庭美满、情感圆满的大团圆景象，幸福洋溢",
+        "持久深厚的和谐关系，得到社群与亲人的祝福",
+        "心灵获得永恒的安宁与归宿，充满爱与感恩"
+      ],
+      "reversedMeanings": [
+        "家庭内部出现裂痕与争执，和谐氛围遭到破坏",
+        "价值观分歧导致亲密关系紧张，缺乏归属感",
+        "表面维持和睦但暗流涌动，需要真诚沟通修复"
+      ],
+      "fortuneTelling": [
+        "家庭与人际关系迎来最圆满的和谐与幸福时刻",
+        "珍惜身边的亲人与爱人，爱是最好的庇护所"
+      ],
+      "uprightMeaningsEn": [
+        "Having more than you ever dreamed",
+        "Being deeply thankful for all you've been given",
+        "Recognizing the Hand of God in the gifts the Universe brings your way",
+        "Experiencing transcendent joy",
+        "Achieving domestic bliss"
+      ],
+      "reversedMeaningsEn": [
+        "Comparing your achievements or relationships to unrealistic fantasy standards",
+        "Experiencing emotions so intense they blunt your ability to cope with reality",
+        "Feeling overwhelmed",
+        "Envying the achievements and happiness of others"
+      ],
+      "fortuneTellingEn": [
+        "Marriage and family are in the cards",
+        "Expect a friendship to blossom into a romance"
+      ],
+      "uprightMeaningsZh": [
+        "家庭美满、情感圆满的大团圆景象，幸福洋溢",
+        "持久深厚的和谐关系，得到社群与亲人的祝福",
+        "心灵获得永恒的安宁与归宿，充满爱与感恩"
+      ],
+      "reversedMeaningsZh": [
+        "家庭内部出现裂痕与争执，和谐氛围遭到破坏",
+        "价值观分歧导致亲密关系紧张，缺乏归属感",
+        "表面维持和睦但暗流涌动，需要真诚沟通修复"
+      ],
+      "fortuneTellingZh": [
+        "家庭与人际关系迎来最圆满的和谐与幸福时刻",
+        "珍惜身边的亲人与爱人，爱是最好的庇护所"
+      ]
+    },
+    {
+      "id": 46,
+      "code": "cups_11",
+      "nameEn": "Page Of Cups",
+      "nameZh": "圣杯侍从",
+      "arcana": "MINOR",
+      "suit": "CUPS",
+      "rank": 11,
+      "rankName": "Page",
+      "element": "WATER",
+      "keywordsEn": [
+        "enthusiasm",
+        "first impressions",
+        "romanticism",
+        "superficiality"
+      ],
+      "keywordsZh": [
+        "圣杯侍从",
+        "圣杯牌组",
+        "WATER元素"
+      ],
+      "uprightMeanings": [
+        "敏感细腻、富有艺术灵感与同理心的年轻灵魂",
+        "带来温柔温暖的情感消息，开启浪漫新篇章",
+        "倾听内心的直觉与想象力，拥抱艺术与诗意"
+      ],
+      "reversedMeanings": [
+        "情绪过于脆弱敏感，容易玻璃心或任性逃避",
+        "沉溺于幻想不切实际，带来虚假或幼稚的情感承诺",
+        "缺乏面对现实冲突的勇气，容易受负面情绪支配"
+      ],
+      "fortuneTelling": [
+        "保持温柔与同理心，一个温暖的情感信号正在靠近",
+        "相信你的艺术直觉与灵感，勇敢表达爱意"
+      ],
+      "uprightMeaningsEn": [
+        "Showing your emotions freely",
+        "Throwing yourself into romance",
+        "Nursing a secret crush",
+        "Indulging in romantic fantasy",
+        "Starting a new relationship",
+        "Recalling your first love",
+        "Experiencing love for the first time",
+        "Converting to a new religion"
+      ],
+      "reversedMeaningsEn": [
+        "Mistaking a crush for true love",
+        "Reading romantic intention into innocent action",
+        "Frantically trying to impress others",
+        "Indulging in overly-sweet sentimentality",
+        "Pretending to more romantic or spiritual experience than you possess"
+      ],
+      "fortuneTellingEn": [
+        "This card represents a young man or woman with a watery, dreamy demeanor, likely born a Libra, Scorpio, or Sagittarius, who wants to start a new relationship with you"
+      ],
+      "uprightMeaningsZh": [
+        "敏感细腻、富有艺术灵感与同理心的年轻灵魂",
+        "带来温柔温暖的情感消息，开启浪漫新篇章",
+        "倾听内心的直觉与想象力，拥抱艺术与诗意"
+      ],
+      "reversedMeaningsZh": [
+        "情绪过于脆弱敏感，容易玻璃心或任性逃避",
+        "沉溺于幻想不切实际，带来虚假或幼稚的情感承诺",
+        "缺乏面对现实冲突的勇气，容易受负面情绪支配"
+      ],
+      "fortuneTellingZh": [
+        "保持温柔与同理心，一个温暖的情感信号正在靠近",
+        "相信你的艺术直觉与灵感，勇敢表达爱意"
+      ]
+    },
+    {
+      "id": 47,
+      "code": "cups_12",
+      "nameEn": "Knight Of Cups",
+      "nameZh": "圣杯骑士",
+      "arcana": "MINOR",
+      "suit": "CUPS",
+      "rank": 12,
+      "rankName": "Knight",
+      "element": "WATER",
+      "keywordsEn": [
+        "fervor",
+        "zeal",
+        "moodiness",
+        "illumination"
+      ],
+      "keywordsZh": [
+        "圣杯骑士",
+        "圣杯牌组",
+        "WATER元素"
+      ],
+      "uprightMeanings": [
+        "浪漫多情的追求者，带着真挚的情感与提议而来",
+        "温文尔雅富有魅力，追随内心的理想与诗意",
+        "带来美好的情感邀请、艺术合作或和解契机"
+      ],
+      "reversedMeanings": [
+        "华而不实缺乏担当，用甜言蜜语掩盖虚伪动机",
+        "情绪化反复无常，过度理想化导致期望破灭",
+        "沉溺于情欲游戏，难以做出长久稳定的承诺"
+      ],
+      "fortuneTelling": [
+        "一个美好的邀请或浪漫的机缘正在路上，准备迎接",
+        "用真诚温和的态度待人，魅力将为你赢得机会"
+      ],
+      "uprightMeaningsEn": [
+        "Being deeply committed to a cause",
+        "Giving in to strong emotions, from excitement to depression",
+        "Acting on intuition alone",
+        "Solving problems intuitively",
+        "Believing in and basing decisions on ideals instead of realities",
+        "Bringing intuition or passion to the table"
+      ],
+      "reversedMeaningsEn": [
+        "Becoming a fanatic",
+        "Rejecting information that suggests your intuitions are misguided",
+        "Allowing your emotions to control you",
+        "Giving in to jealousy, confrontation, and peer pressure",
+        "Hiding or ignoring intuitive insights"
+      ],
+      "fortuneTellingEn": [
+        "This card represents a man with an emotional, sensitive personality, likely born between October 13th and November 11th, who wants you to rally around his latest passionate cause"
+      ],
+      "uprightMeaningsZh": [
+        "浪漫多情的追求者，带着真挚的情感与提议而来",
+        "温文尔雅富有魅力，追随内心的理想与诗意",
+        "带来美好的情感邀请、艺术合作或和解契机"
+      ],
+      "reversedMeaningsZh": [
+        "华而不实缺乏担当，用甜言蜜语掩盖虚伪动机",
+        "情绪化反复无常，过度理想化导致期望破灭",
+        "沉溺于情欲游戏，难以做出长久稳定的承诺"
+      ],
+      "fortuneTellingZh": [
+        "一个美好的邀请或浪漫的机缘正在路上，准备迎接",
+        "用真诚温和的态度待人，魅力将为你赢得机会"
+      ]
+    },
+    {
+      "id": 48,
+      "code": "cups_13",
+      "nameEn": "Queen Of Cups",
+      "nameZh": "圣杯王后",
+      "arcana": "MINOR",
+      "suit": "CUPS",
+      "rank": 13,
+      "rankName": "Queen",
+      "element": "WATER",
+      "keywordsEn": [
+        "insightfulness",
+        "spirituality",
+        "compassion",
+        "empathy",
+        "instinct"
+      ],
+      "keywordsZh": [
+        "圣杯王后",
+        "圣杯牌组",
+        "WATER元素"
+      ],
+      "uprightMeanings": [
+        "深具同理心、直觉敏锐且温柔包容的女性导师",
+        "如水般滋养身边的一切，擅长倾听与心灵疗愈",
+        "情感成熟稳重，在爱与洞察中展现非凡力量"
+      ],
+      "reversedMeanings": [
+        "情绪失控陷入嫉妒与过度敏感，依赖心过强",
+        "操纵他人情感以满足自身安全感，难以自拔",
+        "内心脆弱疲惫，急需建立心理边界与自我关怀"
+      ],
+      "fortuneTelling": [
+        "倾听你敏锐的直觉，用爱与包容抚慰周围的心灵",
+        "保持内在情绪的稳定与平和，你拥有强大的疗愈力"
+      ],
+      "uprightMeaningsEn": [
+        "Allowing yourself to be moved by the plight of others",
+        "Feeling strong emotions",
+        "Possessing unusual sympathy or empathy",
+        "Trusting your feelings to guide you",
+        "Calling on psychic abilities",
+        "Achieving unity with Spirit"
+      ],
+      "reversedMeaningsEn": [
+        "Becoming so caught up in matters of Spirit, you become detached from the world",
+        "Allowing empathy to disable you (instead of inspire action)",
+        "Using psychic abilities to wield covert influence",
+        "Wallowing in emotionalism, sentiment, or self-pity"
+      ],
+      "fortuneTellingEn": [
+        "This card represents a woman with an emotional, deeply spiritual nature, likely born between June 11th and July 11th, who uses emotional and spiritual appeals to sway others to her point of view"
+      ],
+      "uprightMeaningsZh": [
+        "深具同理心、直觉敏锐且温柔包容的女性导师",
+        "如水般滋养身边的一切，擅长倾听与心灵疗愈",
+        "情感成熟稳重，在爱与洞察中展现非凡力量"
+      ],
+      "reversedMeaningsZh": [
+        "情绪失控陷入嫉妒与过度敏感，依赖心过强",
+        "操纵他人情感以满足自身安全感，难以自拔",
+        "内心脆弱疲惫，急需建立心理边界与自我关怀"
+      ],
+      "fortuneTellingZh": [
+        "倾听你敏锐的直觉，用爱与包容抚慰周围的心灵",
+        "保持内在情绪的稳定与平和，你拥有强大的疗愈力"
+      ]
+    },
+    {
+      "id": 49,
+      "code": "cups_14",
+      "nameEn": "King Of Cups",
+      "nameZh": "圣杯国王",
+      "arcana": "MINOR",
+      "suit": "CUPS",
+      "rank": 14,
+      "rankName": "King",
+      "element": "WATER",
+      "keywordsEn": [
+        "wisdom",
+        "diplomacy",
+        "restraint",
+        "composure"
+      ],
+      "keywordsZh": [
+        "圣杯国王",
+        "圣杯牌组",
+        "WATER元素"
+      ],
+      "uprightMeanings": [
+        "情感成熟睿智的领袖，善于平衡理性与同理心",
+        "在风浪中保持沉着冷静，能够给予可靠的心理支持",
+        "具有出色的外交手腕与亲和力，深受他人信赖"
+      ],
+      "reversedMeanings": [
+        "情绪压抑冷酷无情，或利用他人情感弱点行操控",
+        "在压力下情绪失衡，喜怒无常令人捉摸不透",
+        "缺乏真正的同情心，行事虚伪缺乏担当"
+      ],
+      "fortuneTelling": [
+        "保持情绪的从容与克制，用成熟与智慧引领大局",
+        "成为身边人坚实的后盾，用宽厚的胸怀赢得人心"
+      ],
+      "uprightMeaningsEn": [
+        "Keeping a stiff upper lip",
+        "Being brave and clear in the face of adverse circumstances",
+        "Sharing experience as a way of comforting others",
+        "Making fair and empathetic decisions",
+        "Honoring the spirit, not just the letter, of the law"
+      ],
+      "reversedMeaningsEn": [
+        "Allowing yourself to become rigid and unemotional",
+        "Making unfair decisions based on a hidden agenda",
+        "Making decisions without regard for their emotional impact on others",
+        "Abusing spiritual authority",
+        "Using emotional or spiritual leverage to exercise unhealthy control over others"
+      ],
+      "fortuneTellingEn": [
+        "This card represents an older man with a gentle, sensitive presence, likely born between February 9th and March 10th, who is known for his fairness and tolerance"
+      ],
+      "uprightMeaningsZh": [
+        "情感成熟睿智的领袖，善于平衡理性与同理心",
+        "在风浪中保持沉着冷静，能够给予可靠的心理支持",
+        "具有出色的外交手腕与亲和力，深受他人信赖"
+      ],
+      "reversedMeaningsZh": [
+        "情绪压抑冷酷无情，或利用他人情感弱点行操控",
+        "在压力下情绪失衡，喜怒无常令人捉摸不透",
+        "缺乏真正的同情心，行事虚伪缺乏担当"
+      ],
+      "fortuneTellingZh": [
+        "保持情绪的从容与克制，用成熟与智慧引领大局",
+        "成为身边人坚实的后盾，用宽厚的胸怀赢得人心"
+      ]
+    },
+    {
+      "id": 50,
+      "code": "swords_01",
+      "nameEn": "Ace Of Swords",
+      "nameZh": "宝剑一",
+      "arcana": "MINOR",
+      "suit": "SWORDS",
+      "rank": 1,
+      "rankName": "Ace",
+      "element": "AIR",
+      "keywordsEn": [
+        "logic",
+        "objectivity",
+        "intellect",
+        "choice"
+      ],
+      "keywordsZh": [
+        "宝剑一",
+        "宝剑牌组",
+        "AIR元素"
+      ],
+      "uprightMeanings": [
+        "思维极度清晰敏锐，斩断混乱洞悉真相的开端",
+        "拥有强大的理性分析力与突破思维局限的决断力",
+        "在艰难处境中迎来智力上的重大突破与正义裁决"
+      ],
+      "reversedMeanings": [
+        "思维混乱判断失误，言语尖酸刻薄伤人伤己",
+        "滥用智谋耍小聪明，陷入无休止的争执与纠纷",
+        "真相被扭曲掩盖，计划因缺乏周密考虑而流产"
+      ],
+      "fortuneTelling": [
+        "运用清醒理性的头脑斩断乱麻，真相将赐予你力量",
+        "果断做出理性决断，新的思想突破就在眼前"
+      ],
+      "uprightMeaningsEn": [
+        "Making objective decisions",
+        "Applying logic",
+        "Reasoning your way out of a difficult situation",
+        "Solving puzzles",
+        "Thinking things through",
+        "Emphasizing the facts",
+        "Clearing your mind",
+        "Seeking clarity"
+      ],
+      "reversedMeaningsEn": [
+        "Applying ruthless or twisted logic",
+        "Gloating over your own superior intellect",
+        "Using quick thinking to deceive or confuse others",
+        "Confusing snap judgments with quick thinking",
+        "Making decisions without thinking through consequences"
+      ],
+      "fortuneTellingEn": [
+        "The time to make a choice is now",
+        "Stop wavering and do what you know is best"
+      ],
+      "uprightMeaningsZh": [
+        "思维极度清晰敏锐，斩断混乱洞悉真相的开端",
+        "拥有强大的理性分析力与突破思维局限的决断力",
+        "在艰难处境中迎来智力上的重大突破与正义裁决"
+      ],
+      "reversedMeaningsZh": [
+        "思维混乱判断失误，言语尖酸刻薄伤人伤己",
+        "滥用智谋耍小聪明，陷入无休止的争执与纠纷",
+        "真相被扭曲掩盖，计划因缺乏周密考虑而流产"
+      ],
+      "fortuneTellingZh": [
+        "运用清醒理性的头脑斩断乱麻，真相将赐予你力量",
+        "果断做出理性决断，新的思想突破就在眼前"
+      ]
+    },
+    {
+      "id": 51,
+      "code": "swords_02",
+      "nameEn": "Two Of Swords",
+      "nameZh": "宝剑二",
+      "arcana": "MINOR",
+      "suit": "SWORDS",
+      "rank": 2,
+      "rankName": "Two",
+      "element": "AIR",
+      "keywordsEn": [
+        "denial",
+        "debate",
+        "impasse",
+        "truce"
+      ],
+      "keywordsZh": [
+        "宝剑二",
+        "宝剑牌组",
+        "AIR元素"
+      ],
+      "uprightMeanings": [
+        "左右为难陷入僵局，盲目封闭自我以维持表面的平静",
+        "回避做出艰难但必要的抉择，身心处于防御平衡",
+        "需要在理智与情感之间权衡，打破内心的屏障"
+      ],
+      "reversedMeanings": [
+        "无法再回避现实，被迫做出抉择或面对真相",
+        "打破僵局撕开伪装，混乱中需要重新寻找方向",
+        "信息过载导致思维过载，陷入深刻的精神焦虑"
+      ],
+      "fortuneTelling": [
+        "逃避不能解决根本问题，摘下眼罩勇敢直面现实",
+        "理清利弊做出选择，打破内心的犹豫与僵局"
+      ],
+      "uprightMeaningsEn": [
+        "Refusing to make a decision without getting the facts",
+        "Exploring both sides of an argument",
+        "Arguing passionately for what you believe in",
+        "Weighing the issues",
+        "Encouraging the open exchange of ideas",
+        "Discussing political or religious issues without getting \"hot under the collar\""
+      ],
+      "reversedMeaningsEn": [
+        "Rejecting evidence that conflicts with dearly-held beliefs",
+        "Arguing with others just for the sake of doing so",
+        "Nit-picking",
+        "Putting off a decision because you're afraid to face the consequences",
+        "Preventing others from getting the information they need to make good decisions"
+      ],
+      "fortuneTellingEn": [
+        "Sometimes, the only way to win is to refuse to fight",
+        "You're stuck for now; let time pass before taking action"
+      ],
+      "uprightMeaningsZh": [
+        "左右为难陷入僵局，盲目封闭自我以维持表面的平静",
+        "回避做出艰难但必要的抉择，身心处于防御平衡",
+        "需要在理智与情感之间权衡，打破内心的屏障"
+      ],
+      "reversedMeaningsZh": [
+        "无法再回避现实，被迫做出抉择或面对真相",
+        "打破僵局撕开伪装，混乱中需要重新寻找方向",
+        "信息过载导致思维过载，陷入深刻的精神焦虑"
+      ],
+      "fortuneTellingZh": [
+        "逃避不能解决根本问题，摘下眼罩勇敢直面现实",
+        "理清利弊做出选择，打破内心的犹豫与僵局"
+      ]
+    },
+    {
+      "id": 52,
+      "code": "swords_03",
+      "nameEn": "Three Of Swords",
+      "nameZh": "宝剑三",
+      "arcana": "MINOR",
+      "suit": "SWORDS",
+      "rank": 3,
+      "rankName": "Three",
+      "element": "AIR",
+      "keywordsEn": [
+        "variance",
+        "difference",
+        "dissatisfaction",
+        "heartache",
+        "rejection"
+      ],
+      "keywordsZh": [
+        "宝剑三",
+        "宝剑牌组",
+        "AIR元素"
+      ],
+      "uprightMeanings": [
+        "心碎与悲痛难免，遭遇背叛、分离或残酷真相的打击",
+        "情感遭受重创，内心的痛苦需要得到正视与释放",
+        "虽然痛苦至深，但也是看清现实、走向疗愈的必经阶段"
+      ],
+      "reversedMeanings": [
+        "伤痛正在逐渐平息，开始走出背叛与心碎的阴霾",
+        "压抑伤痛拒绝疗愈，让怨恨在心底继续滋生蔓延",
+        "宽恕他人与自我和解，痛苦终将转化为成长的养分"
+      ],
+      "fortuneTelling": [
+        "正视内心的痛苦，允许自己释放情绪，风雨终会过去",
+        "伤口是光照进来的地方，疗愈的曙光正在显现"
+      ],
+      "uprightMeaningsEn": [
+        "Being brave enough to see things as they really are",
+        "Exercising your critical eye",
+        "Being your own best critic",
+        "Acknowledging that things don't always turn out as planned",
+        "Moving past heartbreak to embrace a painful truth"
+      ],
+      "reversedMeaningsEn": [
+        "Wallowing in despair",
+        "Allowing yourself to be completely crushed by the thoughts, words, or deeds of another",
+        "Judging yourself too harshly",
+        "Holding yourself to an unrealistic standard of excellence",
+        "Wearing your heart on your sleeve while carrying a chip on your shoulder"
+      ],
+      "fortuneTellingEn": [
+        "Breakups and infidelity abound",
+        "What hurts now, though, will turn out to be good for you later on"
+      ],
+      "uprightMeaningsZh": [
+        "心碎与悲痛难免，遭遇背叛、分离或残酷真相的打击",
+        "情感遭受重创，内心的痛苦需要得到正视与释放",
+        "虽然痛苦至深，但也是看清现实、走向疗愈的必经阶段"
+      ],
+      "reversedMeaningsZh": [
+        "伤痛正在逐渐平息，开始走出背叛与心碎的阴霾",
+        "压抑伤痛拒绝疗愈，让怨恨在心底继续滋生蔓延",
+        "宽恕他人与自我和解，痛苦终将转化为成长的养分"
+      ],
+      "fortuneTellingZh": [
+        "正视内心的痛苦，允许自己释放情绪，风雨终会过去",
+        "伤口是光照进来的地方，疗愈的曙光正在显现"
+      ]
+    },
+    {
+      "id": 53,
+      "code": "swords_04",
+      "nameEn": "Four Of Swords",
+      "nameZh": "宝剑四",
+      "arcana": "MINOR",
+      "suit": "SWORDS",
+      "rank": 4,
+      "rankName": "Four",
+      "element": "AIR",
+      "keywordsEn": [
+        "meditation",
+        "contemplation",
+        "perspective",
+        "mindset"
+      ],
+      "keywordsZh": [
+        "宝剑四",
+        "宝剑牌组",
+        "AIR元素"
+      ],
+      "uprightMeanings": [
+        "战后的暂时休养生息，远离纷扰进行身心复原",
+        "静心沉淀、冥想自省，恢复被消耗的心智与元气",
+        "为下一阶段的挑战蓄积力量，此时不宜轻举妄动"
+      ],
+      "reversedMeanings": [
+        "休养结束准备重新披甲上阵，重返现实战场",
+        "因过度焦虑而难以得到真正休息，身心持续透支",
+        "孤立闭塞导致与现实脱节，急需重新连接外界"
+      ],
+      "fortuneTelling": [
+        "放慢脚步好好休息，你的身心急需一次深度的修整",
+        "在宁静中积蓄力量，养精蓄锐方能走得更远"
+      ],
+      "uprightMeaningsEn": [
+        "Thinking over your plans before putting them into action",
+        "Pausing to meditate or clear your mind",
+        "Taking time to understand someone or something before criticizing it",
+        "Resting",
+        "Occupying your thoughts with a healthy distraction"
+      ],
+      "reversedMeaningsEn": [
+        "Failing to think things through",
+        "Mistaking procrastination for thoughtfulness",
+        "Adopting a point of view and refusing to reconsider your conclusions, even when presented with refuting evidence",
+        "Allowing chaos and whimsy to dominate your thoughts"
+      ],
+      "fortuneTellingEn": [
+        "Don't make any decision now",
+        "Wait, and you'll be glad you did"
+      ],
+      "uprightMeaningsZh": [
+        "战后的暂时休养生息，远离纷扰进行身心复原",
+        "静心沉淀、冥想自省，恢复被消耗的心智与元气",
+        "为下一阶段的挑战蓄积力量，此时不宜轻举妄动"
+      ],
+      "reversedMeaningsZh": [
+        "休养结束准备重新披甲上阵，重返现实战场",
+        "因过度焦虑而难以得到真正休息，身心持续透支",
+        "孤立闭塞导致与现实脱节，急需重新连接外界"
+      ],
+      "fortuneTellingZh": [
+        "放慢脚步好好休息，你的身心急需一次深度的修整",
+        "在宁静中积蓄力量，养精蓄锐方能走得更远"
+      ]
+    },
+    {
+      "id": 54,
+      "code": "swords_05",
+      "nameEn": "Five Of Swords",
+      "nameZh": "宝剑五",
+      "arcana": "MINOR",
+      "suit": "SWORDS",
+      "rank": 5,
+      "rankName": "Five",
+      "element": "AIR",
+      "keywordsEn": [
+        "selfishness",
+        "hostility",
+        "irrationality",
+        "self-preservation"
+      ],
+      "keywordsZh": [
+        "宝剑五",
+        "宝剑牌组",
+        "AIR元素"
+      ],
+      "uprightMeanings": [
+        "惨胜如败的冲突，为了争强好胜而付出了沉重的代价",
+        "赢得口舌或争斗却失去了人心、友谊与长远利益",
+        "自私冷酷的争执，散发着背叛与不欢而散的负面气息"
+      ],
+      "reversedMeanings": [
+        "意识到争斗的无意义，愿意主动放下恩怨寻求和解",
+        "惨痛教训令人反省，不再执着于无谓的输赢胜负",
+        "旧伤疤再次被揭开，需要彻底清理人际毒素"
+      ],
+      "fortuneTelling": [
+        "退一步海阔天空，不要为了争一时长短而失去更重要的东西",
+        "审视冲突的真正代价，无谓的胜负没有赢家"
+      ],
+      "uprightMeaningsEn": [
+        "Acting in your own best interest",
+        "Choosing to stand up for yourself",
+        "Not backing down from disagreement and discord",
+        "Taking a stand",
+        "Refusing to go along with an unethical plan",
+        "Knowing when to bend the rules"
+      ],
+      "reversedMeaningsEn": [
+        "Taking advantage of others",
+        "Intimidating others",
+        "Acting in an unethical manner",
+        "Picking fights",
+        "Using words to goad others into violence and irrationality",
+        "Ignoring rules you've agreed to abide by",
+        "Looking out for yourself while allowing harm to come to others",
+        "Gloating over victory"
+      ],
+      "fortuneTellingEn": [
+        "Someone is stealing from you, financially or romantically",
+        "Be wary of friends who talk behind your back"
+      ],
+      "uprightMeaningsZh": [
+        "惨胜如败的冲突，为了争强好胜而付出了沉重的代价",
+        "赢得口舌或争斗却失去了人心、友谊与长远利益",
+        "自私冷酷的争执，散发着背叛与不欢而散的负面气息"
+      ],
+      "reversedMeaningsZh": [
+        "意识到争斗的无意义，愿意主动放下恩怨寻求和解",
+        "惨痛教训令人反省，不再执着于无谓的输赢胜负",
+        "旧伤疤再次被揭开，需要彻底清理人际毒素"
+      ],
+      "fortuneTellingZh": [
+        "退一步海阔天空，不要为了争一时长短而失去更重要的东西",
+        "审视冲突的真正代价，无谓的胜负没有赢家"
+      ]
+    },
+    {
+      "id": 55,
+      "code": "swords_06",
+      "nameEn": "Six Of Swords",
+      "nameZh": "宝剑六",
+      "arcana": "MINOR",
+      "suit": "SWORDS",
+      "rank": 6,
+      "rankName": "Six",
+      "element": "AIR",
+      "keywordsEn": [
+        "adaptation",
+        "adjustments",
+        "science",
+        "travel"
+      ],
+      "keywordsZh": [
+        "宝剑六",
+        "宝剑牌组",
+        "AIR元素"
+      ],
+      "uprightMeanings": [
+        "告别动荡与险境，逐步渡过难关驶向平静的彼岸",
+        "虽然带着过往的伤痛，但局势正朝着平稳方向发展",
+        "踏上疗愈与过渡之旅，可能涉及搬迁、转岗或心态转变"
+      ],
+      "reversedMeanings": [
+        "过渡期遭遇阻碍与反复，无法彻底摆脱过往困扰",
+        "抗拒改变试图重回险境，导致迁徙过程困难重重",
+        "困在未解的难题中进退两难，缺乏明确的前行方向"
+      ],
+      "fortuneTelling": [
+        "最凶险的风浪已经过去，事情正稳步走向平稳安宁",
+        "放下过去的沉重负担，平稳过渡到新的人生阶段"
+      ],
+      "uprightMeaningsEn": [
+        "Making the best of a bad situation",
+        "Recovering from defeat",
+        "Resetting expectations",
+        "Making allowances for unexpected circumstances",
+        "Helping others who find themselves in dire circumstances",
+        "Changing the way you see the world",
+        "Broadening your perspective through study or travel"
+      ],
+      "reversedMeaningsEn": [
+        "Refusing to accept that things have changed",
+        "Playing the victim",
+        "Rejecting the idea that your actions have consequences",
+        "Applying scientific criteria to matters of faith, or confusing faith with science",
+        "Believing the whole world should be like your small corner of it"
+      ],
+      "fortuneTellingEn": [
+        "You'll soon go on a long journey over water",
+        "Actions have unexpected consequences, so be prepared"
+      ],
+      "uprightMeaningsZh": [
+        "告别动荡与险境，逐步渡过难关驶向平静的彼岸",
+        "虽然带着过往的伤痛，但局势正朝着平稳方向发展",
+        "踏上疗愈与过渡之旅，可能涉及搬迁、转岗或心态转变"
+      ],
+      "reversedMeaningsZh": [
+        "过渡期遭遇阻碍与反复，无法彻底摆脱过往困扰",
+        "抗拒改变试图重回险境，导致迁徙过程困难重重",
+        "困在未解的难题中进退两难，缺乏明确的前行方向"
+      ],
+      "fortuneTellingZh": [
+        "最凶险的风浪已经过去，事情正稳步走向平稳安宁",
+        "放下过去的沉重负担，平稳过渡到新的人生阶段"
+      ]
+    },
+    {
+      "id": 56,
+      "code": "swords_07",
+      "nameEn": "Seven Of Swords",
+      "nameZh": "宝剑七",
+      "arcana": "MINOR",
+      "suit": "SWORDS",
+      "rank": 7,
+      "rankName": "Seven",
+      "element": "AIR",
+      "keywordsEn": [
+        "dishonesty",
+        "presumption",
+        "sneakiness",
+        "assumptions"
+      ],
+      "keywordsZh": [
+        "宝剑七",
+        "宝剑牌组",
+        "AIR元素"
+      ],
+      "uprightMeanings": [
+        "采取隐秘、机智或迂回策略行事，避开正面冲突",
+        "暗中布局规避风险，凭借小聪明取得局部成果",
+        "警惕欺骗、偷窃、不诚实行为或内心的侥幸心理"
+      ],
+      "reversedMeanings": [
+        "欺瞒行为败露，不得不面对现实并承担相应责任",
+        "放弃侥幸心理，选择坦诚布公解决问题",
+        "感到内疚不安，逃避计划失败陷入被动局面"
+      ],
+      "fortuneTelling": [
+        "行事需保持谨慎机敏，但也切勿触碰诚信底线",
+        "防人之心不可无，妥善看管好自己的成果与隐私"
+      ],
+      "uprightMeaningsEn": [
+        "Refusing to do something dishonest, even when there's no chance of ever being caught",
+        "Handling a difficult situation with finesse",
+        "Pointing out assumptions",
+        "Acting ethically in public and in private",
+        "Living a life that is beyond reproach"
+      ],
+      "reversedMeaningsEn": [
+        "Stealing or lying",
+        "Doing whatever you can get away with, simply because you can",
+        "Looking for a way around consequences",
+        "Justifying wicked behavior by focusing on the wickedness of others",
+        "Failing to examine your own motives and prejudices"
+      ],
+      "fortuneTellingEn": [
+        "Don't assume people around you are worthy of your trust",
+        "Ask for an accounting of where people have been, and what they've been doing"
+      ],
+      "uprightMeaningsZh": [
+        "采取隐秘、机智或迂回策略行事，避开正面冲突",
+        "暗中布局规避风险，凭借小聪明取得局部成果",
+        "警惕欺骗、偷窃、不诚实行为或内心的侥幸心理"
+      ],
+      "reversedMeaningsZh": [
+        "欺瞒行为败露，不得不面对现实并承担相应责任",
+        "放弃侥幸心理，选择坦诚布公解决问题",
+        "感到内疚不安，逃避计划失败陷入被动局面"
+      ],
+      "fortuneTellingZh": [
+        "行事需保持谨慎机敏，但也切勿触碰诚信底线",
+        "防人之心不可无，妥善看管好自己的成果与隐私"
+      ]
+    },
+    {
+      "id": 57,
+      "code": "swords_08",
+      "nameEn": "Eight Of Swords",
+      "nameZh": "宝剑八",
+      "arcana": "MINOR",
+      "suit": "SWORDS",
+      "rank": 8,
+      "rankName": "Eight",
+      "element": "AIR",
+      "keywordsEn": [
+        "restriction",
+        "limitation",
+        "confinement",
+        "helplessness"
+      ],
+      "keywordsZh": [
+        "宝剑八",
+        "宝剑牌组",
+        "AIR元素"
+      ],
+      "uprightMeanings": [
+        "陷入自我设置的思想牢笼，感到无力、受困与孤立",
+        "被恐惧与限制性信念所捆绑，误以为自己毫无出路",
+        "事实上束缚并不牢固，只要鼓起勇气就能解脱"
+      ],
+      "reversedMeanings": [
+        "冲破思想枷锁重获自由，认清困局中的生机与出路",
+        "克服内心的恐惧与受害者心态，勇敢迈出解脱的步伐",
+        "尽管仍有余悸，但已经找到了重获新生的方向"
+      ],
+      "fortuneTelling": [
+        "真正的牢笼在于你内心的恐惧，睁开眼睛看清出路",
+        "迈出勇敢的一步，你比自己想象的自由得多"
+      ],
+      "uprightMeaningsEn": [
+        "Honoring limits",
+        "Respecting the rules",
+        "Deciding to go on a diet for your health's sake",
+        "Recognizing you cannot always be in control",
+        "Identifying obstacles to further progress",
+        "Refusing to think about unhealthy or unethical options",
+        "Asking for assistance"
+      ],
+      "reversedMeaningsEn": [
+        "Feeling trapped",
+        "Being lost in a maze of rules and regulations",
+        "Giving in to despair",
+        "Playing the victim",
+        "Allowing others to dictate what you can and cannot do",
+        "Being rendered helpless",
+        "Having very few options",
+        "Failing to look for a way out"
+      ],
+      "fortuneTellingEn": [
+        "Get over playing the victim",
+        "Once you realize you are your own biggest obstacle, nothing can hold you back"
+      ],
+      "uprightMeaningsZh": [
+        "陷入自我设置的思想牢笼，感到无力、受困与孤立",
+        "被恐惧与限制性信念所捆绑，误以为自己毫无出路",
+        "事实上束缚并不牢固，只要鼓起勇气就能解脱"
+      ],
+      "reversedMeaningsZh": [
+        "冲破思想枷锁重获自由，认清困局中的生机与出路",
+        "克服内心的恐惧与受害者心态，勇敢迈出解脱的步伐",
+        "尽管仍有余悸，但已经找到了重获新生的方向"
+      ],
+      "fortuneTellingZh": [
+        "真正的牢笼在于你内心的恐惧，睁开眼睛看清出路",
+        "迈出勇敢的一步，你比自己想象的自由得多"
+      ]
+    },
+    {
+      "id": 58,
+      "code": "swords_09",
+      "nameEn": "Nine Of Swords",
+      "nameZh": "宝剑九",
+      "arcana": "MINOR",
+      "suit": "SWORDS",
+      "rank": 9,
+      "rankName": "Nine",
+      "element": "AIR",
+      "keywordsEn": [
+        "remorse",
+        "worry",
+        "distraught",
+        "conclusion"
+      ],
+      "keywordsZh": [
+        "宝剑九",
+        "宝剑牌组",
+        "AIR元素"
+      ],
+      "uprightMeanings": [
+        "极度的焦虑、噩梦、失眠与精神折磨，不堪重负",
+        "陷入自责、悔恨与过度担忧的旋涡，夜不能寐",
+        "多数恐惧源于内心的过度放大，现实往往并非如此绝望"
+      ],
+      "reversedMeanings": [
+        "从长期的焦虑与噩梦中逐渐苏醒，看清恐惧的虚妄",
+        "寻求外界帮助与心理疏导，精神压力得到有效缓解",
+        "若继续沉溺恐慌则可能陷入更深的精神绝境"
+      ],
+      "fortuneTelling": [
+        "黑夜虽长但黎明终将到来，不要被脑海中的恐惧击垮",
+        "向信任的朋友倾诉，直面阳光驱散心中的阴霾"
+      ],
+      "uprightMeaningsEn": [
+        "Refusing to worry about what you cannot control",
+        "Rejecting anxiety",
+        "Judging your own performance with kindness and gentleness",
+        "Using meditation to quiet a troubled mind",
+        "Confronting nightmares and fears",
+        "Drawing a conclusion and putting an issue out of your mind"
+      ],
+      "reversedMeaningsEn": [
+        "Torturing yourself with regrets",
+        "Second-guessing your every move",
+        "Beating yourself up for your mistakes",
+        "Depression",
+        "Obsessing on errors and overlooked details",
+        "Refusing to handle stress in healthy ways",
+        "Ruining your ability to appreciate the present by dwelling on the past",
+        "Debating irreversible decisions"
+      ],
+      "fortuneTellingEn": [
+        "If you take the action you're considering now, you'll be sorry in the future"
+      ],
+      "uprightMeaningsZh": [
+        "极度的焦虑、噩梦、失眠与精神折磨，不堪重负",
+        "陷入自责、悔恨与过度担忧的旋涡，夜不能寐",
+        "多数恐惧源于内心的过度放大，现实往往并非如此绝望"
+      ],
+      "reversedMeaningsZh": [
+        "从长期的焦虑与噩梦中逐渐苏醒，看清恐惧的虚妄",
+        "寻求外界帮助与心理疏导，精神压力得到有效缓解",
+        "若继续沉溺恐慌则可能陷入更深的精神绝境"
+      ],
+      "fortuneTellingZh": [
+        "黑夜虽长但黎明终将到来，不要被脑海中的恐惧击垮",
+        "向信任的朋友倾诉，直面阳光驱散心中的阴霾"
+      ]
+    },
+    {
+      "id": 59,
+      "code": "swords_10",
+      "nameEn": "Ten Of Swords",
+      "nameZh": "宝剑十",
+      "arcana": "MINOR",
+      "suit": "SWORDS",
+      "rank": 10,
+      "rankName": "Ten",
+      "element": "AIR",
+      "keywordsEn": [
+        "exhaustion",
+        "ruin",
+        "disaster",
+        "stamina",
+        "obsession"
+      ],
+      "keywordsZh": [
+        "宝剑十",
+        "宝剑牌组",
+        "AIR元素"
+      ],
+      "uprightMeanings": [
+        "彻底跌入谷底的终结，痛苦与磨难已经达到顶峰",
+        "旧有模式的彻底破灭，无法挽回的结局已经注定",
+        "触底反弹的转折点，最坏的已经过去，未来唯有向上"
+      ],
+      "reversedMeanings": [
+        "从毁灭性的打击中艰难苏醒，迎来触底新生的曙光",
+        "抗拒彻底的终结，在苟延残喘中承受反复的痛苦",
+        "痛苦的顶点已经过去，开始重建破碎的生活"
+      ],
+      "fortuneTelling": [
+        "最糟糕的阶段已经过去，黎明前的至暗时刻即将消散",
+        "坦然接纳现实的终结，从谷底中积蓄重生的力量"
+      ],
+      "uprightMeaningsEn": [
+        "Seeing the signs that you've reached your limits",
+        "Paying attention to what your body is trying to tell you",
+        "Giving in to the need for rest and renewal",
+        "Acknowledging that you've hit bottom",
+        "Committing to a turnaround",
+        "Knowing the worst is over"
+      ],
+      "reversedMeaningsEn": [
+        "Accepting defeat prematurely",
+        "Driving yourself to total exhaustion, especially mentally",
+        "Experiencing a mental breakdown",
+        "Obsessing on a problem to the breaking point",
+        "Giving up",
+        "Refusing to move from thought to action",
+        "Deeply unhealthy thoughts"
+      ],
+      "fortuneTellingEn": [
+        "Disaster",
+        "Put off plans and do not take action until omens are better"
+      ],
+      "uprightMeaningsZh": [
+        "彻底跌入谷底的终结，痛苦与磨难已经达到顶峰",
+        "旧有模式的彻底破灭，无法挽回的结局已经注定",
+        "触底反弹的转折点，最坏的已经过去，未来唯有向上"
+      ],
+      "reversedMeaningsZh": [
+        "从毁灭性的打击中艰难苏醒，迎来触底新生的曙光",
+        "抗拒彻底的终结，在苟延残喘中承受反复的痛苦",
+        "痛苦的顶点已经过去，开始重建破碎的生活"
+      ],
+      "fortuneTellingZh": [
+        "最糟糕的阶段已经过去，黎明前的至暗时刻即将消散",
+        "坦然接纳现实的终结，从谷底中积蓄重生的力量"
+      ]
+    },
+    {
+      "id": 60,
+      "code": "swords_11",
+      "nameEn": "Page Of Swords",
+      "nameZh": "宝剑侍从",
+      "arcana": "MINOR",
+      "suit": "SWORDS",
+      "rank": 11,
+      "rankName": "Page",
+      "element": "AIR",
+      "keywordsEn": [
+        "student",
+        "apprentice",
+        "scholarship",
+        "information"
+      ],
+      "keywordsZh": [
+        "宝剑侍从",
+        "宝剑牌组",
+        "AIR元素"
+      ],
+      "uprightMeanings": [
+        "思维敏锐、充满警惕与求知欲的年轻观察者",
+        "带来重要消息或新挑战，善于收集信息与分析局势",
+        "直言不讳、思维机敏，时刻准备应对突发状况"
+      ],
+      "reversedMeanings": [
+        "尖酸刻薄好嚼舌根，传播不实流言或窥探他人隐私",
+        "防备心过重疑神疑鬼，缺乏深度思考与长远眼光",
+        "言辞过激容易引发冲突，在困难面前缺乏担当"
+      ],
+      "fortuneTelling": [
+        "保持警觉与敏锐的观察力，注意收集身边的重要资讯",
+        "注意言行分寸，理性分析事实真相而非轻信传言"
+      ],
+      "uprightMeaningsEn": [
+        "Pursuing a course of study",
+        "Asking good questions",
+        "Investing time in study and practice",
+        "Doing research",
+        "Making a habit of learning new things",
+        "Starting an investigation",
+        "Outlining what you need to know",
+        "Finding a mentor or teacher"
+      ],
+      "reversedMeaningsEn": [
+        "Pretending to knowledge or sophistication you do not possess",
+        "Cheating on an exam",
+        "Feigning interest as a way of gaining favor",
+        "Considering only the evidence that supports conclusions you've already drawn",
+        "Rejecting the wise counsel of experienced teachers"
+      ],
+      "fortuneTellingEn": [
+        "This card represents a young man or woman with an airy, intellectual demeanor, likely born a Capricorn, Aquarius, or Pisces, who wants to learn something new from you or have a discussion with you"
+      ],
+      "uprightMeaningsZh": [
+        "思维敏锐、充满警惕与求知欲的年轻观察者",
+        "带来重要消息或新挑战，善于收集信息与分析局势",
+        "直言不讳、思维机敏，时刻准备应对突发状况"
+      ],
+      "reversedMeaningsZh": [
+        "尖酸刻薄好嚼舌根，传播不实流言或窥探他人隐私",
+        "防备心过重疑神疑鬼，缺乏深度思考与长远眼光",
+        "言辞过激容易引发冲突，在困难面前缺乏担当"
+      ],
+      "fortuneTellingZh": [
+        "保持警觉与敏锐的观察力，注意收集身边的重要资讯",
+        "注意言行分寸，理性分析事实真相而非轻信传言"
+      ]
+    },
+    {
+      "id": 61,
+      "code": "swords_12",
+      "nameEn": "Knight Of Swords",
+      "nameZh": "宝剑骑士",
+      "arcana": "MINOR",
+      "suit": "SWORDS",
+      "rank": 12,
+      "rankName": "Knight",
+      "element": "AIR",
+      "keywordsEn": [
+        "bluntness",
+        "intelligence",
+        "incisiveness",
+        "investigation"
+      ],
+      "keywordsZh": [
+        "宝剑骑士",
+        "宝剑牌组",
+        "AIR元素"
+      ],
+      "uprightMeanings": [
+        "雷霆万钧勇往直前的智力先锋，带着犀利逻辑迅速出击",
+        "意志坚定目标明确，不畏艰难险阻直奔核心问题",
+        "具备极强的辩才与行动力，追求真理与效率"
+      ],
+      "reversedMeanings": [
+        "盲目冲动不计后果，言辞伤人缺乏同理心与温度",
+        "思维偏激独断专行，引发无休止的争吵与对抗",
+        "行动缺乏耐心与持久力，虎头蛇尾容易功亏一篑"
+      ],
+      "fortuneTelling": [
+        "用锐利清晰的逻辑打破僵局，果断采取行动",
+        "注意控制节奏与态度，避免因言辞过激而树敌"
+      ],
+      "uprightMeaningsEn": [
+        "Speaking your mind",
+        "Making your opinions known",
+        "Offering constructive criticism",
+        "Sharing your knowledge",
+        "Making insightful observations",
+        "Pinpointing the problem",
+        "Clarifying what others have said",
+        "Giving clear direction to others",
+        "Uncovering the truth"
+      ],
+      "reversedMeaningsEn": [
+        "Stating your opinions as fact",
+        "Picking fights",
+        "Starting arguments",
+        "Using clever insults to undermine the confidence of others",
+        "Tossing reason out the window",
+        "Speaking without taking the feelings of others into account",
+        "Going on a witch hunt",
+        "Distorting evidence"
+      ],
+      "fortuneTellingEn": [
+        "A blunder leads someone to say something he or she regrets",
+        "If this was you, be prepared to apologize and move on"
+      ],
+      "uprightMeaningsZh": [
+        "雷霆万钧勇往直前的智力先锋，带着犀利逻辑迅速出击",
+        "意志坚定目标明确，不畏艰难险阻直奔核心问题",
+        "具备极强的辩才与行动力，追求真理与效率"
+      ],
+      "reversedMeaningsZh": [
+        "盲目冲动不计后果，言辞伤人缺乏同理心与温度",
+        "思维偏激独断专行，引发无休止的争吵与对抗",
+        "行动缺乏耐心与持久力，虎头蛇尾容易功亏一篑"
+      ],
+      "fortuneTellingZh": [
+        "用锐利清晰的逻辑打破僵局，果断采取行动",
+        "注意控制节奏与态度，避免因言辞过激而树敌"
+      ]
+    },
+    {
+      "id": 62,
+      "code": "swords_13",
+      "nameEn": "Queen Of Swords",
+      "nameZh": "宝剑王后",
+      "arcana": "MINOR",
+      "suit": "SWORDS",
+      "rank": 13,
+      "rankName": "Queen",
+      "element": "AIR",
+      "keywordsEn": [
+        "grace",
+        "skill",
+        "wit",
+        "charm",
+        "aptitude"
+      ],
+      "keywordsZh": [
+        "宝剑王后",
+        "宝剑牌组",
+        "AIR元素"
+      ],
+      "uprightMeanings": [
+        "思维极其清醒独立、明察秋毫的智慧女性榜样",
+        "以客观公正的视角洞悉一切虚妄与谎言，言出必中",
+        "历经风雨依然保持高贵与理性，边界清晰不容侵犯"
+      ],
+      "reversedMeanings": [
+        "尖酸刻薄冷酷无情，用严苛挑剔的目光审视所有人",
+        "内心充满怨恨与苦涩，过度防备导致彻底与人隔绝",
+        "滥用聪明才智伤害他人，在孤独中顾影自怜"
+      ],
+      "fortuneTelling": [
+        "保持清醒独立的理性思考，不要被感性偏见所左右",
+        "守住你的个人边界，用公正与真诚赢得长久尊重"
+      ],
+      "uprightMeaningsEn": [
+        "Exercising tact or using diplomacy",
+        "Defusing a tense situation",
+        "Knowing what to say and how to say it",
+        "Making others feel comfortable and confident",
+        "Bringing out the best in everyone",
+        "Having a way with words",
+        "Telling jokes",
+        "Possessing a knack for music, math, art, or science"
+      ],
+      "reversedMeaningsEn": [
+        "Knowing exactly what to say to destroy another person",
+        "Withholding critical information",
+        "Using a barbed tongue to upset others",
+        "Employing sarcasm",
+        "Mimicking others unkindly",
+        "Making light of the less fortunate",
+        "Being disrespectful",
+        "Failing to use the talent you've been given"
+      ],
+      "fortuneTellingEn": [
+        "This card represents a woman with an artistic, intellectual nature, likely born between September 12th and October 12th, who uses clever, positive communication to sway others to her point of view"
+      ],
+      "uprightMeaningsZh": [
+        "思维极其清醒独立、明察秋毫的智慧女性榜样",
+        "以客观公正的视角洞悉一切虚妄与谎言，言出必中",
+        "历经风雨依然保持高贵与理性，边界清晰不容侵犯"
+      ],
+      "reversedMeaningsZh": [
+        "尖酸刻薄冷酷无情，用严苛挑剔的目光审视所有人",
+        "内心充满怨恨与苦涩，过度防备导致彻底与人隔绝",
+        "滥用聪明才智伤害他人，在孤独中顾影自怜"
+      ],
+      "fortuneTellingZh": [
+        "保持清醒独立的理性思考，不要被感性偏见所左右",
+        "守住你的个人边界，用公正与真诚赢得长久尊重"
+      ]
+    },
+    {
+      "id": 63,
+      "code": "swords_14",
+      "nameEn": "King Of Swords",
+      "nameZh": "宝剑国王",
+      "arcana": "MINOR",
+      "suit": "SWORDS",
+      "rank": 14,
+      "rankName": "King",
+      "element": "AIR",
+      "keywordsEn": [
+        "genius",
+        "expertise",
+        "decision",
+        "verdict"
+      ],
+      "keywordsZh": [
+        "宝剑国王",
+        "宝剑牌组",
+        "AIR元素"
+      ],
+      "uprightMeanings": [
+        "智力超群、公正严明的权威领袖与真理捍卫者",
+        "具备卓越的战略思维与逻辑决断力，令人肃然起敬",
+        "在复杂局势中坚持法理、真相与最高的专业标准"
+      ],
+      "reversedMeanings": [
+        "专制冷血滥用智谋，为了达成目的不择手段",
+        "教条刻板缺乏人性关怀，做出冷酷不公的裁决",
+        "巧言令色操控他人，在自负中走向孤立无援"
+      ],
+      "fortuneTelling": [
+        "依靠卓越的专业素养与客观理性做出公正决断",
+        "坚持原则与真理，你的权威与信誉将坚如磐石"
+      ],
+      "uprightMeaningsEn": [
+        "Expressing yourself with firmness and authority",
+        "Rendering a final decision",
+        "Consulting an expert",
+        "Calling in advisors and consultants",
+        "Coming to a final conclusion",
+        "Reaching a beneficial agreement based on sound information"
+      ],
+      "reversedMeaningsEn": [
+        "Insisting on having the last word",
+        "Flaunting your intellectual capability",
+        "Talking \"over the heads\" of others",
+        "Waffling on an important decision",
+        "Constantly changing your mind",
+        "Refusing to make choices that are in your own best interest",
+        "Wishing in vain you could take back what's been said"
+      ],
+      "fortuneTellingEn": [
+        "This card represents an older man with an insightful, deliberate spirit, likely born between May 11th and June 10th, who is known for his integrity and sharp decision-making ability"
+      ],
+      "uprightMeaningsZh": [
+        "智力超群、公正严明的权威领袖与真理捍卫者",
+        "具备卓越的战略思维与逻辑决断力，令人肃然起敬",
+        "在复杂局势中坚持法理、真相与最高的专业标准"
+      ],
+      "reversedMeaningsZh": [
+        "专制冷血滥用智谋，为了达成目的不择手段",
+        "教条刻板缺乏人性关怀，做出冷酷不公的裁决",
+        "巧言令色操控他人，在自负中走向孤立无援"
+      ],
+      "fortuneTellingZh": [
+        "依靠卓越的专业素养与客观理性做出公正决断",
+        "坚持原则与真理，你的权威与信誉将坚如磐石"
+      ]
+    },
+    {
+      "id": 64,
+      "code": "pentacles_01",
+      "nameEn": "Ace of 星币",
+      "nameZh": "星币一",
+      "arcana": "MINOR",
+      "suit": "PENTACLES",
+      "rank": 1,
+      "rankName": "Ace",
+      "element": "EARTH",
+      "keywordsEn": [
+        "health",
+        "wealth",
+        "practicality",
+        "receiving"
+      ],
+      "keywordsZh": [
+        "星币一",
+        "星币牌组",
+        "EARTH元素"
+      ],
+      "uprightMeanings": [
+        "物质与财富的坚实开端，丰厚的新机遇与现实收益",
+        "获得可落地的资源、投资或健康的良好开端",
+        "脚踏实地开启长期富足与稳定的美好篇章"
+      ],
+      "reversedMeanings": [
+        "错失良机，投资失误或财务规划缺乏可行性",
+        "过度贪婪物质利益，忽略了更重要的精神价值",
+        "资源短缺或启动资金不足，计划在现实中遇阻"
+      ],
+      "fortuneTelling": [
+        "一个务实可靠的新机遇正在敲门，抓住它打下财富基石",
+        "脚踏实地做好长远规划，物质收获将接踵而至"
+      ],
+      "uprightMeaningsEn": [
+        "Outlining a plan for achieving prosperity",
+        "Becoming aware of opportunities to improve income or health",
+        "Realizing you have everything you need",
+        "Appreciating everything the Universe has given you",
+        "Receiving the perfect gift at the perfect time"
+      ],
+      "reversedMeaningsEn": [
+        "Indulging in relentless consumerism",
+        "Wanting more, no matter how much you have",
+        "Obsessing on your account balance",
+        "Suffering from hypochondria",
+        "Consuming blessings without expressing gratitude",
+        "Taking what you want without concern for the needs of others"
+      ],
+      "fortuneTellingEn": [
+        "Your health will improve",
+        "The check you're looking for really is in the mail"
+      ],
+      "uprightMeaningsZh": [
+        "物质与财富的坚实开端，丰厚的新机遇与现实收益",
+        "获得可落地的资源、投资或健康的良好开端",
+        "脚踏实地开启长期富足与稳定的美好篇章"
+      ],
+      "reversedMeaningsZh": [
+        "错失良机，投资失误或财务规划缺乏可行性",
+        "过度贪婪物质利益，忽略了更重要的精神价值",
+        "资源短缺或启动资金不足，计划在现实中遇阻"
+      ],
+      "fortuneTellingZh": [
+        "一个务实可靠的新机遇正在敲门，抓住它打下财富基石",
+        "脚踏实地做好长远规划，物质收获将接踵而至"
+      ]
+    },
+    {
+      "id": 65,
+      "code": "pentacles_02",
+      "nameEn": "Two of 星币",
+      "nameZh": "星币二",
+      "arcana": "MINOR",
+      "suit": "PENTACLES",
+      "rank": 2,
+      "rankName": "Two",
+      "element": "EARTH",
+      "keywordsEn": [
+        "evaluation",
+        "decision",
+        "budgeting",
+        "diagnosis"
+      ],
+      "keywordsZh": [
+        "星币二",
+        "星币牌组",
+        "EARTH元素"
+      ],
+      "uprightMeanings": [
+        "在多元生活、财务或职责之间保持灵活周转与平衡",
+        "随机应变适应变化，轻松游刃于不同的事务之间",
+        "注重资金流动与生活节奏的动态调节，保持弹性"
+      ],
+      "reversedMeanings": [
+        "顾此失彼难以兼顾，财务或生活节奏陷入严重混乱",
+        "资金链断裂或身心透支，被多重压力压垮",
+        "缺乏统筹规划，盲目多线作战导致满盘皆输"
+      ],
+      "fortuneTelling": [
+        "保持灵活与幽默感，在多重任务中寻找动态平衡",
+        "合理规划财务与精力分配，避免过度透支"
+      ],
+      "uprightMeaningsEn": [
+        "Weighing options",
+        "Comparing prices",
+        "Determining the value of one option over another",
+        "Juggling resources to make ends meet",
+        "Making difficult choices based on what's best for your body or your bankbook",
+        "Looking at the bottom line",
+        "Asking for a second opinion on health issues"
+      ],
+      "reversedMeaningsEn": [
+        "Engaging in endless price comparison",
+        "Putting off a buying decision for fear of finding a slightly better value later on",
+        "Buying something without regard for value",
+        "Breaking your budget with unnecessary expenses",
+        "Engaging in behavior with no regard for how your body or bankbook will be impacted"
+      ],
+      "fortuneTellingEn": [
+        "It's time to balance the budget",
+        "Avoid the temptation to spend critical funds on frivolous goods"
+      ],
+      "uprightMeaningsZh": [
+        "在多元生活、财务或职责之间保持灵活周转与平衡",
+        "随机应变适应变化，轻松游刃于不同的事务之间",
+        "注重资金流动与生活节奏的动态调节，保持弹性"
+      ],
+      "reversedMeaningsZh": [
+        "顾此失彼难以兼顾，财务或生活节奏陷入严重混乱",
+        "资金链断裂或身心透支，被多重压力压垮",
+        "缺乏统筹规划，盲目多线作战导致满盘皆输"
+      ],
+      "fortuneTellingZh": [
+        "保持灵活与幽默感，在多重任务中寻找动态平衡",
+        "合理规划财务与精力分配，避免过度透支"
+      ]
+    },
+    {
+      "id": 66,
+      "code": "pentacles_03",
+      "nameEn": "Three of 星币",
+      "nameZh": "星币三",
+      "arcana": "MINOR",
+      "suit": "PENTACLES",
+      "rank": 3,
+      "rankName": "Three",
+      "element": "EARTH",
+      "keywordsEn": [
+        "expression",
+        "production",
+        "work",
+        "contribution"
+      ],
+      "keywordsZh": [
+        "星币三",
+        "星币牌组",
+        "EARTH元素"
+      ],
+      "uprightMeanings": [
+        "精益求精的专业匠心，团队通力协作打造卓越工程",
+        "专业技能获得权威认可与赞誉，业务稳步上升",
+        "各展所长紧密配合，在专业领域树立良好声誉"
+      ],
+      "reversedMeanings": [
+        "团队合作缺乏默契与沟通，各自为政产生内耗",
+        "工艺粗糙缺乏专业标准，工作态度消极敷衍",
+        "专业能力不足或意见不合，项目进展受阻"
+      ],
+      "fortuneTelling": [
+        "展现你的专业水准，与优秀伙伴携手共创佳作",
+        "虚心听取专业建议，团队协作将带来事半功倍的效果"
+      ],
+      "uprightMeaningsEn": [
+        "Finishing a project",
+        "Setting and meeting standards",
+        "Performing according to specifications",
+        "Making something others value",
+        "Creating something new",
+        "Doing your part in a group project",
+        "Delivering exactly what others have asked for"
+      ],
+      "reversedMeaningsEn": [
+        "Pandering to the tastes of others",
+        "Failing to deliver what you've promised",
+        "Not delivering your best work unless closely supervised",
+        "Ignoring or breaking agreements with those who have invested in you",
+        "Refusing to do your part",
+        "Failing to abide by a clearly-outlined agreement with yourself or others"
+      ],
+      "fortuneTellingEn": [
+        "A high-dollar contract is in your future",
+        "If you work hard, you'll succeed"
+      ],
+      "uprightMeaningsZh": [
+        "精益求精的专业匠心，团队通力协作打造卓越工程",
+        "专业技能获得权威认可与赞誉，业务稳步上升",
+        "各展所长紧密配合，在专业领域树立良好声誉"
+      ],
+      "reversedMeaningsZh": [
+        "团队合作缺乏默契与沟通，各自为政产生内耗",
+        "工艺粗糙缺乏专业标准，工作态度消极敷衍",
+        "专业能力不足或意见不合，项目进展受阻"
+      ],
+      "fortuneTellingZh": [
+        "展现你的专业水准，与优秀伙伴携手共创佳作",
+        "虚心听取专业建议，团队协作将带来事半功倍的效果"
+      ]
+    },
+    {
+      "id": 67,
+      "code": "pentacles_04",
+      "nameEn": "Four of 星币",
+      "nameZh": "星币四",
+      "arcana": "MINOR",
+      "suit": "PENTACLES",
+      "rank": 4,
+      "rankName": "Four",
+      "element": "EARTH",
+      "keywordsEn": [
+        "protection",
+        "conservation",
+        "preservation",
+        "safety"
+      ],
+      "keywordsZh": [
+        "星币四",
+        "星币牌组",
+        "EARTH元素"
+      ],
+      "uprightMeanings": [
+        "牢牢守住既有的财富、地位与安全感，稳扎稳打",
+        "注重资产保值与风险规避，建立稳固的物质防线",
+        "警惕守财奴心态，过于保守可能扼杀新的成长空间"
+      ],
+      "reversedMeanings": [
+        "过度吝啬贪婪导致人际隔阂，或因看管不善遭遇破财",
+        "终于愿意敞开怀抱分享资源，打破僵化格局",
+        "财务控制欲失衡，因害怕失去而深陷焦虑之中"
+      ],
+      "fortuneTelling": [
+        "守住既有成果的同时保持开放，财富需要在流动中增值",
+        "不要让对物质的执念变成束缚心灵的沉重枷锁"
+      ],
+      "uprightMeaningsEn": [
+        "Saving for a rainy day",
+        "Fasting as part of a spiritual practice",
+        "Dieting in an effort to improve your body",
+        "Abstaining from sex as a way of honoring a spiritual tradition or personal promise",
+        "Being financially conservative",
+        "Establishing a trust fund",
+        "Opening a savings account"
+      ],
+      "reversedMeaningsEn": [
+        "Being stingy",
+        "Refusing to spend money that needs to be spent",
+        "Withholding sex from your partner",
+        "Taking care of your own needs exclusively, without regard for the needs of others",
+        "Spending a dollar to save a penny",
+        "Failing to be a good manager of the blessings you've been given"
+      ],
+      "fortuneTellingEn": [
+        "A rainy day is coming—it's time to save"
+      ],
+      "uprightMeaningsZh": [
+        "牢牢守住既有的财富、地位与安全感，稳扎稳打",
+        "注重资产保值与风险规避，建立稳固的物质防线",
+        "警惕守财奴心态，过于保守可能扼杀新的成长空间"
+      ],
+      "reversedMeaningsZh": [
+        "过度吝啬贪婪导致人际隔阂，或因看管不善遭遇破财",
+        "终于愿意敞开怀抱分享资源，打破僵化格局",
+        "财务控制欲失衡，因害怕失去而深陷焦虑之中"
+      ],
+      "fortuneTellingZh": [
+        "守住既有成果的同时保持开放，财富需要在流动中增值",
+        "不要让对物质的执念变成束缚心灵的沉重枷锁"
+      ]
+    },
+    {
+      "id": 68,
+      "code": "pentacles_05",
+      "nameEn": "Five of 星币",
+      "nameZh": "星币五",
+      "arcana": "MINOR",
+      "suit": "PENTACLES",
+      "rank": 5,
+      "rankName": "Five",
+      "element": "EARTH",
+      "keywordsEn": [
+        "poverty",
+        "destitution",
+        "need",
+        "crisis"
+      ],
+      "keywordsZh": [
+        "星币五",
+        "星币牌组",
+        "EARTH元素"
+      ],
+      "uprightMeanings": [
+        "经历物质匮乏、财务困境或身心疾病的严峻考验",
+        "感到被社会或团队抛弃孤立无援，在风雪中艰难前行",
+        "忽略了近在咫尺的精神庇护所与援助之手"
+      ],
+      "reversedMeanings": [
+        "最艰难的困顿时期即将结束，迎来财务或健康的转机",
+        "找到新的生机与庇护，从困境中艰难复苏重拾信心",
+        "虽然恢复缓慢，但生活正在重新走上正轨"
+      ],
+      "fortuneTelling": [
+        "困境只是暂时的考验，抬头看看身边的温暖与庇护所",
+        "放下骄傲主动寻求帮助，风雪过后必有转机"
+      ],
+      "uprightMeaningsEn": [
+        "Recognizing your needs and taking action to fulfill them",
+        "Doing as much as you can do with what little you have",
+        "Admitting you need help",
+        "Embracing the aid that comes your way",
+        "Focusing on what you have versus what you don't",
+        "Looking for the light at the end of the tunnel"
+      ],
+      "reversedMeaningsEn": [
+        "Exaggerating your financial or physical needs",
+        "Adopting a poverty mentality",
+        "Refusing to support yourself",
+        "Refusing offers of support",
+        "Playing the martyr",
+        "Turning down opportunities to improve your health or finances",
+        "Wallowing in misery"
+      ],
+      "fortuneTellingEn": [
+        "Finances are getting tighter",
+        "Prepare for a setback"
+      ],
+      "uprightMeaningsZh": [
+        "经历物质匮乏、财务困境或身心疾病的严峻考验",
+        "感到被社会或团队抛弃孤立无援，在风雪中艰难前行",
+        "忽略了近在咫尺的精神庇护所与援助之手"
+      ],
+      "reversedMeaningsZh": [
+        "最艰难的困顿时期即将结束，迎来财务或健康的转机",
+        "找到新的生机与庇护，从困境中艰难复苏重拾信心",
+        "虽然恢复缓慢，但生活正在重新走上正轨"
+      ],
+      "fortuneTellingZh": [
+        "困境只是暂时的考验，抬头看看身边的温暖与庇护所",
+        "放下骄傲主动寻求帮助，风雪过后必有转机"
+      ]
+    },
+    {
+      "id": 69,
+      "code": "pentacles_06",
+      "nameEn": "Six of 星币",
+      "nameZh": "星币六",
+      "arcana": "MINOR",
+      "suit": "PENTACLES",
+      "rank": 6,
+      "rankName": "Six",
+      "element": "EARTH",
+      "keywordsEn": [
+        "charity",
+        "fairness",
+        "cooperation",
+        "sharing"
+      ],
+      "keywordsZh": [
+        "星币六",
+        "星币牌组",
+        "EARTH元素"
+      ],
+      "uprightMeanings": [
+        "慷慨解囊乐善好施，在给予与接受中达成良性循环",
+        "获得贵人相助或资源支持，财务分配公平合理",
+        "处于收支平衡的健康状态，善意流动带来福报"
+      ],
+      "reversedMeanings": [
+        "附带苛刻条件的施舍，关系中存在不平等的金钱操控",
+        "财务分配不公，遭遇欺诈或陷入不健康的债务纠纷",
+        "盲目借贷或滥施同情，导致自身财务陷入被动"
+      ],
+      "fortuneTelling": [
+        "以感恩的心接受支持，或用善意回馈身边需要帮助的人",
+        "公平与慷慨将为你打开更多财富与人脉之门"
+      ],
+      "uprightMeaningsEn": [
+        "Giving time, money, or effort to a charity",
+        "Taking part in a group effort",
+        "Lending your resources to others without expecting anything in return",
+        "Making sure everyone is treated equally",
+        "Working together toward a common goal",
+        "Redistributing wealth, time, or attention",
+        "Tithing",
+        "Sharing credit for your success"
+      ],
+      "reversedMeaningsEn": [
+        "Making a loan as a means of gaining control over someone",
+        "Using charitable acts to draw attention to yourself",
+        "Dividing work or resources unfairly",
+        "Failing to do your part in a group effort",
+        "Ignoring obligations and commitments"
+      ],
+      "fortuneTellingEn": [
+        "When you need help, ask for it",
+        "Remember, though: what you receive may be limited by what you've given to others in the past"
+      ],
+      "uprightMeaningsZh": [
+        "慷慨解囊乐善好施，在给予与接受中达成良性循环",
+        "获得贵人相助或资源支持，财务分配公平合理",
+        "处于收支平衡的健康状态，善意流动带来福报"
+      ],
+      "reversedMeaningsZh": [
+        "附带苛刻条件的施舍，关系中存在不平等的金钱操控",
+        "财务分配不公，遭遇欺诈或陷入不健康的债务纠纷",
+        "盲目借贷或滥施同情，导致自身财务陷入被动"
+      ],
+      "fortuneTellingZh": [
+        "以感恩的心接受支持，或用善意回馈身边需要帮助的人",
+        "公平与慷慨将为你打开更多财富与人脉之门"
+      ]
+    },
+    {
+      "id": 70,
+      "code": "pentacles_07",
+      "nameEn": "Seven of 星币",
+      "nameZh": "星币七",
+      "arcana": "MINOR",
+      "suit": "PENTACLES",
+      "rank": 7,
+      "rankName": "Seven",
+      "element": "EARTH",
+      "keywordsEn": [
+        "assessment",
+        "evaluation",
+        "re-evaluation",
+        "reflection"
+      ],
+      "keywordsZh": [
+        "星币七",
+        "星币牌组",
+        "EARTH元素"
+      ],
+      "uprightMeanings": [
+        "辛勤耕耘后停下脚步，评估前期的成果与长远回报",
+        "收获虽未完全成熟但已初具规模，需要耐心等待与抉择",
+        "深思熟虑是否需要调整策略，为下一阶段做准备"
+      ],
+      "reversedMeanings": [
+        "缺乏耐心急于求成，在果实未熟时强行采摘",
+        "投资回报不及预期感到沮丧，或面临半途而废的危机",
+        "前期投入过大但方向错误，陷入沉没成本陷阱"
+      ],
+      "fortuneTelling": [
+        "耐心是收获最好的肥料，静候果实完全成熟",
+        "认真复盘前期的投入与产出，明智规划下一步方向"
+      ],
+      "uprightMeaningsEn": [
+        "Measuring progress toward your goal",
+        "Looking at results with an eye toward improving performance",
+        "Asking, \"How happy am I?\"",
+        "Coming up with ideas for improving your health or prosperity",
+        "Deciding it's time for a change",
+        "Expressing an honest opinion"
+      ],
+      "reversedMeaningsEn": [
+        "Becoming distracted by melancholy thoughts",
+        "Longing for \"the good old days\"",
+        "Beating yourself up over lost opportunities",
+        "Judging your own work harshly",
+        "Holding others to inappropriate standards",
+        "Refusing to take part in a project, then whining about the quality of the outcome"
+      ],
+      "fortuneTellingEn": [
+        "Things won't work out as expected",
+        "Pick up the pieces and prepare to move on"
+      ],
+      "uprightMeaningsZh": [
+        "辛勤耕耘后停下脚步，评估前期的成果与长远回报",
+        "收获虽未完全成熟但已初具规模，需要耐心等待与抉择",
+        "深思熟虑是否需要调整策略，为下一阶段做准备"
+      ],
+      "reversedMeaningsZh": [
+        "缺乏耐心急于求成，在果实未熟时强行采摘",
+        "投资回报不及预期感到沮丧，或面临半途而废的危机",
+        "前期投入过大但方向错误，陷入沉没成本陷阱"
+      ],
+      "fortuneTellingZh": [
+        "耐心是收获最好的肥料，静候果实完全成熟",
+        "认真复盘前期的投入与产出，明智规划下一步方向"
+      ]
+    },
+    {
+      "id": 71,
+      "code": "pentacles_08",
+      "nameEn": "Eight of 星币",
+      "nameZh": "星币八",
+      "arcana": "MINOR",
+      "suit": "PENTACLES",
+      "rank": 8,
+      "rankName": "Eight",
+      "element": "EARTH",
+      "keywordsEn": [
+        "effort",
+        "work diligence",
+        "skill"
+      ],
+      "keywordsZh": [
+        "星币八",
+        "星币牌组",
+        "EARTH元素"
+      ],
+      "uprightMeanings": [
+        "专注投入于技能磨砺与专业深造，追求极致匠心",
+        "脚踏实地日积月累，在平凡的重复中实现卓越提升",
+        "对细节一丝不苟，靠精湛技艺赢得稳固的立足之地"
+      ],
+      "reversedMeanings": [
+        "缺乏专注与耐心，行事偷工减料缺乏职业操守",
+        "陷入机械繁琐的重复劳动感到枯燥乏味迷失目标",
+        "才华未尽其用，在低水平循环中浪费精力"
+      ],
+      "fortuneTelling": [
+        "匠心独运功不唐捐，沉下心来磨砺你的核心技能",
+        "日拱一卒的坚持，终将汇聚成无可替代的竞争优势"
+      ],
+      "uprightMeaningsEn": [
+        "Doing your best",
+        "Bringing enthusiasm and zeal to your work",
+        "Making an effort to be the best you can be",
+        "Finding the work that is right for you",
+        "Taking care of the small details",
+        "Becoming a finely skilled craftsperson",
+        "Building something with your hands",
+        "Making a handmade gift"
+      ],
+      "reversedMeaningsEn": [
+        "Working yourself to death",
+        "Doing a half-hearted or sloppy job",
+        "Continuing in a job you hate",
+        "Buying thoughtless gifts",
+        "Producing work with shoddy craftsmanship",
+        "Rushing through your work",
+        "Rejecting opportunities to learn more about your craft"
+      ],
+      "fortuneTellingEn": [
+        "Stop over-analyzing, researching, and outlining",
+        "Buckle down and get the work done"
+      ],
+      "uprightMeaningsZh": [
+        "专注投入于技能磨砺与专业深造，追求极致匠心",
+        "脚踏实地日积月累，在平凡的重复中实现卓越提升",
+        "对细节一丝不苟，靠精湛技艺赢得稳固的立足之地"
+      ],
+      "reversedMeaningsZh": [
+        "缺乏专注与耐心，行事偷工减料缺乏职业操守",
+        "陷入机械繁琐的重复劳动感到枯燥乏味迷失目标",
+        "才华未尽其用，在低水平循环中浪费精力"
+      ],
+      "fortuneTellingZh": [
+        "匠心独运功不唐捐，沉下心来磨砺你的核心技能",
+        "日拱一卒的坚持，终将汇聚成无可替代的竞争优势"
+      ]
+    },
+    {
+      "id": 72,
+      "code": "pentacles_09",
+      "nameEn": "Nine of 星币",
+      "nameZh": "星币九",
+      "arcana": "MINOR",
+      "suit": "PENTACLES",
+      "rank": 9,
+      "rankName": "Nine",
+      "element": "EARTH",
+      "keywordsEn": [
+        "training",
+        "discipline",
+        "confidence",
+        "enough"
+      ],
+      "keywordsZh": [
+        "星币九",
+        "星币牌组",
+        "EARTH元素"
+      ],
+      "uprightMeanings": [
+        "自立自强收获物质富足，享受优雅宁静的高品质生活",
+        "凭借自身努力获得财务自由与安全感，懂得自爱与享受",
+        "在私属的美好庄园中品味艺术与自然，内心充盈满足"
+      ],
+      "reversedMeanings": [
+        "表面奢华但内心孤独空虚，过分依赖物质带来的虚荣",
+        "财务出现隐患或遭遇破财，生活品质受到影响",
+        "虽然拥有财富但缺乏与他人真诚分享的快乐"
+      ],
+      "fortuneTelling": [
+        "你的自律与努力为你赢得了应有的富足与优雅人生",
+        "好好犒劳自己，享受独立自由带来的丰盛成果"
+      ],
+      "uprightMeaningsEn": [
+        "Investing time in learning or teaching a difficult task",
+        "Restraining yourself from physical or financial extremes",
+        "Making sacrifices as a way of achieving larger goals",
+        "Breaking a complex task down into simple steps",
+        "Wanting what you have",
+        "Knowing the difference between needs and wants"
+      ],
+      "reversedMeaningsEn": [
+        "Being assigned to a task without being trained to perform it",
+        "Pursuing a position for which you are not qualified",
+        "Disregarding requirements",
+        "Refusing to dedicate adequate time or attention when learning about something or someone new",
+        "Always craving more"
+      ],
+      "fortuneTellingEn": [
+        "Until you appreciate what you have, you won't have any luck getting more"
+      ],
+      "uprightMeaningsZh": [
+        "自立自强收获物质富足，享受优雅宁静的高品质生活",
+        "凭借自身努力获得财务自由与安全感，懂得自爱与享受",
+        "在私属的美好庄园中品味艺术与自然，内心充盈满足"
+      ],
+      "reversedMeaningsZh": [
+        "表面奢华但内心孤独空虚，过分依赖物质带来的虚荣",
+        "财务出现隐患或遭遇破财，生活品质受到影响",
+        "虽然拥有财富但缺乏与他人真诚分享的快乐"
+      ],
+      "fortuneTellingZh": [
+        "你的自律与努力为你赢得了应有的富足与优雅人生",
+        "好好犒劳自己，享受独立自由带来的丰盛成果"
+      ]
+    },
+    {
+      "id": 73,
+      "code": "pentacles_10",
+      "nameEn": "Ten of 星币",
+      "nameZh": "星币十",
+      "arcana": "MINOR",
+      "suit": "PENTACLES",
+      "rank": 10,
+      "rankName": "Ten",
+      "element": "EARTH",
+      "keywordsEn": [
+        "wealth",
+        "abundance",
+        "acquisition",
+        "greed"
+      ],
+      "keywordsZh": [
+        "星币十",
+        "星币牌组",
+        "EARTH元素"
+      ],
+      "uprightMeanings": [
+        "家族兴旺、财富世代传承的大圆满境界，根基极其深厚",
+        "享受长期稳固的家族资产、房产投资与丰厚遗产",
+        "传统价值观与家族纽带历久弥坚，福泽延绵后代"
+      ],
+      "reversedMeanings": [
+        "家族内部爆发财产争夺或遗产纠纷，传统根基动摇",
+        "家族企业或长期投资遭遇财务危机，声誉受损",
+        "家庭关系冷漠金钱至上，缺乏真正的温情纽带"
+      ],
+      "fortuneTelling": [
+        "基业长青大富大贵之兆，家族与团队为你提供坚实后盾",
+        "注重长远稳健的资产传承，珍惜亲情的守护力量"
+      ],
+      "uprightMeaningsEn": [
+        "Celebrating your physical and financial blessings",
+        "Realizing how lucky or how blessed you are",
+        "Being satisfied with your physical and financial achievements",
+        "Taking best advantage of \"times of plenty\"",
+        "Enjoying a feast",
+        "Showering friends or family with gifts"
+      ],
+      "reversedMeaningsEn": [
+        "Spending all of your money on extravagant gifts and possessions",
+        "Trying too hard to impress others with your wealth or physique",
+        "Giving an inappropriately expensive gift as a means of currying favor",
+        "Obsessing on matters of weight, health, or finance",
+        "Always asking, \"What's in it for me?\""
+      ],
+      "fortuneTellingEn": [
+        "Big money is in the near future",
+        "Expect a powerful blessing to come your way"
+      ],
+      "uprightMeaningsZh": [
+        "家族兴旺、财富世代传承的大圆满境界，根基极其深厚",
+        "享受长期稳固的家族资产、房产投资与丰厚遗产",
+        "传统价值观与家族纽带历久弥坚，福泽延绵后代"
+      ],
+      "reversedMeaningsZh": [
+        "家族内部爆发财产争夺或遗产纠纷，传统根基动摇",
+        "家族企业或长期投资遭遇财务危机，声誉受损",
+        "家庭关系冷漠金钱至上，缺乏真正的温情纽带"
+      ],
+      "fortuneTellingZh": [
+        "基业长青大富大贵之兆，家族与团队为你提供坚实后盾",
+        "注重长远稳健的资产传承，珍惜亲情的守护力量"
+      ]
+    },
+    {
+      "id": 74,
+      "code": "pentacles_11",
+      "nameEn": "Page of 星币",
+      "nameZh": "星币侍从",
+      "arcana": "MINOR",
+      "suit": "PENTACLES",
+      "rank": 11,
+      "rankName": "Page",
+      "element": "EARTH",
+      "keywordsEn": [
+        "practicality",
+        "prosperity",
+        "learning",
+        "growth",
+        "adolescence"
+      ],
+      "keywordsZh": [
+        "星币侍从",
+        "星币牌组",
+        "EARTH元素"
+      ],
+      "uprightMeanings": [
+        "脚踏实地、勤奋好学且充满求知欲的年轻学徒",
+        "带来关于学业、工作或务实财务项目的好消息",
+        "注重实际应用，认真探索新技能并打下坚实基础"
+      ],
+      "reversedMeanings": [
+        "缺乏专注与执行力，眼高手低容易被外界诱惑分心",
+        "学习或工作态度消极懈怠，遭遇财务小挫折",
+        "计划脱离实际缺乏落地可能，难以按期完成任务"
+      ],
+      "fortuneTelling": [
+        "以谦虚务实的态度开启新知识的学习与实践",
+        "脚踏实地打好基本功，好消息与新机遇即将到来"
+      ],
+      "uprightMeaningsEn": [
+        "Learning the value of a dollar",
+        "Starting a savings plan",
+        "Taking the first steps toward getting out of debt",
+        "Learning new physical tasks",
+        "Discovering your sexuality",
+        "Launching a diet, a weight-lifting program, or a health-related effort",
+        "Learning by doing"
+      ],
+      "reversedMeaningsEn": [
+        "Trying to appear healthier or wealthier than you really are",
+        "Spending money carelessly",
+        "Living strictly for today, with no thought of tomorrow",
+        "Possessing immature attitudes toward sex and sexuality",
+        "Using wealth or beauty as an excuse for not having to learn and grow"
+      ],
+      "fortuneTellingEn": [
+        "This card represents a young man or woman with an earthy, practical demeanor, likely born an Aries, Taurus, or Gemini, who playfully encourages you to take financial or sexual risks"
+      ],
+      "uprightMeaningsZh": [
+        "脚踏实地、勤奋好学且充满求知欲的年轻学徒",
+        "带来关于学业、工作或务实财务项目的好消息",
+        "注重实际应用，认真探索新技能并打下坚实基础"
+      ],
+      "reversedMeaningsZh": [
+        "缺乏专注与执行力，眼高手低容易被外界诱惑分心",
+        "学习或工作态度消极懈怠，遭遇财务小挫折",
+        "计划脱离实际缺乏落地可能，难以按期完成任务"
+      ],
+      "fortuneTellingZh": [
+        "以谦虚务实的态度开启新知识的学习与实践",
+        "脚踏实地打好基本功，好消息与新机遇即将到来"
+      ]
+    },
+    {
+      "id": 75,
+      "code": "pentacles_12",
+      "nameEn": "Knight of 星币",
+      "nameZh": "星币骑士",
+      "arcana": "MINOR",
+      "suit": "PENTACLES",
+      "rank": 12,
+      "rankName": "Knight",
+      "element": "EARTH",
+      "keywordsEn": [
+        "caution",
+        "focus",
+        "realism",
+        "invention"
+      ],
+      "keywordsZh": [
+        "星币骑士",
+        "星币牌组",
+        "EARTH元素"
+      ],
+      "uprightMeanings": [
+        "务实可靠、勤勤恳恳、极具责任感的坚韧实干家",
+        "按部就班稳扎稳打推进目标，注重细节与品质",
+        "值得托付与信任，凭借持久的耐力收获最终胜利"
+      ],
+      "reversedMeanings": [
+        "死板固执不懂变通，行事拖沓保守错失良机",
+        "沦为工作狂忽视生活情趣，陷入枯燥乏味的瓶颈",
+        "缺乏开拓精神，在安于现状中消耗斗志"
+      ],
+      "fortuneTelling": [
+        "稳健是成功的最大保障，按既定节奏脚踏实地推进",
+        "保持可靠与忠诚的品格，你的付出所有人有目共睹"
+      ],
+      "uprightMeaningsEn": [
+        "Spending money wisely",
+        "Saving for a rainy day",
+        "Paying close attention to physical or financial details",
+        "Knowing where every dollar goes",
+        "Having safe sex",
+        "Preferring facts to \"good feelings\"",
+        "Finding creative ways to \"make do\" with resources on hand",
+        "Completing a new invention"
+      ],
+      "reversedMeaningsEn": [
+        "Throwing caution to the four winds",
+        "Spending without regard for consequence",
+        "Spending on luxury when necessities are lacking",
+        "Escaping stress by spending money",
+        "Obsessing on tiny physical or financial details",
+        "Perpetually chasing after some new bauble",
+        "Copying another's work and claiming it as your own"
+      ],
+      "fortuneTellingEn": [
+        "A stingy person may chide you for spending money",
+        "Be prepared to defend an economic or sexual decision"
+      ],
+      "uprightMeaningsZh": [
+        "务实可靠、勤勤恳恳、极具责任感的坚韧实干家",
+        "按部就班稳扎稳打推进目标，注重细节与品质",
+        "值得托付与信任，凭借持久的耐力收获最终胜利"
+      ],
+      "reversedMeaningsZh": [
+        "死板固执不懂变通，行事拖沓保守错失良机",
+        "沦为工作狂忽视生活情趣，陷入枯燥乏味的瓶颈",
+        "缺乏开拓精神，在安于现状中消耗斗志"
+      ],
+      "fortuneTellingZh": [
+        "稳健是成功的最大保障，按既定节奏脚踏实地推进",
+        "保持可靠与忠诚的品格，你的付出所有人有目共睹"
+      ]
+    },
+    {
+      "id": 76,
+      "code": "pentacles_13",
+      "nameEn": "Queen of 星币",
+      "nameZh": "星币王后",
+      "arcana": "MINOR",
+      "suit": "PENTACLES",
+      "rank": 13,
+      "rankName": "Queen",
+      "element": "EARTH",
+      "keywordsEn": [
+        "luxury",
+        "comfort",
+        "resourcefulness",
+        "generosity",
+        "prosperity"
+      ],
+      "keywordsZh": [
+        "星币王后",
+        "星币牌组",
+        "EARTH元素"
+      ],
+      "uprightMeanings": [
+        "精明能干、持家有道且极具商业头脑的丰盛女性",
+        "既能创造财富又能享受生活，营造温馨富足的环境",
+        "脚踏实地关爱他人，给予身边人最实实在在的照顾"
+      ],
+      "reversedMeanings": [
+        "过于物质金钱至上，因担心财务安全而陷入焦虑",
+        "忽视身心健康或家庭关怀，在物质追求中失去平衡",
+        "缺乏安全感变得挑剔苛刻，令人难以接近"
+      ],
+      "fortuneTelling": [
+        "善于理财与资源配置，创造温馨富足的现实生活",
+        "脚踏实地关爱自己与他人，财富与健康将双双丰收"
+      ],
+      "uprightMeaningsEn": [
+        "Appreciating fine food, fine wine, beautiful art, beautiful bodies, or any of the better things in life",
+        "Reveling in healthy sexuality",
+        "Treating yourself",
+        "Splurging on the occasional \"nice to have\" item",
+        "Rewarding someone with compensation above and beyond expectations",
+        "Having it all"
+      ],
+      "reversedMeaningsEn": [
+        "Indulging in gluttony or greediness",
+        "Becoming insatiable",
+        "Blunting the impact of treats by indulging in them too often",
+        "Providing physical comfort without providing for emotional needs",
+        "Allowing a feeling of entitlement to distort your gratitude for what you're given"
+      ],
+      "fortuneTellingEn": [
+        "This card represents a woman with an expansive, sensual nature, likely born between December 13th and 31st, who uses sensual appeal and the promise of reward to sway others to her point of view"
+      ],
+      "uprightMeaningsZh": [
+        "精明能干、持家有道且极具商业头脑的丰盛女性",
+        "既能创造财富又能享受生活，营造温馨富足的环境",
+        "脚踏实地关爱他人，给予身边人最实实在在的照顾"
+      ],
+      "reversedMeaningsZh": [
+        "过于物质金钱至上，因担心财务安全而陷入焦虑",
+        "忽视身心健康或家庭关怀，在物质追求中失去平衡",
+        "缺乏安全感变得挑剔苛刻，令人难以接近"
+      ],
+      "fortuneTellingZh": [
+        "善于理财与资源配置，创造温馨富足的现实生活",
+        "脚踏实地关爱自己与他人，财富与健康将双双丰收"
+      ]
+    },
+    {
+      "id": 77,
+      "code": "pentacles_14",
+      "nameEn": "King of 星币",
+      "nameZh": "星币国王",
+      "arcana": "MINOR",
+      "suit": "PENTACLES",
+      "rank": 14,
+      "rankName": "King",
+      "element": "EARTH",
+      "keywordsEn": [
+        "stability",
+        "dependability",
+        "confidence",
+        "intervention"
+      ],
+      "keywordsZh": [
+        "星币国王",
+        "星币牌组",
+        "EARTH元素"
+      ],
+      "uprightMeanings": [
+        "事业有成、富甲一方的商业领袖与财富帝国缔造者",
+        "具备卓越的商业洞察力、财务管理力与沉稳霸气",
+        "提供坚不可摧的安全感与庇护，享受最高级别的繁荣"
+      ],
+      "reversedMeanings": [
+        "唯利是图贪婪无度，利用金钱与权力操控他人",
+        "陷入财务危机或投资失误，商业帝国根基动摇",
+        "傲慢固执挥霍无度，缺乏精神追求与人情关怀"
+      ],
+      "fortuneTelling": [
+        "展现卓越的商业头脑与务实掌控力，财富大门为你敞开",
+        "以稳健沉着的胸怀守护你的事业基业，成就斐然"
+      ],
+      "uprightMeaningsEn": [
+        "Becoming debt-free",
+        "Having more than enough to get by",
+        "Making contributions to a savings plan",
+        "Taking a new job with an eye toward advancing your career",
+        "Buying life or health insurance",
+        "Being confident in the bedroom",
+        "Taking on the role of enforcer when called upon to do so"
+      ],
+      "reversedMeaningsEn": [
+        "Becoming so conservative you resist all change on principle alone",
+        "Ignoring innovations in the name of preserving tradition",
+        "Being smug or cocky",
+        "Becoming ruthlessly dedicated to profit or pleasure",
+        "Being sexually selfish",
+        "Bossing others around, especially when you're not empowered to do so"
+      ],
+      "fortuneTellingEn": [
+        "This card represents an older man with a financially, socially, and politically conservative spirit, likely born between August 12th and September 11th, who is known for putting his money where his mouth is"
+      ],
+      "uprightMeaningsZh": [
+        "事业有成、富甲一方的商业领袖与财富帝国缔造者",
+        "具备卓越的商业洞察力、财务管理力与沉稳霸气",
+        "提供坚不可摧的安全感与庇护，享受最高级别的繁荣"
+      ],
+      "reversedMeaningsZh": [
+        "唯利是图贪婪无度，利用金钱与权力操控他人",
+        "陷入财务危机或投资失误，商业帝国根基动摇",
+        "傲慢固执挥霍无度，缺乏精神追求与人情关怀"
+      ],
+      "fortuneTellingZh": [
+        "展现卓越的商业头脑与务实掌控力，财富大门为你敞开",
+        "以稳健沉着的胸怀守护你的事业基业，成就斐然"
+      ]
+    }
+  ]
+}

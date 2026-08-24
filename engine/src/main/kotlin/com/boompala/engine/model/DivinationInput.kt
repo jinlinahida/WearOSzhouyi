@@ -6,8 +6,9 @@ import java.time.ZoneId
 enum class DivinationInputMode(
     val displayName: String,
 ) {
-    MANUAL_CAST("手动摇卦"),
-    DIRECT_INPUT("已知卦象输入"),
+    COIN_CAST("铜钱摇卦"),
+    MANUAL_CAST("手动排爻"),
+    DIRECT_INPUT("已知卦象"),
 }
 
 data class YaoPolarityInput(

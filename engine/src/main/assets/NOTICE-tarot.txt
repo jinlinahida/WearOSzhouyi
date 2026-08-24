@@ -1,0 +1,26 @@
+塔罗牌离线数据集与图片资源来源与许可声明
+
+文件：
+1. 数据集：engine/src/main/assets/tarot_cards.json
+2. 牌面图片：app/src/main/res/drawable-nodpi/tarot_card_*.webp
+
+数据与资源组成说明：
+1. 英文原始数据（English Data）：
+   - 内容：英文牌名（nameEn）、英文关键词（keywordsEn）、正逆位英文释义（uprightMeanings / reversedMeanings）及占卜断语（fortuneTelling）。
+   - 来源：基于 Darius Kazemi 开放语料库 Corpora (data/divination/tarot_interpretations.json)，改编自 Mark McElroy 的《A Guide to Tarot Meanings》。
+   - 许可协议：CC0 1.0 Universal (Public Domain Dedication)
+   - 许可链接：https://creativecommons.org/publicdomain/zero/1.0/
+
+2. 中文内容与结构化整理（Chinese Translation & Project Curation）：
+   - 内容：中文牌名（nameZh）、中文关键词（keywordsZh）、正逆位中文核心释义（uprightMeaningsZh / reversedMeaningsZh）、中文占卜指引断语（fortuneTellingZh）、花色分类、级别映射、四大元素对应及 JSON Schema 结构编排。
+   - 来源：由 Boompala 项目依据 1909 年 Rider-Waite-Smith 经典公有领域体系独立翻译、整理与撰写，不属于 Corpora 原生内容。
+   - 原作背景：Pamela Colman Smith (1878-1951) 原画与 Arthur Edward Waite (1857-1942) 文本，1909 年初版作品已在全域进入公有领域 (Public Domain)。
+
+3. 牌面与牌背图片资源（Artwork & Images）：
+   - 内容：78 张经典韦特塔罗牌面与 1 张牌背高清扫描修图（WebP 格式）。
+   - 来源：由 Luciella Elisabeth Scarlett (luciellaes) 基于 1909 年公有领域原作扫描并进行色彩还原与边缘平滑处理。
+   - 许可协议：CC0 1.0 Universal (Public Domain Dedication)
+   - 许可链接：https://creativecommons.org/publicdomain/zero/1.0/
+
+声明：
+本文件及资源包含标准 78 张塔罗牌（22 张大阿卡纳、56 张小阿卡纳四花色），供离线文化研究与本地占卜使用。

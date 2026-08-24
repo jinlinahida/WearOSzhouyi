@@ -36,7 +36,7 @@ class ArchiveRepository(context: Context) {
         val where = buildList { if (source != null) add("source=?"); if (color != null) add("color=?") }
         val args = buildList { if (source != null) add(source.name); if (color != null) add(color.toString()) }
         helper.readableDatabase.query("archives", null, where.joinToString(" AND ").ifEmpty { null }, args.toTypedArray().takeIf { it.isNotEmpty() }, null, null, "cast_at DESC").use { c ->
-            return buildList { while (c.moveToNext()) runCatching { add(c.toRecord()) } }
+            return buildList { while (c.moveToNext()) runCatching { c.toRecord() }.getOrNull()?.let { add(it) } }
         }
     }
     fun get(id: Long): ArchiveRecord? = helper.readableDatabase.query(

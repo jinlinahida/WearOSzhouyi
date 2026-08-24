@@ -34,10 +34,7 @@ fun MeiHuaResultContent(
     CommonDivinationResultScreen(
         title = "时间起卦结果",
         rotaryEnabled = rotaryScrollingEnabled,
-        contentPadding = PaddingValues(
-            horizontal = metrics.horizontalPadding,
-            vertical = metrics.verticalPadding,
-        ),
+        contentPadding = metrics.screenPadding,
         itemSpacing = metrics.itemSpacing,
     ) {
         item(key = "meihua-time") {

@@ -10,6 +10,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
@@ -45,15 +47,40 @@ class SettingsRepositoryTest {
         repository.setContentSize(ContentSize.LARGE)
         repository.setAnimationsEnabled(false)
         repository.setRotaryScrollingEnabled(false)
+        repository.setHapticFeedbackEnabled(false)
+        repository.setLanguage(AppLanguage.ENGLISH)
 
-        assertEquals(
-            AppSettings(
-                screenMode = ScreenMode.ROUND,
-                contentSize = ContentSize.LARGE,
-                animationsEnabled = false,
-                rotaryScrollingEnabled = false,
-            ),
-            SettingsRepository(dataStore).settings.first(),
+        val updated = SettingsRepository(dataStore).settings.first()
+        assertEquals(ScreenMode.ROUND, updated.screenMode)
+        assertEquals(ContentSize.LARGE, updated.contentSize)
+        assertEquals(false, updated.animationsEnabled)
+        assertEquals(false, updated.rotaryScrollingEnabled)
+        assertEquals(false, updated.hapticFeedbackEnabled)
+        assertEquals(AppLanguage.ENGLISH, updated.language)
+    }
+
+    @Test
+    fun `home feature toggles and reordering work in repository`() = runBlocking {
+        val dataStore = PreferenceDataStoreFactory.create(
+            scope = dataStoreScope,
+            produceFile = { dataStoreFile },
         )
+        val repository = SettingsRepository(dataStore)
+
+        repository.toggleHomeFeatureVisibility(HomeFeature.SIX_YAO)
+        var current = repository.settings.first()
+        assertTrue(current.hiddenHomeFeatures.contains(HomeFeature.SIX_YAO))
+
+        repository.toggleHomeFeatureVisibility(HomeFeature.SIX_YAO)
+        current = repository.settings.first()
+        assertFalse(current.hiddenHomeFeatures.contains(HomeFeature.SIX_YAO))
+
+        val firstFeature = current.effectiveHomeOrder().first()
+        val secondFeature = current.effectiveHomeOrder()[1]
+        repository.moveHomeFeature(secondFeature, moveUp = true)
+
+        current = repository.settings.first()
+        assertEquals(secondFeature, current.effectiveHomeOrder().first())
+        assertEquals(firstFeature, current.effectiveHomeOrder()[1])
     }
 }

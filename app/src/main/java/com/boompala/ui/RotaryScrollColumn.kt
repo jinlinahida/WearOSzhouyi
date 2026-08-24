@@ -29,6 +29,7 @@ import androidx.wear.compose.material3.ScreenScaffold
 @Composable
 fun RotaryScrollColumn(
     rotaryEnabled: Boolean,
+    hapticFeedbackEnabled: Boolean = true,
     modifier: Modifier = Modifier.fillMaxSize(),
     state: LazyListState = rememberLazyListState(),
     contentPadding: PaddingValues = PaddingValues(),
@@ -39,20 +40,22 @@ fun RotaryScrollColumn(
     val rotaryBehavior = if (rotaryEnabled) {
         RotaryScrollableDefaults.behavior(
             scrollableState = state,
-            hapticFeedbackEnabled = true,
+            hapticFeedbackEnabled = hapticFeedbackEnabled,
         )
     } else {
         null
     }
-    val rotaryModifier = if (rotaryEnabled) {
-        modifier
-            .requestFocusOnHierarchyActive()
-            .rotaryScrollable(
-                behavior = requireNotNull(rotaryBehavior),
-                focusRequester = focusRequester,
-            )
-    } else {
-        modifier
+    val rotaryModifier = remember(rotaryEnabled, rotaryBehavior, focusRequester, modifier) {
+        if (rotaryEnabled && rotaryBehavior != null) {
+            modifier
+                .requestFocusOnHierarchyActive()
+                .rotaryScrollable(
+                    behavior = rotaryBehavior,
+                    focusRequester = focusRequester,
+                )
+        } else {
+            modifier
+        }
     }
 
     ScreenScaffold(

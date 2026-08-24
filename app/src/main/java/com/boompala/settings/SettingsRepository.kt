@@ -36,6 +36,10 @@ class SettingsRepository(
                 contentSize = preferences[CONTENT_SIZE_KEY].toEnumOrDefault(ContentSize.STANDARD),
                 animationsEnabled = preferences[ANIMATIONS_ENABLED_KEY] ?: true,
                 rotaryScrollingEnabled = preferences[ROTARY_SCROLLING_ENABLED_KEY] ?: true,
+                hapticFeedbackEnabled = preferences[HAPTIC_FEEDBACK_ENABLED_KEY] ?: true,
+                language = preferences[LANGUAGE_KEY].toEnumOrDefault(AppLanguage.CHINESE),
+                homeOrder = parseHomeOrder(preferences[HOME_ORDER_KEY]),
+                hiddenHomeFeatures = parseHiddenFeatures(preferences[HIDDEN_HOME_FEATURES_KEY]),
             )
         }
 
@@ -46,12 +50,20 @@ class SettingsRepository(
                 contentSize = preferences[CONTENT_SIZE_KEY].toEnumOrDefault(ContentSize.STANDARD),
                 animationsEnabled = preferences[ANIMATIONS_ENABLED_KEY] ?: true,
                 rotaryScrollingEnabled = preferences[ROTARY_SCROLLING_ENABLED_KEY] ?: true,
+                hapticFeedbackEnabled = preferences[HAPTIC_FEEDBACK_ENABLED_KEY] ?: true,
+                language = preferences[LANGUAGE_KEY].toEnumOrDefault(AppLanguage.CHINESE),
+                homeOrder = parseHomeOrder(preferences[HOME_ORDER_KEY]),
+                hiddenHomeFeatures = parseHiddenFeatures(preferences[HIDDEN_HOME_FEATURES_KEY]),
             )
             val next = transform(current)
             preferences[SCREEN_MODE_KEY] = next.screenMode.name
             preferences[CONTENT_SIZE_KEY] = next.contentSize.name
             preferences[ANIMATIONS_ENABLED_KEY] = next.animationsEnabled
             preferences[ROTARY_SCROLLING_ENABLED_KEY] = next.rotaryScrollingEnabled
+            preferences[HAPTIC_FEEDBACK_ENABLED_KEY] = next.hapticFeedbackEnabled
+            preferences[LANGUAGE_KEY] = next.language.name
+            preferences[HOME_ORDER_KEY] = next.homeOrder.joinToString(",") { it.id }
+            preferences[HIDDEN_HOME_FEATURES_KEY] = next.hiddenHomeFeatures.joinToString(",") { it.id }
         }
     }
 
@@ -71,13 +83,85 @@ class SettingsRepository(
         update { it.copy(rotaryScrollingEnabled = enabled) }
     }
 
+    suspend fun setHapticFeedbackEnabled(enabled: Boolean) {
+        update { it.copy(hapticFeedbackEnabled = enabled) }
+    }
+
+    suspend fun setLanguage(language: AppLanguage) {
+        update { it.copy(language = language) }
+    }
+
+    suspend fun setHomeOrder(order: List<HomeFeature>) {
+        update { it.copy(homeOrder = order) }
+    }
+
+    suspend fun setHiddenHomeFeatures(hidden: Set<HomeFeature>) {
+        update { it.copy(hiddenHomeFeatures = hidden) }
+    }
+
+    suspend fun toggleHomeFeatureVisibility(feature: HomeFeature) {
+        update {
+            val hidden = it.hiddenHomeFeatures.toMutableSet()
+            if (hidden.contains(feature)) {
+                hidden.remove(feature)
+            } else {
+                hidden.add(feature)
+            }
+            it.copy(hiddenHomeFeatures = hidden)
+        }
+    }
+
+    suspend fun moveHomeFeature(feature: HomeFeature, moveUp: Boolean) {
+        update { current ->
+            val list = current.effectiveHomeOrder().toMutableList()
+            val index = list.indexOf(feature)
+            if (index == -1) return@update current
+            val targetIndex = if (moveUp) index - 1 else index + 1
+            if (targetIndex in list.indices) {
+                val item = list.removeAt(index)
+                list.add(targetIndex, item)
+                current.copy(homeOrder = list)
+            } else {
+                current
+            }
+        }
+    }
+
     private companion object {
         val SCREEN_MODE_KEY = stringPreferencesKey("screen_mode")
         val CONTENT_SIZE_KEY = stringPreferencesKey("content_size")
         val ANIMATIONS_ENABLED_KEY = booleanPreferencesKey("animations_enabled")
         val ROTARY_SCROLLING_ENABLED_KEY = booleanPreferencesKey("rotary_scrolling_enabled")
+        val HAPTIC_FEEDBACK_ENABLED_KEY = booleanPreferencesKey("haptic_feedback_enabled")
+        val LANGUAGE_KEY = stringPreferencesKey("language")
+        val HOME_ORDER_KEY = stringPreferencesKey("home_order")
+        val HIDDEN_HOME_FEATURES_KEY = stringPreferencesKey("hidden_home_features")
 
         inline fun <reified T : Enum<T>> String?.toEnumOrDefault(default: T): T =
             runCatching { enumValueOf<T>(this.orEmpty()) }.getOrDefault(default)
+
+        fun parseHomeOrder(stored: String?): List<HomeFeature> {
+            if (stored.isNullOrBlank()) return HomeFeature.DEFAULT_ORDER
+            val parsed = stored.split(",")
+                .mapNotNull(String::trim)
+                .mapNotNull(HomeFeature::fromId)
+            val result = mutableListOf<HomeFeature>()
+            val seen = mutableSetOf<HomeFeature>()
+            for (f in parsed) {
+                if (seen.add(f)) result.add(f)
+            }
+            for (f in HomeFeature.DEFAULT_ORDER) {
+                if (seen.add(f)) result.add(f)
+            }
+            return result
+        }
+
+        fun parseHiddenFeatures(stored: String?): Set<HomeFeature> {
+            if (stored.isNullOrBlank()) return emptySet()
+            return stored.split(",")
+                .mapNotNull(String::trim)
+                .mapNotNull(HomeFeature::fromId)
+                .toSet()
+        }
     }
 }

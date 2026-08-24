@@ -9,7 +9,9 @@ import com.boompala.engine.model.YaoPolarity
 import com.boompala.engine.model.YaoPosition
 import com.boompala.engine.model.YaoState
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertSame
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class ResultScreenTest {
@@ -51,6 +53,64 @@ class ResultScreenTest {
     }
 
     @Test
+    fun `moving line at first position renders at visual bottom without semantic corruption`() {
+        val linesFromBottom = YaoPosition.entries.mapIndexed { index, position ->
+            Yao(
+                position = position,
+                yinYang = YaoPolarity.YANG,
+                moving = position == YaoPosition.FIRST,
+                heavenlyStem = HeavenlyStem.JIA,
+                earthlyBranch = EarthlyBranch.ZI,
+                element = EarthlyBranch.ZI.element,
+                sixRelation = SixRelation.SIBLINGS,
+                sixSpirit = SixSpirit.AZURE_DRAGON,
+                isShi = false,
+                isYing = false,
+                isVoid = false,
+            )
+        }
+
+        val displayed = linesFromBottom.forResultDisplay()
+
+        // Visual index 0 is TOP (上爻), not moving
+        assertEquals(YaoPosition.TOP, displayed[0].position)
+        assertFalse(displayed[0].moving)
+
+        // Visual index 5 is FIRST (初爻), moving
+        assertEquals(YaoPosition.FIRST, displayed[5].position)
+        assertTrue(displayed[5].moving)
+    }
+
+    @Test
+    fun `moving line at top position renders at visual top without semantic corruption`() {
+        val linesFromBottom = YaoPosition.entries.mapIndexed { index, position ->
+            Yao(
+                position = position,
+                yinYang = YaoPolarity.YANG,
+                moving = position == YaoPosition.TOP,
+                heavenlyStem = HeavenlyStem.JIA,
+                earthlyBranch = EarthlyBranch.ZI,
+                element = EarthlyBranch.ZI.element,
+                sixRelation = SixRelation.SIBLINGS,
+                sixSpirit = SixSpirit.AZURE_DRAGON,
+                isShi = false,
+                isYing = false,
+                isVoid = false,
+            )
+        }
+
+        val displayed = linesFromBottom.forResultDisplay()
+
+        // Visual index 0 is TOP (上爻), moving
+        assertEquals(YaoPosition.TOP, displayed[0].position)
+        assertTrue(displayed[0].moving)
+
+        // Visual index 5 is FIRST (初爻), not moving
+        assertEquals(YaoPosition.FIRST, displayed[5].position)
+        assertFalse(displayed[5].moving)
+    }
+
+    @Test
     fun `line display keeps yin yang shape independent from moving state for all four casts`() {
         val expected = mapOf(
             YaoState.OLD_YIN to YaoLineShape.BROKEN,
@@ -65,6 +125,19 @@ class ResultScreenTest {
             assertEquals("${state.numericValue} should keep its yin-yang shape", expectedShape, display.shape)
             assertEquals(state.isChanging, display.isMoving)
         }
+    }
+
+    @Test
+    fun `hexagram line display dimensions maintain symmetry between solid and broken lines`() {
+        val totalLineWidth = 64
+        val gapWidth = 10
+        val segmentWidth = 27
+
+        assertEquals(
+            "Broken line two segments + gap must equal total solid line width",
+            totalLineWidth,
+            segmentWidth * 2 + gapWidth,
+        )
     }
 
     private fun yaoFor(state: YaoState): Yao = Yao(

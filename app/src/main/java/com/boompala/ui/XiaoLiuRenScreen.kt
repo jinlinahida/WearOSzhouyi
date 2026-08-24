@@ -23,7 +23,7 @@ fun XiaoLiuRenScreen(engine: XiaoLiuRenEngine, initial: XiaoLiuRenReading?, rota
     val reading = remember(initial, engine) { initial ?: engine.calculate(Instant.now(), ZoneId.systemDefault()) }
     androidx.compose.runtime.LaunchedEffect(reading) { onReading(reading) }
     val fmt = remember { DateTimeFormatter.ofPattern("yyyy年M月d日 HH:mm", Locale.CHINA) }
-    RotaryScrollColumn(rotaryEnabled = rotary, modifier = Modifier.fillMaxSize(), contentPadding = PaddingValues(metrics.horizontalPadding, metrics.verticalPadding), itemSpacing = metrics.itemSpacing) {
+    RotaryScrollColumn(rotaryEnabled = rotary, modifier = Modifier.fillMaxSize(), contentPadding = metrics.screenPadding, itemSpacing = metrics.itemSpacing) {
         item { Text("小六壬") }
         item { ResultCard { DetailField("公历", fmt.format(reading.timeInfo.gregorianDateTime)); DetailField("农历", reading.timeInfo.lunarDate); DetailField("当前时辰", reading.timeInfo.hourGanzhi.earthlyBranch.displayName + "时"); DetailField("起课数据", "月${reading.timeInfo.lunarMonth} 日${reading.timeInfo.lunarDay} 时${reading.timeInfo.hourGanzhi.earthlyBranch.index + 1}") } }
         item { ResultCard { Text("六宫（固定顺序）"); XiaoLiuRenPalace.entries.forEach { p -> Text(if (p == reading.finalPalace) "▶ ${p.displayName}（最终）" else p.displayName) } } }

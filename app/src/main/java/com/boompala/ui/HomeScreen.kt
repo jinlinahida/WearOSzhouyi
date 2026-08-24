@@ -4,22 +4,25 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.wear.compose.material3.Button
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.OutlinedButton
 import androidx.wear.compose.material3.Text
+import com.boompala.R
+import com.boompala.settings.AppSettings
+import com.boompala.settings.HomeFeature
 
-private data class HomeEntry(
-    val title: String,
-    val enabled: Boolean = false,
-)
+private const val CONTENT_TYPE_TITLE = "title"
+private const val CONTENT_TYPE_BUTTON = "button"
+private const val CONTENT_TYPE_OUTLINED_BUTTON = "outlined_button"
 
 @Composable
 fun HomeScreen(
-    rotaryScrollingEnabled: Boolean,
+    settings: AppSettings,
     onSixYaoClick: () -> Unit,
     onMeiHuaClick: () -> Unit,
     onSettingsClick: () -> Unit,
@@ -27,67 +30,125 @@ fun HomeScreen(
     onArchiveClick: () -> Unit,
     onCompassClick: () -> Unit,
     onBrowseClick: () -> Unit,
+    onDailyFortuneClick: () -> Unit = { },
+    onTarotClick: () -> Unit = { },
+    onTarotThreeCardClick: () -> Unit = { },
+    onTarotHolyTriangleClick: () -> Unit = { },
 ) {
-    val entries = listOf(
-        HomeEntry("历史记录"),
-        HomeEntry("更多功能"),
-    )
     val metrics = LocalUiMetrics.current
+    val titlePaddingModifier = remember(metrics.itemSpacing) {
+        Modifier.padding(bottom = metrics.itemSpacing / 2)
+    }
+    val fullWidthModifier = Modifier.fillMaxWidth()
+    val visibleFeatures = remember(settings.homeOrder, settings.hiddenHomeFeatures) {
+        settings.visibleHomeFeatures()
+    }
 
     RotaryScrollColumn(
-        rotaryEnabled = rotaryScrollingEnabled,
+        rotaryEnabled = settings.rotaryScrollingEnabled,
         modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(
-            horizontal = metrics.horizontalPadding,
-            vertical = metrics.verticalPadding,
-        ),
+        contentPadding = metrics.screenPadding,
         itemSpacing = metrics.itemSpacing,
     ) {
-        item(key = "title") {
+        item(key = "title", contentType = CONTENT_TYPE_TITLE) {
             Text(
-                text = "Boompala 易学",
+                text = stringResource(R.string.app_name),
                 style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.padding(bottom = metrics.itemSpacing / 2),
+                modifier = titlePaddingModifier,
             )
         }
-        item(key = "six-yao") {
-            Button(
-                onClick = onSixYaoClick,
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                Text("六爻排盘")
+
+        visibleFeatures.forEach { feature ->
+            when (feature) {
+                HomeFeature.SIX_YAO -> {
+                    item(key = "six-yao", contentType = CONTENT_TYPE_BUTTON) {
+                        Button(onClick = onSixYaoClick, modifier = fullWidthModifier) {
+                            Text(stringResource(R.string.home_feature_six_yao))
+                        }
+                    }
+                }
+
+                HomeFeature.MEI_HUA -> {
+                    item(key = "mei-hua", contentType = CONTENT_TYPE_BUTTON) {
+                        Button(onClick = onMeiHuaClick, modifier = fullWidthModifier) {
+                            Text(stringResource(R.string.home_feature_mei_hua))
+                        }
+                    }
+                }
+
+                HomeFeature.TAROT_ONE -> {
+                    item(key = "tarot", contentType = CONTENT_TYPE_BUTTON) {
+                        Button(onClick = onTarotClick, modifier = fullWidthModifier) {
+                            Text(stringResource(R.string.home_feature_tarot_one))
+                        }
+                    }
+                }
+
+                HomeFeature.TAROT_THREE -> {
+                    item(key = "tarot-three", contentType = CONTENT_TYPE_BUTTON) {
+                        Button(onClick = onTarotThreeCardClick, modifier = fullWidthModifier) {
+                            Text(stringResource(R.string.home_feature_tarot_three))
+                        }
+                    }
+                }
+
+                HomeFeature.TAROT_HOLY_TRIANGLE -> {
+                    item(key = "tarot-holy-triangle", contentType = CONTENT_TYPE_BUTTON) {
+                        Button(onClick = onTarotHolyTriangleClick, modifier = fullWidthModifier) {
+                            Text(stringResource(R.string.home_feature_tarot_holy_triangle))
+                        }
+                    }
+                }
+
+                HomeFeature.DAILY_FORTUNE -> {
+                    item(key = "daily-fortune", contentType = CONTENT_TYPE_BUTTON) {
+                        Button(onClick = onDailyFortuneClick, modifier = fullWidthModifier) {
+                            Text(stringResource(R.string.home_feature_daily_fortune))
+                        }
+                    }
+                }
+
+                HomeFeature.XIAO_LIU_REN -> {
+                    item(key = "xiaoliuren", contentType = CONTENT_TYPE_BUTTON) {
+                        Button(onClick = onXiaoLiuRenClick, modifier = fullWidthModifier) {
+                            Text(stringResource(R.string.home_feature_xiao_liu_ren))
+                        }
+                    }
+                }
+
+                HomeFeature.COMPASS -> {
+                    item(key = "compass", contentType = CONTENT_TYPE_BUTTON) {
+                        Button(onClick = onCompassClick, modifier = fullWidthModifier) {
+                            Text(stringResource(R.string.home_feature_compass))
+                        }
+                    }
+                }
+
+                HomeFeature.ARCHIVES -> {
+                    item(key = "archives", contentType = CONTENT_TYPE_OUTLINED_BUTTON) {
+                        OutlinedButton(onClick = onArchiveClick, modifier = fullWidthModifier) {
+                            Text(stringResource(R.string.home_feature_archives))
+                        }
+                    }
+                }
+
+                HomeFeature.BROWSE -> {
+                    item(key = "browse", contentType = CONTENT_TYPE_BUTTON) {
+                        Button(onClick = onBrowseClick, modifier = fullWidthModifier) {
+                            Text(stringResource(R.string.home_feature_browse))
+                        }
+                    }
+                }
             }
         }
-        item(key = "mei-hua") {
-            Button(
-                onClick = onMeiHuaClick,
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                Text("时间起卦")
-            }
-        }
-        item(key = "xiaoliuren") { Button(onClick = onXiaoLiuRenClick, modifier = Modifier.fillMaxWidth()) { Text("小六壬") } }
-        item(key = "compass") { Button(onClick = onCompassClick, modifier = Modifier.fillMaxWidth()) { Text("罗盘") } }
-        item(key = "archives") { OutlinedButton(onClick = onArchiveClick, modifier = Modifier.fillMaxWidth()) { Text("归档") } }
-        item(key = "browse") { Button(onClick = onBrowseClick, modifier = Modifier.fillMaxWidth()) { Text("浏览") } }
-        item(key = "settings") {
+
+        // Settings entry is permanent and can never be hidden
+        item(key = "settings", contentType = CONTENT_TYPE_OUTLINED_BUTTON) {
             OutlinedButton(
                 onClick = onSettingsClick,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = fullWidthModifier,
             ) {
-                Text("设置")
-            }
-        }
-        items(
-            items = entries,
-            key = HomeEntry::title,
-        ) { entry ->
-            OutlinedButton(
-                onClick = { },
-                enabled = entry.enabled,
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                Text("${entry.title} · 开发中")
+                Text(stringResource(R.string.home_feature_settings))
             }
         }
     }

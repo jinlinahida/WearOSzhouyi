@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.ui.Alignment
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -90,10 +91,7 @@ fun LiuYaoResultContent(
     CommonDivinationResultScreen(
         title = "起卦结果",
         rotaryEnabled = rotaryScrollingEnabled,
-        contentPadding = PaddingValues(
-            horizontal = metrics.horizontalPadding,
-            vertical = metrics.verticalPadding,
-        ),
+        contentPadding = metrics.screenPadding,
         itemSpacing = metrics.itemSpacing,
     ) {
         // The line-card order is intentionally unchanged from the former
@@ -142,7 +140,7 @@ fun LiuYaoResultContent(
             Text(movingSummary, style = MaterialTheme.typography.bodyMedium)
         }
         item(key = "original-yao-section-title") {
-            Text("本卦完整装卦（上爻至初爻）", style = MaterialTheme.typography.titleSmall)
+            Text("本卦完整装卦", style = MaterialTheme.typography.titleSmall)
         }
         items(
             items = originalYaoCards,
@@ -153,7 +151,7 @@ fun LiuYaoResultContent(
         result.changed?.let { changed ->
             item(key = "changed-yao-section-title") {
                 Text(
-                    "变卦完整装卦：${changed.name}（上爻至初爻）",
+                    "变卦完整装卦：${changed.name}",
                     style = MaterialTheme.typography.titleSmall,
                 )
             }
@@ -308,14 +306,6 @@ private fun formatTrigram(trigram: com.boompala.engine.data.TrigramInterpretatio
     "${trigram.name}（${trigram.image}）：${trigram.meaning}"
 
 @Composable
-internal fun DetailField(
-    label: String,
-    value: String,
-) {
-    Text("$label：$value", style = MaterialTheme.typography.bodySmall)
-}
-
-@Composable
 private fun VoidSummaryCard(summary: String) {
     ResultCard {
         Text("旬空", style = MaterialTheme.typography.titleSmall)
@@ -324,45 +314,67 @@ private fun VoidSummaryCard(summary: String) {
 }
 
 @Composable
-internal fun ResultCard(content: @Composable ColumnScope.() -> Unit) {
-    val metrics = LocalUiMetrics.current
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(ResultCardShape)
-            .background(ResultCardColor)
-            .padding(
-                horizontal = metrics.horizontalPadding / 2,
-                vertical = metrics.cardVerticalPadding,
-            ),
-        verticalArrangement = Arrangement.spacedBy(metrics.itemSpacing / 2),
-        content = content,
-    )
-}
+internal fun HexagramLine(
+    line: YaoLineDisplay,
+    modifier: Modifier = Modifier,
+) {
+    val lineWidth = 64.dp
+    val gapWidth = 10.dp
+    val segmentWidth = 27.dp
+    val lineHeight = 3.dp
 
-@Composable
-internal fun HexagramLine(line: YaoLineDisplay) {
-    Row(modifier = Modifier.width(88.dp)) {
-        when (line.shape) {
-            YaoLineShape.SOLID -> LineSegment(Modifier.fillMaxWidth())
-            YaoLineShape.BROKEN -> {
-                LineSegment(Modifier.width(31.dp))
-                Spacer(Modifier.width(10.dp))
-                LineSegment(Modifier.width(31.dp))
+    Row(
+        modifier = modifier.width(88.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Box(
+            modifier = Modifier.width(lineWidth),
+            contentAlignment = Alignment.CenterStart,
+        ) {
+            when (line.shape) {
+                YaoLineShape.SOLID -> {
+                    LineSegment(
+                        modifier = Modifier
+                            .width(lineWidth)
+                            .height(lineHeight),
+                    )
+                }
+                YaoLineShape.BROKEN -> {
+                    Row(
+                        modifier = Modifier.width(lineWidth),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                    ) {
+                        LineSegment(
+                            modifier = Modifier
+                                .width(segmentWidth)
+                                .height(lineHeight),
+                        )
+                        Spacer(Modifier.width(gapWidth))
+                        LineSegment(
+                            modifier = Modifier
+                                .width(segmentWidth)
+                                .height(lineHeight),
+                        )
+                    }
+                }
             }
         }
         if (line.isMoving) {
             Spacer(Modifier.width(6.dp))
-            Text("动", style = MaterialTheme.typography.labelSmall)
+            Text(
+                text = "动",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.primary,
+            )
         }
     }
 }
 
 @Composable
-private fun LineSegment(modifier: Modifier) {
+private fun LineSegment(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
-            .height(3.dp)
+            .clip(RoundedCornerShape(1.dp))
             .background(Color.White),
     )
 }

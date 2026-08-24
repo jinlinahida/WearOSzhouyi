@@ -31,6 +31,10 @@ android {
                 "hexagramInterpretationAssetPath",
                 file("src/main/assets/hexagram_interpretations.json").absolutePath,
             )
+            it.systemProperty(
+                "tarotCardAssetPath",
+                file("src/main/assets/tarot_cards.json").absolutePath,
+            )
         }
     }
 }
