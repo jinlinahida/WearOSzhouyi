@@ -22,6 +22,7 @@ import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -39,8 +40,13 @@ private const val SLIDE_EXIT_DURATION_MS = 260
 private const val FADE_DURATION_MS = 200
 private const val PARALLAX_OFFSET_FRACTION = 0.20f
 
-internal val DecelEasing = CubicBezierEasing(0.0f, 0.0f, 0.2f, 1.0f)
 internal val AccelEasing = CubicBezierEasing(0.4f, 0.0f, 1.0f, 1.0f)
+
+// Material Motion 规范的 emphasized-decelerate：起手柔和、收尾更长，避免满速冲出。
+internal val EmphasizedDecelEasing = CubicBezierEasing(0.05f, 0.0f, 0.1f, 1.0f)
+
+// 全局触觉开关，由 BoompalaApp 根据设置提供；默认开启以保证独立调用点不受影响。
+internal val LocalHapticFeedbackEnabled = staticCompositionLocalOf { true }
 
 // Press Feedback Physics from Reference App (InteractiveHighlight Spec)
 // dampingRatio = 0.5f, stiffness = 300f
@@ -162,7 +168,7 @@ internal fun pageTransitionSpec(
                 animationSpec = tween(FADE_DURATION_MS, easing = LinearOutSlowInEasing),
             ) + slideInHorizontally(
                 initialOffsetX = { fullWidth -> fullWidth },
-                animationSpec = tween(SLIDE_ENTER_DURATION_MS, easing = DecelEasing),
+                animationSpec = tween(SLIDE_ENTER_DURATION_MS, easing = EmphasizedDecelEasing),
             )
 
             val exit = fadeOut(
@@ -182,7 +188,7 @@ internal fun pageTransitionSpec(
                 animationSpec = tween(FADE_DURATION_MS, easing = LinearOutSlowInEasing),
             ) + slideInHorizontally(
                 initialOffsetX = { fullWidth -> -(fullWidth * PARALLAX_OFFSET_FRACTION).toInt() },
-                animationSpec = tween(SLIDE_ENTER_DURATION_MS, easing = DecelEasing),
+                animationSpec = tween(SLIDE_ENTER_DURATION_MS, easing = EmphasizedDecelEasing),
             )
 
             val exit = fadeOut(
@@ -202,7 +208,7 @@ internal fun pageTransitionSpec(
                 animationSpec = tween(FADE_DURATION_MS, easing = LinearOutSlowInEasing),
             ) + slideInHorizontally(
                 initialOffsetX = { (it * 0.15f).toInt() },
-                animationSpec = tween(SLIDE_ENTER_DURATION_MS, easing = DecelEasing),
+                animationSpec = tween(SLIDE_ENTER_DURATION_MS, easing = EmphasizedDecelEasing),
             )
 
             val exit = fadeOut(
@@ -249,7 +255,7 @@ internal fun loadingContentTransitionSpec(animationsEnabled: Boolean): ContentTr
 fun Modifier.wearPressFeedback(
     interactionSource: MutableInteractionSource,
     enabled: Boolean = true,
-    hapticEnabled: Boolean = true,
+    hapticEnabled: Boolean = LocalHapticFeedbackEnabled.current,
 ): Modifier {
     if (!enabled) return this
 

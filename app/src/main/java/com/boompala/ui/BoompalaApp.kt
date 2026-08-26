@@ -211,17 +211,21 @@ fun BoompalaApp() {
     val popEnterAnimatable = remember { Animatable(1f) }
     var lastTransitionPop by remember { mutableStateOf(false) }
 
-    // 前进导航：先在协程内同步 snap 到初始位移再切屏，避免新页面首帧闪现最终状态。
+    // 前进导航：动画进行中被打断时从当前进度平滑接续，否则先同步 snap 到初始位移再切屏，
+    // 避免新页面首帧闪现最终状态。
     val navigateTo = remember(scope, settings) {
         { target: AppScreen ->
             if (target != screen) {
                 lastTransitionPop = false
                 scope.launch {
                     if (settings.animationsEnabled) {
-                        forwardEnterAnimatable.snapTo(0f)
+                        // 动画进行中被打断时不重置，由 animateTo 从当前进度平滑接续。
+                        if (!forwardEnterAnimatable.isRunning) {
+                            forwardEnterAnimatable.snapTo(0f)
+                        }
                         forwardEnterAnimatable.animateTo(
                             targetValue = 1f,
-                            animationSpec = tween(durationMillis = 280, easing = DecelEasing),
+                            animationSpec = tween(durationMillis = 300, easing = EmphasizedDecelEasing),
                         )
                     } else {
                         forwardEnterAnimatable.snapTo(1f)
@@ -257,10 +261,13 @@ fun BoompalaApp() {
                 lastTransitionPop = true
                 scope.launch {
                     if (settings.animationsEnabled && animate) {
-                        popEnterAnimatable.snapTo(0f)
+                        // 动画进行中被打断时不重置，由 animateTo 从当前进度平滑接续。
+                        if (!popEnterAnimatable.isRunning) {
+                            popEnterAnimatable.snapTo(0f)
+                        }
                         popEnterAnimatable.animateTo(
                             targetValue = 1f,
-                            animationSpec = tween(durationMillis = 280, easing = DecelEasing),
+                            animationSpec = tween(durationMillis = 300, easing = EmphasizedDecelEasing),
                         )
                     } else {
                         popEnterAnimatable.snapTo(1f)
@@ -749,49 +756,54 @@ fun BoompalaApp() {
                     !settingsInnerBackAvailable
                 val screenWidthPx = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp.toPx() }
 
-                SwipeToDismissBox(
-                    state = swipeToDismissBoxState,
-                    modifier = Modifier.fillMaxSize(),
-                    userSwipeEnabled = swipeEnabled,
-                    backgroundKey = effectiveBackDestination ?: AppScreen.HOME,
-                    contentKey = screen,
-                    onDismissed = { goBack(false) },
-                ) { isBackground ->
-                    if (isBackground) {
-                        val bgScreen = effectiveBackDestination ?: AppScreen.HOME
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .graphicsLayer {
-                                    if (forwardEnterAnimatable.value < 1f) {
-                                        val progress = forwardEnterAnimatable.value
-                                        translationX = -0.20f * screenWidthPx * (1f - progress)
-                                        alpha = 0.6f + 0.4f * progress
-                                    }
-                                }
-                        ) {
-                            screenContent(bgScreen)
-                        }
-                    } else {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .graphicsLayer {
-                                    if (lastTransitionPop) {
-                                        // 返回：入场父页从左侧 -20% 视差位置复位，与前进时的背景视差互为镜像。
-                                        if (popEnterAnimatable.value < 1f) {
-                                            val progress = popEnterAnimatable.value
+                CompositionLocalProvider(LocalHapticFeedbackEnabled provides settings.hapticFeedbackEnabled) {
+                    SwipeToDismissBox(
+                        state = swipeToDismissBoxState,
+                        modifier = Modifier.fillMaxSize(),
+                        userSwipeEnabled = swipeEnabled,
+                        backgroundKey = effectiveBackDestination ?: AppScreen.HOME,
+                        contentKey = screen,
+                        onDismissed = { goBack(false) },
+                    ) { isBackground ->
+                        if (isBackground) {
+                            val bgScreen = effectiveBackDestination ?: AppScreen.HOME
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .graphicsLayer {
+                                        if (forwardEnterAnimatable.value < 1f) {
+                                            val progress = forwardEnterAnimatable.value
                                             translationX = -0.20f * screenWidthPx * (1f - progress)
-                                            alpha = 0.6f + 0.4f * progress
+                                            // 背景压暗幅度收窄，减少整屏亮度拖影闪烁。
+                                            alpha = 0.75f + 0.25f * progress
                                         }
-                                    } else if (forwardEnterAnimatable.value < 1f) {
-                                        val progress = forwardEnterAnimatable.value
-                                        translationX = screenWidthPx * (1f - progress)
-                                        alpha = progress.coerceIn(0f, 1f)
                                     }
-                                }
-                        ) {
-                            screenContent(screen)
+                            ) {
+                                screenContent(bgScreen)
+                            }
+                        } else {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .graphicsLayer {
+                                        if (lastTransitionPop) {
+                                            // 返回：入场父页从左侧 -20% 视差位置复位，与前进时的背景视差互为镜像。
+                                            if (popEnterAnimatable.value < 1f) {
+                                                val progress = popEnterAnimatable.value
+                                                translationX = -0.20f * screenWidthPx * (1f - progress)
+                                                // 淡入先于位移完成，避免半透明幽灵感。
+                                                alpha = 0.6f + 0.4f * (progress * 2f).coerceAtMost(1f)
+                                            }
+                                        } else if (forwardEnterAnimatable.value < 1f) {
+                                            val progress = forwardEnterAnimatable.value
+                                            translationX = screenWidthPx * (1f - progress)
+                                            // 淡入先于位移完成，避免半透明幽灵感。
+                                            alpha = (progress * 2f).coerceAtMost(1f)
+                                        }
+                                    }
+                            ) {
+                                screenContent(screen)
+                            }
                         }
                     }
                 }

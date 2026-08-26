@@ -256,6 +256,16 @@ class PageTransitionsTest {
     }
 
     @Test
+    fun emphasizedDecelEasingHasStandardEndpoints() {
+        // Material emphasized-decelerate 曲线：起点 0、终点 1，中间单调递增。
+        assertEquals(0f, EmphasizedDecelEasing.transform(0f), 0.0001f)
+        assertEquals(1f, EmphasizedDecelEasing.transform(1f), 0.0001f)
+        assertTrue(EmphasizedDecelEasing.transform(0.25f) > 0f)
+        assertTrue(EmphasizedDecelEasing.transform(0.5f) > EmphasizedDecelEasing.transform(0.25f))
+        assertTrue(EmphasizedDecelEasing.transform(0.75f) > EmphasizedDecelEasing.transform(0.5f))
+    }
+
+    @Test
     fun enabledAnimationsReturnNonEmptyTransition() {
         val forwardTransform = pageTransitionSpec(NavigationDirection.FORWARD, animationsEnabled = true)
         assertNotNull(forwardTransform)
