@@ -54,7 +54,7 @@ fun TarotHolyTriangleScreen(
     onArchive: (TarotReading) -> Unit = { },
 ) {
     val metrics = LocalUiMetrics.current
-    val haptic = androidx.compose.ui.platform.LocalHapticFeedback.current
+    val hapticContext = androidx.compose.ui.platform.LocalContext.current
     val spread = TarotSpread.HOLY_TRIANGLE
     var deckType by remember { mutableStateOf(DeckType.FULL_78) }
     var allowReversed by remember { mutableStateOf(true) }
@@ -208,7 +208,7 @@ fun TarotHolyTriangleScreen(
                     animationsEnabled = animationsEnabled,
                     onFlip = {
                         if (!isCardFlipped) {
-                            haptic.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.GestureThresholdActivate)
+                            AppHaptics.click(hapticContext)
                             flippedList[currentStep] = true
                         }
                     },

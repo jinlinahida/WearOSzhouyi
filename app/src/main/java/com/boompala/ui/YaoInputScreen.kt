@@ -31,9 +31,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -67,7 +66,7 @@ fun YaoInputScreen(
     onGenerate: (HexagramInput) -> Unit,
 ) {
     val metrics = LocalUiMetrics.current
-    val haptic = LocalHapticFeedback.current
+    val hapticContext = LocalContext.current
 
     var inputMode by remember { mutableStateOf(DivinationInputMode.COIN_CAST) }
 
@@ -245,7 +244,7 @@ fun YaoInputScreen(
                             onClick = {
                                 if (!isTossing) {
                                     isTossing = true
-                                    haptic.performHapticFeedback(HapticFeedbackType.GestureThresholdActivate)
+                                    AppHaptics.click(hapticContext)
                                     coroutineScope.launch {
                                         val toss = LiuYaoCoinCastingEngine.castSingleLine()
                                         lastToss = toss
@@ -280,7 +279,7 @@ fun YaoInputScreen(
                     } else {
                         OutlinedButton(
                             onClick = {
-                                haptic.performHapticFeedback(HapticFeedbackType.GestureThresholdActivate)
+                                AppHaptics.click(hapticContext)
                                 for (i in coinRecords.indices) {
                                     coinRecords[i] = null
                                 }

@@ -5,6 +5,10 @@
         android:name="android.hardware.type.watch"
         android:required="true" />
 
+    <!-- 触觉反馈直驱 Vibrator：部分手表 ROM 上 View/Compose 的
+         performHapticFeedback 不可靠，需要应用自己持有震动权限。 -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"

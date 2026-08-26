@@ -25,8 +25,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalContext
 
 internal enum class NavigationDirection {
     FORWARD,
@@ -47,6 +46,30 @@ internal val EmphasizedDecelEasing = CubicBezierEasing(0.05f, 0.0f, 0.1f, 1.0f)
 
 // 全局触觉开关，由 BoompalaApp 根据设置提供；默认开启以保证独立调用点不受影响。
 internal val LocalHapticFeedbackEnabled = staticCompositionLocalOf { true }
+
+/**
+ * 应用级触觉反馈：直驱 [android.os.Vibrator]。
+ *
+ * 部分手表 ROM 上 View/Compose 的 performHapticFeedback 静默失效（参考 WYS
+ * App Market 的 VibrateUtils 做法），改为直接播放短促的 VibrationEffect，
+ * 需要清单声明 VIBRATE 权限。无震动硬件的设备上 getSystemService 返回 null，
+ * 自然降级为无反馈。
+ */
+internal object AppHaptics {
+    private var vibrator: android.os.Vibrator? = null
+    private var resolved = false
+
+    fun click(context: android.content.Context) {
+        if (!resolved) {
+            resolved = true
+            val manager = context.getSystemService(android.os.VibratorManager::class.java)
+            vibrator = manager?.defaultVibrator
+        }
+        vibrator?.vibrate(
+            android.os.VibrationEffect.createOneShot(25, android.os.VibrationEffect.DEFAULT_AMPLITUDE),
+        )
+    }
+}
 
 // Press Feedback Physics from Reference App (InteractiveHighlight Spec)
 // dampingRatio = 0.5f, stiffness = 300f
@@ -260,11 +283,11 @@ fun Modifier.wearPressFeedback(
     if (!enabled) return this
 
     val isPressed by interactionSource.collectIsPressedAsState()
-    val haptic = LocalHapticFeedback.current
+    val context = LocalContext.current
 
     LaunchedEffect(isPressed) {
         if (isPressed && hapticEnabled) {
-            haptic.performHapticFeedback(HapticFeedbackType.GestureThresholdActivate)
+            AppHaptics.click(context)
         }
     }
 
