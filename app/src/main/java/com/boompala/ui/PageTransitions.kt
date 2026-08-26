@@ -5,12 +5,15 @@ import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
@@ -214,6 +217,23 @@ internal fun pageTransitionSpec(
             }
         }
     }
+}
+
+/**
+ * 统一的"加载 -> 内容"转场规范（仿 WYS App Market 的具名 ContentTransition 实践）。
+ * 所有页面内加载态到内容态的 AnimatedContent 都应使用该函数，
+ * 并在关闭动画设置下退化为无转场。
+ */
+internal fun loadingContentTransitionSpec(animationsEnabled: Boolean): ContentTransform {
+    if (!animationsEnabled) {
+        return EnterTransition.None togetherWith ExitTransition.None
+    }
+    return (fadeIn(tween(240, easing = LinearOutSlowInEasing)) +
+        scaleIn(initialScale = 0.95f, animationSpec = tween(280, easing = FastOutSlowInEasing)))
+        .togetherWith(
+            fadeOut(tween(160, easing = FastOutLinearInEasing)) +
+                scaleOut(targetScale = 0.95f, animationSpec = tween(200, easing = FastOutLinearInEasing)),
+        )
 }
 
 /**

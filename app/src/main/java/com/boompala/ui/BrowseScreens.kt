@@ -1,6 +1,9 @@
+@file:OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
+
 package com.boompala.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,6 +25,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material3.Button
 import androidx.wear.compose.material3.MaterialTheme
@@ -248,6 +252,7 @@ fun HexagramDetailScreen(
     hex: HexagramReference,
     data: BrowserData,
     rotary: Boolean,
+    animationsEnabled: Boolean = true,
     onBack: () -> Unit,
 ) {
     val m = LocalUiMetrics.current
@@ -263,7 +268,11 @@ fun HexagramDetailScreen(
                 text = "${hex.order}. ${hex.name}",
                 style = MaterialTheme.typography.titleMedium,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth(),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .then(if (animationsEnabled) Modifier.basicMarquee() else Modifier),
             )
         }
 
@@ -455,6 +464,7 @@ fun TarotBrowserScreen(
 fun TarotCardDetailScreen(
     card: TarotCard,
     rotary: Boolean,
+    animationsEnabled: Boolean = true,
     onBack: () -> Unit,
 ) {
     val m = LocalUiMetrics.current
@@ -468,7 +478,11 @@ fun TarotCardDetailScreen(
                 text = "${card.nameZh} · ${card.nameEn}",
                 style = MaterialTheme.typography.titleMedium,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth(),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .then(if (animationsEnabled) Modifier.basicMarquee() else Modifier),
             )
         }
 
@@ -613,6 +627,7 @@ fun KnowledgeListScreen(
 fun KnowledgeDetailScreen(
     article: KnowledgeArticle,
     rotary: Boolean,
+    animationsEnabled: Boolean = true,
     onBack: () -> Unit,
 ) {
     val m = LocalUiMetrics.current
@@ -626,7 +641,11 @@ fun KnowledgeDetailScreen(
                 text = article.title,
                 style = MaterialTheme.typography.titleMedium,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth(),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .then(if (animationsEnabled) Modifier.basicMarquee() else Modifier),
             )
         }
         item {

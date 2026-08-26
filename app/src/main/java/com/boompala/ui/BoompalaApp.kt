@@ -1,17 +1,7 @@
 package com.boompala.ui
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.core.FastOutLinearInEasing
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
-import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
@@ -413,8 +403,14 @@ fun BoompalaApp() {
                                 archiveDetail = withContext(Dispatchers.IO) { id?.let(archiveRepository::get) }
                             }
                             val record = archiveDetail
-                            if (record == null) ArchiveLoadingScreen(settings.rotaryScrollingEnabled)
-                            else ArchiveDetailScreen(record, archiveRepository, settings.rotaryScrollingEnabled, { archiveRefresh++; goBack(true) }, { goBack(true) })
+                            AnimatedContent(
+                                targetState = record,
+                                transitionSpec = { loadingContentTransitionSpec(settings.animationsEnabled) },
+                                label = "ArchiveDetailLoadingTransition",
+                            ) { snapshot ->
+                                if (snapshot == null) ArchiveLoadingScreen(settings.rotaryScrollingEnabled)
+                                else ArchiveDetailScreen(snapshot, archiveRepository, settings.rotaryScrollingEnabled, { archiveRefresh++; goBack(true) }, { goBack(true) })
+                            }
                         }
                         AppScreen.COMPASS -> CompassScreen(settings.rotaryScrollingEnabled) { goBack(true) }
                         AppScreen.DAILY_FORTUNE -> {
@@ -445,14 +441,7 @@ fun BoompalaApp() {
                             val currentReading = dailyFortuneReading
                             AnimatedContent(
                                 targetState = currentReading,
-                                transitionSpec = {
-                                    if (settings.animationsEnabled) {
-                                        (fadeIn(tween(240, easing = LinearOutSlowInEasing)) + scaleIn(initialScale = 0.95f, animationSpec = tween(280, easing = FastOutSlowInEasing)))
-                                            .togetherWith(fadeOut(tween(160, easing = FastOutLinearInEasing)) + scaleOut(targetScale = 0.95f, animationSpec = tween(200, easing = FastOutLinearInEasing)))
-                                    } else {
-                                        EnterTransition.None togetherWith ExitTransition.None
-                                    }
-                                },
+                                transitionSpec = { loadingContentTransitionSpec(settings.animationsEnabled) },
                                 label = "DailyFortuneLoadingTransition",
                             ) { reading ->
                                 if (reading != null) {
@@ -468,17 +457,23 @@ fun BoompalaApp() {
                         }
                         AppScreen.BROWSE -> {
                             val data = browserData
-                            if (data != null) {
-                                BrowseHomeScreen(
-                                    data = data,
-                                    rotary = settings.rotaryScrollingEnabled,
-                                    onHexagrams = { navigateTo(AppScreen.HEXAGRAM_BROWSER) },
-                                    onKnowledge = { navigateTo(AppScreen.KNOWLEDGE_LIST) },
-                                    onTarot = { navigateTo(AppScreen.TAROT_BROWSER) },
-                                    onBack = { goBack(true) },
-                                )
-                            } else {
-                                WearLoadingIndicator(label = stringResource(R.string.browse_loading))
+                            AnimatedContent(
+                                targetState = data,
+                                transitionSpec = { loadingContentTransitionSpec(settings.animationsEnabled) },
+                                label = "BrowseHomeLoadingTransition",
+                            ) { snapshot ->
+                                if (snapshot != null) {
+                                    BrowseHomeScreen(
+                                        data = snapshot,
+                                        rotary = settings.rotaryScrollingEnabled,
+                                        onHexagrams = { navigateTo(AppScreen.HEXAGRAM_BROWSER) },
+                                        onKnowledge = { navigateTo(AppScreen.KNOWLEDGE_LIST) },
+                                        onTarot = { navigateTo(AppScreen.TAROT_BROWSER) },
+                                        onBack = { goBack(true) },
+                                    )
+                                } else {
+                                    WearLoadingIndicator(label = stringResource(R.string.browse_loading))
+                                }
                             }
                         }
 
@@ -504,6 +499,7 @@ fun BoompalaApp() {
                                     hex = h,
                                     data = d,
                                     rotary = settings.rotaryScrollingEnabled,
+                                    animationsEnabled = settings.animationsEnabled,
                                     onBack = { goBack(true) },
                                 )
                             } else {
@@ -531,6 +527,7 @@ fun BoompalaApp() {
                                 KnowledgeDetailScreen(
                                     article = article,
                                     rotary = settings.rotaryScrollingEnabled,
+                                    animationsEnabled = settings.animationsEnabled,
                                     onBack = { goBack(true) },
                                 )
                             } else {
@@ -558,6 +555,7 @@ fun BoompalaApp() {
                                 TarotCardDetailScreen(
                                     card = card,
                                     rotary = settings.rotaryScrollingEnabled,
+                                    animationsEnabled = settings.animationsEnabled,
                                     onBack = { goBack(true) },
                                 )
                             } else {

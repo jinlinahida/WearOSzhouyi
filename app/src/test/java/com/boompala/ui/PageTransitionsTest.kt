@@ -243,6 +243,19 @@ class PageTransitionsTest {
     }
 
     @Test
+    fun loadingContentTransitionHonorsAnimationsSetting() {
+        val disabled = loadingContentTransitionSpec(animationsEnabled = false)
+        assertNotNull(disabled)
+        assertEquals(EnterTransition.None, disabled.targetContentEnter)
+        assertEquals(ExitTransition.None, disabled.initialContentExit)
+
+        val enabled = loadingContentTransitionSpec(animationsEnabled = true)
+        assertNotNull(enabled)
+        assertTrue(enabled.targetContentEnter != EnterTransition.None)
+        assertTrue(enabled.initialContentExit != ExitTransition.None)
+    }
+
+    @Test
     fun enabledAnimationsReturnNonEmptyTransition() {
         val forwardTransform = pageTransitionSpec(NavigationDirection.FORWARD, animationsEnabled = true)
         assertNotNull(forwardTransform)
