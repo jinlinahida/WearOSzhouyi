@@ -165,6 +165,8 @@ fun BoompalaApp() {
     var isGenerating by remember { mutableStateOf(false) }
     var generationId by remember { mutableIntStateOf(0) }
     var meiHuaGenerationId by remember { mutableIntStateOf(0) }
+    // 设置页内层分区可返回时，需屏蔽外层滑动返回手势，避免直接退回首页。
+    var settingsInnerBackAvailable by remember { mutableStateOf(false) }
     val dependenciesReady = remember(context) {
         CompletableDeferred<OfflineReadingDependencies>()
     }
@@ -645,6 +647,7 @@ fun BoompalaApp() {
                             rotaryScrollingEnabled = settings.rotaryScrollingEnabled,
                             onAboutClick = { navigateTo(AppScreen.ABOUT) },
                             onBack = { goBack(true) },
+                            onInnerBackAvailabilityChanged = { settingsInnerBackAvailable = it },
                         )
 
                         AppScreen.TAROT_ONE_CARD -> TarotOneCardScreen(
@@ -741,7 +744,9 @@ fun BoompalaApp() {
                 }
 
                 val swipeToDismissBoxState = rememberSwipeToDismissBoxState()
-                val swipeEnabled = !isFirstRunWelcome && effectiveBackDestination != null
+                val swipeEnabled = !isFirstRunWelcome &&
+                    effectiveBackDestination != null &&
+                    !settingsInnerBackAvailable
                 val screenWidthPx = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp.toPx() }
 
                 SwipeToDismissBox(

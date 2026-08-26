@@ -20,6 +20,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -68,12 +69,19 @@ fun SettingsScreen(
     rotaryScrollingEnabled: Boolean,
     onAboutClick: () -> Unit,
     onBack: () -> Unit,
+    // 上报设置内层分区是否可返回，供外层屏蔽滑动返回手势。
+    onInnerBackAvailabilityChanged: (Boolean) -> Unit = {},
 ) {
     val metrics = LocalUiMetrics.current
-    var currentSection by remember { mutableStateOf(SettingsSection.MENU) }
+    // 分区状态需要可保存：从 ABOUT 返回设置时不应重置回主菜单。
+    var currentSection by rememberSaveable { mutableStateOf(SettingsSection.MENU) }
 
     BackHandler(enabled = currentSection != SettingsSection.MENU) {
         currentSection = SettingsSection.MENU
+    }
+
+    LaunchedEffect(currentSection) {
+        onInnerBackAvailabilityChanged(currentSection != SettingsSection.MENU)
     }
 
     AnimatedContent(
