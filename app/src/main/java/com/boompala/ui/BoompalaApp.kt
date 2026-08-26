@@ -210,9 +210,6 @@ fun BoompalaApp() {
     val forwardEnterAnimatable = remember { Animatable(1f) }
     val popEnterAnimatable = remember { Animatable(1f) }
     var lastTransitionPop by remember { mutableStateOf(false) }
-    // 转场期间保留的离屏页：SwipeToDismissBox 只在真实滑动时才渲染背景层，
-    // 程序化转场的"两页同屏"必须由自己在前景层内绘制离屏页实现。
-    var leavingScreen by remember { mutableStateOf<AppScreen?>(null) }
 
     // 前进导航：动画进行中被打断时从当前进度平滑接续，否则先同步 snap 到初始位移再切屏，
     // 避免新页面首帧闪现最终状态。
@@ -220,9 +217,6 @@ fun BoompalaApp() {
         { target: AppScreen ->
             if (target != screen) {
                 lastTransitionPop = false
-                if (settings.animationsEnabled) {
-                    leavingScreen = screen
-                }
                 scope.launch {
                     if (settings.animationsEnabled) {
                         // 动画进行中被打断时不重置，由 animateTo 从当前进度平滑接续。
@@ -233,7 +227,6 @@ fun BoompalaApp() {
                             targetValue = 1f,
                             animationSpec = tween(durationMillis = 300, easing = EmphasizedDecelEasing),
                         )
-                        leavingScreen = null
                     } else {
                         forwardEnterAnimatable.snapTo(1f)
                     }
@@ -256,13 +249,16 @@ fun BoompalaApp() {
                 generationId++
                 meiHuaGenerationId++
                 isGenerating = false
-                val leavingNow = screen
-                lastTransitionPop = true
-                if (settings.animationsEnabled && animate) {
-                    leavingScreen = screen
-                } else {
-                    leavingScreen = null
+                if (screen == AppScreen.TAROT_ONE_CARD) {
+                    tarotReading = null
                 }
+                if (screen == AppScreen.TAROT_THREE_CARD) {
+                    tarotThreeReading = null
+                }
+                if (screen == AppScreen.TAROT_HOLY_TRIANGLE) {
+                    tarotHolyTriangleReading = null
+                }
+                lastTransitionPop = true
                 scope.launch {
                     if (settings.animationsEnabled && animate) {
                         // 动画进行中被打断时不重置，由 animateTo 从当前进度平滑接续。
@@ -273,18 +269,8 @@ fun BoompalaApp() {
                             targetValue = 1f,
                             animationSpec = tween(durationMillis = 300, easing = EmphasizedDecelEasing),
                         )
-                        leavingScreen = null
                     } else {
                         popEnterAnimatable.snapTo(1f)
-                    }
-                    // 塔罗 reading 推迟到转场结束后再清空，
-                    // 避免离屏页在退场动画中突变为无结果的初始态；
-                    // 下次从首页进入塔罗时会先清空，不会残留旧结果。
-                    when (leavingNow) {
-                        AppScreen.TAROT_ONE_CARD -> tarotReading = null
-                        AppScreen.TAROT_THREE_CARD -> tarotThreeReading = null
-                        AppScreen.TAROT_HOLY_TRIANGLE -> tarotHolyTriangleReading = null
-                        else -> {}
                     }
                 }
                 screen = target
@@ -796,65 +782,27 @@ fun BoompalaApp() {
                                 screenContent(bgScreen)
                             }
                         } else {
-                            val leaving = leavingScreen
-                            if (leaving != null && lastTransitionPop) {
-                                // 返回：底层入场父页从左侧视差复位，顶层离屏页向右滑出，运动成对。
-                                Box(modifier = Modifier.fillMaxSize()) {
-                                    Box(
-                                        modifier = Modifier
-                                            .fillMaxSize()
-                                            .graphicsLayer {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .graphicsLayer {
+                                        if (lastTransitionPop) {
+                                            // 返回：父页从左侧滑入复位，与前进的右滑入方向成镜像。
+                                            if (popEnterAnimatable.value < 1f) {
                                                 val progress = popEnterAnimatable.value
-                                                translationX = -0.20f * screenWidthPx * (1f - progress)
-                                                alpha = 0.75f + 0.25f * progress
-                                            }
-                                    ) {
-                                        screenContent(screen)
-                                    }
-                                    Box(
-                                        modifier = Modifier
-                                            .fillMaxSize()
-                                            .graphicsLayer {
-                                                val progress = popEnterAnimatable.value
-                                                translationX = screenWidthPx * (1f - progress)
-                                                // 离屏页前半程淡出，避免滑到屏外才消失。
-                                                alpha = ((1f - progress) * 2f).coerceAtMost(1f)
-                                            }
-                                    ) {
-                                        screenContent(leaving)
-                                    }
-                                }
-                            } else if (leaving != null) {
-                                // 前进：底层离屏页视差退让并压暗，顶层入场页从右侧滑入。
-                                Box(modifier = Modifier.fillMaxSize()) {
-                                    Box(
-                                        modifier = Modifier
-                                            .fillMaxSize()
-                                            .graphicsLayer {
-                                                val progress = forwardEnterAnimatable.value
-                                                translationX = -0.20f * screenWidthPx * progress
-                                                alpha = 1f - 0.25f * progress
-                                            }
-                                    ) {
-                                        screenContent(leaving)
-                                    }
-                                    Box(
-                                        modifier = Modifier
-                                            .fillMaxSize()
-                                            .graphicsLayer {
-                                                val progress = forwardEnterAnimatable.value
-                                                translationX = screenWidthPx * (1f - progress)
+                                                translationX = -0.30f * screenWidthPx * (1f - progress)
                                                 // 淡入先于位移完成，避免半透明幽灵感。
                                                 alpha = (progress * 2f).coerceAtMost(1f)
                                             }
-                                    ) {
-                                        screenContent(screen)
+                                        } else if (forwardEnterAnimatable.value < 1f) {
+                                            val progress = forwardEnterAnimatable.value
+                                            translationX = screenWidthPx * (1f - progress)
+                                            // 淡入先于位移完成，避免半透明幽灵感。
+                                            alpha = (progress * 2f).coerceAtMost(1f)
+                                        }
                                     }
-                                }
-                            } else {
-                                Box(modifier = Modifier.fillMaxSize()) {
-                                    screenContent(screen)
-                                }
+                            ) {
+                                screenContent(screen)
                             }
                         }
                     }
