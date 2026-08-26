@@ -31,6 +31,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -59,6 +60,7 @@ import java.time.ZoneId
 @Composable
 fun YaoInputScreen(
     rotaryScrollingEnabled: Boolean,
+    animationsEnabled: Boolean = true,
     isGenerating: Boolean,
     onBack: () -> Unit,
     onGenerate: (HexagramInput) -> Unit,
@@ -244,16 +246,20 @@ fun YaoInputScreen(
                                     isTossing = true
                                     haptic.performHapticFeedback(HapticFeedbackType.GestureThresholdActivate)
                                     coroutineScope.launch {
-                                        tossAnimProgress.snapTo(0f)
-                                        tossAnimProgress.animateTo(
-                                            targetValue = 1f,
-                                            animationSpec = androidx.compose.animation.core.tween(
-                                                durationMillis = 280,
-                                                easing = androidx.compose.animation.core.FastOutSlowInEasing,
-                                            ),
-                                        )
                                         val toss = LiuYaoCoinCastingEngine.castSingleLine()
                                         lastToss = toss
+                                        tossAnimProgress.snapTo(0f)
+                                        if (animationsEnabled) {
+                                            tossAnimProgress.animateTo(
+                                                targetValue = 1f,
+                                                animationSpec = androidx.compose.animation.core.tween(
+                                                    durationMillis = 320,
+                                                    easing = androidx.compose.animation.core.FastOutSlowInEasing,
+                                                ),
+                                            )
+                                        } else {
+                                            tossAnimProgress.snapTo(1f)
+                                        }
                                         coinRecords[currentLineIndex] = CoinCastingRecord(
                                             position = YaoPosition.entries[currentLineIndex],
                                             toss = toss,
@@ -295,57 +301,11 @@ fun YaoInputScreen(
                         )
                         Spacer(Modifier.height(4.dp))
                         YaoPosition.entries.reversed().forEach { position ->
-                            val record = coinRecords[position.indexFromBottom]
-                            val isCurrentTarget = position.indexFromBottom == currentLineIndex
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = 2.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                Text(
-                                    text = if (isCurrentTarget) "▶ ${position.displayName}" else "  ${position.displayName}",
-                                    style = MaterialTheme.typography.labelSmall,
-                                    fontWeight = if (isCurrentTarget) FontWeight.Bold else FontWeight.Normal,
-                                    color = if (isCurrentTarget) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
-                                )
-                                if (record != null) {
-                                    val state = record.toss.state
-                                    val lineDisplay = YaoLineDisplay(
-                                        polarity = if (state.isYang) YaoPolarity.YANG else YaoPolarity.YIN,
-                                        shape = if (state.isYang) YaoLineShape.SOLID else YaoLineShape.BROKEN,
-                                        isMoving = state.isChanging,
-                                    )
-                                    HexagramLine(line = lineDisplay)
-                                    Text(
-                                        text = "${record.toss.sum} ${state.displayName}",
-                                        style = MaterialTheme.typography.labelSmall,
-                                        color = if (state.isChanging) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
-                                    )
-                                } else {
-                                    Box(
-                                        modifier = Modifier.width(88.dp),
-                                        contentAlignment = Alignment.CenterStart,
-                                    ) {
-                                        Box(
-                                            modifier = Modifier
-                                                .width(64.dp)
-                                                .height(3.dp)
-                                                .clip(RoundedCornerShape(1.dp))
-                                                .background(
-                                                    if (isCurrentTarget) MaterialTheme.colorScheme.primary.copy(alpha = 0.4f)
-                                                    else MaterialTheme.colorScheme.surfaceContainerHigh,
-                                                ),
-                                        )
-                                    }
-                                    Text(
-                                        text = if (isCurrentTarget) "正在摇…" else "待摇",
-                                        style = MaterialTheme.typography.labelSmall,
-                                        color = if (isCurrentTarget) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
-                                    )
-                                }
-                            }
+                            PreviewYaoRow(
+                                position = position,
+                                record = coinRecords[position.indexFromBottom],
+                                isCurrentTarget = position.indexFromBottom == currentLineIndex,
+                            )
                         }
                     }
                 }
@@ -499,21 +459,114 @@ fun YaoInputScreen(
 }
 
 @Composable
+private fun PreviewYaoRow(
+    position: YaoPosition,
+    record: CoinCastingRecord?,
+    isCurrentTarget: Boolean,
+) {
+    // 注意：不能以 record 是否为空作为 remember 键，否则 record 出现时
+    // Animatable 会以 1f 重建，渐显动画永远不会播放。
+    val appearProgress = remember {
+        androidx.compose.animation.core.Animatable(0f)
+    }
+    androidx.compose.runtime.LaunchedEffect(record) {
+        if (record != null) {
+            if (appearProgress.value < 1f) {
+                appearProgress.animateTo(
+                    targetValue = 1f,
+                    animationSpec = androidx.compose.animation.core.spring(
+                        dampingRatio = 0.72f,
+                        stiffness = 380f,
+                    ),
+                )
+            }
+        } else {
+            appearProgress.snapTo(0f)
+        }
+    }
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 2.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = if (isCurrentTarget) "▶ ${position.displayName}" else "  ${position.displayName}",
+            style = MaterialTheme.typography.labelSmall,
+            fontWeight = if (isCurrentTarget) FontWeight.Bold else FontWeight.Normal,
+            color = if (isCurrentTarget) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
+        )
+        if (record != null) {
+            val state = record.toss.state
+            val lineDisplay = YaoLineDisplay(
+                polarity = if (state.isYang) YaoPolarity.YANG else YaoPolarity.YIN,
+                shape = if (state.isYang) YaoLineShape.SOLID else YaoLineShape.BROKEN,
+                isMoving = state.isChanging,
+            )
+            Box(
+                modifier = Modifier.graphicsLayer {
+                    alpha = appearProgress.value
+                    scaleX = 0.8f + 0.2f * appearProgress.value
+                    scaleY = 0.8f + 0.2f * appearProgress.value
+                },
+            ) {
+                HexagramLine(line = lineDisplay)
+            }
+            Text(
+                text = "${record.toss.sum} ${state.displayName}",
+                style = MaterialTheme.typography.labelSmall,
+                color = if (state.isChanging) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.graphicsLayer {
+                    alpha = appearProgress.value
+                },
+            )
+        } else {
+            Box(
+                modifier = Modifier.width(88.dp),
+                contentAlignment = Alignment.CenterStart,
+            ) {
+                Box(
+                    modifier = Modifier
+                        .width(64.dp)
+                        .height(3.dp)
+                        .clip(RoundedCornerShape(1.dp))
+                        .background(
+                            if (isCurrentTarget) MaterialTheme.colorScheme.primary.copy(alpha = 0.4f)
+                            else MaterialTheme.colorScheme.surfaceContainerHigh,
+                        ),
+                )
+            }
+            Text(
+                text = if (isCurrentTarget) "正在摇…" else "待摇",
+                style = MaterialTheme.typography.labelSmall,
+                color = if (isCurrentTarget) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+    }
+}
+
+@Composable
 private fun CoinDisplayChip(
     side: CoinSide?,
     animProgress: Float = 0f,
     modifier: Modifier = Modifier,
 ) {
-    val rotation = animProgress * 360f
-    val scale = 1f - (kotlin.math.sin(animProgress * Math.PI.toFloat()) * 0.15f)
+    val density = LocalDensity.current.density
+    val rotationY = animProgress * 720f
+    val tiltX = kotlin.math.sin(animProgress * Math.PI.toFloat()) * 28f
+    val scale = 1f + (kotlin.math.sin(animProgress * Math.PI.toFloat()) * 0.22f)
 
     Box(
         modifier = modifier
             .size(44.dp)
             .graphicsLayer {
-                rotationY = rotation
-                scaleX = scale
-                scaleY = scale
+                cameraDistance = 16f * density
+                this.rotationY = rotationY
+                this.rotationX = tiltX
+                this.scaleX = scale
+                this.scaleY = scale
             }
             .clip(CircleShape)
             .background(

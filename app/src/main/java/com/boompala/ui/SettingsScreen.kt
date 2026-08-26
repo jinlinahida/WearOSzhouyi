@@ -1,6 +1,7 @@
 package com.boompala.ui
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -75,7 +76,20 @@ fun SettingsScreen(
         currentSection = SettingsSection.MENU
     }
 
-    when (currentSection) {
+    AnimatedContent(
+        targetState = currentSection,
+        transitionSpec = {
+            val direction = when {
+                initialState == SettingsSection.MENU && targetState != SettingsSection.MENU -> NavigationDirection.FORWARD
+                initialState != SettingsSection.MENU && targetState == SettingsSection.MENU -> NavigationDirection.BACKWARD
+                else -> NavigationDirection.LATERAL
+            }
+            pageTransitionSpec(direction, settings.animationsEnabled)
+        },
+        label = "SettingsSectionTransition",
+        modifier = Modifier.fillMaxSize(),
+    ) { section ->
+        when (section) {
         SettingsSection.MENU -> {
             RotaryScrollColumn(
                 rotaryEnabled = rotaryScrollingEnabled,
@@ -517,6 +531,7 @@ fun SettingsScreen(
             }
         }
     }
+}
 }
 
 @Composable

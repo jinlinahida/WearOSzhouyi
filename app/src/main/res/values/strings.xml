@@ -123,6 +123,7 @@
     <string name="browse_basics_title">易学基础</string>
     <string name="browse_basics_desc">阴阳五行、八卦、干支</string>
     <string name="browse_filter_category">分类筛选</string>
+    <string name="browse_loading">正在加载资料库…</string>
 
     <!-- About -->
     <string name="about_title">关于应用</string>

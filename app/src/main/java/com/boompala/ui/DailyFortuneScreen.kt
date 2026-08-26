@@ -1,8 +1,8 @@
 package com.boompala.ui
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -48,7 +48,9 @@ fun DailyFortuneScreen(
             )
         }
         item(key = "date") {
-            Column(verticalArrangement = Arrangement.spacedBy(metrics.itemSpacing / 2)) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(metrics.itemSpacing / 2),
+            ) {
                 Text(gregorianText, style = MaterialTheme.typography.bodySmall)
                 Text(
                     "农历${reading.lunarDateText} · ${reading.dayGanzhi.displayName}日 · 日干属${reading.dayStemElement.displayName}",
@@ -57,7 +59,9 @@ fun DailyFortuneScreen(
             }
         }
         item(key = "hexagram") {
-            Column(verticalArrangement = Arrangement.spacedBy(metrics.itemSpacing / 2)) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(metrics.itemSpacing / 2),
+            ) {
                 Text(
                     stringResource(R.string.daily_fortune_day_hexagram, reading.dayHexagramName),
                     style = MaterialTheme.typography.titleMedium,
@@ -147,7 +151,14 @@ fun DailyFortuneScreen(
             )
         }
         item(key = "back") {
-            OutlinedButton(onClick = onBack, modifier = Modifier.fillMaxWidth()) {
+            val pressInteraction = remember { MutableInteractionSource() }
+            OutlinedButton(
+                onClick = onBack,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wearPressFeedback(pressInteraction),
+                interactionSource = pressInteraction,
+            ) {
                 Text(stringResource(R.string.action_back_home))
             }
         }

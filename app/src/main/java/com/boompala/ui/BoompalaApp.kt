@@ -1,7 +1,18 @@
 package com.boompala.ui
 
-import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.togetherWith
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -17,9 +28,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.animation.core.Animatable
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.wear.compose.foundation.rememberSwipeToDismissBoxState
+import androidx.wear.compose.material3.SwipeToDismissBox
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.material3.Text
@@ -180,6 +196,12 @@ fun BoompalaApp() {
             }
             tarotCardRepository = repository
         }
+        if (browserData == null) {
+            val data = withContext(Dispatchers.IO) {
+                loadBrowserData(context.applicationContext)
+            }
+            browserData = data
+        }
     }
     LaunchedEffect(dependenciesReady) {
         val dependencies = withContext(Dispatchers.IO) {
@@ -189,60 +211,115 @@ fun BoompalaApp() {
     }
     val backDestination = screen.backDestination()
 
-    val onSixYaoClick = remember { { screen = AppScreen.YAO_INPUT } }
-    val onMeiHuaClick = remember {
+    val isFirstRunWelcome = screen == AppScreen.WELCOME && !settings.hasCompletedOnboarding
+    val effectiveBackDestination = if (screen == AppScreen.WELCOME) welcomeReturnScreen else backDestination
+
+    // 页面转场动画状态：前进推入与返回视差复位各自独立，避免互相打断。
+    val forwardEnterAnimatable = remember { Animatable(1f) }
+    val popEnterAnimatable = remember { Animatable(1f) }
+    var lastTransitionPop by remember { mutableStateOf(false) }
+
+    // 前进导航：先在协程内同步 snap 到初始位移再切屏，避免新页面首帧闪现最终状态。
+    val navigateTo = remember(scope, settings) {
+        { target: AppScreen ->
+            if (target != screen) {
+                lastTransitionPop = false
+                scope.launch {
+                    if (settings.animationsEnabled) {
+                        forwardEnterAnimatable.snapTo(0f)
+                        forwardEnterAnimatable.animateTo(
+                            targetValue = 1f,
+                            animationSpec = tween(durationMillis = 280, easing = DecelEasing),
+                        )
+                    } else {
+                        forwardEnterAnimatable.snapTo(1f)
+                    }
+                }
+                screen = target
+            }
+        }
+    }
+
+    // 统一返回入口：WELCOME 回到打开它的页面，ARCHIVE_TAG 回到归档来源页，其余按 backDestination 返回。
+    // animate=false 用于滑动返回手势完成后的收尾（手势本身已提供退出动效）。
+    val goBack = remember(scope, settings) {
+        { animate: Boolean ->
+            val target = when (screen) {
+                AppScreen.WELCOME -> welcomeReturnScreen
+                AppScreen.ARCHIVE_TAG -> archiveReturnScreen
+                else -> screen.backDestination()
+            }
+            if (target != null && target != screen) {
+                generationId++
+                meiHuaGenerationId++
+                isGenerating = false
+                if (screen == AppScreen.TAROT_ONE_CARD) {
+                    tarotReading = null
+                }
+                if (screen == AppScreen.TAROT_THREE_CARD) {
+                    tarotThreeReading = null
+                }
+                if (screen == AppScreen.TAROT_HOLY_TRIANGLE) {
+                    tarotHolyTriangleReading = null
+                }
+                lastTransitionPop = true
+                scope.launch {
+                    if (settings.animationsEnabled && animate) {
+                        popEnterAnimatable.snapTo(0f)
+                        popEnterAnimatable.animateTo(
+                            targetValue = 1f,
+                            animationSpec = tween(durationMillis = 280, easing = DecelEasing),
+                        )
+                    } else {
+                        popEnterAnimatable.snapTo(1f)
+                    }
+                }
+                screen = target
+            }
+        }
+    }
+
+    val onSixYaoClick = remember(navigateTo) { { navigateTo(AppScreen.YAO_INPUT) } }
+    val onMeiHuaClick = remember(navigateTo) {
         {
             meiHuaGenerationId++
             meiHuaReading = null
             generatedMeiHuaReading = null
-            screen = AppScreen.MEIHUA_TIME
+            navigateTo(AppScreen.MEIHUA_TIME)
         }
     }
-    val onSettingsClick = remember { { screen = AppScreen.SETTINGS } }
-    val onXiaoLiuRenClick = remember {
+    val onSettingsClick = remember(navigateTo) { { navigateTo(AppScreen.SETTINGS) } }
+    val onXiaoLiuRenClick = remember(navigateTo) {
         {
             xlrReading = null
-            screen = AppScreen.XIAO_LIU_REN
+            navigateTo(AppScreen.XIAO_LIU_REN)
         }
     }
-    val onArchiveClick = remember { { screen = AppScreen.ARCHIVES } }
-    val onCompassClick = remember { { screen = AppScreen.COMPASS } }
-    val onBrowseClick = remember { { screen = AppScreen.BROWSE } }
-    val onDailyFortuneClick = remember { { screen = AppScreen.DAILY_FORTUNE } }
-    val onTarotClick = remember {
+    val onArchiveClick = remember(navigateTo) { { navigateTo(AppScreen.ARCHIVES) } }
+    val onCompassClick = remember(navigateTo) { { navigateTo(AppScreen.COMPASS) } }
+    val onBrowseClick = remember(navigateTo) { { navigateTo(AppScreen.BROWSE) } }
+    val onDailyFortuneClick = remember(navigateTo) { { navigateTo(AppScreen.DAILY_FORTUNE) } }
+    val onTarotClick = remember(navigateTo) {
         {
             tarotReading = null
-            screen = AppScreen.TAROT_ONE_CARD
+            navigateTo(AppScreen.TAROT_ONE_CARD)
         }
     }
-    val onTarotThreeCardClick = remember {
+    val onTarotThreeCardClick = remember(navigateTo) {
         {
             tarotThreeReading = null
-            screen = AppScreen.TAROT_THREE_CARD
+            navigateTo(AppScreen.TAROT_THREE_CARD)
         }
     }
-    val onTarotHolyTriangleClick = remember {
+    val onTarotHolyTriangleClick = remember(navigateTo) {
         {
             tarotHolyTriangleReading = null
-            screen = AppScreen.TAROT_HOLY_TRIANGLE
+            navigateTo(AppScreen.TAROT_HOLY_TRIANGLE)
         }
     }
 
-    val isFirstRunWelcome = screen == AppScreen.WELCOME && !settings.hasCompletedOnboarding
-    BackHandler(enabled = !isFirstRunWelcome && backDestination != null) {
-        generationId++
-        meiHuaGenerationId++
-        isGenerating = false
-        if (screen == AppScreen.TAROT_ONE_CARD) {
-            tarotReading = null
-        }
-        if (screen == AppScreen.TAROT_THREE_CARD) {
-            tarotThreeReading = null
-        }
-        if (screen == AppScreen.TAROT_HOLY_TRIANGLE) {
-            tarotHolyTriangleReading = null
-        }
-        screen = if (screen == AppScreen.WELCOME) welcomeReturnScreen else requireNotNull(backDestination)
+    BackHandler(enabled = !isFirstRunWelcome && effectiveBackDestination != null) {
+        goBack(true)
     }
 
     MaterialTheme {
@@ -270,12 +347,9 @@ fun BoompalaApp() {
 
                         AppScreen.YAO_INPUT -> YaoInputScreen(
                             rotaryScrollingEnabled = settings.rotaryScrollingEnabled,
+                            animationsEnabled = settings.animationsEnabled,
                             isGenerating = isGenerating,
-                            onBack = {
-                                generationId++
-                                isGenerating = false
-                                screen = AppScreen.HOME
-                            },
+                            onBack = { goBack(true) },
                             onGenerate = { input ->
                                 if (!isGenerating) {
                                     isGenerating = true
@@ -295,7 +369,7 @@ fun BoompalaApp() {
                                                     result = result,
                                                     interpretations = dependencies.interpretations,
                                                 )
-                                                screen = AppScreen.RESULT
+                                                navigateTo(AppScreen.RESULT)
                                             }
                                         } finally {
                                             if (requestId == generationId) {
@@ -311,8 +385,9 @@ fun BoompalaApp() {
                             LiuYaoResultContent(
                                 reading = currentReading,
                                 rotaryScrollingEnabled = settings.rotaryScrollingEnabled,
-                                onBack = { screen = AppScreen.YAO_INPUT },
-                                onArchive = { r -> archiveReturnScreen=AppScreen.RESULT; archiveDraft = ArchiveDraft("", "", 0xFF4CAF50, ArchiveSource.LIU_YAO, r.castAt.toEpochMilli(), "本卦${r.original.name}", ArchiveSnapshotCodec.encode(r, currentReading.interpretations)); screen = AppScreen.ARCHIVE_TAG },
+                                animationsEnabled = settings.animationsEnabled,
+                                onBack = { goBack(true) },
+                                onArchive = { r -> archiveReturnScreen=AppScreen.RESULT; archiveDraft = ArchiveDraft("", "", 0xFF4CAF50, ArchiveSource.LIU_YAO, r.castAt.toEpochMilli(), "本卦${r.original.name}", ArchiveSnapshotCodec.encode(r, currentReading.interpretations)); navigateTo(AppScreen.ARCHIVE_TAG) },
                             )
                         } ?: HomeScreen(
                             settings = settings,
@@ -329,9 +404,9 @@ fun BoompalaApp() {
                             onTarotHolyTriangleClick = onTarotHolyTriangleClick,
                         )
 
-                        AppScreen.XIAO_LIU_REN -> XiaoLiuRenScreen(xlrEngine, xlrReading, settings.rotaryScrollingEnabled, { xlrReading = it }, { r -> archiveReturnScreen=AppScreen.XIAO_LIU_REN; archiveDraft = ArchiveDraft("", "", 0xFF4CAF50, ArchiveSource.XIAO_LIU_REN, r.timeInfo.gregorianDateTime.toInstant().toEpochMilli(), "最终${r.finalPalace.displayName}", ArchiveSnapshotCodec.encode(r)); screen = AppScreen.ARCHIVE_TAG }, { screen = AppScreen.HOME })
-                        AppScreen.ARCHIVE_TAG -> archiveDraft?.let { d -> ArchiveTagScreen(d, archiveRepository, settings.rotaryScrollingEnabled, { Toast.makeText(context, context.getString(R.string.archive_save_toast), Toast.LENGTH_SHORT).show(); screen = archiveReturnScreen }, { screen = archiveReturnScreen }) }
-                        AppScreen.ARCHIVES -> ArchiveListScreen(archiveRepository, settings.rotaryScrollingEnabled, archiveRefresh, { id -> archiveDetail=null; archiveDetailId=id; screen=AppScreen.ARCHIVE_DETAIL }, { screen = AppScreen.HOME })
+                        AppScreen.XIAO_LIU_REN -> XiaoLiuRenScreen(xlrEngine, xlrReading, settings.rotaryScrollingEnabled, { xlrReading = it }, { r -> archiveReturnScreen=AppScreen.XIAO_LIU_REN; archiveDraft = ArchiveDraft("", "", 0xFF4CAF50, ArchiveSource.XIAO_LIU_REN, r.timeInfo.gregorianDateTime.toInstant().toEpochMilli(), "最终${r.finalPalace.displayName}", ArchiveSnapshotCodec.encode(r)); navigateTo(AppScreen.ARCHIVE_TAG) }, { goBack(true) })
+                        AppScreen.ARCHIVE_TAG -> archiveDraft?.let { d -> ArchiveTagScreen(d, archiveRepository, settings.rotaryScrollingEnabled, { Toast.makeText(context, context.getString(R.string.archive_save_toast), Toast.LENGTH_SHORT).show(); goBack(true) }, { goBack(true) }) }
+                        AppScreen.ARCHIVES -> ArchiveListScreen(archiveRepository, settings.rotaryScrollingEnabled, archiveRefresh, { id -> archiveDetail=null; archiveDetailId=id; navigateTo(AppScreen.ARCHIVE_DETAIL) }, { goBack(true) })
                         AppScreen.ARCHIVE_DETAIL -> {
                             val id = archiveDetailId
                             LaunchedEffect(id) {
@@ -339,9 +414,9 @@ fun BoompalaApp() {
                             }
                             val record = archiveDetail
                             if (record == null) ArchiveLoadingScreen(settings.rotaryScrollingEnabled)
-                            else ArchiveDetailScreen(record, archiveRepository, settings.rotaryScrollingEnabled, { archiveRefresh++; screen=AppScreen.ARCHIVES }, { screen=AppScreen.ARCHIVES })
+                            else ArchiveDetailScreen(record, archiveRepository, settings.rotaryScrollingEnabled, { archiveRefresh++; goBack(true) }, { goBack(true) })
                         }
-                        AppScreen.COMPASS -> CompassScreen(settings.rotaryScrollingEnabled) { screen = AppScreen.HOME }
+                        AppScreen.COMPASS -> CompassScreen(settings.rotaryScrollingEnabled) { goBack(true) }
                         AppScreen.DAILY_FORTUNE -> {
                             LaunchedEffect(dailyFortuneEngineReady) {
                                 if (!dailyFortuneEngineReady.isCompleted) {
@@ -368,23 +443,127 @@ fun BoompalaApp() {
                                 }
                             }
                             val currentReading = dailyFortuneReading
-                            if (currentReading != null) {
-                                DailyFortuneScreen(
-                                    reading = currentReading,
-                                    rotaryScrollingEnabled = settings.rotaryScrollingEnabled,
-                                    onBack = { screen = AppScreen.HOME },
-                                )
-                            } else {
-                                WearLoadingIndicator(label = stringResource(R.string.daily_fortune_loading))
+                            AnimatedContent(
+                                targetState = currentReading,
+                                transitionSpec = {
+                                    if (settings.animationsEnabled) {
+                                        (fadeIn(tween(240, easing = LinearOutSlowInEasing)) + scaleIn(initialScale = 0.95f, animationSpec = tween(280, easing = FastOutSlowInEasing)))
+                                            .togetherWith(fadeOut(tween(160, easing = FastOutLinearInEasing)) + scaleOut(targetScale = 0.95f, animationSpec = tween(200, easing = FastOutLinearInEasing)))
+                                    } else {
+                                        EnterTransition.None togetherWith ExitTransition.None
+                                    }
+                                },
+                                label = "DailyFortuneLoadingTransition",
+                            ) { reading ->
+                                if (reading != null) {
+                                    DailyFortuneScreen(
+                                        reading = reading,
+                                        rotaryScrollingEnabled = settings.rotaryScrollingEnabled,
+                                        onBack = { goBack(true) },
+                                    )
+                                } else {
+                                    WearLoadingIndicator(label = stringResource(R.string.daily_fortune_loading))
+                                }
                             }
                         }
-                        AppScreen.BROWSE -> browserData?.let { d -> BrowseHomeScreen(d, settings.rotaryScrollingEnabled, { screen = AppScreen.HEXAGRAM_BROWSER }, { screen = AppScreen.KNOWLEDGE_LIST }, { screen = AppScreen.TAROT_BROWSER }, { screen = AppScreen.HOME }) }
-                        AppScreen.HEXAGRAM_BROWSER -> browserData?.let { d -> HexagramBrowserScreen(d, settings.rotaryScrollingEnabled, { selectedHexagram = it; screen = AppScreen.HEXAGRAM_DETAIL }, { screen = AppScreen.BROWSE }) }
-                        AppScreen.HEXAGRAM_DETAIL -> { val h = selectedHexagram; val d = browserData; if (h != null && d != null) HexagramDetailScreen(h, d, settings.rotaryScrollingEnabled) { screen = AppScreen.HEXAGRAM_BROWSER } }
-                        AppScreen.KNOWLEDGE_LIST -> browserData?.let { d -> KnowledgeListScreen(d.knowledge, settings.rotaryScrollingEnabled, { selectedKnowledge = it; screen = AppScreen.KNOWLEDGE_DETAIL }, { screen = AppScreen.BROWSE }) }
-                        AppScreen.KNOWLEDGE_DETAIL -> selectedKnowledge?.let { KnowledgeDetailScreen(it, settings.rotaryScrollingEnabled) { screen = AppScreen.KNOWLEDGE_LIST } }
-                        AppScreen.TAROT_BROWSER -> browserData?.let { d -> TarotBrowserScreen(d.tarotCards.allCards(), settings.rotaryScrollingEnabled, { selectedTarotCard = it; screen = AppScreen.TAROT_CARD_DETAIL }, { screen = AppScreen.BROWSE }) }
-                        AppScreen.TAROT_CARD_DETAIL -> selectedTarotCard?.let { c -> TarotCardDetailScreen(c, settings.rotaryScrollingEnabled) { screen = AppScreen.TAROT_BROWSER } }
+                        AppScreen.BROWSE -> {
+                            val data = browserData
+                            if (data != null) {
+                                BrowseHomeScreen(
+                                    data = data,
+                                    rotary = settings.rotaryScrollingEnabled,
+                                    onHexagrams = { navigateTo(AppScreen.HEXAGRAM_BROWSER) },
+                                    onKnowledge = { navigateTo(AppScreen.KNOWLEDGE_LIST) },
+                                    onTarot = { navigateTo(AppScreen.TAROT_BROWSER) },
+                                    onBack = { goBack(true) },
+                                )
+                            } else {
+                                WearLoadingIndicator(label = stringResource(R.string.browse_loading))
+                            }
+                        }
+
+                        AppScreen.HEXAGRAM_BROWSER -> {
+                            val data = browserData
+                            if (data != null) {
+                                HexagramBrowserScreen(
+                                    data = data,
+                                    rotary = settings.rotaryScrollingEnabled,
+                                    onOpen = { selectedHexagram = it; navigateTo(AppScreen.HEXAGRAM_DETAIL) },
+                                    onBack = { goBack(true) },
+                                )
+                            } else {
+                                WearLoadingIndicator(label = stringResource(R.string.browse_loading))
+                            }
+                        }
+
+                        AppScreen.HEXAGRAM_DETAIL -> {
+                            val h = selectedHexagram
+                            val d = browserData
+                            if (h != null && d != null) {
+                                HexagramDetailScreen(
+                                    hex = h,
+                                    data = d,
+                                    rotary = settings.rotaryScrollingEnabled,
+                                    onBack = { goBack(true) },
+                                )
+                            } else {
+                                WearLoadingIndicator(label = stringResource(R.string.browse_loading))
+                            }
+                        }
+
+                        AppScreen.KNOWLEDGE_LIST -> {
+                            val d = browserData
+                            if (d != null) {
+                                KnowledgeListScreen(
+                                    articles = d.knowledge,
+                                    rotary = settings.rotaryScrollingEnabled,
+                                    onOpen = { selectedKnowledge = it; navigateTo(AppScreen.KNOWLEDGE_DETAIL) },
+                                    onBack = { goBack(true) },
+                                )
+                            } else {
+                                WearLoadingIndicator(label = stringResource(R.string.browse_loading))
+                            }
+                        }
+
+                        AppScreen.KNOWLEDGE_DETAIL -> {
+                            val article = selectedKnowledge
+                            if (article != null) {
+                                KnowledgeDetailScreen(
+                                    article = article,
+                                    rotary = settings.rotaryScrollingEnabled,
+                                    onBack = { goBack(true) },
+                                )
+                            } else {
+                                WearLoadingIndicator(label = stringResource(R.string.browse_loading))
+                            }
+                        }
+
+                        AppScreen.TAROT_BROWSER -> {
+                            val d = browserData
+                            if (d != null) {
+                                TarotBrowserScreen(
+                                    cards = d.tarotCards.allCards(),
+                                    rotary = settings.rotaryScrollingEnabled,
+                                    onOpen = { selectedTarotCard = it; navigateTo(AppScreen.TAROT_CARD_DETAIL) },
+                                    onBack = { goBack(true) },
+                                )
+                            } else {
+                                WearLoadingIndicator(label = stringResource(R.string.browse_loading))
+                            }
+                        }
+
+                        AppScreen.TAROT_CARD_DETAIL -> {
+                            val card = selectedTarotCard
+                            if (card != null) {
+                                TarotCardDetailScreen(
+                                    card = card,
+                                    rotary = settings.rotaryScrollingEnabled,
+                                    onBack = { goBack(true) },
+                                )
+                            } else {
+                                WearLoadingIndicator(label = stringResource(R.string.browse_loading))
+                            }
+                        }
 
                         AppScreen.MEIHUA_TIME -> MeiHuaTimeScreen(
                             engine = meiHuaEngine,
@@ -404,11 +583,11 @@ fun BoompalaApp() {
                                             reading = currentReading,
                                             interpretations = dependencies.interpretations,
                                         )
-                                        screen = AppScreen.MEIHUA_RESULT
+                                        navigateTo(AppScreen.MEIHUA_RESULT)
                                     }
                                 }
                             },
-                            onBack = { screen = AppScreen.HOME },
+                            onBack = { goBack(true) },
                         )
 
                         AppScreen.MEIHUA_RESULT -> generatedMeiHuaReading?.let { currentReading ->
@@ -416,8 +595,8 @@ fun BoompalaApp() {
                                 reading = currentReading.reading,
                                 interpretations = currentReading.interpretations,
                                 rotaryScrollingEnabled = settings.rotaryScrollingEnabled,
-                                onBack = { screen = AppScreen.MEIHUA_TIME },
-                                onArchive = { r -> archiveReturnScreen=AppScreen.MEIHUA_RESULT; archiveDraft = ArchiveDraft("", "", 0xFF4CAF50, ArchiveSource.MEI_HUA, r.timeInfo.gregorianDateTime.toInstant().toEpochMilli(), "本卦${r.original.name}", ArchiveSnapshotCodec.encode(r, currentReading.interpretations)); screen = AppScreen.ARCHIVE_TAG },
+                                onBack = { goBack(true) },
+                                onArchive = { r -> archiveReturnScreen=AppScreen.MEIHUA_RESULT; archiveDraft = ArchiveDraft("", "", 0xFF4CAF50, ArchiveSource.MEI_HUA, r.timeInfo.gregorianDateTime.toInstant().toEpochMilli(), "本卦${r.original.name}", ArchiveSnapshotCodec.encode(r, currentReading.interpretations)); navigateTo(AppScreen.ARCHIVE_TAG) },
                             )
                         } ?: MeiHuaTimeScreen(
                             engine = meiHuaEngine,
@@ -425,7 +604,7 @@ fun BoompalaApp() {
                             rotaryScrollingEnabled = settings.rotaryScrollingEnabled,
                             onReadingChanged = { meiHuaReading = it },
                             onViewReading = { },
-                            onBack = { screen = AppScreen.HOME },
+                            onBack = { goBack(true) },
                         )
 
                         AppScreen.SETTINGS -> SettingsScreen(
@@ -466,19 +645,17 @@ fun BoompalaApp() {
                             },
                             archiveRepository = archiveRepository,
                             rotaryScrollingEnabled = settings.rotaryScrollingEnabled,
-                            onAboutClick = { screen = AppScreen.ABOUT },
-                            onBack = { screen = AppScreen.HOME },
+                            onAboutClick = { navigateTo(AppScreen.ABOUT) },
+                            onBack = { goBack(true) },
                         )
 
                         AppScreen.TAROT_ONE_CARD -> TarotOneCardScreen(
                             engine = tarotEngine,
                             reading = tarotReading,
                             rotaryScrollingEnabled = settings.rotaryScrollingEnabled,
+                            animationsEnabled = settings.animationsEnabled,
                             onReadingChanged = { tarotReading = it },
-                            onBack = {
-                                tarotReading = null
-                                screen = AppScreen.HOME
-                            },
+                            onBack = { goBack(true) },
                             onArchive = { r ->
                                 archiveReturnScreen = AppScreen.TAROT_ONE_CARD
                                 archiveDraft = ArchiveDraft(
@@ -490,7 +667,7 @@ fun BoompalaApp() {
                                     summary = r.drawnCards.joinToString(" · ") { "${it.card.nameZh}(${if (it.orientation == com.boompala.engine.tarot.TarotOrientation.REVERSED) "逆" else "正"})" },
                                     snapshotJson = ArchiveSnapshotCodec.encode(r),
                                 )
-                                screen = AppScreen.ARCHIVE_TAG
+                                navigateTo(AppScreen.ARCHIVE_TAG)
                             },
                         )
 
@@ -498,11 +675,9 @@ fun BoompalaApp() {
                             engine = tarotEngine,
                             reading = tarotThreeReading,
                             rotaryScrollingEnabled = settings.rotaryScrollingEnabled,
+                            animationsEnabled = settings.animationsEnabled,
                             onReadingChanged = { tarotThreeReading = it },
-                            onBack = {
-                                tarotThreeReading = null
-                                screen = AppScreen.HOME
-                            },
+                            onBack = { goBack(true) },
                             onArchive = { r ->
                                 archiveReturnScreen = AppScreen.TAROT_THREE_CARD
                                 archiveDraft = ArchiveDraft(
@@ -514,7 +689,7 @@ fun BoompalaApp() {
                                     summary = r.drawnCards.joinToString(" · ") { "${it.slot.name}:${it.card.nameZh}(${if (it.orientation == com.boompala.engine.tarot.TarotOrientation.REVERSED) "逆" else "正"})" },
                                     snapshotJson = ArchiveSnapshotCodec.encode(r),
                                 )
-                                screen = AppScreen.ARCHIVE_TAG
+                                navigateTo(AppScreen.ARCHIVE_TAG)
                             },
                         )
 
@@ -522,11 +697,9 @@ fun BoompalaApp() {
                             engine = tarotEngine,
                             reading = tarotHolyTriangleReading,
                             rotaryScrollingEnabled = settings.rotaryScrollingEnabled,
+                            animationsEnabled = settings.animationsEnabled,
                             onReadingChanged = { tarotHolyTriangleReading = it },
-                            onBack = {
-                                tarotHolyTriangleReading = null
-                                screen = AppScreen.HOME
-                            },
+                            onBack = { goBack(true) },
                             onArchive = { r ->
                                 archiveReturnScreen = AppScreen.TAROT_HOLY_TRIANGLE
                                 archiveDraft = ArchiveDraft(
@@ -538,7 +711,7 @@ fun BoompalaApp() {
                                     summary = r.drawnCards.joinToString(" · ") { "${it.slot.name}:${it.card.nameZh}(${if (it.orientation == com.boompala.engine.tarot.TarotOrientation.REVERSED) "逆" else "正"})" },
                                     snapshotJson = ArchiveSnapshotCodec.encode(r),
                                 )
-                                screen = AppScreen.ARCHIVE_TAG
+                                navigateTo(AppScreen.ARCHIVE_TAG)
                             },
                         )
 
@@ -551,10 +724,10 @@ fun BoompalaApp() {
                                         settingsRepository.setOnboardingCompleted(true)
                                     }
                                 }
-                                screen = welcomeReturnScreen
+                                navigateTo(welcomeReturnScreen)
                             },
                             onBack = if (welcomeReturnScreen != AppScreen.HOME) {
-                                { screen = welcomeReturnScreen }
+                                { goBack(true) }
                             } else null,
                         )
 
@@ -562,52 +735,65 @@ fun BoompalaApp() {
                             rotaryScrollingEnabled = settings.rotaryScrollingEnabled,
                             onViewWelcomeClick = {
                                 welcomeReturnScreen = AppScreen.ABOUT
-                                screen = AppScreen.WELCOME
+                                navigateTo(AppScreen.WELCOME)
                             },
-                            onBack = { screen = AppScreen.SETTINGS },
+                            onBack = { goBack(true) },
                         )
                     }
                 }
 
-                SingleScreenFade(
-                    screen = screen,
-                    animationsEnabled = settings.animationsEnabled,
-                ) {
-                    screenContent(screen)
-                }
-                LaunchedEffect(screen) {
-                    if (screen == AppScreen.BROWSE && browserData == null) browserData = withContext(Dispatchers.IO) { loadBrowserData(context) }
+                val swipeToDismissBoxState = rememberSwipeToDismissBoxState()
+                val swipeEnabled = !isFirstRunWelcome && effectiveBackDestination != null
+                val screenWidthPx = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp.toPx() }
+
+                SwipeToDismissBox(
+                    state = swipeToDismissBoxState,
+                    modifier = Modifier.fillMaxSize(),
+                    userSwipeEnabled = swipeEnabled,
+                    backgroundKey = effectiveBackDestination ?: AppScreen.HOME,
+                    contentKey = screen,
+                    onDismissed = { goBack(false) },
+                ) { isBackground ->
+                    if (isBackground) {
+                        val bgScreen = effectiveBackDestination ?: AppScreen.HOME
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .graphicsLayer {
+                                    if (forwardEnterAnimatable.value < 1f) {
+                                        val progress = forwardEnterAnimatable.value
+                                        translationX = -0.20f * screenWidthPx * (1f - progress)
+                                        alpha = 0.6f + 0.4f * progress
+                                    }
+                                }
+                        ) {
+                            screenContent(bgScreen)
+                        }
+                    } else {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .graphicsLayer {
+                                    if (lastTransitionPop) {
+                                        // 返回：入场父页从左侧 -20% 视差位置复位，与前进时的背景视差互为镜像。
+                                        if (popEnterAnimatable.value < 1f) {
+                                            val progress = popEnterAnimatable.value
+                                            translationX = -0.20f * screenWidthPx * (1f - progress)
+                                            alpha = 0.6f + 0.4f * progress
+                                        }
+                                    } else if (forwardEnterAnimatable.value < 1f) {
+                                        val progress = forwardEnterAnimatable.value
+                                        translationX = screenWidthPx * (1f - progress)
+                                        alpha = progress.coerceIn(0f, 1f)
+                                    }
+                                }
+                        ) {
+                            screenContent(screen)
+                        }
+                    }
                 }
             }
         }
-    }
-}
-
-@Composable
-private fun SingleScreenFade(
-    screen: AppScreen,
-    animationsEnabled: Boolean,
-    content: @Composable () -> Unit,
-) {
-    val alpha = remember(screen, animationsEnabled) {
-        Animatable(if (animationsEnabled) 0f else 1f)
-    }
-    LaunchedEffect(alpha) {
-        if (animationsEnabled) {
-            alpha.animateTo(
-                targetValue = 1f,
-                animationSpec = tween(durationMillis = 90),
-            )
-        }
-    }
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .graphicsLayer {
-                this.alpha = alpha.value
-            },
-    ) {
-        content()
     }
 }
 

@@ -35,9 +35,8 @@ fun WearLoadingIndicator(
         ) {
             CircularProgressIndicator(
                 modifier = Modifier.size(36.dp),
-                strokeWidth = 3.dp,
             )
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(12.dp))
             Text(
                 text = label,
                 style = MaterialTheme.typography.bodySmall,

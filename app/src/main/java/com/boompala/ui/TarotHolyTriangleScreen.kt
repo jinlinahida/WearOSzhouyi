@@ -2,6 +2,7 @@ package com.boompala.ui
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -46,6 +47,7 @@ fun TarotHolyTriangleScreen(
     engine: TarotEngine,
     reading: TarotReading?,
     rotaryScrollingEnabled: Boolean,
+    animationsEnabled: Boolean = true,
     onReadingChanged: (TarotReading?) -> Unit,
     onBack: () -> Unit,
     onArchive: (TarotReading) -> Unit = { },
@@ -186,6 +188,7 @@ fun TarotHolyTriangleScreen(
                 TarotHolyTriangleFlipItem(
                     drawnCard = drawnCard,
                     isFlipped = isCardFlipped,
+                    animationsEnabled = animationsEnabled,
                     onFlip = {
                         if (!isCardFlipped) {
                             haptic.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.GestureThresholdActivate)
@@ -418,6 +421,7 @@ fun TarotHolyTriangleScreen(
 private fun TarotHolyTriangleFlipItem(
     drawnCard: DrawnTarotCard,
     isFlipped: Boolean,
+    animationsEnabled: Boolean = true,
     onFlip: () -> Unit,
 ) {
     val card = drawnCard.card
@@ -425,7 +429,11 @@ private fun TarotHolyTriangleFlipItem(
 
     val rotation by animateFloatAsState(
         targetValue = if (isFlipped) 180f else 0f,
-        animationSpec = tween(durationMillis = 500, easing = FastOutSlowInEasing),
+        animationSpec = if (animationsEnabled) {
+            tween(durationMillis = 500, easing = FastOutSlowInEasing)
+        } else {
+            snap()
+        },
         label = "TarotHolyTriangleFlipAnimation",
     )
 

@@ -3,6 +3,7 @@ package com.boompala.ui
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.Image
@@ -49,6 +50,7 @@ fun TarotOneCardScreen(
     engine: TarotEngine,
     reading: TarotReading?,
     rotaryScrollingEnabled: Boolean,
+    animationsEnabled: Boolean = true,
     onReadingChanged: (TarotReading?) -> Unit,
     onBack: () -> Unit,
     onArchive: (TarotReading) -> Unit = { },
@@ -157,6 +159,7 @@ fun TarotOneCardScreen(
                     TarotCardFlipView(
                         drawnCard = drawnCard,
                         isFlipped = isFlipped,
+                        animationsEnabled = animationsEnabled,
                         onFlip = {
                             if (!isFlipped) {
                                 haptic.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.GestureThresholdActivate)
@@ -280,6 +283,7 @@ fun TarotOneCardScreen(
 private fun TarotCardFlipView(
     drawnCard: DrawnTarotCard,
     isFlipped: Boolean,
+    animationsEnabled: Boolean = true,
     onFlip: () -> Unit,
 ) {
     val card = drawnCard.card
@@ -287,7 +291,11 @@ private fun TarotCardFlipView(
 
     val rotation by animateFloatAsState(
         targetValue = if (isFlipped) 180f else 0f,
-        animationSpec = tween(durationMillis = 500, easing = FastOutSlowInEasing),
+        animationSpec = if (animationsEnabled) {
+            tween(durationMillis = 500, easing = FastOutSlowInEasing)
+        } else {
+            snap()
+        },
         label = "TarotFlipAnimation",
     )
 

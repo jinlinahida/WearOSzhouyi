@@ -1,6 +1,14 @@
 package com.boompala.ui
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -45,6 +53,7 @@ private val ResultCardColor = Color(0xFF1B1B1B)
 fun LiuYaoResultContent(
     reading: GeneratedReading,
     rotaryScrollingEnabled: Boolean,
+    animationsEnabled: Boolean = true,
     onBack: () -> Unit,
     onArchive: (DivinationResult) -> Unit = {},
 ) {
@@ -146,7 +155,7 @@ fun LiuYaoResultContent(
             items = originalYaoCards,
             key = { card -> "original-${card.position.indexFromBottom}" },
         ) { card ->
-            YaoDetailCard(card)
+            YaoDetailCard(card, animationsEnabled)
         }
         result.changed?.let { changed ->
             item(key = "changed-yao-section-title") {
@@ -159,17 +168,32 @@ fun LiuYaoResultContent(
                 items = changedYaoCards,
                 key = { card -> "changed-${card.position.indexFromBottom}" },
             ) { card ->
-                YaoDetailCard(card)
+                YaoDetailCard(card, animationsEnabled)
             }
         }
         item(key = "void-summary") {
             VoidSummaryCard(voidSummary)
         }
-        item(key = "archive") { OutlinedButton(onClick = { onArchive(result) }, modifier = Modifier.fillMaxWidth()) { Text("归档此次结果") } }
+        item(key = "archive") {
+            val archiveInteraction = remember { MutableInteractionSource() }
+            OutlinedButton(
+                onClick = { onArchive(result) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wearPressFeedback(archiveInteraction),
+                interactionSource = archiveInteraction,
+            ) {
+                Text("归档此次结果")
+            }
+        }
         item(key = "back") {
+            val backInteraction = remember { MutableInteractionSource() }
             OutlinedButton(
                 onClick = onBack,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wearPressFeedback(backInteraction),
+                interactionSource = backInteraction,
             ) {
                 Text("返回修改")
             }
@@ -211,12 +235,43 @@ private fun FourPillarsCard(result: DivinationResult) {
 }
 
 @Composable
-private fun YaoDetailCard(card: YaoCardData) {
-    ResultCard {
+private fun YaoDetailCard(card: YaoCardData, animationsEnabled: Boolean = true) {
+    val isMoving = card.lineDisplay.isMoving
+    val glowModifier = if (isMoving) {
+        if (animationsEnabled) {
+            val infiniteTransition = rememberInfiniteTransition(label = "MovingYaoGlow")
+            val glowAlpha by infiniteTransition.animateFloat(
+                initialValue = 0.35f,
+                targetValue = 0.95f,
+                animationSpec = infiniteRepeatable(
+                    animation = tween(1200, easing = FastOutSlowInEasing),
+                    repeatMode = RepeatMode.Reverse,
+                ),
+                label = "glowAlpha",
+            )
+            Modifier.border(
+                width = 1.2.dp,
+                color = MaterialTheme.colorScheme.primary.copy(alpha = glowAlpha),
+                shape = ResultCardShape,
+            )
+        } else {
+            // 关闭动画时保持静态高亮边框，避免无限循环动画持续耗电。
+            Modifier.border(
+                width = 1.2.dp,
+                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f),
+                shape = ResultCardShape,
+            )
+        }
+    } else {
+        Modifier
+    }
+
+    ResultCard(modifier = glowModifier) {
         HexagramLine(card.lineDisplay)
         Text(
             "${card.position.displayName} · ${card.yinYang} · ${card.motion}",
             style = MaterialTheme.typography.titleSmall,
+            color = if (isMoving) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
         )
         card.changeDescription?.let { description ->
             Text(description, style = MaterialTheme.typography.labelMedium)

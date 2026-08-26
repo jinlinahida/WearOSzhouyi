@@ -1,6 +1,7 @@
 package com.boompala.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -200,9 +201,13 @@ fun HexagramBrowserScreen(
         }
         items(data.hexagrams, key = { it.codeFromBottom }) { h ->
             val meaning = data.interpretations.interpretationFor(h.codeFromBottom)?.coreMeaning.orEmpty()
+            val pressInteraction = remember { MutableInteractionSource() }
             OutlinedButton(
                 onClick = { onOpen(h) },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wearPressFeedback(pressInteraction),
+                interactionSource = pressInteraction,
             ) {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
@@ -224,7 +229,14 @@ fun HexagramBrowserScreen(
             }
         }
         item {
-            OutlinedButton(onClick = onBack, modifier = Modifier.fillMaxWidth()) {
+            val pressInteraction = remember { MutableInteractionSource() }
+            OutlinedButton(
+                onClick = onBack,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wearPressFeedback(pressInteraction),
+                interactionSource = pressInteraction,
+            ) {
                 Text("返回")
             }
         }
@@ -314,7 +326,14 @@ fun HexagramDetailScreen(
         }
 
         item {
-            OutlinedButton(onClick = onBack, modifier = Modifier.fillMaxWidth()) {
+            val pressInteraction = remember { MutableInteractionSource() }
+            OutlinedButton(
+                onClick = onBack,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wearPressFeedback(pressInteraction),
+                interactionSource = pressInteraction,
+            ) {
                 Text("返回卦列表")
             }
         }
@@ -376,9 +395,13 @@ fun TarotBrowserScreen(
             Text("分类筛选", style = MaterialTheme.typography.labelSmall)
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 categories.forEach { (cat, title) ->
+                    val pressInteraction = remember { MutableInteractionSource() }
                     OutlinedButton(
                         onClick = { selectedCategory = cat },
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wearPressFeedback(pressInteraction),
+                        interactionSource = pressInteraction,
                     ) {
                         Text(if (selectedCategory == cat) "● $title" else title)
                     }
@@ -386,9 +409,13 @@ fun TarotBrowserScreen(
             }
         }
         items(filteredCards, key = { it.code }) { card ->
+            val pressInteraction = remember { MutableInteractionSource() }
             OutlinedButton(
                 onClick = { onOpen(card) },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wearPressFeedback(pressInteraction),
+                interactionSource = pressInteraction,
             ) {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
@@ -410,7 +437,14 @@ fun TarotBrowserScreen(
             }
         }
         item {
-            OutlinedButton(onClick = onBack, modifier = Modifier.fillMaxWidth()) {
+            val pressInteraction = remember { MutableInteractionSource() }
+            OutlinedButton(
+                onClick = onBack,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wearPressFeedback(pressInteraction),
+                interactionSource = pressInteraction,
+            ) {
                 Text("返回浏览首页")
             }
         }
@@ -532,9 +566,13 @@ fun KnowledgeListScreen(
                 )
             }
             items(values, key = { it.id }) { a ->
+                val pressInteraction = remember { MutableInteractionSource() }
                 OutlinedButton(
                     onClick = { onOpen(a) },
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wearPressFeedback(pressInteraction),
+                    interactionSource = pressInteraction,
                 ) {
                     Column(
                         modifier = Modifier.fillMaxWidth(),
@@ -557,7 +595,14 @@ fun KnowledgeListScreen(
             }
         }
         item {
-            OutlinedButton(onClick = onBack, modifier = Modifier.fillMaxWidth()) {
+            val pressInteraction = remember { MutableInteractionSource() }
+            OutlinedButton(
+                onClick = onBack,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wearPressFeedback(pressInteraction),
+                interactionSource = pressInteraction,
+            ) {
                 Text("返回")
             }
         }
@@ -597,7 +642,14 @@ fun KnowledgeDetailScreen(
             }
         }
         item {
-            OutlinedButton(onClick = onBack, modifier = Modifier.fillMaxWidth()) {
+            val pressInteraction = remember { MutableInteractionSource() }
+            OutlinedButton(
+                onClick = onBack,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wearPressFeedback(pressInteraction),
+                interactionSource = pressInteraction,
+            ) {
                 Text("返回知识列表")
             }
         }

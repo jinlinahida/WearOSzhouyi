@@ -13,6 +13,8 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
@@ -164,7 +166,24 @@ fun ReWearBiliCard(
 @Composable
 fun VideoSilkBackground(
     modifier: Modifier = Modifier,
+    animationsEnabled: Boolean = true,
 ) {
+    Box(modifier = modifier.fillMaxSize()) {
+        Image(
+            painter = painterResource(id = R.drawable.img_silk_background),
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop,
+        )
+        // 关闭动画时不创建 MediaPlayer / SurfaceView，仅保留静态底图。
+        if (animationsEnabled) {
+            SilkVideoLayer()
+        }
+    }
+}
+
+@Composable
+private fun SilkVideoLayer() {
     val context = LocalContext.current
     val mediaPlayer = remember {
         MediaPlayer().apply {
@@ -172,8 +191,25 @@ fun VideoSilkBackground(
             setVolume(0f, 0f)
         }
     }
+    // MediaPlayer 回调均为异步：释放后必须阻止任何对播放器对象的再访问。
+    var isReleased by remember { mutableStateOf(false) }
     var isPrepared by remember { mutableStateOf(false) }
     var currentSurfaceHolder by remember { mutableStateOf<SurfaceHolder?>(null) }
+
+    val attachAndStart = {
+        val holder = currentSurfaceHolder
+        if (!isReleased && holder != null && holder.surface.isValid) {
+            try {
+                mediaPlayer.setDisplay(holder)
+                if (!mediaPlayer.isPlaying) {
+                    mediaPlayer.start()
+                }
+            } catch (e: IllegalStateException) {
+                // MediaPlayer 状态转换与释放存在平台侧竞态，属于异常终止路径而非业务规则错误；
+                // 此时退回静态底图展示。
+            }
+        }
+    }
 
     LaunchedEffect(Unit) {
         withContext(Dispatchers.IO) {
@@ -186,83 +222,60 @@ fun VideoSilkBackground(
                         }
                     }
                 }
+                if (isReleased) return@withContext
                 mediaPlayer.setDataSource(videoFile.absolutePath)
                 mediaPlayer.setOnPreparedListener {
                     isPrepared = true
-                    currentSurfaceHolder?.let { holder ->
-                        if (holder.surface.isValid) {
-                            try {
-                                mediaPlayer.setDisplay(holder)
-                                mediaPlayer.start()
-                            } catch (_: Exception) {
-                            }
-                        }
-                    }
+                    attachAndStart()
                 }
                 mediaPlayer.prepareAsync()
-            } catch (_: Exception) {
+            } catch (e: java.io.IOException) {
+                // 视频资源拷贝/读取失败时退回静态底图。
+            } catch (e: IllegalStateException) {
+                // 播放器在准备前已被释放等状态异常，退回静态底图。
             }
         }
     }
 
     DisposableEffect(Unit) {
         onDispose {
-            try {
-                if (mediaPlayer.isPlaying) {
-                    mediaPlayer.stop()
-                }
-                mediaPlayer.release()
-            } catch (_: Exception) {
+            isReleased = true
+            if (isPrepared) {
+                mediaPlayer.stop()
             }
+            mediaPlayer.release()
         }
     }
 
-    Box(modifier = modifier.fillMaxSize()) {
-        Image(
-            painter = painterResource(id = R.drawable.img_silk_background),
-            contentDescription = null,
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop,
-        )
-        AndroidView(
-            factory = { ctx ->
-                SurfaceView(ctx).apply {
-                    holder.addCallback(object : SurfaceHolder.Callback {
-                        override fun surfaceCreated(holder: SurfaceHolder) {
-                            currentSurfaceHolder = holder
-                            try {
-                                mediaPlayer.setDisplay(holder)
-                                if (isPrepared && !mediaPlayer.isPlaying) {
-                                    mediaPlayer.start()
-                                }
-                            } catch (_: Exception) {
-                            }
-                        }
+    AndroidView(
+        factory = { ctx ->
+            SurfaceView(ctx).apply {
+                holder.addCallback(object : SurfaceHolder.Callback {
+                    override fun surfaceCreated(holder: SurfaceHolder) {
+                        currentSurfaceHolder = holder
+                        if (isPrepared) attachAndStart()
+                    }
 
-                        override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
-                            currentSurfaceHolder = holder
-                            try {
-                                mediaPlayer.setDisplay(holder)
-                                if (isPrepared && !mediaPlayer.isPlaying) {
-                                    mediaPlayer.start()
-                                }
-                            } catch (_: Exception) {
-                            }
-                        }
+                    override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
+                        currentSurfaceHolder = holder
+                        if (isPrepared) attachAndStart()
+                    }
 
-                        override fun surfaceDestroyed(holder: SurfaceHolder) {
-                            currentSurfaceHolder = null
+                    override fun surfaceDestroyed(holder: SurfaceHolder) {
+                        currentSurfaceHolder = null
+                        if (!isReleased) {
                             try {
                                 mediaPlayer.setDisplay(null)
-                            } catch (_: Exception) {
+                            } catch (e: IllegalStateException) {
+                                // 播放器已处于不可操作状态，忽略并退回静态底图。
                             }
                         }
-                    })
-                }
-            },
-            modifier = Modifier.fillMaxSize(),
-        )
-    }
+                    }
+                })
+            }
+        },
+        modifier = Modifier.fillMaxSize(),
+    )
 }
 
 // =========================================================================
@@ -328,7 +341,9 @@ fun WelcomeScreen(
     AnimatedContent(
         targetState = currentStep,
         transitionSpec = {
-            if (targetState > initialState) {
+            if (!animationsEnabled) {
+                EnterTransition.None togetherWith ExitTransition.None
+            } else if (targetState > initialState) {
                 (slideInHorizontally(tween(350)) { it } + fadeIn(tween(350)))
                     .togetherWith(slideOutHorizontally(tween(350)) { -it } + fadeOut(tween(350)))
             } else {
@@ -363,19 +378,25 @@ private fun StartScreen(
     onToNext: () -> Unit,
 ) {
     val localDensity = LocalDensity.current
-    val infiniteTransition = rememberInfiniteTransition(label = "")
-    val floatingHintAnimation by infiniteTransition.animateFloat(
-        initialValue = with(localDensity) { -5.dp.toPx() },
-        targetValue = with(localDensity) { 5.dp.toPx() },
-        animationSpec = InfiniteRepeatableSpec(
-            animation = tween(
-                durationMillis = 1100,
-                easing = EaseInOutCubic,
+    // 关闭动画时不创建无限循环动画，避免持续运算耗电。
+    val floatingHintOffset = if (animationsEnabled) {
+        val infiniteTransition = rememberInfiniteTransition(label = "WelcomeFloatingHint")
+        val offset by infiniteTransition.animateFloat(
+            initialValue = with(localDensity) { -5.dp.toPx() },
+            targetValue = with(localDensity) { 5.dp.toPx() },
+            animationSpec = InfiniteRepeatableSpec(
+                animation = tween(
+                    durationMillis = 1100,
+                    easing = EaseInOutCubic,
+                ),
+                repeatMode = RepeatMode.Reverse,
             ),
-            repeatMode = RepeatMode.Reverse,
-        ),
-        label = "",
-    )
+            label = "WelcomeFloatingHintOffset",
+        )
+        offset
+    } else {
+        0f
+    }
     var isWelcomeAnimationPerformed by remember {
         mutableStateOf(false)
     }
@@ -393,8 +414,8 @@ private fun StartScreen(
                 onClick = onToNext,
             ),
     ) {
-        // 1. 动态流沙视频背景
-        VideoSilkBackground()
+        // 1. 动态流沙视频背景（关闭动画时退化为静态底图）
+        VideoSilkBackground(animationsEnabled = animationsEnabled)
 
         // 2. 中部浅蓝色渐变品牌文字
         BoompalaBrandText(modifier = Modifier.align(Alignment.Center))
@@ -417,7 +438,7 @@ private fun StartScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .graphicsLayer {
-                            translationY = if (animationsEnabled) floatingHintAnimation else 0f
+                            translationY = floatingHintOffset
                         },
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
