@@ -18,6 +18,7 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -54,6 +55,11 @@ internal val LocalHapticFeedbackEnabled = staticCompositionLocalOf { true }
  * App Market 的 VibrateUtils 做法），改为直接播放短促的 VibrationEffect，
  * 需要清单声明 VIBRATE 权限。无震动硬件的设备上 getSystemService 返回 null，
  * 自然降级为无反馈。
+ *
+ * 实机验证的两个 HAL 兼容要点：
+ * 1. 部分震动驱动在上一次效果未释放时会丢弃新请求，必须先 cancel 再播放，
+ *    否则出现"只震一次，之后点击无反馈"；
+ * 2. DEFAULT_AMPLITUDE(-1) 在部分 ROM 上被映射为 0 振幅，必须显式指定振幅。
  */
 internal object AppHaptics {
     private var vibrator: android.os.Vibrator? = null
@@ -65,9 +71,16 @@ internal object AppHaptics {
             val manager = context.getSystemService(android.os.VibratorManager::class.java)
             vibrator = manager?.defaultVibrator
         }
-        vibrator?.vibrate(
-            android.os.VibrationEffect.createOneShot(25, android.os.VibrationEffect.DEFAULT_AMPLITUDE),
-        )
+        val v = vibrator ?: return
+        v.cancel()
+        try {
+            v.vibrate(android.os.VibrationEffect.createPredefined(android.os.VibrationEffect.EFFECT_TICK))
+        } catch (e: UnsupportedOperationException) {
+            // 少数 HAL 不支持预定义效果，退回显式振幅的 oneShot。
+            v.vibrate(android.os.VibrationEffect.createOneShot(35, 200))
+        } catch (e: IllegalStateException) {
+            // 震动服务状态异常（如硬件被禁用），本次点击静默降级。
+        }
     }
 }
 
@@ -285,9 +298,16 @@ fun Modifier.wearPressFeedback(
     val isPressed by interactionSource.collectIsPressedAsState()
     val context = LocalContext.current
 
-    LaunchedEffect(isPressed) {
-        if (isPressed && hapticEnabled) {
-            AppHaptics.click(context)
+    // 震动用事件流而非按压状态采样：collectIsPressedAsState 按帧合并状态，
+    // 快速点击（按下+抬起在同一帧内）永远不会观察到按压，震动被静默丢弃；
+    // interactions 流能看到每一次 Press 事件，与帧率无关。
+    LaunchedEffect(interactionSource, hapticEnabled) {
+        if (hapticEnabled) {
+            interactionSource.interactions.collect { interaction ->
+                if (interaction is PressInteraction.Press) {
+                    AppHaptics.click(context)
+                }
+            }
         }
     }
 
