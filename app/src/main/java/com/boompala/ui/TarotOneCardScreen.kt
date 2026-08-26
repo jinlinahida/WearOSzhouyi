@@ -8,6 +8,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -95,6 +96,7 @@ fun TarotOneCardScreen(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(metrics.itemSpacing),
                     ) {
+                        val deckInteraction = remember { MutableInteractionSource() }
                         OutlinedButton(
                             onClick = {
                                 deckType = if (deckType == DeckType.FULL_78) {
@@ -103,7 +105,10 @@ fun TarotOneCardScreen(
                                     DeckType.FULL_78
                                 }
                             },
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wearPressFeedback(deckInteraction),
+                            interactionSource = deckInteraction,
                         ) {
                             Text(if (deckType == DeckType.FULL_78) "切换为仅大牌 (22张)" else "切换为全牌组 (78张)")
                         }
@@ -114,9 +119,13 @@ fun TarotOneCardScreen(
             item(key = "tarot-reversed-selection") {
                 ResultCard {
                     DetailField("逆位规则", if (allowReversed) "允许逆位" else "仅正位")
+                    val reversedInteraction = remember { MutableInteractionSource() }
                     OutlinedButton(
                         onClick = { allowReversed = !allowReversed },
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wearPressFeedback(reversedInteraction),
+                        interactionSource = reversedInteraction,
                     ) {
                         Text(if (allowReversed) "切换为仅正位" else "切换为允许逆位")
                     }
@@ -124,6 +133,7 @@ fun TarotOneCardScreen(
             }
 
             item(key = "tarot-draw-action") {
+                val drawInteraction = remember { MutableInteractionSource() }
                 Button(
                     onClick = {
                         val newReading = engine.cast(
@@ -134,16 +144,23 @@ fun TarotOneCardScreen(
                         isFlipped = false
                         onReadingChanged(newReading)
                     },
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wearPressFeedback(drawInteraction),
+                    interactionSource = drawInteraction,
                 ) {
                     Text("洗牌并抽牌")
                 }
             }
 
             item(key = "tarot-back-home") {
+                val backInteraction = remember { MutableInteractionSource() }
                 OutlinedButton(
                     onClick = onBack,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wearPressFeedback(backInteraction),
+                    interactionSource = backInteraction,
                 ) {
                     Text("返回首页")
                 }
@@ -245,30 +262,42 @@ fun TarotOneCardScreen(
                     }
 
                     item(key = "tarot-archive") {
+                        val archiveInteraction = remember { MutableInteractionSource() }
                         OutlinedButton(
                             onClick = { onArchive(reading) },
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wearPressFeedback(archiveInteraction),
+                            interactionSource = archiveInteraction,
                         ) {
                             Text("归档此结果")
                         }
                     }
 
                     item(key = "tarot-recast") {
+                        val recastInteraction = remember { MutableInteractionSource() }
                         Button(
                             onClick = {
                                 isFlipped = false
                                 onReadingChanged(null)
                             },
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wearPressFeedback(recastInteraction),
+                            interactionSource = recastInteraction,
                         ) {
                             Text("重新抽牌")
                         }
                     }
 
                     item(key = "tarot-finish-back") {
+                        val finishInteraction = remember { MutableInteractionSource() }
                         OutlinedButton(
                             onClick = onBack,
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wearPressFeedback(finishInteraction),
+                            interactionSource = finishInteraction,
                         ) {
                             Text("返回首页")
                         }

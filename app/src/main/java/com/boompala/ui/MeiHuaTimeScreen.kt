@@ -1,5 +1,6 @@
 package com.boompala.ui
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -84,22 +85,42 @@ fun MeiHuaTimeScreen(
             }
         }
         item(key = "meihua-time-view") {
-            Button(onClick = { onViewReading(fixedReading) }, modifier = Modifier.fillMaxWidth()) {
+            val pressInteraction = remember { MutableInteractionSource() }
+            Button(
+                onClick = { onViewReading(fixedReading) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wearPressFeedback(pressInteraction),
+                interactionSource = pressInteraction,
+            ) {
                 Text("查看此卦")
             }
         }
         item(key = "meihua-time-recast") {
+            val pressInteraction = remember { MutableInteractionSource() }
             OutlinedButton(
                 onClick = {
                     onReadingChanged(engine.calculate(Instant.now(), ZoneId.systemDefault()))
                 },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wearPressFeedback(pressInteraction),
+                interactionSource = pressInteraction,
             ) {
                 Text("重新按当前时间起卦")
             }
         }
         item(key = "meihua-time-back") {
-            OutlinedButton(onClick = onBack, modifier = Modifier.fillMaxWidth()) { Text("返回首页") }
+            val pressInteraction = remember { MutableInteractionSource() }
+            OutlinedButton(
+                onClick = onBack,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wearPressFeedback(pressInteraction),
+                interactionSource = pressInteraction,
+            ) {
+                Text("返回首页")
+            }
         }
     }
 }

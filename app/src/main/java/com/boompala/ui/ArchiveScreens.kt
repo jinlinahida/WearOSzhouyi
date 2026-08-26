@@ -2,6 +2,7 @@ package com.boompala.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -73,7 +74,14 @@ fun ArchiveListScreen(
                     ArchiveSource.XIAO_LIU_REN to stringResource(R.string.home_feature_xiao_liu_ren),
                     ArchiveSource.TAROT to stringResource(R.string.browse_tarot_title),
                 ).forEach { (s, t) ->
-                    OutlinedButton(onClick = { source = s }, modifier = Modifier.fillMaxWidth()) {
+                    val pressInteraction = remember { MutableInteractionSource() }
+                    OutlinedButton(
+                        onClick = { source = s },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wearPressFeedback(pressInteraction),
+                        interactionSource = pressInteraction,
+                    ) {
                         Text(if (source == s) "● $t" else t)
                     }
                 }
@@ -89,7 +97,14 @@ fun ArchiveListScreen(
                     0xFFFF9800L to stringResource(R.string.archive_color_orange),
                     0xFFE91E63L to stringResource(R.string.archive_color_pink),
                 ).forEach { (c, t) ->
-                    OutlinedButton(onClick = { color = c }, modifier = Modifier.fillMaxWidth()) {
+                    val pressInteraction = remember { MutableInteractionSource() }
+                    OutlinedButton(
+                        onClick = { color = c },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wearPressFeedback(pressInteraction),
+                        interactionSource = pressInteraction,
+                    ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             if (c != null) {
                                 Box(Modifier.padding(end = 8.dp).size(10.dp).background(Color(c), RoundedCornerShape(50)))
@@ -116,7 +131,14 @@ fun ArchiveListScreen(
         }
 
         items(records.orEmpty(), key = { it.id }) { r ->
-            OutlinedButton(onClick = { onSelect(r.id) }, modifier = Modifier.fillMaxWidth()) {
+            val pressInteraction = remember { MutableInteractionSource() }
+            OutlinedButton(
+                onClick = { onSelect(r.id) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wearPressFeedback(pressInteraction),
+                interactionSource = pressInteraction,
+            ) {
                 Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
                     if (r.color != 0L) {
                         Box(Modifier.padding(end = 8.dp).size(10.dp).background(Color(r.color), RoundedCornerShape(50)))
@@ -133,7 +155,14 @@ fun ArchiveListScreen(
             }
         }
         item {
-            OutlinedButton(onClick = onBack, modifier = Modifier.fillMaxWidth()) {
+            val pressInteraction = remember { MutableInteractionSource() }
+            OutlinedButton(
+                onClick = onBack,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wearPressFeedback(pressInteraction),
+                interactionSource = pressInteraction,
+            ) {
                 Text(stringResource(R.string.action_back_home))
             }
         }
@@ -189,17 +218,38 @@ fun ArchiveDetailScreen(
             }
         }
         item {
-            OutlinedButton(onClick = { edit = true }, modifier = Modifier.fillMaxWidth()) {
+            val editInteraction = remember { MutableInteractionSource() }
+            OutlinedButton(
+                onClick = { edit = true },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wearPressFeedback(editInteraction),
+                interactionSource = editInteraction,
+            ) {
                 Text(stringResource(R.string.archive_action_edit))
             }
         }
         item {
-            OutlinedButton(onClick = { confirmDelete = true }, modifier = Modifier.fillMaxWidth()) {
+            val deleteInteraction = remember { MutableInteractionSource() }
+            OutlinedButton(
+                onClick = { confirmDelete = true },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wearPressFeedback(deleteInteraction),
+                interactionSource = deleteInteraction,
+            ) {
                 Text(stringResource(R.string.archive_action_delete), color = MaterialTheme.colorScheme.error)
             }
         }
         item {
-            OutlinedButton(onClick = onBack, modifier = Modifier.fillMaxWidth()) {
+            val backInteraction = remember { MutableInteractionSource() }
+            OutlinedButton(
+                onClick = onBack,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wearPressFeedback(backInteraction),
+                interactionSource = backInteraction,
+            ) {
                 Text(stringResource(R.string.action_back))
             }
         }
@@ -233,6 +283,7 @@ fun ArchiveDetailScreen(
             title = { Text(stringResource(R.string.archive_delete_dialog_title)) },
             text = { Text(stringResource(R.string.archive_delete_dialog_desc)) },
             confirmButton = {
+                val confirmInteraction = remember { MutableInteractionSource() }
                 Button(
                     onClick = {
                         scope.launch {
@@ -241,12 +292,19 @@ fun ArchiveDetailScreen(
                             onChanged()
                         }
                     },
+                    modifier = Modifier.wearPressFeedback(confirmInteraction),
+                    interactionSource = confirmInteraction,
                 ) {
                     Text(stringResource(R.string.action_delete))
                 }
             },
             dismissButton = {
-                OutlinedButton(onClick = { confirmDelete = false }) {
+                val dismissInteraction = remember { MutableInteractionSource() }
+                OutlinedButton(
+                    onClick = { confirmDelete = false },
+                    modifier = Modifier.wearPressFeedback(dismissInteraction),
+                    interactionSource = dismissInteraction,
+                ) {
                     Text(stringResource(R.string.action_cancel))
                 }
             },
@@ -281,7 +339,14 @@ private fun ArchiveEditDialog(
                         0xFFFF9800L to stringResource(R.string.archive_color_orange),
                         0xFFE91E63L to stringResource(R.string.archive_color_pink),
                     ).forEach { (c, label) ->
-                        OutlinedButton(onClick = { onColor(c) }, modifier = Modifier.fillMaxWidth()) {
+                        val pressInteraction = remember { MutableInteractionSource() }
+                        OutlinedButton(
+                            onClick = { onColor(c) },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wearPressFeedback(pressInteraction),
+                            interactionSource = pressInteraction,
+                        ) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Box(Modifier.padding(end = 8.dp).size(10.dp).background(Color(c), RoundedCornerShape(50)))
                                 Text(if (c == color) "● $label" else label)
@@ -292,12 +357,23 @@ private fun ArchiveEditDialog(
             }
         },
         confirmButton = {
-            Button(enabled = name.isNotBlank(), onClick = onSave) {
+            val saveInteraction = remember { MutableInteractionSource() }
+            Button(
+                enabled = name.isNotBlank(),
+                onClick = onSave,
+                modifier = Modifier.wearPressFeedback(saveInteraction),
+                interactionSource = saveInteraction,
+            ) {
                 Text(stringResource(R.string.action_save))
             }
         },
         dismissButton = {
-            OutlinedButton(onClick = onCancel) {
+            val cancelInteraction = remember { MutableInteractionSource() }
+            OutlinedButton(
+                onClick = onCancel,
+                modifier = Modifier.wearPressFeedback(cancelInteraction),
+                interactionSource = cancelInteraction,
+            ) {
                 Text(stringResource(R.string.action_cancel))
             }
         },
@@ -353,7 +429,14 @@ fun ArchiveTagScreen(
                     0xFFFF9800L to stringResource(R.string.archive_color_orange),
                     0xFFE91E63L to stringResource(R.string.archive_color_pink),
                 ).forEach { (c, label) ->
-                    OutlinedButton(onClick = { color = c }, modifier = Modifier.fillMaxWidth()) {
+                    val pressInteraction = remember { MutableInteractionSource() }
+                    OutlinedButton(
+                        onClick = { color = c },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wearPressFeedback(pressInteraction),
+                        interactionSource = pressInteraction,
+                    ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Box(Modifier.padding(end = 8.dp).size(10.dp).background(Color(c), RoundedCornerShape(50)))
                             Text(if (c == color) "● $label" else label)
@@ -363,6 +446,7 @@ fun ArchiveTagScreen(
             }
         }
         item {
+            val saveInteraction = remember { MutableInteractionSource() }
             Button(
                 enabled = name.isNotBlank() && !saving,
                 onClick = {
@@ -376,13 +460,23 @@ fun ArchiveTagScreen(
                         }
                     }
                 },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wearPressFeedback(saveInteraction),
+                interactionSource = saveInteraction,
             ) {
                 Text(stringResource(R.string.archive_save_btn))
             }
         }
         item {
-            OutlinedButton(onClick = onBack, modifier = Modifier.fillMaxWidth()) {
+            val cancelInteraction = remember { MutableInteractionSource() }
+            OutlinedButton(
+                onClick = onBack,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wearPressFeedback(cancelInteraction),
+                interactionSource = cancelInteraction,
+            ) {
                 Text(stringResource(R.string.action_cancel))
             }
         }

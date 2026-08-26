@@ -1,5 +1,6 @@
 package com.boompala.ui
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,8 +29,29 @@ fun XiaoLiuRenScreen(engine: XiaoLiuRenEngine, initial: XiaoLiuRenReading?, rota
         item { ResultCard { DetailField("公历", fmt.format(reading.timeInfo.gregorianDateTime)); DetailField("农历", reading.timeInfo.lunarDate); DetailField("当前时辰", reading.timeInfo.hourGanzhi.earthlyBranch.displayName + "时"); DetailField("起课数据", "月${reading.timeInfo.lunarMonth} 日${reading.timeInfo.lunarDay} 时${reading.timeInfo.hourGanzhi.earthlyBranch.index + 1}") } }
         item { ResultCard { Text("六宫（固定顺序）"); XiaoLiuRenPalace.entries.forEach { p -> Text(if (p == reading.finalPalace) "▶ ${p.displayName}（最终）" else p.displayName) } } }
         item { ResultCard { DetailField("月宫", reading.monthPalace.displayName); DetailField("日宫", reading.dayPalace.displayName); DetailField("时宫/最终", reading.finalPalace.displayName); Text(reading.finalPalace.meaning) } }
-        item { Button(onClick = { onReading(engine.calculate(Instant.now(), ZoneId.systemDefault())) }, modifier = Modifier.fillMaxWidth()) { Text("重新按当前时间起课") } }
-        item { OutlinedButton(onClick = { onArchive(reading) }, modifier = Modifier.fillMaxWidth()) { Text("归档此次起课") } }
-        item { OutlinedButton(onClick = onBack, modifier = Modifier.fillMaxWidth()) { Text("返回首页") } }
+        item {
+            val pressInteraction = remember { MutableInteractionSource() }
+            Button(
+                onClick = { onReading(engine.calculate(Instant.now(), ZoneId.systemDefault())) },
+                modifier = Modifier.fillMaxWidth().wearPressFeedback(pressInteraction),
+                interactionSource = pressInteraction,
+            ) { Text("重新按当前时间起课") }
+        }
+        item {
+            val pressInteraction = remember { MutableInteractionSource() }
+            OutlinedButton(
+                onClick = { onArchive(reading) },
+                modifier = Modifier.fillMaxWidth().wearPressFeedback(pressInteraction),
+                interactionSource = pressInteraction,
+            ) { Text("归档此次起课") }
+        }
+        item {
+            val pressInteraction = remember { MutableInteractionSource() }
+            OutlinedButton(
+                onClick = onBack,
+                modifier = Modifier.fillMaxWidth().wearPressFeedback(pressInteraction),
+                interactionSource = pressInteraction,
+            ) { Text("返回首页") }
+        }
     }
 }

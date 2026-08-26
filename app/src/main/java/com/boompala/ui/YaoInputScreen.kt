@@ -2,6 +2,7 @@ package com.boompala.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -326,6 +327,7 @@ fun YaoInputScreen(
                 ) { _, position ->
                     val internalIndex = position.indexFromBottom
                     val selected = selectedStates[internalIndex]
+                    val pressInteraction = remember { MutableInteractionSource() }
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(metrics.itemSpacing),
@@ -343,10 +345,12 @@ fun YaoInputScreen(
                             },
                             modifier = Modifier
                                 .weight(1.2f)
+                                .wearPressFeedback(pressInteraction)
                                 .semantics {
                                     contentDescription =
                                         "${position.displayName}，当前${selected?.displayName ?: "未选择"}"
                                 },
+                            interactionSource = pressInteraction,
                         ) {
                             Text(selected?.displayName ?: "未选择")
                         }
@@ -410,6 +414,7 @@ fun YaoInputScreen(
         }
 
         item(key = "generate-button") {
+            val pressInteraction = remember { MutableInteractionSource() }
             Button(
                 onClick = {
                     val castAt = Instant.now()
@@ -441,16 +446,22 @@ fun YaoInputScreen(
                 enabled = canGenerate && !isGenerating,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = metrics.itemSpacing / 2),
+                    .padding(top = metrics.itemSpacing / 2)
+                    .wearPressFeedback(pressInteraction),
+                interactionSource = pressInteraction,
             ) {
                 Text(if (isGenerating) "排盘中…" else "生成卦盘")
             }
         }
 
         item(key = "back-button") {
+            val pressInteraction = remember { MutableInteractionSource() }
             OutlinedButton(
                 onClick = onBack,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wearPressFeedback(pressInteraction),
+                interactionSource = pressInteraction,
             ) {
                 Text("返回")
             }
@@ -628,12 +639,21 @@ private fun ModeButton(
     onSelected: (DivinationInputMode) -> Unit,
     modifier: Modifier,
 ) {
+    val pressInteraction = remember { MutableInteractionSource() }
     if (mode == selectedMode) {
-        Button(onClick = { onSelected(mode) }, modifier = modifier) {
+        Button(
+            onClick = { onSelected(mode) },
+            modifier = modifier.wearPressFeedback(pressInteraction),
+            interactionSource = pressInteraction,
+        ) {
             Text(mode.displayName)
         }
     } else {
-        OutlinedButton(onClick = { onSelected(mode) }, modifier = modifier) {
+        OutlinedButton(
+            onClick = { onSelected(mode) },
+            modifier = modifier.wearPressFeedback(pressInteraction),
+            interactionSource = pressInteraction,
+        ) {
             Text(mode.displayName)
         }
     }
@@ -647,12 +667,16 @@ private fun PolarityButton(
     onClick: () -> Unit,
     modifier: Modifier,
 ) {
+    val pressInteraction = remember { MutableInteractionSource() }
     OutlinedButton(
         onClick = onClick,
-        modifier = modifier.semantics {
-            contentDescription =
-                "$hexagramLabel${position.displayName}，当前${polarity?.displayName ?: "未选择"}"
-        },
+        modifier = modifier
+            .wearPressFeedback(pressInteraction)
+            .semantics {
+                contentDescription =
+                    "$hexagramLabel${position.displayName}，当前${polarity?.displayName ?: "未选择"}"
+            },
+        interactionSource = pressInteraction,
     ) {
         Text(polarity?.displayName ?: "未选")
     }

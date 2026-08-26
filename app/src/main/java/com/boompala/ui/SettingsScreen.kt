@@ -2,6 +2,7 @@ package com.boompala.ui
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -486,9 +487,13 @@ fun SettingsScreen(
 
                 if (archiveCount > 0) {
                     item(key = "data-clear") {
+                        val pressInteraction = remember { MutableInteractionSource() }
                         OutlinedButton(
                             onClick = { showClearDialog = true },
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wearPressFeedback(pressInteraction),
+                            interactionSource = pressInteraction,
                         ) {
                             Text(
                                 text = stringResource(R.string.settings_data_clear_all),
@@ -515,6 +520,7 @@ fun SettingsScreen(
                     title = { Text(stringResource(R.string.settings_data_clear_confirm_title)) },
                     text = { Text(stringResource(R.string.settings_data_clear_confirm_desc)) },
                     confirmButton = {
+                        val confirmInteraction = remember { MutableInteractionSource() }
                         Button(
                             onClick = {
                                 scope.launch {
@@ -526,12 +532,19 @@ fun SettingsScreen(
                                     showClearDialog = false
                                 }
                             },
+                            modifier = Modifier.wearPressFeedback(confirmInteraction),
+                            interactionSource = confirmInteraction,
                         ) {
                             Text(stringResource(R.string.action_delete))
                         }
                     },
                     dismissButton = {
-                        OutlinedButton(onClick = { showClearDialog = false }) {
+                        val dismissInteraction = remember { MutableInteractionSource() }
+                        OutlinedButton(
+                            onClick = { showClearDialog = false },
+                            modifier = Modifier.wearPressFeedback(dismissInteraction),
+                            interactionSource = dismissInteraction,
+                        ) {
                             Text(stringResource(R.string.action_cancel))
                         }
                     },
@@ -549,9 +562,13 @@ private fun SettingsModuleButton(
     subtitle: String,
     onClick: () -> Unit,
 ) {
+    val pressInteraction = remember { MutableInteractionSource() }
     OutlinedButton(
         onClick = onClick,
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .wearPressFeedback(pressInteraction),
+        interactionSource = pressInteraction,
     ) {
         Row(
             modifier = Modifier
@@ -593,17 +610,24 @@ private fun SelectionButton(
     text: String,
     onClick: () -> Unit,
 ) {
+    val pressInteraction = remember { MutableInteractionSource() }
     if (selected) {
         Button(
             onClick = onClick,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .wearPressFeedback(pressInteraction),
+            interactionSource = pressInteraction,
         ) {
             Text("✓ $text")
         }
     } else {
         OutlinedButton(
             onClick = onClick,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .wearPressFeedback(pressInteraction),
+            interactionSource = pressInteraction,
         ) {
             Text(text)
         }

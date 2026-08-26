@@ -1,5 +1,6 @@
 package com.boompala.ui
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -108,9 +109,25 @@ fun MeiHuaResultContent(
                 DetailField("用卦", "外部事物或所问之事")
             }
         }
-        item(key = "meihua-archive") { OutlinedButton(onClick = { onArchive(reading) }, modifier = Modifier.fillMaxWidth()) { Text("归档此次结果") } }
+        item(key = "meihua-archive") {
+            val archiveInteraction = remember { MutableInteractionSource() }
+            OutlinedButton(
+                onClick = { onArchive(reading) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wearPressFeedback(archiveInteraction),
+                interactionSource = archiveInteraction,
+            ) { Text("归档此次结果") }
+        }
         item(key = "meihua-back") {
-            OutlinedButton(onClick = onBack, modifier = Modifier.fillMaxWidth()) {
+            val backInteraction = remember { MutableInteractionSource() }
+            OutlinedButton(
+                onClick = onBack,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wearPressFeedback(backInteraction),
+                interactionSource = backInteraction,
+            ) {
                 Text("返回时间起卦")
             }
         }

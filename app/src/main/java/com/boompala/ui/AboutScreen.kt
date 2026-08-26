@@ -1,6 +1,7 @@
 package com.boompala.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -148,9 +150,13 @@ fun AboutScreen(
 
         // 5. 重新查看欢迎与声明入口
         item(key = "welcome-revisit-card") {
+            val revisitInteraction = remember { MutableInteractionSource() }
             OutlinedButton(
                 onClick = onViewWelcomeClick,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wearPressFeedback(revisitInteraction),
+                interactionSource = revisitInteraction,
             ) {
                 Text(
                     text = stringResource(R.string.welcome_revisit_from_about),
@@ -160,9 +166,13 @@ fun AboutScreen(
         }
 
         item(key = "back") {
+            val backInteraction = remember { MutableInteractionSource() }
             OutlinedButton(
                 onClick = onBack,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wearPressFeedback(backInteraction),
+                interactionSource = backInteraction,
             ) {
                 Text(stringResource(R.string.about_back_to_settings))
             }
