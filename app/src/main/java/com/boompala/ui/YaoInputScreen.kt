@@ -67,6 +67,8 @@ fun YaoInputScreen(
 ) {
     val metrics = LocalUiMetrics.current
     val hapticContext = LocalContext.current
+    val hapticEnabled = LocalHapticFeedbackEnabled.current
+    val hapticIntensity = LocalHapticIntensity.current
 
     var inputMode by remember { mutableStateOf(DivinationInputMode.COIN_CAST) }
 
@@ -240,11 +242,11 @@ fun YaoInputScreen(
 
                 item(key = "coin-action-button") {
                     if (!allCoinsCast) {
+                        val tossInteraction = remember { MutableInteractionSource() }
                         Button(
                             onClick = {
                                 if (!isTossing) {
                                     isTossing = true
-                                    AppHaptics.click(hapticContext)
                                     coroutineScope.launch {
                                         val toss = LiuYaoCoinCastingEngine.castSingleLine()
                                         lastToss = toss
@@ -260,6 +262,12 @@ fun YaoInputScreen(
                                         } else {
                                             tossAnimProgress.snapTo(1f)
                                         }
+                                        AppHaptics.coinToss(
+                                            context = hapticContext,
+                                            isChanging = toss.state.isChanging,
+                                            intensity = hapticIntensity,
+                                            enabled = hapticEnabled,
+                                        )
                                         coinRecords[currentLineIndex] = CoinCastingRecord(
                                             position = YaoPosition.entries[currentLineIndex],
                                             toss = toss,
@@ -269,7 +277,10 @@ fun YaoInputScreen(
                                 }
                             },
                             enabled = !isTossing,
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wearPressFeedback(tossInteraction),
+                            interactionSource = tossInteraction,
                         ) {
                             Text(
                                 if (isTossing) "正在摇卦…"
@@ -277,15 +288,18 @@ fun YaoInputScreen(
                             )
                         }
                     } else {
+                        val resetInteraction = remember { MutableInteractionSource() }
                         OutlinedButton(
                             onClick = {
-                                AppHaptics.click(hapticContext)
                                 for (i in coinRecords.indices) {
                                     coinRecords[i] = null
                                 }
                                 lastToss = null
                             },
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wearPressFeedback(resetInteraction),
+                            interactionSource = resetInteraction,
                         ) {
                             Text("重新摇卦")
                         }

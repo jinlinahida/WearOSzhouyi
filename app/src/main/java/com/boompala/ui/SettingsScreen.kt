@@ -25,6 +25,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -38,6 +39,7 @@ import androidx.wear.compose.material3.Text
 import com.boompala.R
 import com.boompala.archive.ArchiveRepository
 import com.boompala.settings.AppLanguage
+import com.boompala.settings.HapticIntensity
 import com.boompala.settings.AppSettings
 import com.boompala.settings.ContentSize
 import com.boompala.settings.HomeFeature
@@ -63,6 +65,7 @@ fun SettingsScreen(
     onAnimationsEnabledChange: (Boolean) -> Unit,
     onRotaryScrollingEnabledChange: (Boolean) -> Unit,
     onHapticFeedbackEnabledChange: (Boolean) -> Unit = {},
+    onHapticIntensityChange: (HapticIntensity) -> Unit = {},
     onLanguageSelected: (AppLanguage) -> Unit = {},
     onMoveHomeFeature: (HomeFeature, Boolean) -> Unit = { _, _ -> },
     onToggleHomeFeatureVisibility: (HomeFeature) -> Unit = {},
@@ -74,6 +77,7 @@ fun SettingsScreen(
     onInnerBackAvailabilityChanged: (Boolean) -> Unit = {},
 ) {
     val metrics = LocalUiMetrics.current
+    val context = LocalContext.current
     // 分区状态需要可保存：从 ABOUT 返回设置时不应重置回主菜单。
     var currentSection by rememberSaveable { mutableStateOf(SettingsSection.MENU) }
 
@@ -168,9 +172,13 @@ fun SettingsScreen(
                 }
 
                 item(key = "back-home") {
+                    val backInteraction = remember { MutableInteractionSource() }
                     OutlinedButton(
                         onClick = onBack,
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wearPressFeedback(backInteraction),
+                        interactionSource = backInteraction,
                     ) {
                         Text(stringResource(R.string.action_back_home))
                     }
@@ -249,9 +257,13 @@ fun SettingsScreen(
                 }
 
                 item(key = "appearance-back") {
+                    val backInteraction = remember { MutableInteractionSource() }
                     OutlinedButton(
                         onClick = { currentSection = SettingsSection.MENU },
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wearPressFeedback(backInteraction),
+                        interactionSource = backInteraction,
                     ) {
                         Text(stringResource(R.string.action_back))
                     }
@@ -284,9 +296,13 @@ fun SettingsScreen(
                 }
 
                 item(key = "language-back") {
+                    val backInteraction = remember { MutableInteractionSource() }
                     OutlinedButton(
                         onClick = { currentSection = SettingsSection.MENU },
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wearPressFeedback(backInteraction),
+                        interactionSource = backInteraction,
                     ) {
                         Text(stringResource(R.string.action_back))
                     }
@@ -357,23 +373,35 @@ fun SettingsScreen(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(4.dp),
                         ) {
+                            val toggleInteraction = remember { MutableInteractionSource() }
+                            val upInteraction = remember { MutableInteractionSource() }
+                            val downInteraction = remember { MutableInteractionSource() }
                             OutlinedButton(
                                 onClick = { onToggleHomeFeatureVisibility(feature) },
-                                modifier = Modifier.weight(1f),
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .wearPressFeedback(toggleInteraction),
+                                interactionSource = toggleInteraction,
                             ) {
                                 Text(if (isHidden) stringResource(R.string.action_show) else stringResource(R.string.action_hide))
                             }
                             OutlinedButton(
                                 onClick = { onMoveHomeFeature(feature, true) },
                                 enabled = index > 0,
-                                modifier = Modifier.weight(0.7f),
+                                modifier = Modifier
+                                    .weight(0.7f)
+                                    .wearPressFeedback(upInteraction, enabled = index > 0),
+                                interactionSource = upInteraction,
                             ) {
                                 Text("▲")
                             }
                             OutlinedButton(
                                 onClick = { onMoveHomeFeature(feature, false) },
                                 enabled = index < fullOrder.size - 1,
-                                modifier = Modifier.weight(0.7f),
+                                modifier = Modifier
+                                    .weight(0.7f)
+                                    .wearPressFeedback(downInteraction, enabled = index < fullOrder.size - 1),
+                                interactionSource = downInteraction,
                             ) {
                                 Text("▼")
                             }
@@ -382,9 +410,13 @@ fun SettingsScreen(
                 }
 
                 item(key = "home-manage-back") {
+                    val backInteraction = remember { MutableInteractionSource() }
                     OutlinedButton(
                         onClick = { currentSection = SettingsSection.MENU },
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wearPressFeedback(backInteraction),
+                        interactionSource = backInteraction,
                     ) {
                         Text(stringResource(R.string.action_back))
                     }
@@ -438,10 +470,40 @@ fun SettingsScreen(
                     )
                 }
 
+                if (settings.hapticFeedbackEnabled) {
+                    item(key = "haptic-intensity-title") {
+                        Text(
+                            text = stringResource(R.string.settings_haptic_intensity),
+                            style = MaterialTheme.typography.titleSmall,
+                        )
+                    }
+                    HapticIntensity.entries.forEach { intensity ->
+                        item(key = "haptic-intensity-${intensity.name}") {
+                            val label = when (intensity) {
+                                HapticIntensity.LIGHT -> stringResource(R.string.settings_haptic_intensity_light)
+                                HapticIntensity.STANDARD -> stringResource(R.string.settings_haptic_intensity_standard)
+                                HapticIntensity.STRONG -> stringResource(R.string.settings_haptic_intensity_strong)
+                            }
+                            SelectionButton(
+                                selected = settings.hapticIntensity == intensity,
+                                text = label,
+                                targetIntensity = intensity,
+                                onClick = {
+                                    onHapticIntensityChange(intensity)
+                                },
+                            )
+                        }
+                    }
+                }
+
                 item(key = "haptics-back") {
+                    val backInteraction = remember { MutableInteractionSource() }
                     OutlinedButton(
                         onClick = { currentSection = SettingsSection.MENU },
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wearPressFeedback(backInteraction),
+                        interactionSource = backInteraction,
                     ) {
                         Text(stringResource(R.string.action_back))
                     }
@@ -504,9 +566,13 @@ fun SettingsScreen(
                 }
 
                 item(key = "data-back") {
+                    val backInteraction = remember { MutableInteractionSource() }
                     OutlinedButton(
                         onClick = { currentSection = SettingsSection.MENU },
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wearPressFeedback(backInteraction),
+                        interactionSource = backInteraction,
                     ) {
                         Text(stringResource(R.string.action_back))
                     }
@@ -609,14 +675,16 @@ private fun SelectionButton(
     selected: Boolean,
     text: String,
     onClick: () -> Unit,
+    targetIntensity: HapticIntensity? = null,
 ) {
     val pressInteraction = remember { MutableInteractionSource() }
+    val intensity = targetIntensity ?: LocalHapticIntensity.current
     if (selected) {
         Button(
             onClick = onClick,
             modifier = Modifier
                 .fillMaxWidth()
-                .wearPressFeedback(pressInteraction),
+                .wearPressFeedback(pressInteraction, intensity = intensity),
             interactionSource = pressInteraction,
         ) {
             Text("✓ $text")
@@ -626,7 +694,7 @@ private fun SelectionButton(
             onClick = onClick,
             modifier = Modifier
                 .fillMaxWidth()
-                .wearPressFeedback(pressInteraction),
+                .wearPressFeedback(pressInteraction, intensity = intensity),
             interactionSource = pressInteraction,
         ) {
             Text(text)

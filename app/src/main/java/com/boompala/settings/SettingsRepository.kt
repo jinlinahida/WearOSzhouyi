@@ -37,6 +37,7 @@ class SettingsRepository(
                 animationsEnabled = preferences[ANIMATIONS_ENABLED_KEY] ?: true,
                 rotaryScrollingEnabled = preferences[ROTARY_SCROLLING_ENABLED_KEY] ?: true,
                 hapticFeedbackEnabled = preferences[HAPTIC_FEEDBACK_ENABLED_KEY] ?: true,
+                hapticIntensity = preferences[HAPTIC_INTENSITY_KEY].toEnumOrDefault(HapticIntensity.STANDARD),
                 language = preferences[LANGUAGE_KEY].toEnumOrDefault(AppLanguage.CHINESE),
                 homeOrder = parseHomeOrder(preferences[HOME_ORDER_KEY]),
                 hiddenHomeFeatures = parseHiddenFeatures(preferences[HIDDEN_HOME_FEATURES_KEY]),
@@ -52,6 +53,7 @@ class SettingsRepository(
                 animationsEnabled = preferences[ANIMATIONS_ENABLED_KEY] ?: true,
                 rotaryScrollingEnabled = preferences[ROTARY_SCROLLING_ENABLED_KEY] ?: true,
                 hapticFeedbackEnabled = preferences[HAPTIC_FEEDBACK_ENABLED_KEY] ?: true,
+                hapticIntensity = preferences[HAPTIC_INTENSITY_KEY].toEnumOrDefault(HapticIntensity.STANDARD),
                 language = preferences[LANGUAGE_KEY].toEnumOrDefault(AppLanguage.CHINESE),
                 homeOrder = parseHomeOrder(preferences[HOME_ORDER_KEY]),
                 hiddenHomeFeatures = parseHiddenFeatures(preferences[HIDDEN_HOME_FEATURES_KEY]),
@@ -63,6 +65,7 @@ class SettingsRepository(
             preferences[ANIMATIONS_ENABLED_KEY] = next.animationsEnabled
             preferences[ROTARY_SCROLLING_ENABLED_KEY] = next.rotaryScrollingEnabled
             preferences[HAPTIC_FEEDBACK_ENABLED_KEY] = next.hapticFeedbackEnabled
+            preferences[HAPTIC_INTENSITY_KEY] = next.hapticIntensity.name
             preferences[LANGUAGE_KEY] = next.language.name
             preferences[HOME_ORDER_KEY] = next.homeOrder.joinToString(",") { it.id }
             preferences[HIDDEN_HOME_FEATURES_KEY] = next.hiddenHomeFeatures.joinToString(",") { it.id }
@@ -88,6 +91,10 @@ class SettingsRepository(
 
     suspend fun setHapticFeedbackEnabled(enabled: Boolean) {
         update { it.copy(hapticFeedbackEnabled = enabled) }
+    }
+
+    suspend fun setHapticIntensity(intensity: HapticIntensity) {
+        update { it.copy(hapticIntensity = intensity) }
     }
 
     suspend fun setLanguage(language: AppLanguage) {
@@ -140,6 +147,7 @@ class SettingsRepository(
         val ANIMATIONS_ENABLED_KEY = booleanPreferencesKey("animations_enabled")
         val ROTARY_SCROLLING_ENABLED_KEY = booleanPreferencesKey("rotary_scrolling_enabled")
         val HAPTIC_FEEDBACK_ENABLED_KEY = booleanPreferencesKey("haptic_feedback_enabled")
+        val HAPTIC_INTENSITY_KEY = stringPreferencesKey("haptic_intensity")
         val LANGUAGE_KEY = stringPreferencesKey("language")
         val HOME_ORDER_KEY = stringPreferencesKey("home_order")
         val HIDDEN_HOME_FEATURES_KEY = stringPreferencesKey("hidden_home_features")

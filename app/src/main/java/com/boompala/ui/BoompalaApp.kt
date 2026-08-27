@@ -635,6 +635,11 @@ fun BoompalaApp() {
                                     settingsRepository.setHapticFeedbackEnabled(enabled)
                                 }
                             },
+                            onHapticIntensityChange = { intensity ->
+                                scope.launch {
+                                    settingsRepository.setHapticIntensity(intensity)
+                                }
+                            },
                             onLanguageSelected = { lang ->
                                 scope.launch {
                                     settingsRepository.setLanguage(lang)
@@ -756,7 +761,10 @@ fun BoompalaApp() {
                     !settingsInnerBackAvailable
                 val screenWidthPx = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp.toPx() }
 
-                CompositionLocalProvider(LocalHapticFeedbackEnabled provides settings.hapticFeedbackEnabled) {
+                CompositionLocalProvider(
+                    LocalHapticFeedbackEnabled provides settings.hapticFeedbackEnabled,
+                    LocalHapticIntensity provides settings.hapticIntensity,
+                ) {
                     SwipeToDismissBox(
                         state = swipeToDismissBoxState,
                         modifier = Modifier.fillMaxSize(),

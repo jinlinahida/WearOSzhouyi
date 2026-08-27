@@ -48,6 +48,7 @@ class SettingsRepositoryTest {
         repository.setAnimationsEnabled(false)
         repository.setRotaryScrollingEnabled(false)
         repository.setHapticFeedbackEnabled(false)
+        repository.setHapticIntensity(HapticIntensity.STRONG)
         repository.setLanguage(AppLanguage.ENGLISH)
 
         val updated = SettingsRepository(dataStore).settings.first()
@@ -56,6 +57,7 @@ class SettingsRepositoryTest {
         assertEquals(false, updated.animationsEnabled)
         assertEquals(false, updated.rotaryScrollingEnabled)
         assertEquals(false, updated.hapticFeedbackEnabled)
+        assertEquals(HapticIntensity.STRONG, updated.hapticIntensity)
         assertEquals(AppLanguage.ENGLISH, updated.language)
     }
 

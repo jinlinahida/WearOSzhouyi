@@ -16,6 +16,7 @@ class AppSettingsTest {
                 animationsEnabled = true,
                 rotaryScrollingEnabled = true,
                 hapticFeedbackEnabled = true,
+                hapticIntensity = HapticIntensity.STANDARD,
                 language = AppLanguage.CHINESE,
                 homeOrder = HomeFeature.DEFAULT_ORDER,
                 hiddenHomeFeatures = emptySet(),

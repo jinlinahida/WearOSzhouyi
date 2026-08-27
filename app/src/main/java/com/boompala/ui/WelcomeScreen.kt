@@ -589,9 +589,13 @@ private fun DisclaimerScreen(
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth(),
                     )
+                    val enterInteraction = remember { MutableInteractionSource() }
                     Button(
                         onClick = onFinish,
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wearPressFeedback(enterInteraction),
+                        interactionSource = enterInteraction,
                     ) {
                         Text(
                             text = stringResource(R.string.welcome_agree_and_enter),

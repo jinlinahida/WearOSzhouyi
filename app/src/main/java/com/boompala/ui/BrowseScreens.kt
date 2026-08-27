@@ -79,9 +79,13 @@ fun BrowseHomeScreen(
             )
         }
         item {
+            val hexInteraction = remember { MutableInteractionSource() }
             OutlinedButton(
                 onClick = onHexagrams,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wearPressFeedback(hexInteraction),
+                interactionSource = hexInteraction,
             ) {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
@@ -103,9 +107,13 @@ fun BrowseHomeScreen(
             }
         }
         item {
+            val tarotInteraction = remember { MutableInteractionSource() }
             OutlinedButton(
                 onClick = onTarot,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wearPressFeedback(tarotInteraction),
+                interactionSource = tarotInteraction,
             ) {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
@@ -127,9 +135,13 @@ fun BrowseHomeScreen(
             }
         }
         item {
+            val daoInteraction = remember { MutableInteractionSource() }
             OutlinedButton(
                 onClick = onKnowledge,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wearPressFeedback(daoInteraction),
+                interactionSource = daoInteraction,
             ) {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
@@ -151,9 +163,13 @@ fun BrowseHomeScreen(
             }
         }
         item {
+            val yiInteraction = remember { MutableInteractionSource() }
             OutlinedButton(
                 onClick = onKnowledge,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wearPressFeedback(yiInteraction),
+                interactionSource = yiInteraction,
             ) {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
@@ -175,7 +191,14 @@ fun BrowseHomeScreen(
             }
         }
         item {
-            OutlinedButton(onClick = onBack, modifier = Modifier.fillMaxWidth()) {
+            val backInteraction = remember { MutableInteractionSource() }
+            OutlinedButton(
+                onClick = onBack,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wearPressFeedback(backInteraction),
+                interactionSource = backInteraction,
+            ) {
                 Text("返回首页")
             }
         }
@@ -543,7 +566,14 @@ fun TarotCardDetailScreen(
         }
 
         item {
-            OutlinedButton(onClick = onBack, modifier = Modifier.fillMaxWidth()) {
+            val backInteraction = remember { MutableInteractionSource() }
+            OutlinedButton(
+                onClick = onBack,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wearPressFeedback(backInteraction),
+                interactionSource = backInteraction,
+            ) {
                 Text("返回塔罗列表")
             }
         }

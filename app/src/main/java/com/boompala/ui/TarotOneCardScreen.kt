@@ -58,6 +58,8 @@ fun TarotOneCardScreen(
 ) {
     val metrics = LocalUiMetrics.current
     val hapticContext = androidx.compose.ui.platform.LocalContext.current
+    val hapticEnabled = LocalHapticFeedbackEnabled.current
+    val hapticIntensity = LocalHapticIntensity.current
     var deckType by remember { mutableStateOf(DeckType.FULL_78) }
     var allowReversed by remember { mutableStateOf(true) }
     var isFlipped by remember(reading) { mutableStateOf(false) }
@@ -179,7 +181,7 @@ fun TarotOneCardScreen(
                         animationsEnabled = animationsEnabled,
                         onFlip = {
                             if (!isFlipped) {
-                                AppHaptics.click(hapticContext)
+                                AppHaptics.cardFlip(hapticContext, intensity = hapticIntensity, enabled = hapticEnabled)
                                 isFlipped = true
                             }
                         },

@@ -310,9 +310,13 @@ internal fun HexagramInterpretationCard(
                 "关键词：${interpretation.keywords.joinToString(" · ")}",
                 style = MaterialTheme.typography.labelSmall,
             )
+            val expandInteraction = remember { MutableInteractionSource() }
             OutlinedButton(
                 onClick = { expanded = !expanded },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wearPressFeedback(expandInteraction),
+                interactionSource = expandInteraction,
             ) {
                 Text(if (expanded) "收起详细解释" else "展开详细解释")
             }

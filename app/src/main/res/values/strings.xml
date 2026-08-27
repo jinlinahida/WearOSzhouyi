@@ -58,6 +58,10 @@
     <string name="settings_animations">页面过渡动效</string>
     <string name="settings_rotary">表冠旋转滚动</string>
     <string name="settings_haptic">触感振动反馈</string>
+    <string name="settings_haptic_intensity">震动强度</string>
+    <string name="settings_haptic_intensity_light">弱（轻柔）</string>
+    <string name="settings_haptic_intensity_standard">标准（扎实）</string>
+    <string name="settings_haptic_intensity_strong">强劲（有力）</string>
     <string name="settings_language_chinese">简体中文</string>
     <string name="settings_language_english">English</string>
     <string name="settings_home_fixed_hint">“设置”入口作为系统基础入口，始终固定显示。</string>

@@ -6,6 +6,7 @@ import android.graphics.Typeface
 import android.hardware.SensorManager
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.*
@@ -98,10 +99,14 @@ fun CompassScreen(rotaryScrollingEnabled: Boolean, onBack: () -> Unit) {
             }
         }
         item(key = "lock") {
+            val lockInteraction = remember { MutableInteractionSource() }
             Button(
                 onClick = { if (locked) lockedHeading = null else lockedHeading = sensorState.heading },
                 enabled = sensorState.available && (sensorState.heading != null || locked),
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wearPressFeedback(lockInteraction),
+                interactionSource = lockInteraction,
             ) { Text(if (locked) "恢复实时测量" else "锁定当前方位") }
         }
         item(key = "calibration") {
@@ -110,7 +115,16 @@ fun CompassScreen(rotaryScrollingEnabled: Boolean, onBack: () -> Unit) {
                 Text("尽量水平持表，远离磁扣、扬声器和金属桌面；精度较低时缓慢做“8”字动作。", style = MaterialTheme.typography.bodySmall)
             }
         }
-        item(key = "back") { OutlinedButton(onClick = onBack, modifier = Modifier.fillMaxWidth()) { Text("返回首页") } }
+        item(key = "back") {
+            val backInteraction = remember { MutableInteractionSource() }
+            OutlinedButton(
+                onClick = onBack,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wearPressFeedback(backInteraction),
+                interactionSource = backInteraction,
+            ) { Text("返回首页") }
+        }
     }
 }
 

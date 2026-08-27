@@ -29,7 +29,7 @@ import androidx.wear.compose.material3.ScreenScaffold
 @Composable
 fun RotaryScrollColumn(
     rotaryEnabled: Boolean,
-    hapticFeedbackEnabled: Boolean = true,
+    hapticFeedbackEnabled: Boolean = LocalHapticFeedbackEnabled.current,
     modifier: Modifier = Modifier.fillMaxSize(),
     state: LazyListState = rememberLazyListState(),
     contentPadding: PaddingValues = PaddingValues(),

@@ -17,6 +17,14 @@ enum class ContentSize(
     LARGE("大", 1.10f),
 }
 
+enum class HapticIntensity(
+    val displayName: String,
+) {
+    LIGHT("弱"),
+    STANDARD("标准"),
+    STRONG("强劲"),
+}
+
 enum class AppLanguage(
     val code: String,
     val displayName: String,
@@ -66,6 +74,7 @@ data class AppSettings(
     val animationsEnabled: Boolean = true,
     val rotaryScrollingEnabled: Boolean = true,
     val hapticFeedbackEnabled: Boolean = true,
+    val hapticIntensity: HapticIntensity = HapticIntensity.STANDARD,
     val language: AppLanguage = AppLanguage.CHINESE,
     val homeOrder: List<HomeFeature> = HomeFeature.DEFAULT_ORDER,
     val hiddenHomeFeatures: Set<HomeFeature> = emptySet(),
