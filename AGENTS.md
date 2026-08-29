@@ -8,7 +8,7 @@
 
 - 语言：Kotlin（官方代码风格，JVM target 17）；少量 Node.js ESM 工具脚本用于导入资料。
 - 平台/框架：Android Wear OS，Jetpack Compose、Compose for Wear Material 3/Foundation、`ComponentActivity`。
-- 构建：Gradle Wrapper，Android Gradle Plugin 8.7.3，Kotlin 2.0.21，Compose compiler plugin，compile/target SDK 35，min SDK 33；Java/Kotlin 编译目标为 17。
+- 构建：Gradle Wrapper，Android Gradle Plugin 8.7.3，Kotlin 2.0.21，Compose compiler plugin，compile/target SDK 35，min SDK 26；Java/Kotlin 编译目标为 17。
 - 关键库：`androidx.activity:activity-compose:1.10.0`、Compose UI/Animation 1.9.0、Wear Compose 1.6.2、`androidx.graphics:graphics-shapes:1.0.1`、Preferences DataStore 1.1.1、Gson 2.10.1、`cn.6tail:lunar:1.7.7`、JUnit 4.13.2。
 - 存储：Android `SQLiteOpenHelper` 本地数据库 `boompa_archives.db`（schema version 2，归档表及 `cast_at` 降序索引）；DataStore 文件 `app_settings` 保存界面、偏好及用户生辰档案设置；没有 Room、网络 API 或远程数据库。
 - Android 入口：`app/src/main/AndroidManifest.xml` 声明 standalone、必需的 watch feature、`android.permission.VIBRATE`（用于直驱震动马达保障不同手表 ROM 上触觉反馈的可靠性）和 launcher Activity；未声明网络或定位权限。

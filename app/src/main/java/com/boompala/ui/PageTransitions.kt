@@ -68,17 +68,16 @@ internal object AppHaptics {
     @Volatile
     private var resolved = false
 
-    private val touchAttributes: android.os.VibrationAttributes by lazy {
-        android.os.VibrationAttributes.Builder()
-            .setUsage(android.os.VibrationAttributes.USAGE_TOUCH)
-            .build()
-    }
-
     private fun getVibrator(context: android.content.Context): android.os.Vibrator? {
         if (!resolved) {
             val appContext = context.applicationContext ?: context
-            val manager = appContext.getSystemService(android.os.VibratorManager::class.java)
-            val v = manager?.defaultVibrator ?: appContext.getSystemService(android.os.Vibrator::class.java)
+            val v = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+                appContext.getSystemService(android.os.VibratorManager::class.java)?.defaultVibrator
+                    ?: appContext.getSystemService(android.os.Vibrator::class.java)
+            } else {
+                @Suppress("DEPRECATION")
+                appContext.getSystemService(android.content.Context.VIBRATOR_SERVICE) as? android.os.Vibrator
+            }
             vibrator = v
             resolved = true
         }
@@ -87,13 +86,30 @@ internal object AppHaptics {
 
     private fun vibrateEffect(v: android.os.Vibrator, effect: android.os.VibrationEffect) {
         try {
-            v.vibrate(effect, touchAttributes)
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+                Api30HapticsHelper.vibrateWithTouchAttributes(v, effect)
+            } else {
+                v.vibrate(effect)
+            }
         } catch (_: Throwable) {
             try {
                 v.vibrate(effect)
             } catch (_: Throwable) {
                 // 少数极度精简系统静默降级
             }
+        }
+    }
+
+    @androidx.annotation.RequiresApi(android.os.Build.VERSION_CODES.R)
+    private object Api30HapticsHelper {
+        private val touchAttributes: android.os.VibrationAttributes by lazy {
+            android.os.VibrationAttributes.Builder()
+                .setUsage(android.os.VibrationAttributes.USAGE_TOUCH)
+                .build()
+        }
+
+        fun vibrateWithTouchAttributes(v: android.os.Vibrator, effect: android.os.VibrationEffect) {
+            v.vibrate(effect, touchAttributes)
         }
     }
 

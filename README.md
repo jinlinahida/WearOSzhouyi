@@ -108,8 +108,8 @@
 
 - **Android Studio** Ladybug / Koala 或现代 Android 构建环境
 - **JDK 17**（JVM target 17）
-- **Android SDK**：compileSdk / targetSdk 35，minSdk 33（Wear OS 4+）
-- **Wear OS 设备**：支持 Wear OS 4+ 的实体手表或 Android Studio 模拟器
+- **Android SDK**：compileSdk / targetSdk 35，minSdk 26（Android 8.0+ / Wear OS 2.0+）
+- **Wear OS 设备**：实体手表（支持几乎所有 Wear OS / Android 手表设备）或 Android Studio 模拟器
 
 ---
 
