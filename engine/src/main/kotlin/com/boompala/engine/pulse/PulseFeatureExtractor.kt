@@ -300,15 +300,17 @@ object PulseFeatureExtractor {
         val regularity = (100.0 - (cv * 120.0) - (pnn50 * 0.5)).coerceIn(30.0, 100.0)
 
         // 7. 形态学模拟估算 (根据 RMSSD 与心率动态调整波形系数)
-        val isWiry = rmssd <= 22.0 && meanBpm >= 70.0
-        val isSlippery = rmssd >= 42.0 && meanBpm in 68.0..90.0
+        val isWiry = rmssd <= 22.0 && meanBpm >= 68.0
+        val isSlippery = rmssd >= 42.0 && meanBpm in 66.0..95.0
+        val isRu = rmssd in 18.0..30.0 && meanBpm in 58.0..74.0
         val kValue = when {
             isWiry -> 0.42
             isSlippery -> 0.38
-            meanBpm < 60.0 -> 0.30
+            isRu -> 0.30
+            meanBpm < 60.0 -> 0.28
             else -> 0.35
         }
-        val h2Ratio = if (isWiry) 0.50 else 0.38
+        val h2Ratio = if (isWiry) 0.50 else if (isRu) 0.34 else 0.38
         val h3Ratio = if (isSlippery) 0.55 else 0.48
 
         return PulseFeatureMetrics(

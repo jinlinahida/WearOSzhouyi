@@ -69,8 +69,8 @@ object ElgendiPeakDetector {
             }
         }
 
-        // 5. 后处理：去除过近的假峰（两峰间距必须大于最小心跳间隔，例如 200BPM 对应 300ms）
-        val minIntervalSamples = (0.35 * sampleRateHz).roundToInt().coerceAtLeast(2)
+        // 5. 后处理：去除重搏波假峰（收缩期主峰间距必须大于生理不应期，标准设为 400ms）
+        val minIntervalSamples = (0.40 * sampleRateHz).roundToInt().coerceAtLeast(2)
         val filteredPeaks = mutableListOf<Int>()
         for (p in peaks) {
             if (filteredPeaks.isEmpty()) {
@@ -90,20 +90,39 @@ object ElgendiPeakDetector {
         return filteredPeaks
     }
 
-    private fun movingAverage(data: DoubleArray, windowSize: Int): DoubleArray {
-        val n = data.size
-        val prefix = DoubleArray(n + 1)
-        for (i in 0 until n) {
-            prefix[i + 1] = prefix[i] + data[i]
+    private fun movingAverage(src: DoubleArray, windowSize: Int): DoubleArray {
+        val n = src.size
+        val dst = DoubleArray(n)
+        if (windowSize <= 1) {
+            System.arraycopy(src, 0, dst, 0, n)
+            return dst
         }
-        val out = DoubleArray(n)
-        val halfW = windowSize / 2
-        for (i in 0 until n) {
-            val start = (i - halfW).coerceAtLeast(0)
-            val end = (i + halfW + 1).coerceAtMost(n)
-            out[i] = (prefix[end] - prefix[start]) / (end - start)
+
+        val half = windowSize / 2
+        var currentSum = 0.0
+
+        // 初始前缀和
+        val initEnd = half.coerceAtMost(n - 1)
+        for (i in 0..initEnd) {
+            currentSum += src[i]
         }
-        return out
+
+        for (i in 0 until n) {
+            val addIdx = i + half
+            if (addIdx < n) {
+                currentSum += src[addIdx]
+            }
+            val removeIdx = i - half - 1
+            if (removeIdx >= 0) {
+                currentSum -= src[removeIdx]
+            }
+
+            val start = (i - half).coerceAtLeast(0)
+            val end = (i + half).coerceAtMost(n - 1)
+            val count = end - start + 1
+            dst[i] = currentSum / count
+        }
+        return dst
     }
 
     private fun findLocalMaxIndex(signal: DoubleArray, start: Int, end: Int): Int? {

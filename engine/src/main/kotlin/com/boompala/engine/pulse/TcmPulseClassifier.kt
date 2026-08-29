@@ -1,21 +1,16 @@
 package com.boompala.engine.pulse
 
+import java.time.LocalTime
+
 /**
- * 中医脉象辨证分类决策树引擎。
- * 结合心率、节律规整度、波形指标 (h1, h2, h3, K值) 与时辰子午流注，输出权威诊断与调摄报告。
+ * 中医脉象辨证分类器（依据位、数、形、势四诊要素与子午流注时辰归经）。
+ * 基于心率（数/迟）、RMSSD / 幅值（滑/弦/洪/细）、规整度 / pNN50（结代）与波形系数（沉/浮/濡/缓）综合裁决。
  */
 object TcmPulseClassifier {
 
-    /**
-     * 对脉搏指标执行中医辨证分类并打包综合结果。
-     *
-     * @param metrics 物理与波形特征指标
-     * @param hour24 当前测量发生时的系统 24 小时制小时（0..23），用于推导子午流注经络
-     * @param timestampMillis 测量时间戳
-     */
     fun classify(
         metrics: PulseFeatureMetrics,
-        hour24: Int,
+        hour24: Int = LocalTime.now().hour,
         timestampMillis: Long = System.currentTimeMillis(),
     ): PulseDiagnosisResult {
         val category = determineCategory(metrics)
@@ -61,26 +56,44 @@ object TcmPulseClassifier {
         }
 
         // 4. 滑脉判定：副交感活性旺盛、微循环充盈流利、RMSSD 充沛 (>= 42ms) 或 h3Ratio 灵动跳跃
-        if ((metrics.rmssdMs >= 42.0 && metrics.heartRateBpm in 66.0..92.0) ||
+        if ((metrics.rmssdMs >= 42.0 && metrics.heartRateBpm in 66.0..95.0) ||
             (metrics.isRawPpg && metrics.h3Ratio >= 0.52 && metrics.h2Ratio <= 0.44)
         ) {
             return PulseCategory.HUA
         }
 
-        // 5. 细脉 / 濡脉判定：气血偏亏或湿困于表
-        if (metrics.kValue <= 0.28 && metrics.heartRateBpm < 68.0) {
+        // 5. 浮脉判定：举之有余，升支迅捷幅值充盈 (75~95 BPM)
+        if ((metrics.rmssdMs in 28.0..42.0 && metrics.heartRateBpm in 75.0..95.0 && metrics.kValue in 0.34..0.40) ||
+            (metrics.isRawPpg && metrics.h1 >= 0.90 && metrics.h2Ratio <= 0.40 && metrics.heartRateBpm in 72.0..95.0)
+        ) {
+            return PulseCategory.FU
+        }
+
+        // 6. 细脉判定：微细如发丝
+        if (metrics.kValue <= 0.28 && metrics.heartRateBpm < 68.0 && metrics.rmssdMs < 20.0) {
             return PulseCategory.XI
         }
-        if (metrics.kValue <= 0.32 && metrics.h2Ratio <= 0.36 && metrics.heartRateBpm < 75.0) {
+
+        // 7. 沉脉判定：轻取不应，脉位深伏沉稳 (58~70 BPM，K 值低沉)
+        if ((metrics.kValue in 0.24..0.30 && metrics.heartRateBpm in 58.0..70.0 && metrics.rmssdMs in 18.0..28.0 && metrics.h2Ratio >= 0.36) ||
+            (metrics.isRawPpg && metrics.kValue in 0.22..0.29 && metrics.h2Ratio <= 0.38)
+        ) {
+            return PulseCategory.CHEN
+        }
+
+        // 8. 濡脉判定：气血偏亏，浮而细软 (h2Ratio <= 0.35 浮软)
+        if ((metrics.kValue <= 0.32 && metrics.h2Ratio <= 0.35 && metrics.heartRateBpm < 75.0) ||
+            (metrics.rmssdMs in 18.0..28.0 && metrics.heartRateBpm in 68.0..75.0 && metrics.kValue <= 0.32)
+        ) {
             return PulseCategory.RU
         }
 
-        // 6. 缓脉：脉率在 58~68 之间，脉体和缓
+        // 9. 缓脉：脉率在 58~68 之间，脉体和缓
         if (metrics.heartRateBpm in 58.0..68.0 && metrics.rmssdMs in 22.0..42.0) {
             return PulseCategory.HUAN
         }
 
-        // 7. 平脉：形态适中稳健，脏腑冲和
+        // 10. 平脉：形态适中稳健，脏腑冲和
         return PulseCategory.PING
     }
 }

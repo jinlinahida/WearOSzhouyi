@@ -246,23 +246,62 @@ fun PulseMeasureScreen(
                 }
 
                 is PulseSensorState.NotWorn -> {
-                    // 未佩戴或脱离手腕拦截提示
+                    // 未佩戴或脱离手腕拦截提示（含重试与返回操作闭环）
+                    val scrollState = rememberScrollState()
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.padding(16.dp),
+                        verticalArrangement = Arrangement.Center,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .verticalScroll(scrollState)
+                            .padding(horizontal = 16.dp, vertical = 20.dp),
                     ) {
                         Text(
                             text = "未贴紧手腕",
                             style = MaterialTheme.typography.titleMedium,
                             color = Color(0xFFE0A96D),
+                            textAlign = TextAlign.Center,
                         )
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(6.dp))
                         Text(
                             text = "请将手表贴紧手腕内侧动脉处\n感知脉搏后自动开始",
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             textAlign = TextAlign.Center,
                         )
+                        Spacer(modifier = Modifier.height(12.dp))
+                        val retryNotWornPress = remember { MutableInteractionSource() }
+                        BoompalaCardButton(
+                            onClick = {
+                                restartKey++
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wearPressFeedback(
+                                    interactionSource = retryNotWornPress,
+                                    hapticEnabled = hapticEnabled,
+                                    intensity = hapticIntensity,
+                                ),
+                            interactionSource = retryNotWornPress,
+                        ) {
+                            Text("重新把脉")
+                        }
+                        Spacer(modifier = Modifier.height(6.dp))
+                        val backPress = remember { MutableInteractionSource() }
+                        BoompalaCardButton(
+                            onClick = onBack,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wearPressFeedback(
+                                    interactionSource = backPress,
+                                    hapticEnabled = hapticEnabled,
+                                    intensity = hapticIntensity,
+                                ),
+                            interactionSource = backPress,
+                            colors = BoompalaButtonDefaults.outlinedButtonColors(),
+                        ) {
+                            Text("返回")
+                        }
                     }
                 }
 
@@ -339,28 +378,37 @@ fun PulseMeasureScreen(
                 }
 
                 is PulseSensorState.Error -> {
-                    // 异常重试
+                    val isTimeout = currentState.reason == "wear_timeout"
+                    val title = if (isTimeout) "感应超时" else "传感器未就绪"
+                    val desc = if (isTimeout) {
+                        "未检测到手腕脉搏，请佩戴紧实后重试"
+                    } else {
+                        "未能启动手表传感器，请重试"
+                    }
+
+                    val scrollState = rememberScrollState()
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
+                            .verticalScroll(scrollState)
                             .padding(horizontal = 16.dp, vertical = 20.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center,
                     ) {
                         Text(
-                            text = "传感器未就绪",
+                            text = title,
                             style = MaterialTheme.typography.titleSmall,
                             color = MaterialTheme.colorScheme.primary,
                             textAlign = TextAlign.Center,
                         )
                         Spacer(modifier = Modifier.height(6.dp))
                         Text(
-                            text = "请佩戴好手表并保持静止",
+                            text = desc,
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             textAlign = TextAlign.Center,
                         )
-                        Spacer(modifier = Modifier.height(14.dp))
+                        Spacer(modifier = Modifier.height(12.dp))
                         val errorRetryPress = remember { MutableInteractionSource() }
                         BoompalaCardButton(
                             onClick = {
@@ -376,6 +424,22 @@ fun PulseMeasureScreen(
                             interactionSource = errorRetryPress,
                         ) {
                             Text("重新把脉")
+                        }
+                        Spacer(modifier = Modifier.height(6.dp))
+                        val errorBackPress = remember { MutableInteractionSource() }
+                        BoompalaCardButton(
+                            onClick = onBack,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wearPressFeedback(
+                                    interactionSource = errorBackPress,
+                                    hapticEnabled = hapticEnabled,
+                                    intensity = hapticIntensity,
+                                ),
+                            interactionSource = errorBackPress,
+                            colors = BoompalaButtonDefaults.outlinedButtonColors(),
+                        ) {
+                            Text("返回")
                         }
                     }
                 }

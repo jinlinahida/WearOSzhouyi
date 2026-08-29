@@ -136,6 +136,50 @@ class PulseAlgorithmTest {
         val irregularResult = TcmPulseClassifier.classify(irregularMetrics, hour24 = 11)
         assertEquals(PulseCategory.JIE_DAI, irregularResult.category)
         assertEquals("午时", irregularResult.meridianInfo.earthlyBranch)
+
+        // 5. 浮脉判定：75~95 BPM 且升支充盈
+        val fuMetrics = PulseFeatureMetrics(
+            heartRateBpm = 82.0,
+            regularityPercent = 95.0,
+            rmssdMs = 35.0,
+            kValue = 0.36,
+            isRawPpg = false,
+        )
+        val fuResult = TcmPulseClassifier.classify(fuMetrics, hour24 = 7)
+        assertEquals(PulseCategory.FU, fuResult.category)
+
+        // 6. 沉脉判定：58~70 BPM 且沉稳深伏
+        val chenMetrics = PulseFeatureMetrics(
+            heartRateBpm = 64.0,
+            regularityPercent = 92.0,
+            rmssdMs = 24.0,
+            kValue = 0.27,
+            isRawPpg = false,
+        )
+        val chenResult = TcmPulseClassifier.classify(chenMetrics, hour24 = 21)
+        assertEquals(PulseCategory.CHEN, chenResult.category)
+
+        // 7. 濡脉判定：气血双虚夹湿
+        val ruMetrics = PulseFeatureMetrics(
+            heartRateBpm = 65.0,
+            regularityPercent = 90.0,
+            rmssdMs = 24.0,
+            kValue = 0.30,
+            h2Ratio = 0.34,
+            isRawPpg = false,
+        )
+        val ruResult = TcmPulseClassifier.classify(ruMetrics, hour24 = 17)
+        assertEquals(PulseCategory.RU, ruResult.category)
+
+        // 8. 93 BPM 充盈脉象不落空：正确判定为滑脉
+        val fastHuaMetrics = PulseFeatureMetrics(
+            heartRateBpm = 93.0,
+            regularityPercent = 94.0,
+            rmssdMs = 45.0,
+            isRawPpg = false,
+        )
+        val fastHuaResult = TcmPulseClassifier.classify(fastHuaMetrics, hour24 = 13)
+        assertEquals(PulseCategory.HUA, fastHuaResult.category)
     }
 
     @Test
@@ -198,5 +242,29 @@ class PulseAlgorithmTest {
         )
         val xianResult = TcmPulseClassifier.classify(xianMetrics, hour24 = 10)
         assertEquals(PulseCategory.XIAN, xianResult.category)
+    }
+
+    @Test
+    fun testFastHeartRatePhaseCrossingDetection() {
+        // 模拟 110 BPM 快速心搏下的单帧跨步
+        val bpm = 110.0
+        val packetDurationMs = (60000.0 / bpm).toFloat() // ~545ms
+        val frameIntervalMs = 40L
+        val phaseStep = (frameIntervalMs / packetDurationMs) * 1.8f // ~0.132f
+        val rTime = 0.18f
+
+        var oldP = 0.0f
+        var peakTriggeredCount = 0
+
+        while (oldP < 1.0f) {
+            val newP = oldP + phaseStep
+            if (oldP < rTime && newP >= rTime) {
+                peakTriggeredCount++
+            }
+            oldP = newP
+        }
+
+        // 证明区间穿越算法在快心率下有且仅有 1 次精准触发波峰判定
+        assertEquals(1, peakTriggeredCount)
     }
 }

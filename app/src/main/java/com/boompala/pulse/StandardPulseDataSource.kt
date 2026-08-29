@@ -25,7 +25,7 @@ import kotlin.math.sin
  * 通用 Wear OS 手表把脉数据源。
  * 纯粹由硬件 TYPE_HEART_BEAT 逐搏事件与纳秒时钟物理驱动波形走带，
  * 结合 Task Force HRV 时域标准提取位、数、形、势，
- * 具备离腕检测硬拦截、波形逐跳动态生理形态调制与 20s 覆盖率/置信度质检重测机制。
+ * 具备离腕检测硬拦截与 15s 脱腕超时保护、波形逐跳动态生理形态调制与 20s 覆盖率/置信度质检重测机制。
  */
 class StandardPulseDataSource(
     private val context: Context,
@@ -127,10 +127,19 @@ class StandardPulseDataSource(
 
             var elapsedMs = 0L
             var initialGraceElapsedMs = 0L
+            var notWornDurationMs = 0L
 
             while (isActive && elapsedMs < totalMillis) {
-                // 1. 离腕硬拦截
+                // 1. 离腕硬拦截与脱腕超时保护
                 if (isOffBody) {
+                    notWornDurationMs += frameIntervalMs
+                    if (notWornDurationMs >= 15000L) {
+                        _state.value = PulseSensorState.Error(
+                            reason = "wear_timeout",
+                            canFallback = false,
+                        )
+                        break
+                    }
                     _state.value = PulseSensorState.NotWorn
                     delay(frameIntervalMs)
                     continue
@@ -139,6 +148,14 @@ class StandardPulseDataSource(
                 // 2. 初始寻脉阶段：若前 4 秒未收到任何真实脉搏
                 if (beatTimestampsNanos.isEmpty() && bpmRecords.isEmpty()) {
                     initialGraceElapsedMs += frameIntervalMs
+                    notWornDurationMs += frameIntervalMs
+                    if (notWornDurationMs >= 15000L) {
+                        _state.value = PulseSensorState.Error(
+                            reason = "wear_timeout",
+                            canFallback = false,
+                        )
+                        break
+                    }
                     if (initialGraceElapsedMs > 4000L) {
                         _state.value = PulseSensorState.NotWorn
                     } else {
@@ -147,6 +164,9 @@ class StandardPulseDataSource(
                     delay(frameIntervalMs)
                     continue
                 }
+
+                // 恢复接触或已感应到脉搏，重置未佩戴计时
+                notWornDurationMs = 0L
 
                 // 3. 正常测量走带
                 elapsedMs += frameIntervalMs
@@ -158,31 +178,35 @@ class StandardPulseDataSource(
                 var isPeakNow = false
 
                 if (pulsePacketPhase < 1.0f) {
-                    val p = pulsePacketPhase
+                    val oldP = pulsePacketPhase
                     val rTime = activeRiseTime
                     val peakH = activePeakHeight
                     val notchD = activeNotchDepth
                     val dicroH = activeDicroticHeight
 
-                    // 动态生理波包插值计算（每个脉冲形态独一无二）
+                    // 动态生理波包插值计算
                     sampleValue = when {
-                        p < rTime -> baseLine + (p / rTime) * (peakH - baseLine) // 主波升支
-                        p < (rTime + 0.22f) -> peakH - ((p - rTime) / 0.22f) * (peakH - notchD) // 降中峡
-                        p < (rTime + 0.42f) -> notchD + ((p - rTime - 0.22f) / 0.20f) * (dicroH - notchD) // 重搏波
+                        oldP < rTime -> baseLine + (oldP / rTime) * (peakH - baseLine) // 主波升支
+                        oldP < (rTime + 0.22f) -> peakH - ((oldP - rTime) / 0.22f) * (peakH - notchD) // 降中峡
+                        oldP < (rTime + 0.42f) -> notchD + ((oldP - rTime - 0.22f) / 0.20f) * (dicroH - notchD) // 重搏波
                         else -> {
-                            val remainFraction = ((p - rTime - 0.42f) / (1.0f - rTime - 0.42f).coerceAtLeast(0.1f)).coerceIn(0f, 1f)
+                            val remainFraction = ((oldP - rTime - 0.42f) / (1.0f - rTime - 0.42f).coerceAtLeast(0.1f)).coerceIn(0f, 1f)
                             dicroH - remainFraction * (dicroH - baseLine) // 舒张末期回落
                         }
                     }.coerceIn(0.15f, 0.98f)
 
-                    if (p in (rTime * 0.75f)..(rTime * 1.25f)) {
-                        isPeakNow = true
-                    }
-
                     // 波包展开速率 (心率越快，单个波包展开越迅速)
                     val bpm = currentInstantBpm ?: 72.0
                     val packetDurationMs = (60000.0 / bpm).toFloat().coerceIn(350f, 1200f)
-                    pulsePacketPhase += (frameIntervalMs / packetDurationMs) * 1.8f
+                    val phaseStep = (frameIntervalMs / packetDurationMs) * 1.8f
+                    val newP = oldP + phaseStep
+
+                    // 区间穿越判定：精准覆盖波峰顶点时刻，无论心率多快绝不跳步丢失微震
+                    if (oldP < rTime && newP >= rTime) {
+                        isPeakNow = true
+                    }
+
+                    pulsePacketPhase = newP
                 }
 
                 // 移位缓冲区
@@ -201,27 +225,29 @@ class StandardPulseDataSource(
                 delay(frameIntervalMs)
             }
 
-            // 采样结束，执行质检与辨证
-            _state.value = PulseSensorState.Analyzing
-            delay(400) // 视觉过渡
+            // 采样结束，执行质检与辨证 (如果是因为超时跳出则保持 Error 状态)
+            if (_state.value !is PulseSensorState.Error) {
+                _state.value = PulseSensorState.Analyzing
+                delay(400) // 视觉过渡
 
-            val metrics = PulseFeatureExtractor.extractFromBeatSeries(
-                beatTimestamps = beatTimestampsNanos.toList(),
-                bpmRecords = bpmRecords.toList(),
-                accuracyRecords = accuracyRecords.toList(),
-                durationSeconds = durationSeconds,
-            )
+                val metrics = PulseFeatureExtractor.extractFromBeatSeries(
+                    beatTimestamps = beatTimestampsNanos.toList(),
+                    bpmRecords = bpmRecords.toList(),
+                    accuracyRecords = accuracyRecords.toList(),
+                    durationSeconds = durationSeconds,
+                )
 
-            if (!metrics.quality.isReliable) {
-                _state.value = PulseSensorState.QualityFailed(
-                    reason = metrics.quality.failureReason ?: "有效脉搏信号不足，请保持手腕静止",
-                )
-            } else {
-                val result = TcmPulseClassifier.classify(
-                    metrics = metrics,
-                    hour24 = LocalTime.now().hour,
-                )
-                _state.value = PulseSensorState.Completed(result)
+                if (!metrics.quality.isReliable) {
+                    _state.value = PulseSensorState.QualityFailed(
+                        reason = metrics.quality.failureReason ?: "有效脉搏信号不足，请保持手腕静止",
+                    )
+                } else {
+                    val result = TcmPulseClassifier.classify(
+                        metrics = metrics,
+                        hour24 = LocalTime.now().hour,
+                    )
+                    _state.value = PulseSensorState.Completed(result)
+                }
             }
         }
     }
