@@ -23,14 +23,16 @@ import kotlin.math.sin
 
 /**
  * 通用 Wear OS 手表把脉数据源。
- * 纯粹由硬件传感器脉搏事件物理驱动波形走带，结合 Task Force HRV 时域标准提取位、数、形、势，
- * 具备离腕检测硬拦截、波形逐跳动态生理形态调制（消除千篇一律的固定模板）与 20s 覆盖率/置信度质检重测机制。
+ * 纯粹由硬件 TYPE_HEART_BEAT 逐搏事件与纳秒时钟物理驱动波形走带，
+ * 结合 Task Force HRV 时域标准提取位、数、形、势，
+ * 具备离腕检测硬拦截、波形逐跳动态生理形态调制与 20s 覆盖率/置信度质检重测机制。
  */
 class StandardPulseDataSource(
     private val context: Context,
 ) : PulseSensorDataSource, SensorEventListener {
 
     private val sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as? SensorManager
+    private val heartBeatSensor = sensorManager?.getDefaultSensor(Sensor.TYPE_HEART_BEAT)
     private val heartRateSensor = sensorManager?.getDefaultSensor(Sensor.TYPE_HEART_RATE)
     private val offBodySensor = sensorManager?.getDefaultSensor(Sensor.TYPE_LOW_LATENCY_OFFBODY_DETECT)
 
@@ -41,16 +43,13 @@ class StandardPulseDataSource(
 
     private var job: Job? = null
 
-    // 采样数据收集器
-    private val beatTimestampsMs = mutableListOf<Long>()
+    // 硬件传感器数据采集器（使用硬件纳秒时钟）
+    private val beatTimestampsNanos = mutableListOf<Long>()
     private val bpmRecords = mutableListOf<Double>()
     private val accuracyRecords = mutableListOf<Int>()
 
     @Volatile
     private var isOffBody: Boolean = false
-
-    @Volatile
-    private var lastBeatTimeMs: Long = 0L
 
     @Volatile
     private var currentInstantBpm: Double? = null
@@ -75,11 +74,10 @@ class StandardPulseDataSource(
     override fun start(scope: CoroutineScope, durationSeconds: Int) {
         stop()
         _state.value = PulseSensorState.Preparing
-        beatTimestampsMs.clear()
+        beatTimestampsNanos.clear()
         bpmRecords.clear()
         accuracyRecords.clear()
         isOffBody = false
-        lastBeatTimeMs = 0L
         currentInstantBpm = null
         pulsePacketPhase = 1.0f
         activePeakHeight = 0.92f
@@ -94,6 +92,13 @@ class StandardPulseDataSource(
 
         if (hasPermission && sensorManager != null) {
             try {
+                if (heartBeatSensor != null) {
+                    sensorManager.registerListener(
+                        this,
+                        heartBeatSensor,
+                        SensorManager.SENSOR_DELAY_FASTEST,
+                    )
+                }
                 if (heartRateSensor != null) {
                     sensorManager.registerListener(
                         this,
@@ -132,7 +137,7 @@ class StandardPulseDataSource(
                 }
 
                 // 2. 初始寻脉阶段：若前 4 秒未收到任何真实脉搏
-                if (beatTimestampsMs.isEmpty()) {
+                if (beatTimestampsNanos.isEmpty() && bpmRecords.isEmpty()) {
                     initialGraceElapsedMs += frameIntervalMs
                     if (initialGraceElapsedMs > 4000L) {
                         _state.value = PulseSensorState.NotWorn
@@ -201,7 +206,7 @@ class StandardPulseDataSource(
             delay(400) // 视觉过渡
 
             val metrics = PulseFeatureExtractor.extractFromBeatSeries(
-                beatTimestampsMs = beatTimestampsMs.toList(),
+                beatTimestamps = beatTimestampsNanos.toList(),
                 bpmRecords = bpmRecords.toList(),
                 accuracyRecords = accuracyRecords.toList(),
                 durationSeconds = durationSeconds,
@@ -238,36 +243,50 @@ class StandardPulseDataSource(
                 val value = event.values.firstOrNull() ?: 1.0f
                 isOffBody = (value == 0.0f)
             }
+            Sensor.TYPE_HEART_BEAT -> {
+                val confidence = event.values.firstOrNull() ?: 1.0f
+                if (confidence >= 0.5f) {
+                    val timestampNanos = event.timestamp
+                    beatTimestampsNanos.add(timestampNanos)
+                    triggerBeatAnimation(timestampNanos)
+                }
+            }
             Sensor.TYPE_HEART_RATE -> {
                 val bpm = event.values.firstOrNull()?.toDouble() ?: 0.0
                 val accuracy = event.accuracy
 
                 if (accuracy <= SensorManager.SENSOR_STATUS_NO_CONTACT || bpm <= 30.0) {
-                    // 无有效接触
                     return
                 }
 
-                val nowMs = System.currentTimeMillis()
-
-                // 每一跳动态注入人体生理呼吸变异 (RSA) 与微血管阻力抖动
-                val rsaCycle = sin(nowMs * 0.0018).toFloat() // ~0.25Hz 呼吸微律动
-                val jitter = ((nowMs % 17) - 8) * 0.008f // 微血管阻力微颤
-
-                activePeakHeight = (0.88f + (0.08f * rsaCycle) + jitter).coerceIn(0.78f, 0.98f)
-                activeNotchDepth = (0.36f + (0.05f * rsaCycle) - jitter * 0.5f).coerceIn(0.26f, 0.44f)
-                activeDicroticHeight = (activeNotchDepth + 0.18f + (0.04f * rsaCycle)).coerceIn(activeNotchDepth + 0.08f, 0.68f)
-                activeRiseTime = if (bpm > 85.0) 0.18f else if (bpm < 60.0) 0.25f else 0.22f
-
-                // 触发物理波包
-                pulsePacketPhase = 0.0f
                 currentInstantBpm = bpm
-                lastBeatTimeMs = nowMs
-
-                beatTimestampsMs.add(nowMs)
                 bpmRecords.add(bpm)
                 accuracyRecords.add(accuracy)
+
+                // 兼容极其老旧无 TYPE_HEART_BEAT 硬件传感器之场景
+                if (heartBeatSensor == null) {
+                    val timestampNanos = event.timestamp
+                    beatTimestampsNanos.add(timestampNanos)
+                    triggerBeatAnimation(timestampNanos)
+                }
             }
         }
+    }
+
+    private fun triggerBeatAnimation(timestampNanos: Long) {
+        val bpm = currentInstantBpm ?: 72.0
+        val timestampMs = timestampNanos / 1_000_000L
+
+        // 每一跳动态注入人体生理呼吸变异 (RSA) 与微血管阻力抖动
+        val rsaCycle = sin(timestampMs * 0.0018).toFloat() // ~0.25Hz 呼吸微律动
+        val jitter = ((timestampMs % 17) - 8) * 0.008f // 微血管阻力微颤
+
+        activePeakHeight = (0.88f + (0.08f * rsaCycle) + jitter).coerceIn(0.78f, 0.98f)
+        activeNotchDepth = (0.36f + (0.05f * rsaCycle) - jitter * 0.5f).coerceIn(0.26f, 0.44f)
+        activeDicroticHeight = (activeNotchDepth + 0.18f + (0.04f * rsaCycle)).coerceIn(activeNotchDepth + 0.08f, 0.68f)
+        activeRiseTime = if (bpm > 85.0) 0.18f else if (bpm < 60.0) 0.25f else 0.22f
+
+        pulsePacketPhase = 0.0f
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {

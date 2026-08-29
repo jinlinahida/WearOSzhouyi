@@ -53,6 +53,20 @@ class PulseAlgorithmTest {
         val metrics = PulseFeatureExtractor.extract(signal, peaks, sampleRate, isRawPpg = true)
         assertTrue("计算心率应接近 75 BPM，实际: ${metrics.heartRateBpm}", metrics.heartRateBpm in 70.0..80.0)
         assertTrue("节律应高度规整 (>90%)，实际: ${metrics.regularityPercent}", metrics.regularityPercent >= 90.0)
+        assertTrue("数据应判定为可靠", metrics.quality.isReliable)
+    }
+
+    @Test
+    fun testExtractWithInsufficientPeaksFailsSafely() {
+        // 当波峰不足（如手表面朝空气）时，严禁输出假平脉
+        val emptyMetrics = PulseFeatureExtractor.extract(
+            signal = DoubleArray(100) { 0.0 },
+            peaks = listOf(10),
+            sampleRateHz = 25.0,
+            isRawPpg = true,
+        )
+        assertTrue("波峰不足应判定为不可靠", !emptyMetrics.quality.isReliable)
+        assertNotNull("应具备明确失败原因", emptyMetrics.quality.failureReason)
     }
 
     @Test
@@ -126,20 +140,20 @@ class PulseAlgorithmTest {
 
     @Test
     fun testExtractFromBeatSeriesAndQualityEvaluation() {
-        // 1. 模拟 20 秒内正常的 24 次心搏 (平均间期 800ms 对应 75 BPM)
+        // 1. 模拟 20 秒内硬件 TYPE_HEART_BEAT 纳秒时间戳的 24 次心搏 (平均间期 800ms 对应 75 BPM)
         val normalTimestamps = mutableListOf<Long>()
         val normalBpms = mutableListOf<Double>()
         val normalAccuracies = mutableListOf<Int>()
-        var curTime = 1000L
+        var curNanos = 1_000_000_000L
         for (i in 0 until 24) {
-            normalTimestamps.add(curTime)
+            normalTimestamps.add(curNanos)
             normalBpms.add(75.0 + (i % 3))
             normalAccuracies.add(3)
-            curTime += 800L
+            curNanos += 800_000_000L // 800ms in nanos
         }
 
         val goodMetrics = PulseFeatureExtractor.extractFromBeatSeries(
-            beatTimestampsMs = normalTimestamps,
+            beatTimestamps = normalTimestamps,
             bpmRecords = normalBpms,
             accuracyRecords = normalAccuracies,
             durationSeconds = 20,
@@ -149,12 +163,12 @@ class PulseAlgorithmTest {
         assertTrue("心率计算应在 70-80 之间，实际: ${goodMetrics.heartRateBpm}", goodMetrics.heartRateBpm in 70.0..80.0)
 
         // 2. 模拟样本不足/中途脱腕 (仅有 4 次心搏)
-        val sparseTimestamps = listOf(1000L, 1800L, 2600L, 3400L)
+        val sparseTimestamps = listOf(1_000_000_000L, 1_800_000_000L, 2_600_000_000L, 3_400_000_000L)
         val sparseBpms = listOf(75.0, 75.0, 75.0, 75.0)
         val sparseAccuracies = listOf(3, 3, 3, 3)
 
         val badMetrics = PulseFeatureExtractor.extractFromBeatSeries(
-            beatTimestampsMs = sparseTimestamps,
+            beatTimestamps = sparseTimestamps,
             bpmRecords = sparseBpms,
             accuracyRecords = sparseAccuracies,
             durationSeconds = 20,

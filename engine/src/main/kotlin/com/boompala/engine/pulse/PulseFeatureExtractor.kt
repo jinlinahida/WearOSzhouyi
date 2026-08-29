@@ -5,7 +5,7 @@ import kotlin.math.sqrt
 
 /**
  * 脉图特征参数提取器（依据经典中医脉图客观化与生物医学工程标准）。
- * 计算心率、节律规整度、h1 (主波幅值)、h2 (降中切迹)、h3 (重搏波)、K 值 (面积系数)。
+ * 计算心率、节律规整度、RMSSD、pNN50、h1 (主波幅值)、h2 (降中切迹)、h3 (重搏波)、K 值 (面积系数) 与数据置信度。
  */
 object PulseFeatureExtractor {
 
@@ -19,17 +19,26 @@ object PulseFeatureExtractor {
         isRawPpg: Boolean = true,
     ): PulseFeatureMetrics {
         if (peaks.size < 2) {
-            // 降级保护默认值
+            // 坚决拒绝输出虚假平脉，标记不可靠
             return PulseFeatureMetrics(
-                heartRateBpm = 72.0,
-                regularityPercent = 95.0,
-                h1 = 1.0,
-                h2 = 0.38,
-                h3 = 0.50,
-                kValue = 0.35,
-                h3Ratio = 0.50,
-                h2Ratio = 0.38,
-                isRawPpg = false,
+                heartRateBpm = 0.0,
+                regularityPercent = 0.0,
+                rmssdMs = 0.0,
+                pnn50Percent = 0.0,
+                h1 = 0.0,
+                h2 = 0.0,
+                h3 = 0.0,
+                kValue = 0.0,
+                h3Ratio = 0.0,
+                h2Ratio = 0.0,
+                isRawPpg = isRawPpg,
+                quality = PulseDataQuality(
+                    validBeatCount = peaks.size,
+                    coveragePercent = 0.0,
+                    meanConfidence = 0.0,
+                    isReliable = false,
+                    failureReason = "有效脉搏波峰不足，无法建立脉图",
+                ),
             )
         }
 
@@ -54,7 +63,31 @@ object PulseFeatureExtractor {
         // CV 越小越规整，CV <= 0.05 对应 >95% 规整度
         val regularity = (100.0 - (cv * 150.0)).coerceIn(40.0, 100.0)
 
-        // 3. 周期切分与波形归一化重叠平均（Ensemble Average）
+        // 3. 计算真实的 RMSSD 与 pNN50
+        var sumSquaredDiffs = 0.0
+        var nn50Count = 0
+        val diffCount = validIbis.size - 1
+        if (diffCount > 0) {
+            for (i in 0 until diffCount) {
+                val diffMs = kotlin.math.abs(validIbis[i + 1] - validIbis[i]) * 1000.0
+                sumSquaredDiffs += diffMs * diffMs
+                if (diffMs > 50.0) {
+                    nn50Count++
+                }
+            }
+        }
+        val rmssd = if (diffCount > 0) {
+            sqrt(sumSquaredDiffs / diffCount).coerceIn(5.0, 150.0)
+        } else {
+            30.0
+        }
+        val pnn50 = if (diffCount > 0) {
+            (nn50Count.toDouble() / diffCount) * 100.0
+        } else {
+            0.0
+        }
+
+        // 4. 周期切分与波形归一化重叠平均（Ensemble Average）
         val cycleLength = (meanIbi * sampleRateHz).roundToInt().coerceAtLeast(10)
         val normalizedCycles = mutableListOf<DoubleArray>()
 
@@ -89,7 +122,7 @@ object PulseFeatureExtractor {
             generateDefaultWaveform()
         }
 
-        // 4. 从平均单周期波形中提取 h1, h2, h3 与 K 值
+        // 5. 从平均单周期波形中提取 h1, h2, h3 与 K 值
         // 主波峰（通常位于 10% ~ 35% 处）
         val h1 = 1.0
         val peakIndex = avgWaveform.indices.maxByOrNull { avgWaveform[it] } ?: 20
@@ -119,14 +152,14 @@ object PulseFeatureExtractor {
             h3 = maxDicrotic.coerceIn(h2, 0.90)
         }
 
-        // 5. 脉搏波面积波形系数 K 值（平均值占矩形面积比例）
+        // 6. 脉搏波面积波形系数 K 值（平均值占矩形面积比例）
         val kValue = avgWaveform.average().coerceIn(0.20, 0.60)
 
         return PulseFeatureMetrics(
             heartRateBpm = bpm,
             regularityPercent = regularity,
-            rmssdMs = 35.0,
-            pnn50Percent = 0.0,
+            rmssdMs = rmssd,
+            pnn50Percent = pnn50,
             h1 = h1,
             h2 = h2,
             h3 = h3,
@@ -146,13 +179,13 @@ object PulseFeatureExtractor {
     /**
      * 从 Wear OS 硬件传感器捕获的真实心搏时间戳与脉率序列中，计算医学级 HRV 时域指标、数据置信度与覆盖率。
      *
-     * @param beatTimestampsMs 各次心搏被传感器感知的毫秒时间戳
+     * @param beatTimestamps 各次心搏被硬件传感器感知的纳秒/毫秒时间戳
      * @param bpmRecords 每次心搏测得的瞬时心率
      * @param accuracyRecords 每次心搏的传感器置信度 (0..3)
      * @param durationSeconds 计划采样总时长 (默认 20s)
      */
     fun extractFromBeatSeries(
-        beatTimestampsMs: List<Long>,
+        beatTimestamps: List<Long>,
         bpmRecords: List<Double>,
         accuracyRecords: List<Int>,
         durationSeconds: Int = 20,
@@ -160,14 +193,14 @@ object PulseFeatureExtractor {
         val totalExpectedMillis = durationSeconds * 1000.0
 
         // 1. 基础采样数校验
-        if (beatTimestampsMs.size < 4 || bpmRecords.isEmpty()) {
+        if (beatTimestamps.size < 4) {
             return PulseFeatureMetrics(
                 heartRateBpm = 0.0,
                 regularityPercent = 0.0,
                 rmssdMs = 0.0,
                 pnn50Percent = 0.0,
                 quality = PulseDataQuality(
-                    validBeatCount = beatTimestampsMs.size,
+                    validBeatCount = beatTimestamps.size,
                     coveragePercent = 0.0,
                     meanConfidence = 0.0,
                     isReliable = false,
@@ -178,8 +211,14 @@ object PulseFeatureExtractor {
 
         // 2. 计算逐搏间期 IBI (Inter-Beat Intervals, 毫秒)
         val ibisMs = mutableListOf<Double>()
-        for (i in 0 until beatTimestampsMs.size - 1) {
-            val deltaMs = (beatTimestampsMs[i + 1] - beatTimestampsMs[i]).toDouble()
+        for (i in 0 until beatTimestamps.size - 1) {
+            val deltaRaw = beatTimestamps[i + 1] - beatTimestamps[i]
+            // 自适应纳秒与毫秒时间戳
+            val deltaMs = if (deltaRaw > 50_000_000L) {
+                deltaRaw / 1_000_000.0
+            } else {
+                deltaRaw.toDouble()
+            }
             // 过滤生理极限 300ms ~ 1800ms (对应 33 ~ 200 BPM)
             if (deltaMs in 300.0..1800.0) {
                 ibisMs.add(deltaMs)
@@ -196,7 +235,7 @@ object PulseFeatureExtractor {
             2.0
         }
 
-        // 3. 数据质控裁决 (覆盖率 >= 65% 且至少 10 次有效心跳且置信度 >= 1.0)
+        // 3. 数据质控裁决 (覆盖率 >= 60% 且至少 10 次有效心跳且置信度 >= 1.0)
         val isReliable = validBeatCount >= 10 && coveragePercent >= 60.0 && meanConfidence >= 1.0
         val failureReason = when {
             validBeatCount < 8 -> "气脉微弱，未充分贴紧手腕"
