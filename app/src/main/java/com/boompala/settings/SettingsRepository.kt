@@ -6,8 +6,10 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.boompala.engine.bazi.BaziGender
 import java.io.IOException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -42,6 +44,9 @@ class SettingsRepository(
                 homeOrder = parseHomeOrder(preferences[HOME_ORDER_KEY]),
                 hiddenHomeFeatures = parseHiddenFeatures(preferences[HIDDEN_HOME_FEATURES_KEY]),
                 hasCompletedOnboarding = preferences[ONBOARDING_COMPLETED_KEY] ?: false,
+                userBirthDate = preferences[USER_BIRTH_DATE_KEY],
+                userBirthHour = preferences[USER_BIRTH_HOUR_KEY]?.takeIf { it in 0..23 },
+                userGender = preferences[USER_GENDER_KEY].toEnumOrDefault(BaziGender.MALE),
             )
         }
 
@@ -58,6 +63,9 @@ class SettingsRepository(
                 homeOrder = parseHomeOrder(preferences[HOME_ORDER_KEY]),
                 hiddenHomeFeatures = parseHiddenFeatures(preferences[HIDDEN_HOME_FEATURES_KEY]),
                 hasCompletedOnboarding = preferences[ONBOARDING_COMPLETED_KEY] ?: false,
+                userBirthDate = preferences[USER_BIRTH_DATE_KEY],
+                userBirthHour = preferences[USER_BIRTH_HOUR_KEY]?.takeIf { it in 0..23 },
+                userGender = preferences[USER_GENDER_KEY].toEnumOrDefault(BaziGender.MALE),
             )
             val next = transform(current)
             preferences[SCREEN_MODE_KEY] = next.screenMode.name
@@ -70,6 +78,37 @@ class SettingsRepository(
             preferences[HOME_ORDER_KEY] = next.homeOrder.joinToString(",") { it.id }
             preferences[HIDDEN_HOME_FEATURES_KEY] = next.hiddenHomeFeatures.joinToString(",") { it.id }
             preferences[ONBOARDING_COMPLETED_KEY] = next.hasCompletedOnboarding
+            if (next.userBirthDate != null) {
+                preferences[USER_BIRTH_DATE_KEY] = next.userBirthDate
+            } else {
+                preferences.remove(USER_BIRTH_DATE_KEY)
+            }
+            if (next.userBirthHour != null) {
+                preferences[USER_BIRTH_HOUR_KEY] = next.userBirthHour
+            } else {
+                preferences.remove(USER_BIRTH_HOUR_KEY)
+            }
+            preferences[USER_GENDER_KEY] = next.userGender.name
+        }
+    }
+
+    suspend fun setUserBirth(birthDate: String?, birthHour: Int?, gender: BaziGender) {
+        update {
+            it.copy(
+                userBirthDate = birthDate,
+                userBirthHour = birthHour,
+                userGender = gender,
+            )
+        }
+    }
+
+    suspend fun clearUserBirth() {
+        update {
+            it.copy(
+                userBirthDate = null,
+                userBirthHour = null,
+                userGender = BaziGender.MALE,
+            )
         }
     }
 
@@ -152,6 +191,9 @@ class SettingsRepository(
         val HOME_ORDER_KEY = stringPreferencesKey("home_order")
         val HIDDEN_HOME_FEATURES_KEY = stringPreferencesKey("hidden_home_features")
         val ONBOARDING_COMPLETED_KEY = booleanPreferencesKey("onboarding_completed")
+        val USER_BIRTH_DATE_KEY = stringPreferencesKey("user_birth_date")
+        val USER_BIRTH_HOUR_KEY = intPreferencesKey("user_birth_hour")
+        val USER_GENDER_KEY = stringPreferencesKey("user_gender")
 
         inline fun <reified T : Enum<T>> String?.toEnumOrDefault(default: T): T =
             runCatching { enumValueOf<T>(this.orEmpty()) }.getOrDefault(default)

@@ -5,15 +5,30 @@
     <!-- Home Navigation & Feature Names -->
     <string name="home_feature_six_yao">六爻排盘</string>
     <string name="home_feature_mei_hua">时间起卦</string>
+    <string name="home_feature_destiny_chart">命盘计算</string>
     <string name="home_feature_tarot_one">单牌塔罗</string>
     <string name="home_feature_tarot_three">时间流三牌</string>
     <string name="home_feature_tarot_holy_triangle">圣三角牌阵</string>
     <string name="home_feature_daily_fortune">今日运势</string>
     <string name="home_feature_xiao_liu_ren">小六壬</string>
     <string name="home_feature_compass">罗盘</string>
+    <string name="home_feature_pulse">把脉</string>
     <string name="home_feature_archives">归档</string>
     <string name="home_feature_browse">浏览</string>
     <string name="home_feature_settings">设置</string>
+
+    <!-- Destiny Chart Strings -->
+    <string name="destiny_chart_title">命盘大厅</string>
+    <string name="destiny_chart_bazi">生辰八字</string>
+    <string name="destiny_chart_bazi_desc">四柱格局 · 藏干十神 · 十年大运</string>
+    <string name="destiny_chart_western">西方本命星盘</string>
+    <string name="destiny_chart_western_desc">太阳月亮上升 · 四象元素能量</string>
+    <string name="destiny_chart_numerology">生命灵数</string>
+    <string name="destiny_chart_numerology_desc">生命道路数 · 九宫连线天赋</string>
+    <string name="destiny_chart_bone_weight">袁天罡称骨</string>
+    <string name="destiny_chart_bone_weight_desc">四柱骨重 · 绝句断命歌诀</string>
+    <string name="destiny_chart_nine_star">九星气学</string>
+    <string name="destiny_chart_nine_star_desc">本命九星 · 守护五行 · 吉凶方位</string>
 
     <!-- Common Actions & Navigation -->
     <string name="action_back">返回</string>
@@ -33,18 +48,45 @@
 
     <!-- Settings Modules -->
     <string name="settings_title">设置</string>
+    <string name="settings_module_profile">我的档案</string>
+    <string name="settings_module_profile_desc">生辰八字与个人命盘</string>
     <string name="settings_module_appearance">外观与显示</string>
     <string name="settings_module_appearance_desc">屏幕形态、字阶与动效</string>
-    <string name="settings_module_language">语言 (Language)</string>
+    <string name="settings_module_language">语言</string>
     <string name="settings_module_language_desc">简体中文 / English</string>
     <string name="settings_module_home">首页管理</string>
     <string name="settings_module_home_desc">功能排序与显隐设置</string>
     <string name="settings_module_haptics">交互与触感</string>
     <string name="settings_module_haptics_desc">表冠旋转与振动反馈</string>
+    <string name="settings_module_bazi">生辰八字</string>
+    <string name="settings_module_bazi_desc">配置命盘用于专属运势与排盘</string>
     <string name="settings_module_data">数据与归档</string>
     <string name="settings_module_data_desc">记录统计与本地维护</string>
     <string name="settings_module_about">关于应用</string>
     <string name="settings_module_about_desc">版本、开发者与开源许可</string>
+
+    <!-- Settings Bazi / Profile Options -->
+    <string name="settings_bazi_title">我的档案</string>
+    <string name="settings_bazi_not_configured">未设置 · 点击配置</string>
+    <string name="settings_bazi_gender">造化性别</string>
+    <string name="settings_bazi_gender_male">乾造</string>
+    <string name="settings_bazi_gender_female">坤造</string>
+    <string name="settings_bazi_birth_date">出生公历</string>
+    <string name="settings_bazi_birth_year">年：%1$d</string>
+    <string name="settings_bazi_birth_month">月：%1$d</string>
+    <string name="settings_bazi_birth_day">日：%1$d</string>
+    <string name="settings_bazi_birth_hour">出生时辰</string>
+    <string name="settings_bazi_hour_unknown">时辰未知</string>
+    <string name="settings_bazi_save">保存档案</string>
+    <string name="settings_bazi_edit">修改生辰</string>
+    <string name="settings_bazi_clear">清除档案</string>
+    <string name="settings_bazi_clear_confirm_title">清除个人档案？</string>
+    <string name="settings_bazi_clear_confirm_desc">清除后，将恢复通识黄历运势与常规排盘。</string>
+    <string name="settings_bazi_preview_title">四柱排盘预览</string>
+    <string name="settings_bazi_pillar_year">年柱</string>
+    <string name="settings_bazi_pillar_month">月柱</string>
+    <string name="settings_bazi_pillar_day">日柱</string>
+    <string name="settings_bazi_pillar_hour">时柱</string>
 
     <!-- Settings Detail Options -->
     <string name="settings_screen_mode">屏幕模式</string>
@@ -59,9 +101,9 @@
     <string name="settings_rotary">表冠旋转滚动</string>
     <string name="settings_haptic">触感振动反馈</string>
     <string name="settings_haptic_intensity">震动强度</string>
-    <string name="settings_haptic_intensity_light">弱（轻柔）</string>
-    <string name="settings_haptic_intensity_standard">标准（扎实）</string>
-    <string name="settings_haptic_intensity_strong">强劲（有力）</string>
+    <string name="settings_haptic_intensity_light">轻柔</string>
+    <string name="settings_haptic_intensity_standard">标准</string>
+    <string name="settings_haptic_intensity_strong">强劲</string>
     <string name="settings_language_chinese">简体中文</string>
     <string name="settings_language_english">English</string>
     <string name="settings_home_fixed_hint">“设置”入口作为系统基础入口，始终固定显示。</string>
@@ -107,8 +149,8 @@
     <string name="archive_action_delete">删除归档</string>
     <string name="archive_tag_title">归档此次结果</string>
     <string name="archive_tag_summary_prefix">摘要：%1$s</string>
-    <string name="archive_tag_name_required">标记名称（必填）</string>
-    <string name="archive_tag_note_optional">备注（可选）</string>
+    <string name="archive_tag_name_required">标记名称</string>
+    <string name="archive_tag_note_optional">备注</string>
     <string name="archive_save_btn">保存归档</string>
     <string name="archive_edit_dialog_title">修改归档</string>
     <string name="archive_delete_dialog_title">确认删除？</string>

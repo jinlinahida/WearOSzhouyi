@@ -204,6 +204,11 @@ data class HexagramPattern(
         get() = linesFromBottom.joinToString(separator = "") { polarity ->
             if (polarity == YaoPolarity.YANG) "1" else "0"
         }
+
+    companion object {
+        fun fromCode(codeFromBottom: String): HexagramPattern =
+            HexagramPattern(codeFromBottom.map { if (it == '1') YaoPolarity.YANG else YaoPolarity.YIN })
+    }
 }
 
 data class Hexagram(

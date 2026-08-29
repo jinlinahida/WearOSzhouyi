@@ -205,6 +205,34 @@ internal object AppHaptics {
     }
 
     /**
+     * Level 4 · 脉冲微搏动：用于切脉时脉搏波峰微震反馈。
+     * - LIGHT: 12ms / 振幅 120
+     * - STANDARD: 18ms / 振幅 170
+     * - STRONG: 28ms / 振幅 220
+     */
+    fun pulseBeat(
+        context: android.content.Context,
+        intensity: HapticIntensity = HapticIntensity.STANDARD,
+        enabled: Boolean = true,
+    ) {
+        if (!enabled) return
+        val v = getVibrator(context) ?: return
+        if (!v.hasVibrator()) return
+
+        val (duration, amplitude) = when (intensity) {
+            HapticIntensity.LIGHT -> 12L to 120
+            HapticIntensity.STANDARD -> 18L to 170
+            HapticIntensity.STRONG -> 28L to 220
+        }
+        val effect = try {
+            android.os.VibrationEffect.createOneShot(duration, amplitude)
+        } catch (_: Throwable) {
+            return
+        }
+        vibrateEffect(v, effect)
+    }
+
+    /**
      * 设置项预览试听触感：直接执行对应 Level 1 点击。
      */
     fun preview(context: android.content.Context, intensity: HapticIntensity) {
@@ -234,6 +262,8 @@ internal fun AppScreen.hierarchyDepth(): Int = when (this) {
     AppScreen.TAROT_ONE_CARD,
     AppScreen.TAROT_THREE_CARD,
     AppScreen.TAROT_HOLY_TRIANGLE,
+    AppScreen.DESTINY_CHART_MENU,
+    AppScreen.PULSE_MEASURE,
     AppScreen.COMPASS,
     AppScreen.ARCHIVES,
     AppScreen.BROWSE,
@@ -242,11 +272,17 @@ internal fun AppScreen.hierarchyDepth(): Int = when (this) {
     // Level 2: Sub-browsers, results, tags, about
     AppScreen.RESULT,
     AppScreen.MEIHUA_RESULT,
+    AppScreen.PULSE_RESULT,
     AppScreen.ARCHIVE_DETAIL,
     AppScreen.ARCHIVE_TAG,
     AppScreen.HEXAGRAM_BROWSER,
     AppScreen.KNOWLEDGE_LIST,
     AppScreen.TAROT_BROWSER,
+    AppScreen.BAZI_DETAIL,
+    AppScreen.WESTERN_CHART_DETAIL,
+    AppScreen.NUMEROLOGY_DETAIL,
+    AppScreen.BONE_WEIGHT_DETAIL,
+    AppScreen.NINE_STAR_DETAIL,
     AppScreen.ABOUT -> 2
 
     // Level 3: Individual item detail pages

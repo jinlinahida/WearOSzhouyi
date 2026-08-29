@@ -21,9 +21,34 @@ class AppSettingsTest {
                 homeOrder = HomeFeature.DEFAULT_ORDER,
                 hiddenHomeFeatures = emptySet(),
                 hasCompletedOnboarding = false,
+                userBirthDate = null,
+                userBirthHour = null,
+                userGender = com.boompala.engine.bazi.BaziGender.MALE,
             ),
             AppSettings.DEFAULT,
         )
+    }
+
+    @Test
+    fun `bazi profile resolves when valid birth date is provided`() {
+        val unconfigured = AppSettings.DEFAULT
+        assertFalse(unconfigured.isBaziConfigured)
+        assertEquals(null, unconfigured.resolvedBaziProfile())
+
+        val configured = AppSettings.DEFAULT.copy(
+            userBirthDate = "1990-05-15",
+            userBirthHour = 14,
+            userGender = com.boompala.engine.bazi.BaziGender.MALE,
+        )
+        assertTrue(configured.isBaziConfigured)
+        val profile = configured.resolvedBaziProfile()
+        org.junit.Assert.assertNotNull(profile)
+        assertEquals("庚午", profile?.yearPillar?.ganzhi?.displayName)
+        assertEquals("庚辰", profile?.dayPillar?.ganzhi?.displayName)
+        assertEquals("癸未", profile?.hourPillar?.ganzhi?.displayName)
+
+        val invalidDate = AppSettings.DEFAULT.copy(userBirthDate = "invalid-date")
+        assertEquals(null, invalidDate.resolvedBaziProfile())
     }
 
     @Test

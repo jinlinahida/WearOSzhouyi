@@ -1,5 +1,10 @@
 package com.boompala.settings
 
+import com.boompala.engine.bazi.BaziEngine
+import com.boompala.engine.bazi.BaziGender
+import com.boompala.engine.bazi.BaziProfile
+import java.time.LocalDate
+
 enum class ScreenMode(
     val displayName: String,
 ) {
@@ -41,12 +46,14 @@ enum class HomeFeature(
 ) {
     SIX_YAO("six_yao", "六爻排盘", "Six Yao"),
     MEI_HUA("mei_hua", "时间起卦", "Mei Hua Time"),
+    DESTINY_CHART("destiny_chart", "命盘计算", "Destiny Charts"),
     TAROT_ONE("tarot_one", "单牌塔罗", "Tarot Single Card"),
     TAROT_THREE("tarot_three", "时间流三牌", "Tarot Time Flow"),
     TAROT_HOLY_TRIANGLE("tarot_holy_triangle", "圣三角牌阵", "Holy Triangle"),
     DAILY_FORTUNE("daily_fortune", "今日运势", "Daily Fortune"),
     XIAO_LIU_REN("xiao_liu_ren", "小六壬", "Xiao Liu Ren"),
     COMPASS("compass", "罗盘", "Compass"),
+    PULSE("pulse", "把脉", "Pulse Diagnosis"),
     ARCHIVES("archives", "归档", "Archives"),
     BROWSE("browse", "浏览", "Browse");
 
@@ -54,12 +61,14 @@ enum class HomeFeature(
         val DEFAULT_ORDER = listOf(
             SIX_YAO,
             MEI_HUA,
+            DESTINY_CHART,
             TAROT_ONE,
             TAROT_THREE,
             TAROT_HOLY_TRIANGLE,
             DAILY_FORTUNE,
             XIAO_LIU_REN,
             COMPASS,
+            PULSE,
             ARCHIVES,
             BROWSE,
         )
@@ -79,9 +88,27 @@ data class AppSettings(
     val homeOrder: List<HomeFeature> = HomeFeature.DEFAULT_ORDER,
     val hiddenHomeFeatures: Set<HomeFeature> = emptySet(),
     val hasCompletedOnboarding: Boolean = false,
+    val userBirthDate: String? = null,
+    val userBirthHour: Int? = null,
+    val userGender: BaziGender = BaziGender.MALE,
 ) {
     companion object {
         val DEFAULT = AppSettings()
+    }
+
+    val isBaziConfigured: Boolean
+        get() = !userBirthDate.isNullOrBlank()
+
+    fun resolvedBaziProfile(): BaziProfile? {
+        val dateStr = userBirthDate?.trim() ?: return null
+        val date = runCatching { LocalDate.parse(dateStr) }.getOrNull() ?: return null
+        return runCatching {
+            BaziEngine.calculate(
+                birthDate = date,
+                birthHour = userBirthHour,
+                gender = userGender,
+            )
+        }.getOrNull()
     }
 
     fun resolvedScreenShape(isRoundDevice: Boolean): ScreenShape =

@@ -13,8 +13,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.OutlinedButton
 import androidx.wear.compose.material3.Text
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import com.boompala.R
+import com.boompala.engine.bazi.BaziProfile
 import com.boompala.engine.dailyfortune.DailyFortuneReading
+import com.boompala.engine.dailyfortune.PersonalFortuneEvaluator
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
@@ -22,16 +27,26 @@ import java.util.Locale
  * Daily fortune page: a deterministic almanac-style presentation of the
  * current natural day. Readings with null text fields (repository degraded)
  * hide the affected section instead of crashing.
+ *
+ * When [baziProfile] is provided, personal daily fortune (ShiShen theme,
+ * active ShenSha, branch interactions, and personal balance color) is
+ * evaluated and prominently displayed at the top.
  */
 @Composable
 fun DailyFortuneScreen(
     reading: DailyFortuneReading,
     rotaryScrollingEnabled: Boolean,
     onBack: () -> Unit,
+    baziProfile: BaziProfile? = null,
+    animationsEnabled: Boolean = true,
+    onConfigureBazi: (() -> Unit)? = null,
 ) {
     val metrics = LocalUiMetrics.current
     val gregorianText = remember(reading.date) {
         DateTimeFormatter.ofPattern("yyyy-MM-dd EEEE", Locale.getDefault()).format(reading.date)
+    }
+    val personalFortune = remember(baziProfile, reading) {
+        baziProfile?.let { PersonalFortuneEvaluator.evaluate(it, reading) }
     }
 
     RotaryScrollColumn(
@@ -56,6 +71,115 @@ fun DailyFortuneScreen(
                     "农历${reading.lunarDateText} · ${reading.dayGanzhi.displayName}日 · 日干属${reading.dayStemElement.displayName}",
                     style = MaterialTheme.typography.bodySmall,
                 )
+            }
+        }
+
+        if (baziProfile != null && personalFortune != null) {
+            item(key = "personal-fortune-main") {
+                ResultCard {
+                    Text(
+                        text = "${baziProfile.gender.titleZh} · ${baziProfile.dayMaster.displayName}${baziProfile.dayMasterElement.displayName}日主",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.primary,
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.wearMarquee(animationsEnabled),
+                    )
+                    Text(
+                        text = "【${personalFortune.shiShenName}】${personalFortune.themeTitle}",
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary,
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.wearMarquee(animationsEnabled),
+                    )
+                    Text(
+                        text = personalFortune.themeAdvice,
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                    DetailField(
+                        label = "专属平衡色",
+                        value = "${personalFortune.balanceColor.displayName} · 幸运数 ${personalFortune.balanceNumbers.joinToString("、")}",
+                    )
+                    DetailField(
+                        label = "卦日感应",
+                        value = personalFortune.hexagramResonance,
+                        marquee = true,
+                        animationsEnabled = animationsEnabled,
+                    )
+                }
+            }
+
+            if (personalFortune.events.isNotEmpty()) {
+                item(key = "personal-fortune-events") {
+                    ResultCard {
+                        Text(
+                            text = "命盘星曜感应",
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.Bold,
+                        )
+                        personalFortune.events.forEach { event ->
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 2.dp),
+                                verticalArrangement = Arrangement.spacedBy(1.dp),
+                            ) {
+                                Text(
+                                    text = (if (event.isAuspicious) "✦ " else "▲ ") + event.title,
+                                    style = MaterialTheme.typography.labelMedium,
+                                    fontWeight = FontWeight.Bold,
+                                    color = if (event.isAuspicious) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error,
+                                    maxLines = 1,
+                                    softWrap = false,
+                                    overflow = TextOverflow.Ellipsis,
+                                    modifier = Modifier.wearMarquee(animationsEnabled),
+                                )
+                                Text(
+                                    text = event.description,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            item(key = "personal-fortune-prompt") {
+                ResultCard {
+                    Text(
+                        text = "专属命盘日运",
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary,
+                    )
+                    Text(
+                        text = "在设置中配置生辰八字，即可解锁每日流日十神、个人神煞与干支合冲分析",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                    if (onConfigureBazi != null) {
+                        val configInteraction = remember { MutableInteractionSource() }
+                        BoompalaCardButton(
+                            onClick = onConfigureBazi,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wearPressFeedback(configInteraction),
+                            interactionSource = configInteraction,
+                            colors = BoompalaButtonDefaults.buttonColors(),
+                        ) {
+                            Text(
+                                text = "前往我的档案设置",
+                                style = MaterialTheme.typography.labelMedium,
+                                fontWeight = FontWeight.Bold,
+                            )
+                        }
+                    }
+                }
             }
         }
         item(key = "hexagram") {
@@ -152,12 +276,13 @@ fun DailyFortuneScreen(
         }
         item(key = "back") {
             val pressInteraction = remember { MutableInteractionSource() }
-            OutlinedButton(
+            BoompalaCardButton(
                 onClick = onBack,
                 modifier = Modifier
                     .fillMaxWidth()
                     .wearPressFeedback(pressInteraction),
                 interactionSource = pressInteraction,
+                colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) {
                 Text(stringResource(R.string.action_back_home))
             }

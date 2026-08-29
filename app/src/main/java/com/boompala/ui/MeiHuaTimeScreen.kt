@@ -86,7 +86,7 @@ fun MeiHuaTimeScreen(
         }
         item(key = "meihua-time-view") {
             val pressInteraction = remember { MutableInteractionSource() }
-            Button(
+            BoompalaCardButton(
                 onClick = { onViewReading(fixedReading) },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -98,7 +98,7 @@ fun MeiHuaTimeScreen(
         }
         item(key = "meihua-time-recast") {
             val pressInteraction = remember { MutableInteractionSource() }
-            OutlinedButton(
+            BoompalaCardButton(
                 onClick = {
                     onReadingChanged(engine.calculate(Instant.now(), ZoneId.systemDefault()))
                 },
@@ -106,18 +106,20 @@ fun MeiHuaTimeScreen(
                     .fillMaxWidth()
                     .wearPressFeedback(pressInteraction),
                 interactionSource = pressInteraction,
+                colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) {
                 Text("重新按当前时间起卦")
             }
         }
         item(key = "meihua-time-back") {
             val pressInteraction = remember { MutableInteractionSource() }
-            OutlinedButton(
+            BoompalaCardButton(
                 onClick = onBack,
                 modifier = Modifier
                     .fillMaxWidth()
                     .wearPressFeedback(pressInteraction),
                 interactionSource = pressInteraction,
+                colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) {
                 Text("返回首页")
             }

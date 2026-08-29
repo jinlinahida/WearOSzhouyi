@@ -5,15 +5,30 @@
     <!-- Home Navigation & Feature Names -->
     <string name="home_feature_six_yao">Six Yao</string>
     <string name="home_feature_mei_hua">Mei Hua Time</string>
+    <string name="home_feature_destiny_chart">Destiny Charts</string>
     <string name="home_feature_tarot_one">Single Tarot</string>
     <string name="home_feature_tarot_three">Time Flow Tarot</string>
     <string name="home_feature_tarot_holy_triangle">Holy Triangle</string>
     <string name="home_feature_daily_fortune">Daily Fortune</string>
     <string name="home_feature_xiao_liu_ren">Xiao Liu Ren</string>
     <string name="home_feature_compass">Compass</string>
+    <string name="home_feature_pulse">Pulse Diagnosis</string>
     <string name="home_feature_archives">Archives</string>
     <string name="home_feature_browse">Browse</string>
     <string name="home_feature_settings">Settings</string>
+
+    <!-- Destiny Chart Strings -->
+    <string name="destiny_chart_title">Destiny Hub</string>
+    <string name="destiny_chart_bazi">BaZi Four Pillars</string>
+    <string name="destiny_chart_bazi_desc">Four Pillars · Hidden Stems · 10-Yr Luck</string>
+    <string name="destiny_chart_western">Western Natal Chart</string>
+    <string name="destiny_chart_western_desc">Sun, Moon, Ascendant &amp; 4 Elements</string>
+    <string name="destiny_chart_numerology">Numerology</string>
+    <string name="destiny_chart_numerology_desc">Life Path Number &amp; Lo Shu Grid</string>
+    <string name="destiny_chart_bone_weight">Bone Weight</string>
+    <string name="destiny_chart_bone_weight_desc">Bone Weight · Classical Destiny Poem</string>
+    <string name="destiny_chart_nine_star">Nine Star Ki</string>
+    <string name="destiny_chart_nine_star_desc">Year Star · Guiding Element · Lucky Directions</string>
 
     <!-- Common Actions & Navigation -->
     <string name="action_back">Back</string>
@@ -33,6 +48,8 @@
 
     <!-- Settings Modules -->
     <string name="settings_title">Settings</string>
+    <string name="settings_module_profile">My Profile</string>
+    <string name="settings_module_profile_desc">Birth chart &amp; destiny profile</string>
     <string name="settings_module_appearance">Appearance</string>
     <string name="settings_module_appearance_desc">Screen shape, font scale &amp; motion</string>
     <string name="settings_module_language">Language</string>
@@ -41,10 +58,35 @@
     <string name="settings_module_home_desc">Reorder &amp; toggle features</string>
     <string name="settings_module_haptics">Interaction &amp; Haptics</string>
     <string name="settings_module_haptics_desc">Rotary crown &amp; vibration</string>
+    <string name="settings_module_bazi">Birth Chart</string>
+    <string name="settings_module_bazi_desc">Configure chart for custom fortune</string>
     <string name="settings_module_data">Data &amp; Archives</string>
     <string name="settings_module_data_desc">Statistics &amp; maintenance</string>
     <string name="settings_module_about">About</string>
     <string name="settings_module_about_desc">Version, author &amp; licenses</string>
+
+    <!-- Settings Bazi Options -->
+    <string name="settings_bazi_title">My Profile</string>
+    <string name="settings_bazi_not_configured">Not set · Tap to configure</string>
+    <string name="settings_bazi_gender">Gender</string>
+    <string name="settings_bazi_gender_male">Qianzao</string>
+    <string name="settings_bazi_gender_female">Kunzao</string>
+    <string name="settings_bazi_birth_date">Birth Date</string>
+    <string name="settings_bazi_birth_year">Year: %1$d</string>
+    <string name="settings_bazi_birth_month">Month: %1$d</string>
+    <string name="settings_bazi_birth_day">Day: %1$d</string>
+    <string name="settings_bazi_birth_hour">Birth Hour</string>
+    <string name="settings_bazi_hour_unknown">Unknown Hour</string>
+    <string name="settings_bazi_save">Save Profile</string>
+    <string name="settings_bazi_edit">Edit Birth Chart</string>
+    <string name="settings_bazi_clear">Clear Profile</string>
+    <string name="settings_bazi_clear_confirm_title">Clear Profile?</string>
+    <string name="settings_bazi_clear_confirm_desc">Once cleared, generic daily fortune and casting will be restored.</string>
+    <string name="settings_bazi_preview_title">Four Pillars Preview</string>
+    <string name="settings_bazi_pillar_year">Year</string>
+    <string name="settings_bazi_pillar_month">Month</string>
+    <string name="settings_bazi_pillar_day">Day</string>
+    <string name="settings_bazi_pillar_hour">Hour</string>
 
     <!-- Settings Detail Options -->
     <string name="settings_screen_mode">Screen Mode</string>
@@ -107,8 +149,8 @@
     <string name="archive_action_delete">Delete</string>
     <string name="archive_tag_title">Archive Result</string>
     <string name="archive_tag_summary_prefix">Summary: %1$s</string>
-    <string name="archive_tag_name_required">Tag Name (Required)</string>
-    <string name="archive_tag_note_optional">Note (Optional)</string>
+    <string name="archive_tag_name_required">Tag Name</string>
+    <string name="archive_tag_note_optional">Note</string>
     <string name="archive_save_btn">Save Archive</string>
     <string name="archive_edit_dialog_title">Edit Archive</string>
     <string name="archive_delete_dialog_title">Confirm Delete?</string>

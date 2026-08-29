@@ -75,14 +75,19 @@ fun ArchiveListScreen(
                     ArchiveSource.TAROT to stringResource(R.string.browse_tarot_title),
                 ).forEach { (s, t) ->
                     val pressInteraction = remember { MutableInteractionSource() }
-                    OutlinedButton(
+                    val selected = source == s
+                    SelectableCardButton(
+                        selected = selected,
                         onClick = { source = s },
                         modifier = Modifier
                             .fillMaxWidth()
                             .wearPressFeedback(pressInteraction),
                         interactionSource = pressInteraction,
                     ) {
-                        Text(if (source == s) "● $t" else t)
+                        Text(
+                            text = if (selected) "✓ $t" else t,
+                            fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
+                        )
                     }
                 }
             }
@@ -98,7 +103,9 @@ fun ArchiveListScreen(
                     0xFFE91E63L to stringResource(R.string.archive_color_pink),
                 ).forEach { (c, t) ->
                     val pressInteraction = remember { MutableInteractionSource() }
-                    OutlinedButton(
+                    val selected = color == c
+                    SelectableCardButton(
+                        selected = selected,
                         onClick = { color = c },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -109,7 +116,10 @@ fun ArchiveListScreen(
                             if (c != null) {
                                 Box(Modifier.padding(end = 8.dp).size(10.dp).background(Color(c), RoundedCornerShape(50)))
                             }
-                            Text(if (color == c) "● $t" else t)
+                            Text(
+                                text = if (selected) "✓ $t" else t,
+                                fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
+                            )
                         }
                     }
                 }
@@ -132,12 +142,13 @@ fun ArchiveListScreen(
 
         items(records.orEmpty(), key = { it.id }) { r ->
             val pressInteraction = remember { MutableInteractionSource() }
-            OutlinedButton(
+            BoompalaCardButton(
                 onClick = { onSelect(r.id) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .wearPressFeedback(pressInteraction),
                 interactionSource = pressInteraction,
+                colors = BoompalaButtonDefaults.buttonColors(),
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
                     if (r.color != 0L) {
@@ -156,12 +167,13 @@ fun ArchiveListScreen(
         }
         item {
             val pressInteraction = remember { MutableInteractionSource() }
-            OutlinedButton(
+            BoompalaCardButton(
                 onClick = onBack,
                 modifier = Modifier
                     .fillMaxWidth()
                     .wearPressFeedback(pressInteraction),
                 interactionSource = pressInteraction,
+                colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) {
                 Text(stringResource(R.string.action_back_home))
             }
@@ -219,36 +231,39 @@ fun ArchiveDetailScreen(
         }
         item {
             val editInteraction = remember { MutableInteractionSource() }
-            OutlinedButton(
+            BoompalaCardButton(
                 onClick = { edit = true },
                 modifier = Modifier
                     .fillMaxWidth()
                     .wearPressFeedback(editInteraction),
                 interactionSource = editInteraction,
+                colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) {
                 Text(stringResource(R.string.archive_action_edit))
             }
         }
         item {
             val deleteInteraction = remember { MutableInteractionSource() }
-            OutlinedButton(
+            BoompalaCardButton(
                 onClick = { confirmDelete = true },
                 modifier = Modifier
                     .fillMaxWidth()
                     .wearPressFeedback(deleteInteraction),
                 interactionSource = deleteInteraction,
+                colors = BoompalaButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error),
             ) {
                 Text(stringResource(R.string.archive_action_delete), color = MaterialTheme.colorScheme.error)
             }
         }
         item {
             val backInteraction = remember { MutableInteractionSource() }
-            OutlinedButton(
+            BoompalaCardButton(
                 onClick = onBack,
                 modifier = Modifier
                     .fillMaxWidth()
                     .wearPressFeedback(backInteraction),
                 interactionSource = backInteraction,
+                colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) {
                 Text(stringResource(R.string.action_back))
             }
@@ -284,7 +299,7 @@ fun ArchiveDetailScreen(
             text = { Text(stringResource(R.string.archive_delete_dialog_desc)) },
             confirmButton = {
                 val confirmInteraction = remember { MutableInteractionSource() }
-                Button(
+                BoompalaCardButton(
                     onClick = {
                         scope.launch {
                             withContext(Dispatchers.IO) { repo.delete(record.id) }
@@ -294,16 +309,23 @@ fun ArchiveDetailScreen(
                     },
                     modifier = Modifier.wearPressFeedback(confirmInteraction),
                     interactionSource = confirmInteraction,
+                    colors = BoompalaButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.error.copy(alpha = 0.25f),
+                    ),
                 ) {
-                    Text(stringResource(R.string.action_delete))
+                    Text(
+                        stringResource(R.string.action_delete),
+                        color = MaterialTheme.colorScheme.error,
+                    )
                 }
             },
             dismissButton = {
                 val dismissInteraction = remember { MutableInteractionSource() }
-                OutlinedButton(
+                BoompalaCardButton(
                     onClick = { confirmDelete = false },
                     modifier = Modifier.wearPressFeedback(dismissInteraction),
                     interactionSource = dismissInteraction,
+                    colors = BoompalaButtonDefaults.outlinedButtonColors(),
                 ) {
                     Text(stringResource(R.string.action_cancel))
                 }
@@ -340,7 +362,9 @@ private fun ArchiveEditDialog(
                         0xFFE91E63L to stringResource(R.string.archive_color_pink),
                     ).forEach { (c, label) ->
                         val pressInteraction = remember { MutableInteractionSource() }
-                        OutlinedButton(
+                        val selected = c == color
+                        SelectableCardButton(
+                            selected = selected,
                             onClick = { onColor(c) },
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -349,7 +373,10 @@ private fun ArchiveEditDialog(
                         ) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Box(Modifier.padding(end = 8.dp).size(10.dp).background(Color(c), RoundedCornerShape(50)))
-                                Text(if (c == color) "● $label" else label)
+                                Text(
+                                    text = if (selected) "✓ $label" else label,
+                                    fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
+                                )
                             }
                         }
                     }
@@ -358,7 +385,7 @@ private fun ArchiveEditDialog(
         },
         confirmButton = {
             val saveInteraction = remember { MutableInteractionSource() }
-            Button(
+            BoompalaCardButton(
                 enabled = name.isNotBlank(),
                 onClick = onSave,
                 modifier = Modifier.wearPressFeedback(saveInteraction),
@@ -369,10 +396,11 @@ private fun ArchiveEditDialog(
         },
         dismissButton = {
             val cancelInteraction = remember { MutableInteractionSource() }
-            OutlinedButton(
+            BoompalaCardButton(
                 onClick = onCancel,
                 modifier = Modifier.wearPressFeedback(cancelInteraction),
                 interactionSource = cancelInteraction,
+                colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) {
                 Text(stringResource(R.string.action_cancel))
             }
@@ -430,7 +458,9 @@ fun ArchiveTagScreen(
                     0xFFE91E63L to stringResource(R.string.archive_color_pink),
                 ).forEach { (c, label) ->
                     val pressInteraction = remember { MutableInteractionSource() }
-                    OutlinedButton(
+                    val selected = color == c
+                    SelectableCardButton(
+                        selected = selected,
                         onClick = { color = c },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -439,7 +469,10 @@ fun ArchiveTagScreen(
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Box(Modifier.padding(end = 8.dp).size(10.dp).background(Color(c), RoundedCornerShape(50)))
-                            Text(if (c == color) "● $label" else label)
+                            Text(
+                                text = if (selected) "✓ $label" else label,
+                                fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
+                            )
                         }
                     }
                 }
@@ -447,7 +480,7 @@ fun ArchiveTagScreen(
         }
         item {
             val saveInteraction = remember { MutableInteractionSource() }
-            Button(
+            BoompalaCardButton(
                 enabled = name.isNotBlank() && !saving,
                 onClick = {
                     if (!saving) {
@@ -470,12 +503,13 @@ fun ArchiveTagScreen(
         }
         item {
             val cancelInteraction = remember { MutableInteractionSource() }
-            OutlinedButton(
+            BoompalaCardButton(
                 onClick = onBack,
                 modifier = Modifier
                     .fillMaxWidth()
                     .wearPressFeedback(cancelInteraction),
                 interactionSource = cancelInteraction,
+                colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) {
                 Text(stringResource(R.string.action_cancel))
             }

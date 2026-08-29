@@ -222,10 +222,10 @@ fun YaoInputScreen(
                                 modifier = Modifier.fillMaxWidth(),
                             )
                             val stateDesc = when (lastToss!!.sum) {
-                                6 -> "老阴（阴爻·动）"
-                                7 -> "少阳（阳爻·静）"
-                                8 -> "少阴（阴爻·静）"
-                                9 -> "老阳（阳爻·动）"
+                                6 -> "老阴 · 动"
+                                7 -> "少阳 · 静"
+                                8 -> "少阴 · 静"
+                                9 -> "老阳 · 动"
                                 else -> lastToss!!.state.displayName
                             }
                             Text(
@@ -243,7 +243,7 @@ fun YaoInputScreen(
                 item(key = "coin-action-button") {
                     if (!allCoinsCast) {
                         val tossInteraction = remember { MutableInteractionSource() }
-                        Button(
+                        BoompalaCardButton(
                             onClick = {
                                 if (!isTossing) {
                                     isTossing = true
@@ -284,12 +284,12 @@ fun YaoInputScreen(
                         ) {
                             Text(
                                 if (isTossing) "正在摇卦…"
-                                else "摇第 ${currentLineIndex + 1} 爻（${YaoPosition.entries[currentLineIndex].displayName}）"
+                                else "摇 ${YaoPosition.entries[currentLineIndex].displayName}"
                             )
                         }
                     } else {
                         val resetInteraction = remember { MutableInteractionSource() }
-                        OutlinedButton(
+                        BoompalaCardButton(
                             onClick = {
                                 for (i in coinRecords.indices) {
                                     coinRecords[i] = null
@@ -300,6 +300,7 @@ fun YaoInputScreen(
                                 .fillMaxWidth()
                                 .wearPressFeedback(resetInteraction),
                             interactionSource = resetInteraction,
+                            colors = BoompalaButtonDefaults.outlinedButtonColors(),
                         ) {
                             Text("重新摇卦")
                         }
@@ -351,7 +352,9 @@ fun YaoInputScreen(
                             modifier = Modifier.weight(0.8f),
                             style = MaterialTheme.typography.labelSmall,
                         )
-                        Button(
+                        val isSelected = selected != null
+                        SelectableCardButton(
+                            selected = isSelected,
                             onClick = {
                                 selectedStates[internalIndex] = nextState(selected)
                                 manualNextIndex = selectedStates.indexOfFirst { it == null }.takeIf { it >= 0 } ?: 0
@@ -365,7 +368,10 @@ fun YaoInputScreen(
                                 },
                             interactionSource = pressInteraction,
                         ) {
-                            Text(selected?.displayName ?: "未选择")
+                            Text(
+                                text = selected?.displayName ?: "未选择",
+                                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+                            )
                         }
                     }
                 }
@@ -428,7 +434,7 @@ fun YaoInputScreen(
 
         item(key = "generate-button") {
             val pressInteraction = remember { MutableInteractionSource() }
-            Button(
+            BoompalaCardButton(
                 onClick = {
                     val castAt = Instant.now()
                     val zoneId = ZoneId.systemDefault()
@@ -469,12 +475,13 @@ fun YaoInputScreen(
 
         item(key = "back-button") {
             val pressInteraction = remember { MutableInteractionSource() }
-            OutlinedButton(
+            BoompalaCardButton(
                 onClick = onBack,
                 modifier = Modifier
                     .fillMaxWidth()
                     .wearPressFeedback(pressInteraction),
                 interactionSource = pressInteraction,
+                colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) {
                 Text("返回")
             }
@@ -653,22 +660,17 @@ private fun ModeButton(
     modifier: Modifier,
 ) {
     val pressInteraction = remember { MutableInteractionSource() }
-    if (mode == selectedMode) {
-        Button(
-            onClick = { onSelected(mode) },
-            modifier = modifier.wearPressFeedback(pressInteraction),
-            interactionSource = pressInteraction,
-        ) {
-            Text(mode.displayName)
-        }
-    } else {
-        OutlinedButton(
-            onClick = { onSelected(mode) },
-            modifier = modifier.wearPressFeedback(pressInteraction),
-            interactionSource = pressInteraction,
-        ) {
-            Text(mode.displayName)
-        }
+    val selected = mode == selectedMode
+    SelectableCardButton(
+        selected = selected,
+        onClick = { onSelected(mode) },
+        modifier = modifier.wearPressFeedback(pressInteraction),
+        interactionSource = pressInteraction,
+    ) {
+        Text(
+            text = if (selected) "✓ ${mode.displayName}" else mode.displayName,
+            fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
+        )
     }
 }
 
@@ -681,7 +683,9 @@ private fun PolarityButton(
     modifier: Modifier,
 ) {
     val pressInteraction = remember { MutableInteractionSource() }
-    OutlinedButton(
+    val isSelected = polarity != null
+    SelectableCardButton(
+        selected = isSelected,
         onClick = onClick,
         modifier = modifier
             .wearPressFeedback(pressInteraction)

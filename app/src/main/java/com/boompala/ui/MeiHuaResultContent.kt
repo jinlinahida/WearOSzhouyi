@@ -111,22 +111,24 @@ fun MeiHuaResultContent(
         }
         item(key = "meihua-archive") {
             val archiveInteraction = remember { MutableInteractionSource() }
-            OutlinedButton(
+            BoompalaCardButton(
                 onClick = { onArchive(reading) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .wearPressFeedback(archiveInteraction),
                 interactionSource = archiveInteraction,
+                colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) { Text("归档此次结果") }
         }
         item(key = "meihua-back") {
             val backInteraction = remember { MutableInteractionSource() }
-            OutlinedButton(
+            BoompalaCardButton(
                 onClick = onBack,
                 modifier = Modifier
                     .fillMaxWidth()
                     .wearPressFeedback(backInteraction),
                 interactionSource = backInteraction,
+                colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) {
                 Text("返回时间起卦")
             }

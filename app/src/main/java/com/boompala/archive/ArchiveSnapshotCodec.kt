@@ -246,6 +246,65 @@ object ArchiveSnapshotCodec {
         ),
     )
 
+    fun encode(result: com.boompala.engine.pulse.PulseDiagnosisResult): String = gson.toJson(
+        ArchiveSnapshot(
+            version = 1,
+            source = ArchiveSource.PULSE,
+            title = "脉象推演 · 【${result.category.chineseName}】",
+            sections = buildMap {
+                put(
+                    "脉象与特征",
+                    listOf(
+                        "脉象名称：${result.category.chineseName}",
+                        "属性：${result.category.natureSummary}",
+                        "特征描述：${result.profile.featureDescription}",
+                        "四字脉诀：${result.category.classicPhrase}",
+                    ),
+                )
+                put(
+                    "宜忌指引",
+                    listOf(
+                        "【宜】：${result.profile.dosList.joinToString(" · ")}",
+                        "【忌】：${result.profile.dontsList.joinToString(" · ")}",
+                    ),
+                )
+                put(
+                    "辨证调理",
+                    buildList {
+                        result.profile.syndromes.forEach { syn ->
+                            add("【${syn.title}】")
+                            add("表现：${syn.symptoms}")
+                            add("食疗：${syn.dietaryRecommendations}")
+                        }
+                    },
+                )
+                put(
+                    "调摄建议",
+                    listOf(
+                        "情绪调护：${result.profile.emotionalAdvice}",
+                        "生活起居：${result.profile.lifestyleAdvice}",
+                        "运动调养：${result.profile.exerciseAdvice}",
+                    ),
+                )
+                put(
+                    "时辰经络",
+                    listOf(
+                        "时辰：${result.meridianInfo.earthlyBranch} (${result.meridianInfo.timeRangeText})",
+                        "当令：${result.meridianInfo.meridianName} (${result.meridianInfo.physiologicalRole})",
+                        "指引：${result.meridianInfo.healthGuidance}",
+                    ),
+                )
+                put(
+                    "典籍渊源与医理",
+                    listOf(
+                        "典籍：${result.profile.classicLiterature}",
+                        "医理：${result.profile.theoreticalReason}",
+                    ),
+                )
+            },
+        ),
+    )
+
     fun decode(json: String): Result<ArchiveSnapshot> = runCatching {
         val raw = gson.fromJson(json, ArchiveSnapshot::class.java) ?: error("empty snapshot")
         if (raw.version != 1) error("unknown snapshot version ${raw.version}")

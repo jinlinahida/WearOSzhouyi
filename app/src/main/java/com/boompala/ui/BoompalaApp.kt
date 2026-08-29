@@ -17,6 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.animation.core.Animatable
 import androidx.compose.ui.platform.LocalConfiguration
@@ -60,6 +61,17 @@ import com.boompala.engine.tarot.TarotReading
 import com.boompala.engine.xiaoliuren.*
 import com.boompala.archive.*
 import android.widget.Toast
+import com.boompala.engine.astrology.WesternAstrologyEngine
+import com.boompala.engine.astrology.WesternChartReading
+import com.boompala.engine.bazi.BaziEngine
+import com.boompala.engine.bazi.BaziGender
+import com.boompala.engine.bazi.BaziProfile
+import com.boompala.engine.bone.BoneWeightEngine
+import com.boompala.engine.bone.BoneWeightReading
+import com.boompala.engine.ninestar.NineStarKiEngine
+import com.boompala.engine.ninestar.NineStarKiReading
+import com.boompala.engine.numerology.NumerologyEngine
+import com.boompala.engine.numerology.NumerologyReading
 import com.boompala.settings.AppSettings
 import com.boompala.settings.SettingsRepository
 import kotlinx.coroutines.CompletableDeferred
@@ -87,6 +99,14 @@ internal enum class AppScreen {
     TAROT_ONE_CARD,
     TAROT_THREE_CARD,
     TAROT_HOLY_TRIANGLE,
+    DESTINY_CHART_MENU,
+    BAZI_DETAIL,
+    WESTERN_CHART_DETAIL,
+    NUMEROLOGY_DETAIL,
+    BONE_WEIGHT_DETAIL,
+    NINE_STAR_DETAIL,
+    PULSE_MEASURE,
+    PULSE_RESULT,
 }
 
 internal fun AppScreen.backDestination(): AppScreen? = when (this) {
@@ -107,6 +127,14 @@ internal fun AppScreen.backDestination(): AppScreen? = when (this) {
     AppScreen.TAROT_ONE_CARD -> AppScreen.HOME
     AppScreen.TAROT_THREE_CARD -> AppScreen.HOME
     AppScreen.TAROT_HOLY_TRIANGLE -> AppScreen.HOME
+    AppScreen.DESTINY_CHART_MENU -> AppScreen.HOME
+    AppScreen.BAZI_DETAIL -> AppScreen.DESTINY_CHART_MENU
+    AppScreen.WESTERN_CHART_DETAIL -> AppScreen.DESTINY_CHART_MENU
+    AppScreen.NUMEROLOGY_DETAIL -> AppScreen.DESTINY_CHART_MENU
+    AppScreen.BONE_WEIGHT_DETAIL -> AppScreen.DESTINY_CHART_MENU
+    AppScreen.NINE_STAR_DETAIL -> AppScreen.DESTINY_CHART_MENU
+    AppScreen.PULSE_MEASURE -> AppScreen.HOME
+    AppScreen.PULSE_RESULT -> AppScreen.HOME
     AppScreen.BROWSE -> AppScreen.HOME
     AppScreen.HEXAGRAM_BROWSER -> AppScreen.BROWSE
     AppScreen.HEXAGRAM_DETAIL -> AppScreen.HEXAGRAM_BROWSER
@@ -181,6 +209,12 @@ fun BoompalaApp() {
     var tarotReading by remember { mutableStateOf<TarotReading?>(null) }
     var tarotThreeReading by remember { mutableStateOf<TarotReading?>(null) }
     var tarotHolyTriangleReading by remember { mutableStateOf<TarotReading?>(null) }
+    var currentBaziProfile by remember { mutableStateOf<BaziProfile?>(null) }
+    var currentWesternReading by remember { mutableStateOf<WesternChartReading?>(null) }
+    var currentNumerologyReading by remember { mutableStateOf<NumerologyReading?>(null) }
+    var currentBoneWeightReading by remember { mutableStateOf<BoneWeightReading?>(null) }
+    var currentNineStarReading by remember { mutableStateOf<NineStarKiReading?>(null) }
+    var currentPulseResult by remember { mutableStateOf<com.boompala.engine.pulse.PulseDiagnosisResult?>(null) }
     LaunchedEffect(Unit) {
         if (tarotCardRepository == null) {
             val repository = withContext(Dispatchers.IO) {
@@ -316,6 +350,16 @@ fun BoompalaApp() {
             navigateTo(AppScreen.TAROT_HOLY_TRIANGLE)
         }
     }
+    val onDestinyChartClick = remember(navigateTo) {
+        {
+            navigateTo(AppScreen.DESTINY_CHART_MENU)
+        }
+    }
+    val onPulseClick = remember(navigateTo) {
+        {
+            navigateTo(AppScreen.PULSE_MEASURE)
+        }
+    }
 
     BackHandler(enabled = !isFirstRunWelcome && effectiveBackDestination != null) {
         goBack(true)
@@ -327,7 +371,12 @@ fun BoompalaApp() {
             screenShape = screenShape,
         ) {
             AppScaffold {
-                val screenContent: @Composable (AppScreen) -> Unit = { currentScreen ->
+                TopSpotlightBackground(
+                    screen = screen,
+                    isGenerating = isGenerating,
+                    animationsEnabled = settings.animationsEnabled,
+                ) {
+                    val screenContent: @Composable (AppScreen) -> Unit = { currentScreen ->
                     when (currentScreen) {
                         AppScreen.HOME -> HomeScreen(
                             settings = settings,
@@ -338,10 +387,12 @@ fun BoompalaApp() {
                             onArchiveClick = onArchiveClick,
                             onCompassClick = onCompassClick,
                             onBrowseClick = onBrowseClick,
+                            onDestinyChartClick = onDestinyChartClick,
                             onDailyFortuneClick = onDailyFortuneClick,
                             onTarotClick = onTarotClick,
                             onTarotThreeCardClick = onTarotThreeCardClick,
                             onTarotHolyTriangleClick = onTarotHolyTriangleClick,
+                            onPulseClick = onPulseClick,
                         )
 
                         AppScreen.YAO_INPUT -> YaoInputScreen(
@@ -401,6 +452,7 @@ fun BoompalaApp() {
                             onTarotClick = onTarotClick,
                             onTarotThreeCardClick = onTarotThreeCardClick,
                             onTarotHolyTriangleClick = onTarotHolyTriangleClick,
+                            onPulseClick = onPulseClick,
                         )
 
                         AppScreen.XIAO_LIU_REN -> XiaoLiuRenScreen(xlrEngine, xlrReading, settings.rotaryScrollingEnabled, { xlrReading = it }, { r -> archiveReturnScreen=AppScreen.XIAO_LIU_REN; archiveDraft = ArchiveDraft("", "", 0xFF4CAF50, ArchiveSource.XIAO_LIU_REN, r.timeInfo.gregorianDateTime.toInstant().toEpochMilli(), "最终${r.finalPalace.displayName}", ArchiveSnapshotCodec.encode(r)); navigateTo(AppScreen.ARCHIVE_TAG) }, { goBack(true) })
@@ -458,9 +510,17 @@ fun BoompalaApp() {
                                         reading = reading,
                                         rotaryScrollingEnabled = settings.rotaryScrollingEnabled,
                                         onBack = { goBack(true) },
+                                        baziProfile = settings.resolvedBaziProfile(),
+                                        animationsEnabled = settings.animationsEnabled,
+                                        onConfigureBazi = {
+                                            navigateTo(AppScreen.SETTINGS)
+                                        },
                                     )
                                 } else {
-                                    WearLoadingIndicator(label = stringResource(R.string.daily_fortune_loading))
+                                    WearLoadingIndicator(
+                                        label = stringResource(R.string.daily_fortune_loading),
+                                        animationsEnabled = settings.animationsEnabled,
+                                    )
                                 }
                             }
                         }
@@ -655,6 +715,16 @@ fun BoompalaApp() {
                                     settingsRepository.toggleHomeFeatureVisibility(feature)
                                 }
                             },
+                            onSaveUserBirth = { birthDate, birthHour, gender ->
+                                scope.launch {
+                                    settingsRepository.setUserBirth(birthDate, birthHour, gender)
+                                }
+                            },
+                            onClearUserBirth = {
+                                scope.launch {
+                                    settingsRepository.clearUserBirth()
+                                }
+                            },
                             archiveRepository = archiveRepository,
                             rotaryScrollingEnabled = settings.rotaryScrollingEnabled,
                             onAboutClick = { navigateTo(AppScreen.ABOUT) },
@@ -744,6 +814,201 @@ fun BoompalaApp() {
                             } else null,
                         )
 
+                        AppScreen.DESTINY_CHART_MENU -> DestinyChartMenuScreen(
+                            settings = settings,
+                            onNavigateToBazi = { date, hour, gender ->
+                                currentBaziProfile = BaziEngine.calculate(date, hour, gender)
+                                navigateTo(AppScreen.BAZI_DETAIL)
+                            },
+                            onNavigateToWestern = { date, hour ->
+                                currentWesternReading = WesternAstrologyEngine.calculate(date, hour)
+                                navigateTo(AppScreen.WESTERN_CHART_DETAIL)
+                            },
+                            onNavigateToNumerology = { date ->
+                                currentNumerologyReading = NumerologyEngine.calculate(date)
+                                navigateTo(AppScreen.NUMEROLOGY_DETAIL)
+                            },
+                            onNavigateToBoneWeight = { date, hour ->
+                                currentBoneWeightReading = BoneWeightEngine.calculate(date, hour)
+                                navigateTo(AppScreen.BONE_WEIGHT_DETAIL)
+                            },
+                            onNavigateToNineStar = { date ->
+                                currentNineStarReading = NineStarKiEngine.calculate(date)
+                                navigateTo(AppScreen.NINE_STAR_DETAIL)
+                            },
+                            onBack = { goBack(true) },
+                        )
+
+                        AppScreen.BAZI_DETAIL -> currentBaziProfile?.let { profile ->
+                            BaziDetailScreen(
+                                profile = profile,
+                                rotaryEnabled = settings.rotaryScrollingEnabled,
+                                animationsEnabled = settings.animationsEnabled,
+                                onBack = { goBack(true) },
+                            )
+                        } ?: run {
+                            DestinyChartMenuScreen(
+                                settings = settings,
+                                onNavigateToBazi = { date, hour, gender ->
+                                    currentBaziProfile = BaziEngine.calculate(date, hour, gender)
+                                    navigateTo(AppScreen.BAZI_DETAIL)
+                                },
+                                onNavigateToWestern = { date, hour ->
+                                    currentWesternReading = WesternAstrologyEngine.calculate(date, hour)
+                                    navigateTo(AppScreen.WESTERN_CHART_DETAIL)
+                                },
+                                onNavigateToNumerology = { date ->
+                                    currentNumerologyReading = NumerologyEngine.calculate(date)
+                                    navigateTo(AppScreen.NUMEROLOGY_DETAIL)
+                                },
+                                onNavigateToBoneWeight = { date, hour ->
+                                    currentBoneWeightReading = BoneWeightEngine.calculate(date, hour)
+                                    navigateTo(AppScreen.BONE_WEIGHT_DETAIL)
+                                },
+                                onNavigateToNineStar = { date ->
+                                    currentNineStarReading = NineStarKiEngine.calculate(date)
+                                    navigateTo(AppScreen.NINE_STAR_DETAIL)
+                                },
+                                onBack = { goBack(true) },
+                            )
+                        }
+
+                        AppScreen.WESTERN_CHART_DETAIL -> currentWesternReading?.let { reading ->
+                            WesternChartScreen(
+                                reading = reading,
+                                rotaryEnabled = settings.rotaryScrollingEnabled,
+                                animationsEnabled = settings.animationsEnabled,
+                                onBack = { goBack(true) },
+                            )
+                        } ?: run {
+                            DestinyChartMenuScreen(
+                                settings = settings,
+                                onNavigateToBazi = { date, hour, gender ->
+                                    currentBaziProfile = BaziEngine.calculate(date, hour, gender)
+                                    navigateTo(AppScreen.BAZI_DETAIL)
+                                },
+                                onNavigateToWestern = { date, hour ->
+                                    currentWesternReading = WesternAstrologyEngine.calculate(date, hour)
+                                    navigateTo(AppScreen.WESTERN_CHART_DETAIL)
+                                },
+                                onNavigateToNumerology = { date ->
+                                    currentNumerologyReading = NumerologyEngine.calculate(date)
+                                    navigateTo(AppScreen.NUMEROLOGY_DETAIL)
+                                },
+                                onNavigateToBoneWeight = { date, hour ->
+                                    currentBoneWeightReading = BoneWeightEngine.calculate(date, hour)
+                                    navigateTo(AppScreen.BONE_WEIGHT_DETAIL)
+                                },
+                                onNavigateToNineStar = { date ->
+                                    currentNineStarReading = NineStarKiEngine.calculate(date)
+                                    navigateTo(AppScreen.NINE_STAR_DETAIL)
+                                },
+                                onBack = { goBack(true) },
+                            )
+                        }
+
+                        AppScreen.NUMEROLOGY_DETAIL -> currentNumerologyReading?.let { reading ->
+                            NumerologyDetailScreen(
+                                reading = reading,
+                                rotaryEnabled = settings.rotaryScrollingEnabled,
+                                animationsEnabled = settings.animationsEnabled,
+                                onBack = { goBack(true) },
+                            )
+                        } ?: run {
+                            DestinyChartMenuScreen(
+                                settings = settings,
+                                onNavigateToBazi = { date, hour, gender ->
+                                    currentBaziProfile = BaziEngine.calculate(date, hour, gender)
+                                    navigateTo(AppScreen.BAZI_DETAIL)
+                                },
+                                onNavigateToWestern = { date, hour ->
+                                    currentWesternReading = WesternAstrologyEngine.calculate(date, hour)
+                                    navigateTo(AppScreen.WESTERN_CHART_DETAIL)
+                                },
+                                onNavigateToNumerology = { date ->
+                                    currentNumerologyReading = NumerologyEngine.calculate(date)
+                                    navigateTo(AppScreen.NUMEROLOGY_DETAIL)
+                                },
+                                onNavigateToBoneWeight = { date, hour ->
+                                    currentBoneWeightReading = BoneWeightEngine.calculate(date, hour)
+                                    navigateTo(AppScreen.BONE_WEIGHT_DETAIL)
+                                },
+                                onNavigateToNineStar = { date ->
+                                    currentNineStarReading = NineStarKiEngine.calculate(date)
+                                    navigateTo(AppScreen.NINE_STAR_DETAIL)
+                                },
+                                onBack = { goBack(true) },
+                            )
+                        }
+
+                        AppScreen.BONE_WEIGHT_DETAIL -> currentBoneWeightReading?.let { reading ->
+                            BoneWeightDetailScreen(
+                                reading = reading,
+                                rotaryEnabled = settings.rotaryScrollingEnabled,
+                                animationsEnabled = settings.animationsEnabled,
+                                onBack = { goBack(true) },
+                            )
+                        } ?: run {
+                            DestinyChartMenuScreen(
+                                settings = settings,
+                                onNavigateToBazi = { date, hour, gender ->
+                                    currentBaziProfile = BaziEngine.calculate(date, hour, gender)
+                                    navigateTo(AppScreen.BAZI_DETAIL)
+                                },
+                                onNavigateToWestern = { date, hour ->
+                                    currentWesternReading = WesternAstrologyEngine.calculate(date, hour)
+                                    navigateTo(AppScreen.WESTERN_CHART_DETAIL)
+                                },
+                                onNavigateToNumerology = { date ->
+                                    currentNumerologyReading = NumerologyEngine.calculate(date)
+                                    navigateTo(AppScreen.NUMEROLOGY_DETAIL)
+                                },
+                                onNavigateToBoneWeight = { date, hour ->
+                                    currentBoneWeightReading = BoneWeightEngine.calculate(date, hour)
+                                    navigateTo(AppScreen.BONE_WEIGHT_DETAIL)
+                                },
+                                onNavigateToNineStar = { date ->
+                                    currentNineStarReading = NineStarKiEngine.calculate(date)
+                                    navigateTo(AppScreen.NINE_STAR_DETAIL)
+                                },
+                                onBack = { goBack(true) },
+                            )
+                        }
+
+                        AppScreen.NINE_STAR_DETAIL -> currentNineStarReading?.let { reading ->
+                            NineStarDetailScreen(
+                                reading = reading,
+                                rotaryEnabled = settings.rotaryScrollingEnabled,
+                                animationsEnabled = settings.animationsEnabled,
+                                onBack = { goBack(true) },
+                            )
+                        } ?: run {
+                            DestinyChartMenuScreen(
+                                settings = settings,
+                                onNavigateToBazi = { date, hour, gender ->
+                                    currentBaziProfile = BaziEngine.calculate(date, hour, gender)
+                                    navigateTo(AppScreen.BAZI_DETAIL)
+                                },
+                                onNavigateToWestern = { date, hour ->
+                                    currentWesternReading = WesternAstrologyEngine.calculate(date, hour)
+                                    navigateTo(AppScreen.WESTERN_CHART_DETAIL)
+                                },
+                                onNavigateToNumerology = { date ->
+                                    currentNumerologyReading = NumerologyEngine.calculate(date)
+                                    navigateTo(AppScreen.NUMEROLOGY_DETAIL)
+                                },
+                                onNavigateToBoneWeight = { date, hour ->
+                                    currentBoneWeightReading = BoneWeightEngine.calculate(date, hour)
+                                    navigateTo(AppScreen.BONE_WEIGHT_DETAIL)
+                                },
+                                onNavigateToNineStar = { date ->
+                                    currentNineStarReading = NineStarKiEngine.calculate(date)
+                                    navigateTo(AppScreen.NINE_STAR_DETAIL)
+                                },
+                                onBack = { goBack(true) },
+                            )
+                        }
+
                         AppScreen.ABOUT -> AboutScreen(
                             rotaryScrollingEnabled = settings.rotaryScrollingEnabled,
                             onViewWelcomeClick = {
@@ -752,6 +1017,52 @@ fun BoompalaApp() {
                             },
                             onBack = { goBack(true) },
                         )
+
+                        AppScreen.PULSE_MEASURE -> com.boompala.ui.pulse.PulseMeasureScreen(
+                            onResult = { result ->
+                                currentPulseResult = result
+                                navigateTo(AppScreen.PULSE_RESULT)
+                            },
+                            onBack = { goBack(true) },
+                        )
+
+                        AppScreen.PULSE_RESULT -> currentPulseResult?.let { result ->
+                            com.boompala.ui.pulse.PulseResultScreen(
+                                result = result,
+                                rotaryEnabled = settings.rotaryScrollingEnabled,
+                                onSaveArchive = {
+                                    archiveReturnScreen = AppScreen.PULSE_RESULT
+                                    archiveDraft = ArchiveDraft(
+                                        name = "脉象 · ${result.category.chineseName}",
+                                        note = "${result.meridianInfo.earthlyBranch} ${result.category.classicPhrase}",
+                                        color = 0xFF00E5A3L,
+                                        source = ArchiveSource.PULSE,
+                                        castAt = result.timestampMillis,
+                                        summary = "【${result.category.chineseName}】${result.category.natureSummary}",
+                                        snapshotJson = ArchiveSnapshotCodec.encode(result),
+                                    )
+                                    navigateTo(AppScreen.ARCHIVE_TAG)
+                                },
+                                onBack = { goBack(true) },
+                            )
+                        } ?: run {
+                            HomeScreen(
+                                settings = settings,
+                                onSixYaoClick = onSixYaoClick,
+                                onMeiHuaClick = onMeiHuaClick,
+                                onSettingsClick = onSettingsClick,
+                                onXiaoLiuRenClick = onXiaoLiuRenClick,
+                                onArchiveClick = onArchiveClick,
+                                onCompassClick = onCompassClick,
+                                onBrowseClick = onBrowseClick,
+                                onDestinyChartClick = onDestinyChartClick,
+                                onDailyFortuneClick = onDailyFortuneClick,
+                                onTarotClick = onTarotClick,
+                                onTarotThreeCardClick = onTarotThreeCardClick,
+                                onTarotHolyTriangleClick = onTarotHolyTriangleClick,
+                                onPulseClick = onPulseClick,
+                            )
+                        }
                     }
                 }
 
@@ -771,6 +1082,8 @@ fun BoompalaApp() {
                         userSwipeEnabled = swipeEnabled,
                         backgroundKey = effectiveBackDestination ?: AppScreen.HOME,
                         contentKey = screen,
+                        backgroundScrimColor = Color.Transparent,
+                        contentScrimColor = Color.Transparent,
                         onDismissed = { goBack(false) },
                     ) { isBackground ->
                         if (isBackground) {
@@ -819,6 +1132,9 @@ fun BoompalaApp() {
         }
     }
 }
+}
+
+
 
 private fun loadTarotCardRepository(context: android.content.Context): TarotCardRepository =
     runCatching {

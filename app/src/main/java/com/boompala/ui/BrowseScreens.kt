@@ -80,12 +80,13 @@ fun BrowseHomeScreen(
         }
         item {
             val hexInteraction = remember { MutableInteractionSource() }
-            OutlinedButton(
+            BoompalaCardButton(
                 onClick = onHexagrams,
                 modifier = Modifier
                     .fillMaxWidth()
                     .wearPressFeedback(hexInteraction),
                 interactionSource = hexInteraction,
+                colors = BoompalaButtonDefaults.buttonColors(),
             ) {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
@@ -108,12 +109,13 @@ fun BrowseHomeScreen(
         }
         item {
             val tarotInteraction = remember { MutableInteractionSource() }
-            OutlinedButton(
+            BoompalaCardButton(
                 onClick = onTarot,
                 modifier = Modifier
                     .fillMaxWidth()
                     .wearPressFeedback(tarotInteraction),
                 interactionSource = tarotInteraction,
+                colors = BoompalaButtonDefaults.buttonColors(),
             ) {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
@@ -136,12 +138,13 @@ fun BrowseHomeScreen(
         }
         item {
             val daoInteraction = remember { MutableInteractionSource() }
-            OutlinedButton(
+            BoompalaCardButton(
                 onClick = onKnowledge,
                 modifier = Modifier
                     .fillMaxWidth()
                     .wearPressFeedback(daoInteraction),
                 interactionSource = daoInteraction,
+                colors = BoompalaButtonDefaults.buttonColors(),
             ) {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
@@ -164,12 +167,13 @@ fun BrowseHomeScreen(
         }
         item {
             val yiInteraction = remember { MutableInteractionSource() }
-            OutlinedButton(
+            BoompalaCardButton(
                 onClick = onKnowledge,
                 modifier = Modifier
                     .fillMaxWidth()
                     .wearPressFeedback(yiInteraction),
                 interactionSource = yiInteraction,
+                colors = BoompalaButtonDefaults.buttonColors(),
             ) {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
@@ -192,12 +196,13 @@ fun BrowseHomeScreen(
         }
         item {
             val backInteraction = remember { MutableInteractionSource() }
-            OutlinedButton(
+            BoompalaCardButton(
                 onClick = onBack,
                 modifier = Modifier
                     .fillMaxWidth()
                     .wearPressFeedback(backInteraction),
                 interactionSource = backInteraction,
+                colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) {
                 Text("返回首页")
             }
@@ -229,12 +234,13 @@ fun HexagramBrowserScreen(
         items(data.hexagrams, key = { it.codeFromBottom }) { h ->
             val meaning = data.interpretations.interpretationFor(h.codeFromBottom)?.coreMeaning.orEmpty()
             val pressInteraction = remember { MutableInteractionSource() }
-            OutlinedButton(
+            BoompalaCardButton(
                 onClick = { onOpen(h) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .wearPressFeedback(pressInteraction),
                 interactionSource = pressInteraction,
+                colors = BoompalaButtonDefaults.buttonColors(),
             ) {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
@@ -257,12 +263,13 @@ fun HexagramBrowserScreen(
         }
         item {
             val pressInteraction = remember { MutableInteractionSource() }
-            OutlinedButton(
+            BoompalaCardButton(
                 onClick = onBack,
                 modifier = Modifier
                     .fillMaxWidth()
                     .wearPressFeedback(pressInteraction),
                 interactionSource = pressInteraction,
+                colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) {
                 Text("返回")
             }
@@ -359,12 +366,13 @@ fun HexagramDetailScreen(
 
         item {
             val pressInteraction = remember { MutableInteractionSource() }
-            OutlinedButton(
+            BoompalaCardButton(
                 onClick = onBack,
                 modifier = Modifier
                     .fillMaxWidth()
                     .wearPressFeedback(pressInteraction),
                 interactionSource = pressInteraction,
+                colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) {
                 Text("返回卦列表")
             }
@@ -428,26 +436,32 @@ fun TarotBrowserScreen(
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 categories.forEach { (cat, title) ->
                     val pressInteraction = remember { MutableInteractionSource() }
-                    OutlinedButton(
+                    val selected = selectedCategory == cat
+                    SelectableCardButton(
+                        selected = selected,
                         onClick = { selectedCategory = cat },
                         modifier = Modifier
                             .fillMaxWidth()
                             .wearPressFeedback(pressInteraction),
                         interactionSource = pressInteraction,
                     ) {
-                        Text(if (selectedCategory == cat) "● $title" else title)
+                        Text(
+                            text = if (selected) "✓ $title" else title,
+                            fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
+                        )
                     }
                 }
             }
         }
         items(filteredCards, key = { it.code }) { card ->
             val pressInteraction = remember { MutableInteractionSource() }
-            OutlinedButton(
+            BoompalaCardButton(
                 onClick = { onOpen(card) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .wearPressFeedback(pressInteraction),
                 interactionSource = pressInteraction,
+                colors = BoompalaButtonDefaults.buttonColors(),
             ) {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
@@ -470,12 +484,13 @@ fun TarotBrowserScreen(
         }
         item {
             val pressInteraction = remember { MutableInteractionSource() }
-            OutlinedButton(
+            BoompalaCardButton(
                 onClick = onBack,
                 modifier = Modifier
                     .fillMaxWidth()
                     .wearPressFeedback(pressInteraction),
                 interactionSource = pressInteraction,
+                colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) {
                 Text("返回浏览首页")
             }
@@ -567,12 +582,13 @@ fun TarotCardDetailScreen(
 
         item {
             val backInteraction = remember { MutableInteractionSource() }
-            OutlinedButton(
+            BoompalaCardButton(
                 onClick = onBack,
                 modifier = Modifier
                     .fillMaxWidth()
                     .wearPressFeedback(backInteraction),
                 interactionSource = backInteraction,
+                colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) {
                 Text("返回塔罗列表")
             }
@@ -611,12 +627,13 @@ fun KnowledgeListScreen(
             }
             items(values, key = { it.id }) { a ->
                 val pressInteraction = remember { MutableInteractionSource() }
-                OutlinedButton(
+                BoompalaCardButton(
                     onClick = { onOpen(a) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .wearPressFeedback(pressInteraction),
                     interactionSource = pressInteraction,
+                    colors = BoompalaButtonDefaults.buttonColors(),
                 ) {
                     Column(
                         modifier = Modifier.fillMaxWidth(),
@@ -640,12 +657,13 @@ fun KnowledgeListScreen(
         }
         item {
             val pressInteraction = remember { MutableInteractionSource() }
-            OutlinedButton(
+            BoompalaCardButton(
                 onClick = onBack,
                 modifier = Modifier
                     .fillMaxWidth()
                     .wearPressFeedback(pressInteraction),
                 interactionSource = pressInteraction,
+                colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) {
                 Text("返回")
             }
@@ -692,12 +710,13 @@ fun KnowledgeDetailScreen(
         }
         item {
             val pressInteraction = remember { MutableInteractionSource() }
-            OutlinedButton(
+            BoompalaCardButton(
                 onClick = onBack,
                 modifier = Modifier
                     .fillMaxWidth()
                     .wearPressFeedback(pressInteraction),
                 interactionSource = pressInteraction,
+                colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) {
                 Text("返回知识列表")
             }

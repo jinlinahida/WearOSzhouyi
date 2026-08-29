@@ -100,7 +100,7 @@ fun CompassScreen(rotaryScrollingEnabled: Boolean, onBack: () -> Unit) {
         }
         item(key = "lock") {
             val lockInteraction = remember { MutableInteractionSource() }
-            Button(
+            BoompalaCardButton(
                 onClick = { if (locked) lockedHeading = null else lockedHeading = sensorState.heading },
                 enabled = sensorState.available && (sensorState.heading != null || locked),
                 modifier = Modifier
@@ -117,12 +117,13 @@ fun CompassScreen(rotaryScrollingEnabled: Boolean, onBack: () -> Unit) {
         }
         item(key = "back") {
             val backInteraction = remember { MutableInteractionSource() }
-            OutlinedButton(
+            BoompalaCardButton(
                 onClick = onBack,
                 modifier = Modifier
                     .fillMaxWidth()
                     .wearPressFeedback(backInteraction),
                 interactionSource = backInteraction,
+                colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) { Text("返回首页") }
         }
     }

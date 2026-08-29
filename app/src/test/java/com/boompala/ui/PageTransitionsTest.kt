@@ -22,6 +22,8 @@ class PageTransitionsTest {
         assertEquals(1, AppScreen.TAROT_ONE_CARD.hierarchyDepth())
         assertEquals(1, AppScreen.TAROT_THREE_CARD.hierarchyDepth())
         assertEquals(1, AppScreen.TAROT_HOLY_TRIANGLE.hierarchyDepth())
+        assertEquals(1, AppScreen.DESTINY_CHART_MENU.hierarchyDepth())
+        assertEquals(1, AppScreen.PULSE_MEASURE.hierarchyDepth())
         assertEquals(1, AppScreen.COMPASS.hierarchyDepth())
         assertEquals(1, AppScreen.ARCHIVES.hierarchyDepth())
         assertEquals(1, AppScreen.BROWSE.hierarchyDepth())
@@ -30,11 +32,17 @@ class PageTransitionsTest {
         // Level 2 sub-browsers and results
         assertEquals(2, AppScreen.RESULT.hierarchyDepth())
         assertEquals(2, AppScreen.MEIHUA_RESULT.hierarchyDepth())
+        assertEquals(2, AppScreen.PULSE_RESULT.hierarchyDepth())
         assertEquals(2, AppScreen.ARCHIVE_DETAIL.hierarchyDepth())
         assertEquals(2, AppScreen.ARCHIVE_TAG.hierarchyDepth())
         assertEquals(2, AppScreen.HEXAGRAM_BROWSER.hierarchyDepth())
         assertEquals(2, AppScreen.KNOWLEDGE_LIST.hierarchyDepth())
         assertEquals(2, AppScreen.TAROT_BROWSER.hierarchyDepth())
+        assertEquals(2, AppScreen.BAZI_DETAIL.hierarchyDepth())
+        assertEquals(2, AppScreen.WESTERN_CHART_DETAIL.hierarchyDepth())
+        assertEquals(2, AppScreen.NUMEROLOGY_DETAIL.hierarchyDepth())
+        assertEquals(2, AppScreen.BONE_WEIGHT_DETAIL.hierarchyDepth())
+        assertEquals(2, AppScreen.NINE_STAR_DETAIL.hierarchyDepth())
         assertEquals(2, AppScreen.ABOUT.hierarchyDepth())
 
         // Level 3 item details
@@ -54,6 +62,7 @@ class PageTransitionsTest {
             AppScreen.TAROT_ONE_CARD,
             AppScreen.TAROT_THREE_CARD,
             AppScreen.TAROT_HOLY_TRIANGLE,
+            AppScreen.PULSE_MEASURE,
             AppScreen.COMPASS,
             AppScreen.ARCHIVES,
             AppScreen.BROWSE,

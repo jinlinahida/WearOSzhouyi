@@ -176,24 +176,26 @@ fun LiuYaoResultContent(
         }
         item(key = "archive") {
             val archiveInteraction = remember { MutableInteractionSource() }
-            OutlinedButton(
+            BoompalaCardButton(
                 onClick = { onArchive(result) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .wearPressFeedback(archiveInteraction),
                 interactionSource = archiveInteraction,
+                colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) {
                 Text("归档此次结果")
             }
         }
         item(key = "back") {
             val backInteraction = remember { MutableInteractionSource() }
-            OutlinedButton(
+            BoompalaCardButton(
                 onClick = onBack,
                 modifier = Modifier
                     .fillMaxWidth()
                     .wearPressFeedback(backInteraction),
                 interactionSource = backInteraction,
+                colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) {
                 Text("返回修改")
             }
@@ -311,12 +313,13 @@ internal fun HexagramInterpretationCard(
                 style = MaterialTheme.typography.labelSmall,
             )
             val expandInteraction = remember { MutableInteractionSource() }
-            OutlinedButton(
+            BoompalaCardButton(
                 onClick = { expanded = !expanded },
                 modifier = Modifier
                     .fillMaxWidth()
                     .wearPressFeedback(expandInteraction),
                 interactionSource = expandInteraction,
+                colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) {
                 Text(if (expanded) "收起详细解释" else "展开详细解释")
             }
@@ -503,5 +506,5 @@ private fun DivinationResult.toVoidSummary(): String {
         .filter(Yao::isVoid)
         .joinToString { it.position.displayName }
     return "空亡：${voidBranches.joinToString("") { it.displayName }}" +
-        if (voidLines.isEmpty()) "（无空亡爻）" else "（$voidLines）"
+        if (voidLines.isEmpty()) " · 无空爻" else " · $voidLines"
 }

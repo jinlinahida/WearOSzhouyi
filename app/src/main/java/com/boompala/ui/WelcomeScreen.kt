@@ -31,6 +31,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -80,44 +81,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 // =========================================================================
-// Re-WearBili Card & clickVfx
+// Re-WearBili Card (复用 CommonCards.kt 的公共实现)
 // =========================================================================
-
-val CardBorderColor = Color(54, 54, 54, 255)
-val CardBorderWidth = 0.4f.dp
-val CardBackgroundColor = Color(38, 38, 38, 77)
-
-@Composable
-fun Modifier.clickVfx(
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    isEnabled: Boolean = true,
-    animationsEnabled: Boolean = true,
-    onClick: () -> Unit,
-): Modifier = composed {
-    if (isEnabled) {
-        if (!animationsEnabled) {
-            clickable(
-                indication = null,
-                interactionSource = interactionSource,
-                onClick = onClick,
-            )
-        } else {
-            val isPressed by interactionSource.collectIsPressedAsState()
-            val sizePercent by animateFloatAsState(
-                targetValue = if (isPressed) 0.9f else 1f,
-                animationSpec = tween(durationMillis = 150),
-                label = "clickVfx",
-            )
-            scale(sizePercent).clickable(
-                indication = null,
-                interactionSource = interactionSource,
-                onClick = onClick,
-            )
-        }
-    } else {
-        Modifier
-    }
-}
 
 @Composable
 fun ReWearBiliCard(
@@ -130,33 +95,16 @@ fun ReWearBiliCard(
     backgroundColor: Color = CardBackgroundColor,
     content: @Composable BoxScope.() -> Unit,
 ) {
-    Box(
-        modifier = modifier
-            .padding(vertical = 4.dp)
-            .clickVfx(
-                isEnabled = isClickEnabled && onClick != null,
-                animationsEnabled = animationsEnabled,
-                onClick = { onClick?.invoke() },
-            )
-            .clip(shape)
-            .border(
-                width = CardBorderWidth,
-                shape = shape,
-                brush = Brush.linearGradient(
-                    listOf(
-                        borderColor,
-                        Color.Transparent,
-                    ),
-                    start = Offset.Zero,
-                    end = Offset.Infinite,
-                ),
-            )
-            .background(color = backgroundColor)
-            .padding(horizontal = 12.dp, vertical = 10.dp)
-            .fillMaxWidth(),
-    ) {
-        content()
-    }
+    Card(
+        modifier = modifier,
+        isClickEnabled = isClickEnabled,
+        shape = shape,
+        onClick = onClick,
+        borderColor = borderColor,
+        backgroundColor = backgroundColor,
+        innerPaddingValues = PaddingValues(horizontal = 12.dp, vertical = 10.dp),
+        content = content,
+    )
 }
 
 // =========================================================================
@@ -590,7 +538,7 @@ private fun DisclaimerScreen(
                         modifier = Modifier.fillMaxWidth(),
                     )
                     val enterInteraction = remember { MutableInteractionSource() }
-                    Button(
+                    BoompalaCardButton(
                         onClick = onFinish,
                         modifier = Modifier
                             .fillMaxWidth()

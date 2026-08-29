@@ -114,4 +114,31 @@ class ArchiveSnapshotCodecTest {
         assertTrue(snapshot.sections.containsKey("牌阵信息"))
         assertTrue(snapshot.sections.keys.any { it.contains("愚者") })
     }
+
+    @Test
+    fun pulseReadingEncodesAndDecodesSuccessfully() {
+        val metrics = com.boompala.engine.pulse.PulseFeatureMetrics(
+            heartRateBpm = 75.0,
+            regularityPercent = 95.0,
+            h1 = 1.0,
+            h2 = 0.38,
+            h3 = 0.52,
+            kValue = 0.35,
+            h3Ratio = 0.52,
+            h2Ratio = 0.38,
+            isRawPpg = true,
+        )
+        val result = com.boompala.engine.pulse.TcmPulseClassifier.classify(metrics, hour24 = 10)
+        val json = ArchiveSnapshotCodec.encode(result)
+        val snapshot = ArchiveSnapshotCodec.decode(json).getOrThrow()
+
+        assertEquals(ArchiveSource.PULSE, snapshot.source)
+        assertTrue(snapshot.title.contains("脉象推演"))
+        assertTrue(snapshot.title.contains(result.category.chineseName))
+        assertTrue(snapshot.sections.containsKey("脉象与特征"))
+        assertTrue(snapshot.sections.containsKey("宜忌指引"))
+        assertTrue(snapshot.sections.containsKey("辨证调理"))
+        assertTrue(snapshot.sections.containsKey("时辰经络"))
+        assertTrue(snapshot.sections.containsKey("典籍渊源与医理"))
+    }
 }

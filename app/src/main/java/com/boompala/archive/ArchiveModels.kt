@@ -5,6 +5,7 @@ enum class ArchiveSource(val displayName: String) {
     MEI_HUA("时间起卦"),
     XIAO_LIU_REN("小六壬"),
     TAROT("塔罗"),
+    PULSE("脉象推演"),
 }
 
 data class ArchiveRecord(

@@ -102,4 +102,34 @@ class SettingsRepositoryTest {
         val newRepoInstance = SettingsRepository(dataStore)
         assertEquals(true, newRepoInstance.settings.first().hasCompletedOnboarding)
     }
+
+    @Test
+    fun `user birth settings can be saved and cleared`() = runBlocking {
+        val dataStore = PreferenceDataStoreFactory.create(
+            scope = dataStoreScope,
+            produceFile = { dataStoreFile },
+        )
+        val repository = SettingsRepository(dataStore)
+
+        val initial = repository.settings.first()
+        assertEquals(null, initial.userBirthDate)
+        assertEquals(null, initial.userBirthHour)
+        assertEquals(com.boompala.engine.bazi.BaziGender.MALE, initial.userGender)
+
+        repository.setUserBirth(
+            birthDate = "1995-10-24",
+            birthHour = 9,
+            gender = com.boompala.engine.bazi.BaziGender.FEMALE,
+        )
+        val saved = repository.settings.first()
+        assertEquals("1995-10-24", saved.userBirthDate)
+        assertEquals(9, saved.userBirthHour)
+        assertEquals(com.boompala.engine.bazi.BaziGender.FEMALE, saved.userGender)
+
+        repository.clearUserBirth()
+        val cleared = repository.settings.first()
+        assertEquals(null, cleared.userBirthDate)
+        assertEquals(null, cleared.userBirthHour)
+        assertEquals(com.boompala.engine.bazi.BaziGender.MALE, cleared.userGender)
+    }
 }

@@ -53,6 +53,7 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.1.1")
     implementation("androidx.wear.compose:compose-foundation:1.6.2")
     implementation("androidx.wear.compose:compose-material3:1.6.2")
+    implementation("androidx.graphics:graphics-shapes:1.0.1")
     implementation("com.google.code.gson:gson:2.10.1")
 
     testImplementation("junit:junit:4.13.2")

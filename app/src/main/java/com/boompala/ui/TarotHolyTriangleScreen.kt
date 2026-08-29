@@ -111,7 +111,7 @@ fun TarotHolyTriangleScreen(
                 ResultCard {
                     DetailField("牌组类型", deckType.displayName)
                     val deckInteraction = remember { MutableInteractionSource() }
-                    OutlinedButton(
+                    BoompalaCardButton(
                         onClick = {
                             deckType = if (deckType == DeckType.FULL_78) {
                                 DeckType.MAJOR_22
@@ -123,6 +123,7 @@ fun TarotHolyTriangleScreen(
                             .fillMaxWidth()
                             .wearPressFeedback(deckInteraction),
                         interactionSource = deckInteraction,
+                        colors = BoompalaButtonDefaults.outlinedButtonColors(),
                     ) {
                         Text(if (deckType == DeckType.FULL_78) "切换为仅大牌 (22张)" else "切换为全牌组 (78张)")
                     }
@@ -133,12 +134,13 @@ fun TarotHolyTriangleScreen(
                 ResultCard {
                     DetailField("逆位规则", if (allowReversed) "允许逆位" else "仅正位")
                     val reversedInteraction = remember { MutableInteractionSource() }
-                    OutlinedButton(
+                    BoompalaCardButton(
                         onClick = { allowReversed = !allowReversed },
                         modifier = Modifier
                             .fillMaxWidth()
                             .wearPressFeedback(reversedInteraction),
                         interactionSource = reversedInteraction,
+                        colors = BoompalaButtonDefaults.outlinedButtonColors(),
                     ) {
                         Text(if (allowReversed) "切换为仅正位" else "切换为允许逆位")
                     }
@@ -147,7 +149,7 @@ fun TarotHolyTriangleScreen(
 
             item(key = "holy-triangle-draw-action") {
                 val drawInteraction = remember { MutableInteractionSource() }
-                Button(
+                BoompalaCardButton(
                     onClick = {
                         val newReading = engine.cast(
                             spread = spread,
@@ -170,12 +172,13 @@ fun TarotHolyTriangleScreen(
 
             item(key = "holy-triangle-back-home") {
                 val backInteraction = remember { MutableInteractionSource() }
-                OutlinedButton(
+                BoompalaCardButton(
                     onClick = onBack,
                     modifier = Modifier
                         .fillMaxWidth()
                         .wearPressFeedback(backInteraction),
                     interactionSource = backInteraction,
+                    colors = BoompalaButtonDefaults.outlinedButtonColors(),
                 ) {
                     Text("返回首页")
                 }
@@ -243,7 +246,7 @@ fun TarotHolyTriangleScreen(
 
                 item(key = "step-next-action-$currentStep") {
                     val nextInteraction = remember { MutableInteractionSource() }
-                    Button(
+                    BoompalaCardButton(
                         onClick = {
                             if (currentStep < 2) {
                                 currentStep++
@@ -407,12 +410,13 @@ fun TarotHolyTriangleScreen(
 
             item(key = "holy-triangle-archive") {
                 val archiveInteraction = remember { MutableInteractionSource() }
-                OutlinedButton(
+                BoompalaCardButton(
                     onClick = { onArchive(reading) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .wearPressFeedback(archiveInteraction),
                     interactionSource = archiveInteraction,
+                    colors = BoompalaButtonDefaults.outlinedButtonColors(),
                 ) {
                     Text("归档此结果")
                 }
@@ -420,7 +424,7 @@ fun TarotHolyTriangleScreen(
 
             item(key = "holy-triangle-recast") {
                 val recastInteraction = remember { MutableInteractionSource() }
-                Button(
+                BoompalaCardButton(
                     onClick = {
                         currentStep = 0
                         flippedList.clear()
@@ -438,12 +442,13 @@ fun TarotHolyTriangleScreen(
 
             item(key = "holy-triangle-back-home") {
                 val finishInteraction = remember { MutableInteractionSource() }
-                OutlinedButton(
+                BoompalaCardButton(
                     onClick = onBack,
                     modifier = Modifier
                         .fillMaxWidth()
                         .wearPressFeedback(finishInteraction),
                     interactionSource = finishInteraction,
+                    colors = BoompalaButtonDefaults.outlinedButtonColors(),
                 ) {
                     Text("返回首页")
                 }

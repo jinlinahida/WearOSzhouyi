@@ -27,11 +27,11 @@ fun XiaoLiuRenScreen(engine: XiaoLiuRenEngine, initial: XiaoLiuRenReading?, rota
     RotaryScrollColumn(rotaryEnabled = rotary, modifier = Modifier.fillMaxSize(), contentPadding = metrics.screenPadding, itemSpacing = metrics.itemSpacing) {
         item { Text("小六壬") }
         item { ResultCard { DetailField("公历", fmt.format(reading.timeInfo.gregorianDateTime)); DetailField("农历", reading.timeInfo.lunarDate); DetailField("当前时辰", reading.timeInfo.hourGanzhi.earthlyBranch.displayName + "时"); DetailField("起课数据", "月${reading.timeInfo.lunarMonth} 日${reading.timeInfo.lunarDay} 时${reading.timeInfo.hourGanzhi.earthlyBranch.index + 1}") } }
-        item { ResultCard { Text("六宫（固定顺序）"); XiaoLiuRenPalace.entries.forEach { p -> Text(if (p == reading.finalPalace) "▶ ${p.displayName}（最终）" else p.displayName) } } }
+        item { ResultCard { Text("六宫次序"); XiaoLiuRenPalace.entries.forEach { p -> Text(if (p == reading.finalPalace) "▶ ${p.displayName} · 课成" else p.displayName) } } }
         item { ResultCard { DetailField("月宫", reading.monthPalace.displayName); DetailField("日宫", reading.dayPalace.displayName); DetailField("时宫/最终", reading.finalPalace.displayName); Text(reading.finalPalace.meaning) } }
         item {
             val pressInteraction = remember { MutableInteractionSource() }
-            Button(
+            BoompalaCardButton(
                 onClick = { onReading(engine.calculate(Instant.now(), ZoneId.systemDefault())) },
                 modifier = Modifier.fillMaxWidth().wearPressFeedback(pressInteraction),
                 interactionSource = pressInteraction,
@@ -39,18 +39,20 @@ fun XiaoLiuRenScreen(engine: XiaoLiuRenEngine, initial: XiaoLiuRenReading?, rota
         }
         item {
             val pressInteraction = remember { MutableInteractionSource() }
-            OutlinedButton(
+            BoompalaCardButton(
                 onClick = { onArchive(reading) },
                 modifier = Modifier.fillMaxWidth().wearPressFeedback(pressInteraction),
                 interactionSource = pressInteraction,
+                colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) { Text("归档此次起课") }
         }
         item {
             val pressInteraction = remember { MutableInteractionSource() }
-            OutlinedButton(
+            BoompalaCardButton(
                 onClick = onBack,
                 modifier = Modifier.fillMaxWidth().wearPressFeedback(pressInteraction),
                 interactionSource = pressInteraction,
+                colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) { Text("返回首页") }
         }
     }

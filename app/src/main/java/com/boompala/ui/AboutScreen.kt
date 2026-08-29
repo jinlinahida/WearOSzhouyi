@@ -151,12 +151,13 @@ fun AboutScreen(
         // 5. 重新查看欢迎与声明入口
         item(key = "welcome-revisit-card") {
             val revisitInteraction = remember { MutableInteractionSource() }
-            OutlinedButton(
+            BoompalaCardButton(
                 onClick = onViewWelcomeClick,
                 modifier = Modifier
                     .fillMaxWidth()
                     .wearPressFeedback(revisitInteraction),
                 interactionSource = revisitInteraction,
+                colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) {
                 Text(
                     text = stringResource(R.string.welcome_revisit_from_about),
@@ -167,12 +168,13 @@ fun AboutScreen(
 
         item(key = "back") {
             val backInteraction = remember { MutableInteractionSource() }
-            OutlinedButton(
+            BoompalaCardButton(
                 onClick = onBack,
                 modifier = Modifier
                     .fillMaxWidth()
                     .wearPressFeedback(backInteraction),
                 interactionSource = backInteraction,
+                colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) {
                 Text(stringResource(R.string.about_back_to_settings))
             }
