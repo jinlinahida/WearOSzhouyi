@@ -22,6 +22,7 @@ class PageTransitionsTest {
         assertEquals(1, AppScreen.TAROT_ONE_CARD.hierarchyDepth())
         assertEquals(1, AppScreen.TAROT_THREE_CARD.hierarchyDepth())
         assertEquals(1, AppScreen.TAROT_HOLY_TRIANGLE.hierarchyDepth())
+        assertEquals(1, AppScreen.TAROT_CELTIC_CROSS.hierarchyDepth())
         assertEquals(1, AppScreen.DESTINY_CHART_MENU.hierarchyDepth())
         assertEquals(1, AppScreen.PULSE_MEASURE.hierarchyDepth())
         assertEquals(1, AppScreen.COMPASS.hierarchyDepth())
@@ -62,6 +63,7 @@ class PageTransitionsTest {
             AppScreen.TAROT_ONE_CARD,
             AppScreen.TAROT_THREE_CARD,
             AppScreen.TAROT_HOLY_TRIANGLE,
+            AppScreen.TAROT_CELTIC_CROSS,
             AppScreen.PULSE_MEASURE,
             AppScreen.COMPASS,
             AppScreen.ARCHIVES,
@@ -220,6 +222,7 @@ class PageTransitionsTest {
             AppScreen.TAROT_ONE_CARD,
             AppScreen.TAROT_THREE_CARD,
             AppScreen.TAROT_HOLY_TRIANGLE,
+            AppScreen.TAROT_CELTIC_CROSS,
         ).forEach { source ->
             assertEquals(
                 "$source -> ARCHIVE_TAG should be FORWARD",

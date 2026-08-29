@@ -49,6 +49,7 @@ internal fun resolveSpotlightColor(screen: AppScreen): Color = when (screen) {
     AppScreen.TAROT_ONE_CARD,
     AppScreen.TAROT_THREE_CARD,
     AppScreen.TAROT_HOLY_TRIANGLE,
+    AppScreen.TAROT_CELTIC_CROSS,
     AppScreen.TAROT_BROWSER,
     AppScreen.TAROT_CARD_DETAIL -> TarotSpotlightColor
     AppScreen.COMPASS -> CompassSpotlightColor

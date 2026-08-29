@@ -385,6 +385,7 @@ fun SettingsScreen(
                         HomeFeature.TAROT_ONE -> stringResource(R.string.home_feature_tarot_one)
                         HomeFeature.TAROT_THREE -> stringResource(R.string.home_feature_tarot_three)
                         HomeFeature.TAROT_HOLY_TRIANGLE -> stringResource(R.string.home_feature_tarot_holy_triangle)
+                        HomeFeature.TAROT_CELTIC_CROSS -> stringResource(R.string.home_feature_tarot_celtic_cross)
                         HomeFeature.DAILY_FORTUNE -> stringResource(R.string.home_feature_daily_fortune)
                         HomeFeature.XIAO_LIU_REN -> stringResource(R.string.home_feature_xiao_liu_ren)
                         HomeFeature.COMPASS -> stringResource(R.string.home_feature_compass)

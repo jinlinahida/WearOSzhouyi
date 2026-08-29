@@ -7,6 +7,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -99,6 +100,7 @@ internal enum class AppScreen {
     TAROT_ONE_CARD,
     TAROT_THREE_CARD,
     TAROT_HOLY_TRIANGLE,
+    TAROT_CELTIC_CROSS,
     DESTINY_CHART_MENU,
     BAZI_DETAIL,
     WESTERN_CHART_DETAIL,
@@ -127,6 +129,7 @@ internal fun AppScreen.backDestination(): AppScreen? = when (this) {
     AppScreen.TAROT_ONE_CARD -> AppScreen.HOME
     AppScreen.TAROT_THREE_CARD -> AppScreen.HOME
     AppScreen.TAROT_HOLY_TRIANGLE -> AppScreen.HOME
+    AppScreen.TAROT_CELTIC_CROSS -> AppScreen.HOME
     AppScreen.DESTINY_CHART_MENU -> AppScreen.HOME
     AppScreen.BAZI_DETAIL -> AppScreen.DESTINY_CHART_MENU
     AppScreen.WESTERN_CHART_DETAIL -> AppScreen.DESTINY_CHART_MENU
@@ -171,6 +174,7 @@ fun BoompalaApp() {
     if (settingsState == null) return
     val settings = settingsState!!
     val screenShape = settings.resolvedScreenShape(configuration.isScreenRound)
+    val homeListState = rememberLazyListState()
     val scope = rememberCoroutineScope()
     var screen by remember {
         mutableStateOf(if (!settings.hasCompletedOnboarding) AppScreen.WELCOME else AppScreen.HOME)
@@ -195,6 +199,7 @@ fun BoompalaApp() {
     var meiHuaGenerationId by remember { mutableIntStateOf(0) }
     // 设置页内层分区可返回时，需屏蔽外层滑动返回手势，避免直接退回首页。
     var settingsInnerBackAvailable by remember { mutableStateOf(false) }
+    var tarotCelticCrossInnerBackAvailable by remember { mutableStateOf(false) }
     val dependenciesReady = remember(context) {
         CompletableDeferred<OfflineReadingDependencies>()
     }
@@ -209,6 +214,7 @@ fun BoompalaApp() {
     var tarotReading by remember { mutableStateOf<TarotReading?>(null) }
     var tarotThreeReading by remember { mutableStateOf<TarotReading?>(null) }
     var tarotHolyTriangleReading by remember { mutableStateOf<TarotReading?>(null) }
+    var tarotCelticCrossReading by remember { mutableStateOf<TarotReading?>(null) }
     var currentBaziProfile by remember { mutableStateOf<BaziProfile?>(null) }
     var currentWesternReading by remember { mutableStateOf<WesternChartReading?>(null) }
     var currentNumerologyReading by remember { mutableStateOf<NumerologyReading?>(null) }
@@ -292,6 +298,9 @@ fun BoompalaApp() {
                 if (screen == AppScreen.TAROT_HOLY_TRIANGLE) {
                     tarotHolyTriangleReading = null
                 }
+                if (screen == AppScreen.TAROT_CELTIC_CROSS) {
+                    tarotCelticCrossReading = null
+                }
                 lastTransitionPop = true
                 scope.launch {
                     if (settings.animationsEnabled && animate) {
@@ -350,6 +359,12 @@ fun BoompalaApp() {
             navigateTo(AppScreen.TAROT_HOLY_TRIANGLE)
         }
     }
+    val onTarotCelticCrossClick = remember(navigateTo) {
+        {
+            tarotCelticCrossReading = null
+            navigateTo(AppScreen.TAROT_CELTIC_CROSS)
+        }
+    }
     val onDestinyChartClick = remember(navigateTo) {
         {
             navigateTo(AppScreen.DESTINY_CHART_MENU)
@@ -392,7 +407,9 @@ fun BoompalaApp() {
                             onTarotClick = onTarotClick,
                             onTarotThreeCardClick = onTarotThreeCardClick,
                             onTarotHolyTriangleClick = onTarotHolyTriangleClick,
+                            onTarotCelticCrossClick = onTarotCelticCrossClick,
                             onPulseClick = onPulseClick,
+                            state = homeListState,
                         )
 
                         AppScreen.YAO_INPUT -> YaoInputScreen(
@@ -453,6 +470,7 @@ fun BoompalaApp() {
                             onTarotThreeCardClick = onTarotThreeCardClick,
                             onTarotHolyTriangleClick = onTarotHolyTriangleClick,
                             onPulseClick = onPulseClick,
+                            state = homeListState,
                         )
 
                         AppScreen.XIAO_LIU_REN -> XiaoLiuRenScreen(xlrEngine, xlrReading, settings.rotaryScrollingEnabled, { xlrReading = it }, { r -> archiveReturnScreen=AppScreen.XIAO_LIU_REN; archiveDraft = ArchiveDraft("", "", 0xFF4CAF50, ArchiveSource.XIAO_LIU_REN, r.timeInfo.gregorianDateTime.toInstant().toEpochMilli(), "最终${r.finalPalace.displayName}", ArchiveSnapshotCodec.encode(r)); navigateTo(AppScreen.ARCHIVE_TAG) }, { goBack(true) })
@@ -798,6 +816,29 @@ fun BoompalaApp() {
                             },
                         )
 
+                        AppScreen.TAROT_CELTIC_CROSS -> TarotCelticCrossScreen(
+                            engine = tarotEngine,
+                            reading = tarotCelticCrossReading,
+                            rotaryScrollingEnabled = settings.rotaryScrollingEnabled,
+                            animationsEnabled = settings.animationsEnabled,
+                            onReadingChanged = { tarotCelticCrossReading = it },
+                            onBack = { goBack(true) },
+                            onInnerBackAvailabilityChanged = { tarotCelticCrossInnerBackAvailable = it },
+                            onArchive = { r ->
+                                archiveReturnScreen = AppScreen.TAROT_CELTIC_CROSS
+                                archiveDraft = ArchiveDraft(
+                                    name = r.spread.name,
+                                    note = "",
+                                    color = 0xFF4CAF50L,
+                                    source = ArchiveSource.TAROT,
+                                    castAt = r.castAt,
+                                    summary = r.drawnCards.joinToString(" · ") { "${it.slot.name}:${it.card.nameZh}(${if (it.orientation == com.boompala.engine.tarot.TarotOrientation.REVERSED) "逆" else "正"})" },
+                                    snapshotJson = ArchiveSnapshotCodec.encode(r),
+                                )
+                                navigateTo(AppScreen.ARCHIVE_TAG)
+                            },
+                        )
+
                         AppScreen.WELCOME -> WelcomeScreen(
                             rotaryScrollingEnabled = settings.rotaryScrollingEnabled,
                             animationsEnabled = settings.animationsEnabled,
@@ -1060,7 +1101,9 @@ fun BoompalaApp() {
                                 onTarotClick = onTarotClick,
                                 onTarotThreeCardClick = onTarotThreeCardClick,
                                 onTarotHolyTriangleClick = onTarotHolyTriangleClick,
+                                onTarotCelticCrossClick = onTarotCelticCrossClick,
                                 onPulseClick = onPulseClick,
+                                state = homeListState,
                             )
                         }
                     }
@@ -1069,7 +1112,8 @@ fun BoompalaApp() {
                 val swipeToDismissBoxState = rememberSwipeToDismissBoxState()
                 val swipeEnabled = !isFirstRunWelcome &&
                     effectiveBackDestination != null &&
-                    !settingsInnerBackAvailable
+                    !settingsInnerBackAvailable &&
+                    !tarotCelticCrossInnerBackAvailable
                 val screenWidthPx = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp.toPx() }
 
                 CompositionLocalProvider(

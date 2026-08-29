@@ -116,6 +116,48 @@ class ArchiveSnapshotCodecTest {
     }
 
     @Test
+    fun celticCrossReadingEncodesAndDecodesSuccessfully() {
+        val spread = com.boompala.engine.tarot.TarotSpread.CELTIC_CROSS
+        val cards = (0 until 10).map { i ->
+            com.boompala.engine.tarot.TarotCard(
+                id = i,
+                code = "major_${i.toString().padStart(2, '0')}",
+                nameEn = "Card $i",
+                nameZh = "牌$i",
+                arcana = com.boompala.engine.tarot.ArcanaType.MAJOR,
+                suit = com.boompala.engine.tarot.TarotSuit.MAJOR,
+                rank = i,
+                rankName = "$i",
+                element = com.boompala.engine.tarot.TarotElement.AIR,
+                keywordsEn = listOf("key$i"),
+                keywordsZh = listOf("关键词$i"),
+                uprightMeanings = listOf("正位牌义$i"),
+                reversedMeanings = listOf("逆位牌义$i"),
+                fortuneTelling = listOf("断语$i"),
+            )
+        }
+        val drawn = spread.slots.mapIndexed { idx, slot ->
+            com.boompala.engine.tarot.DrawnTarotCard(
+                slot = slot,
+                card = cards[idx],
+                orientation = if (idx % 2 == 0) com.boompala.engine.tarot.TarotOrientation.UPRIGHT else com.boompala.engine.tarot.TarotOrientation.REVERSED,
+            )
+        }
+        val reading = com.boompala.engine.tarot.TarotReading(
+            spread = spread,
+            deckType = com.boompala.engine.tarot.DeckType.FULL_78,
+            drawnCards = drawn,
+            castAt = 1700000000000L,
+        )
+        val json = ArchiveSnapshotCodec.encode(reading)
+        val snapshot = ArchiveSnapshotCodec.decode(json).getOrThrow()
+        assertEquals(ArchiveSource.TAROT, snapshot.source)
+        assertTrue(snapshot.title.contains("凯尔特十字"))
+        assertTrue(snapshot.sections.containsKey("牌阵信息"))
+        assertEquals(11, snapshot.sections.size) // 1 info section + 10 card sections
+    }
+
+    @Test
     fun pulseReadingEncodesAndDecodesSuccessfully() {
         val metrics = com.boompala.engine.pulse.PulseFeatureMetrics(
             heartRateBpm = 75.0,

@@ -43,6 +43,11 @@ class AppScreenTest {
     }
 
     @Test
+    fun tarotCelticCrossEntersFromHomeAndReturnsHome() {
+        assertEquals(AppScreen.HOME, AppScreen.TAROT_CELTIC_CROSS.backDestination())
+    }
+
+    @Test
     fun tarotBrowserEntersFromBrowseAndReturnsBrowse() {
         assertEquals(AppScreen.BROWSE, AppScreen.TAROT_BROWSER.backDestination())
     }

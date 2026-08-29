@@ -4,6 +4,8 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -35,7 +37,9 @@ fun HomeScreen(
     onTarotClick: () -> Unit = { },
     onTarotThreeCardClick: () -> Unit = { },
     onTarotHolyTriangleClick: () -> Unit = { },
+    onTarotCelticCrossClick: () -> Unit = { },
     onPulseClick: () -> Unit = { },
+    state: LazyListState = rememberLazyListState(),
 ) {
     val metrics = LocalUiMetrics.current
     val titlePaddingModifier = remember(metrics.itemSpacing) {
@@ -49,6 +53,7 @@ fun HomeScreen(
     RotaryScrollColumn(
         rotaryEnabled = settings.rotaryScrollingEnabled,
         modifier = Modifier.fillMaxSize(),
+        state = state,
         contentPadding = metrics.screenPadding,
         itemSpacing = metrics.itemSpacing,
     ) {
@@ -136,6 +141,19 @@ fun HomeScreen(
                             interactionSource = pressInteraction,
                         ) {
                             Text(stringResource(R.string.home_feature_tarot_holy_triangle))
+                        }
+                    }
+                }
+
+                HomeFeature.TAROT_CELTIC_CROSS -> {
+                    item(key = "tarot-celtic-cross", contentType = CONTENT_TYPE_BUTTON) {
+                        val pressInteraction = remember { MutableInteractionSource() }
+                        BoompalaCardButton(
+                            onClick = onTarotCelticCrossClick,
+                            modifier = fullWidthModifier.wearPressFeedback(pressInteraction, hapticEnabled = settings.hapticFeedbackEnabled),
+                            interactionSource = pressInteraction,
+                        ) {
+                            Text(stringResource(R.string.home_feature_tarot_celtic_cross))
                         }
                     }
                 }

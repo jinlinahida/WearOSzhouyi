@@ -31,6 +31,7 @@ class AppBackgroundTest {
         assertEquals(TarotSpotlightColor, resolveSpotlightColor(AppScreen.TAROT_ONE_CARD))
         assertEquals(TarotSpotlightColor, resolveSpotlightColor(AppScreen.TAROT_THREE_CARD))
         assertEquals(TarotSpotlightColor, resolveSpotlightColor(AppScreen.TAROT_HOLY_TRIANGLE))
+        assertEquals(TarotSpotlightColor, resolveSpotlightColor(AppScreen.TAROT_CELTIC_CROSS))
         assertEquals(TarotSpotlightColor, resolveSpotlightColor(AppScreen.TAROT_BROWSER))
         assertEquals(TarotSpotlightColor, resolveSpotlightColor(AppScreen.TAROT_CARD_DETAIL))
         assertEquals(Color(0xFF9575CD), TarotSpotlightColor)

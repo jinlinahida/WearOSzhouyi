@@ -262,6 +262,7 @@ internal fun AppScreen.hierarchyDepth(): Int = when (this) {
     AppScreen.TAROT_ONE_CARD,
     AppScreen.TAROT_THREE_CARD,
     AppScreen.TAROT_HOLY_TRIANGLE,
+    AppScreen.TAROT_CELTIC_CROSS,
     AppScreen.DESTINY_CHART_MENU,
     AppScreen.PULSE_MEASURE,
     AppScreen.COMPASS,
