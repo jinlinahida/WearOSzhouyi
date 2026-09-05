@@ -49,5 +49,9 @@ class AppBackgroundTest {
         assertEquals(PulseSpotlightColor, resolveSpotlightColor(AppScreen.PULSE_MEASURE))
         assertEquals(PulseSpotlightColor, resolveSpotlightColor(AppScreen.PULSE_RESULT))
         assertEquals(Color(0xFF00E5A3), PulseSpotlightColor)
+
+        // 特殊界面 6：腕上木鱼为温润檀金色
+        assertEquals(MuyuSpotlightColor, resolveSpotlightColor(AppScreen.MUYU))
+        assertEquals(Color(0xFFD4AF37), MuyuSpotlightColor)
     }
 }

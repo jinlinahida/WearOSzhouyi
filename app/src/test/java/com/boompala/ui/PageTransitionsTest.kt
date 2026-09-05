@@ -25,6 +25,7 @@ class PageTransitionsTest {
         assertEquals(1, AppScreen.TAROT_CELTIC_CROSS.hierarchyDepth())
         assertEquals(1, AppScreen.DESTINY_CHART_MENU.hierarchyDepth())
         assertEquals(1, AppScreen.PULSE_MEASURE.hierarchyDepth())
+        assertEquals(1, AppScreen.MUYU.hierarchyDepth())
         assertEquals(1, AppScreen.COMPASS.hierarchyDepth())
         assertEquals(1, AppScreen.ARCHIVES.hierarchyDepth())
         assertEquals(1, AppScreen.BROWSE.hierarchyDepth())
@@ -65,6 +66,7 @@ class PageTransitionsTest {
             AppScreen.TAROT_HOLY_TRIANGLE,
             AppScreen.TAROT_CELTIC_CROSS,
             AppScreen.PULSE_MEASURE,
+            AppScreen.MUYU,
             AppScreen.COMPASS,
             AppScreen.ARCHIVES,
             AppScreen.BROWSE,

@@ -109,6 +109,7 @@ internal enum class AppScreen {
     NINE_STAR_DETAIL,
     PULSE_MEASURE,
     PULSE_RESULT,
+    MUYU,
 }
 
 internal fun AppScreen.backDestination(): AppScreen? = when (this) {
@@ -138,6 +139,7 @@ internal fun AppScreen.backDestination(): AppScreen? = when (this) {
     AppScreen.NINE_STAR_DETAIL -> AppScreen.DESTINY_CHART_MENU
     AppScreen.PULSE_MEASURE -> AppScreen.HOME
     AppScreen.PULSE_RESULT -> AppScreen.HOME
+    AppScreen.MUYU -> AppScreen.HOME
     AppScreen.BROWSE -> AppScreen.HOME
     AppScreen.HEXAGRAM_BROWSER -> AppScreen.BROWSE
     AppScreen.HEXAGRAM_DETAIL -> AppScreen.HEXAGRAM_BROWSER
@@ -392,6 +394,11 @@ fun BoompalaApp() {
             navigateTo(AppScreen.PULSE_MEASURE)
         }
     }
+    val onMuyuClick = remember(navigateTo) {
+        {
+            navigateTo(AppScreen.MUYU)
+        }
+    }
 
     BackHandler(enabled = !isFirstRunWelcome && effectiveBackDestination != null) {
         goBack(true)
@@ -426,6 +433,7 @@ fun BoompalaApp() {
                             onTarotHolyTriangleClick = onTarotHolyTriangleClick,
                             onTarotCelticCrossClick = onTarotCelticCrossClick,
                             onPulseClick = onPulseClick,
+                            onMuyuClick = onMuyuClick,
                             state = homeListState,
                         )
 
@@ -1151,9 +1159,20 @@ fun BoompalaApp() {
                                 onTarotHolyTriangleClick = onTarotHolyTriangleClick,
                                 onTarotCelticCrossClick = onTarotCelticCrossClick,
                                 onPulseClick = onPulseClick,
+                                onMuyuClick = onMuyuClick,
                                 state = homeListState,
                             )
                         }
+
+                        AppScreen.MUYU -> com.boompala.ui.muyu.MuyuScreen(
+                            initialCount = settings.muyuTotalCount,
+                            onIncrementCount = { delta ->
+                                scope.launch {
+                                    settingsRepository.incrementMuyuCount(delta)
+                                }
+                            },
+                            rotaryEnabled = settings.rotaryScrollingEnabled,
+                        )
                     }
                 }
 

@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.boompala.engine.bazi.BaziGender
@@ -53,6 +54,7 @@ class SettingsRepository(
                 compassDeclination = preferences[COMPASS_DECLINATION_KEY] ?: 0f,
                 tarotReversedEnabled = preferences[TAROT_REVERSED_ENABLED_KEY] ?: true,
                 tarotMajorArcanaOnly = preferences[TAROT_MAJOR_ARCANA_ONLY_KEY] ?: false,
+                muyuTotalCount = preferences[MUYU_TOTAL_COUNT_KEY] ?: 0L,
             )
         }
 
@@ -77,6 +79,7 @@ class SettingsRepository(
                 compassDeclination = preferences[COMPASS_DECLINATION_KEY] ?: 0f,
                 tarotReversedEnabled = preferences[TAROT_REVERSED_ENABLED_KEY] ?: true,
                 tarotMajorArcanaOnly = preferences[TAROT_MAJOR_ARCANA_ONLY_KEY] ?: false,
+                muyuTotalCount = preferences[MUYU_TOTAL_COUNT_KEY] ?: 0L,
             )
             val next = transform(current)
             preferences[SCREEN_MODE_KEY] = next.screenMode.name
@@ -105,6 +108,7 @@ class SettingsRepository(
             preferences[COMPASS_DECLINATION_KEY] = next.compassDeclination
             preferences[TAROT_REVERSED_ENABLED_KEY] = next.tarotReversedEnabled
             preferences[TAROT_MAJOR_ARCANA_ONLY_KEY] = next.tarotMajorArcanaOnly
+            preferences[MUYU_TOTAL_COUNT_KEY] = next.muyuTotalCount
         }
     }
 
@@ -227,6 +231,22 @@ class SettingsRepository(
         }
     }
 
+    suspend fun incrementMuyuCount(delta: Long = 1L): Long {
+        var updated = 0L
+        dataStore.edit { preferences ->
+            val current = preferences[MUYU_TOTAL_COUNT_KEY] ?: 0L
+            updated = (current + delta).coerceAtLeast(0L)
+            preferences[MUYU_TOTAL_COUNT_KEY] = updated
+        }
+        return updated
+    }
+
+    suspend fun resetMuyuCount() {
+        dataStore.edit { preferences ->
+            preferences[MUYU_TOTAL_COUNT_KEY] = 0L
+        }
+    }
+
     private companion object {
         val SCREEN_MODE_KEY = stringPreferencesKey("screen_mode")
         val CONTENT_SIZE_KEY = stringPreferencesKey("content_size")
@@ -246,6 +266,7 @@ class SettingsRepository(
         val COMPASS_DECLINATION_KEY = floatPreferencesKey("compass_declination")
         val TAROT_REVERSED_ENABLED_KEY = booleanPreferencesKey("tarot_reversed_enabled")
         val TAROT_MAJOR_ARCANA_ONLY_KEY = booleanPreferencesKey("tarot_major_arcana_only")
+        val MUYU_TOTAL_COUNT_KEY = longPreferencesKey("muyu_total_count")
 
         inline fun <reified T : Enum<T>> String?.toEnumOrDefault(default: T): T =
             runCatching { enumValueOf<T>(this.orEmpty()) }.getOrDefault(default)

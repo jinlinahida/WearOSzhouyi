@@ -14,9 +14,19 @@
     <string name="home_feature_xiao_liu_ren">Xiao Liu Ren</string>
     <string name="home_feature_compass">Compass</string>
     <string name="home_feature_pulse">Pulse Diagnosis</string>
+    <string name="home_feature_muyu">Wooden Fish</string>
     <string name="home_feature_archives">Archives</string>
     <string name="home_feature_browse">Browse</string>
     <string name="home_feature_settings">Settings</string>
+
+    <!-- Wooden Fish (Muyu) Strings -->
+    <string name="muyu_title">Wooden Fish</string>
+    <string name="muyu_merit">Merit</string>
+    <string name="muyu_merit_plus_one">Merit +1</string>
+    <string name="muyu_auto_mode">Auto</string>
+    <string name="muyu_manual_mode">Manual</string>
+    <string name="muyu_speed_label">s/strike</string>
+    <string name="muyu_reset_count">Reset Count</string>
 
     <!-- Destiny Chart Strings -->
     <string name="destiny_chart_title">Destiny Hub</string>

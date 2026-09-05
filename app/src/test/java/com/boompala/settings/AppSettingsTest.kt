@@ -91,6 +91,7 @@ class AppSettingsTest {
     fun `home feature fromId resolves correctly with fallback`() {
         assertEquals(HomeFeature.SIX_YAO, HomeFeature.fromId("six_yao"))
         assertEquals(HomeFeature.DAILY_FORTUNE, HomeFeature.fromId("daily_fortune"))
+        assertEquals(HomeFeature.MUYU, HomeFeature.fromId("muyu"))
         assertEquals(null, HomeFeature.fromId("non_existent"))
     }
 }

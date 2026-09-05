@@ -623,6 +623,7 @@ fun SettingsScreen(
                         HomeFeature.XIAO_LIU_REN -> stringResource(R.string.home_feature_xiao_liu_ren)
                         HomeFeature.COMPASS -> stringResource(R.string.home_feature_compass)
                         HomeFeature.PULSE -> stringResource(R.string.home_feature_pulse)
+                        HomeFeature.MUYU -> stringResource(R.string.home_feature_muyu)
                         HomeFeature.ARCHIVES -> stringResource(R.string.home_feature_archives)
                         HomeFeature.BROWSE -> stringResource(R.string.home_feature_browse)
                     }

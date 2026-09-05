@@ -115,11 +115,11 @@ internal object AppHaptics {
 
     /**
      * Level 1 · 基础按键点击反馈：
-     * 彻底摒弃不可靠的系统黑盒预定义常量（如导致 Galaxy Watch 哑火的 EFFECT_HEAVY_CLICK），
-     * 全线采用显式参数化波形（OneShot），保证在所有手表硬件上 100% 触发且手感绝对一致。
-     * - LIGHT (弱): 20ms / 振幅 170（轻柔微触）
-     * - STANDARD (标准，新默认): 35ms / 振幅 230（清脆扎实，手腕有清晰机械下沉感，彻底告别偏弱，且绝不哑火）
-     * - STRONG (强劲): 55ms / 振幅 255（充沛有力，走动时依然清晰）
+     * 针对 Galaxy Watch 等高端 X 轴线性马达（LRA），优先唤醒系统底层硬件级 Active Braking（主动制动）预置波形，
+     * 还原 One UI 系统原生机械微动清脆手感；在不支持的环境下优雅降级为极短参数化脉冲，避免长方波引起的粗糙嗡震。
+     * - LIGHT (弱): EFFECT_TICK / 10ms 振幅 170
+     * - STANDARD (标准): EFFECT_CLICK / 15ms 振幅 230
+     * - STRONG (强劲): EFFECT_HEAVY_CLICK / 22ms 振幅 255
      */
     fun click(
         context: android.content.Context,
@@ -130,15 +130,32 @@ internal object AppHaptics {
         val v = getVibrator(context) ?: return
         if (!v.hasVibrator()) return
 
-        val (duration, amplitude) = when (intensity) {
-            HapticIntensity.LIGHT -> 20L to 170
-            HapticIntensity.STANDARD -> 35L to 230
-            HapticIntensity.STRONG -> 55L to 255
-        }
         val effect = try {
-            android.os.VibrationEffect.createOneShot(duration, amplitude)
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                when (intensity) {
+                    HapticIntensity.LIGHT -> android.os.VibrationEffect.createPredefined(android.os.VibrationEffect.EFFECT_TICK)
+                    HapticIntensity.STANDARD -> android.os.VibrationEffect.createPredefined(android.os.VibrationEffect.EFFECT_CLICK)
+                    HapticIntensity.STRONG -> android.os.VibrationEffect.createPredefined(android.os.VibrationEffect.EFFECT_HEAVY_CLICK)
+                }
+            } else {
+                val (duration, amplitude) = when (intensity) {
+                    HapticIntensity.LIGHT -> 10L to 170
+                    HapticIntensity.STANDARD -> 15L to 230
+                    HapticIntensity.STRONG -> 22L to 255
+                }
+                android.os.VibrationEffect.createOneShot(duration, amplitude)
+            }
         } catch (_: Throwable) {
-            return
+            val (duration, amplitude) = when (intensity) {
+                HapticIntensity.LIGHT -> 10L to 170
+                HapticIntensity.STANDARD -> 15L to 230
+                HapticIntensity.STRONG -> 22L to 255
+            }
+            try {
+                android.os.VibrationEffect.createOneShot(duration, amplitude)
+            } catch (_: Throwable) {
+                return
+            }
         }
         vibrateEffect(v, effect)
     }
@@ -249,6 +266,53 @@ internal object AppHaptics {
     }
 
     /**
+     * Level 5 · 腕上木鱼专属敲击反馈：
+     * 针对 Galaxy Watch 等高端 X 轴线性马达（LRA），优先唤醒系统底层硬件级 Active Braking（主动制动）波形，
+     * 消除方波通电引起的拖泥带水“嗡嗡”余震，还原如敲击实木般的紧凑、清脆反作用力触感。
+     * - LIGHT: EFFECT_TICK（轻微木击微触，或 10ms 极短微脉冲）
+     * - STANDARD: EFFECT_CLICK（标准清脆实木敲击，或 14ms 扎实短脉冲）
+     * - STRONG: EFFECT_HEAVY_CLICK（沉厚寺庙重槌，或 20ms 强韧短脉冲）
+     */
+    fun muyuTap(
+        context: android.content.Context,
+        intensity: HapticIntensity = HapticIntensity.STANDARD,
+        enabled: Boolean = true,
+    ) {
+        if (!enabled) return
+        val v = getVibrator(context) ?: return
+        if (!v.hasVibrator()) return
+
+        val effect = try {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                when (intensity) {
+                    HapticIntensity.LIGHT -> android.os.VibrationEffect.createPredefined(android.os.VibrationEffect.EFFECT_TICK)
+                    HapticIntensity.STANDARD -> android.os.VibrationEffect.createPredefined(android.os.VibrationEffect.EFFECT_CLICK)
+                    HapticIntensity.STRONG -> android.os.VibrationEffect.createPredefined(android.os.VibrationEffect.EFFECT_HEAVY_CLICK)
+                }
+            } else {
+                val (duration, amplitude) = when (intensity) {
+                    HapticIntensity.LIGHT -> 10L to 180
+                    HapticIntensity.STANDARD -> 14L to 235
+                    HapticIntensity.STRONG -> 20L to 255
+                }
+                android.os.VibrationEffect.createOneShot(duration, amplitude)
+            }
+        } catch (_: Throwable) {
+            val (duration, amplitude) = when (intensity) {
+                HapticIntensity.LIGHT -> 10L to 180
+                HapticIntensity.STANDARD -> 14L to 235
+                HapticIntensity.STRONG -> 20L to 255
+            }
+            try {
+                android.os.VibrationEffect.createOneShot(duration, amplitude)
+            } catch (_: Throwable) {
+                return
+            }
+        }
+        vibrateEffect(v, effect)
+    }
+
+    /**
      * 设置项预览试听触感：直接执行对应 Level 1 点击。
      */
     fun preview(context: android.content.Context, intensity: HapticIntensity) {
@@ -281,6 +345,7 @@ internal fun AppScreen.hierarchyDepth(): Int = when (this) {
     AppScreen.TAROT_CELTIC_CROSS,
     AppScreen.DESTINY_CHART_MENU,
     AppScreen.PULSE_MEASURE,
+    AppScreen.MUYU,
     AppScreen.COMPASS,
     AppScreen.ARCHIVES,
     AppScreen.BROWSE,

@@ -14,9 +14,19 @@
     <string name="home_feature_xiao_liu_ren">小六壬</string>
     <string name="home_feature_compass">罗盘</string>
     <string name="home_feature_pulse">把脉</string>
+    <string name="home_feature_muyu">腕上木鱼</string>
     <string name="home_feature_archives">归档</string>
     <string name="home_feature_browse">浏览</string>
     <string name="home_feature_settings">设置</string>
+
+    <!-- Wooden Fish (Muyu) Strings -->
+    <string name="muyu_title">腕上木鱼</string>
+    <string name="muyu_merit">功德</string>
+    <string name="muyu_merit_plus_one">功德 +1</string>
+    <string name="muyu_auto_mode">自动</string>
+    <string name="muyu_manual_mode">手动</string>
+    <string name="muyu_speed_label">秒/次</string>
+    <string name="muyu_reset_count">功德清零</string>
 
     <!-- Destiny Chart Strings -->
     <string name="destiny_chart_title">命盘大厅</string>

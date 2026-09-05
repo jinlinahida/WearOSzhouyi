@@ -1,0 +1,64 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="140dp"
+    android:height="140dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+
+    <!-- 底层柔和微光底晕 -->
+    <path
+        android:fillColor="#15D4AF37"
+        android:pathData="M60,60m-54,0a54,54 0 1,0 108,0a54,54 0 1,0 -108,0" />
+
+    <!-- 木鱼主躯体：饱满浑圆的古木主体 -->
+    <path
+        android:fillColor="#221B14"
+        android:strokeColor="#C5A059"
+        android:strokeWidth="3.2"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M24,68 C20,44 38,20 64,20 C88,20 106,40 106,64 C106,86 86,104 62,104 C42,104 26,88 24,68 Z" />
+
+    <!-- 顶部鱼背祥云弧线刻纹 -->
+    <path
+        android:strokeColor="#80C5A059"
+        android:strokeWidth="2.0"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M44,34 C52,28 68,28 78,36" />
+
+    <!-- 鱼眼雕刻（外圈与内珠） -->
+    <path
+        android:fillColor="#3A2E20"
+        android:strokeColor="#D4AF37"
+        android:strokeWidth="2.2"
+        android:pathData="M46,48m-7,0a7,7 0 1,0 14,0a7,7 0 1,0 -14,0" />
+    <path
+        android:fillColor="#E5C384"
+        android:pathData="M46,48m-2.5,0a2.5,2.5 0 1,0 5,0a2.5,2.5 0 1,0 -5,0" />
+
+    <!-- 出音回旋鸣槽（木鱼中缝开口与共鸣回纹） -->
+    <path
+        android:strokeColor="#E5C384"
+        android:strokeWidth="3.2"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:fillColor="#18130E"
+        android:pathData="M104,64 L72,64 C64,64 64,80 72,80 L92,80 C98,80 102,74 102,68 Z" />
+
+    <!-- 鱼尾把手与基座回旋 -->
+    <path
+        android:fillColor="#2D2319"
+        android:strokeColor="#C5A059"
+        android:strokeWidth="2.8"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M25,74 C16,82 18,96 28,100 C36,103 44,98 46,92 C42,90 32,88 25,74 Z" />
+
+    <!-- 鱼鳞精工暗纹 -->
+    <path
+        android:strokeColor="#40C5A059"
+        android:strokeWidth="1.8"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M48,66 C54,72 60,68 62,62" />
+</vector>

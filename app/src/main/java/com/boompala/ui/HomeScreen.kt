@@ -39,6 +39,7 @@ fun HomeScreen(
     onTarotHolyTriangleClick: () -> Unit = { },
     onTarotCelticCrossClick: () -> Unit = { },
     onPulseClick: () -> Unit = { },
+    onMuyuClick: () -> Unit = { },
     state: LazyListState = rememberLazyListState(),
 ) {
     val metrics = LocalUiMetrics.current
@@ -206,6 +207,19 @@ fun HomeScreen(
                             interactionSource = pressInteraction,
                         ) {
                             Text(stringResource(R.string.home_feature_pulse))
+                        }
+                    }
+                }
+
+                HomeFeature.MUYU -> {
+                    item(key = "muyu", contentType = CONTENT_TYPE_BUTTON) {
+                        val pressInteraction = remember { MutableInteractionSource() }
+                        BoompalaCardButton(
+                            onClick = onMuyuClick,
+                            modifier = fullWidthModifier.wearPressFeedback(pressInteraction, hapticEnabled = settings.hapticFeedbackEnabled),
+                            interactionSource = pressInteraction,
+                        ) {
+                            Text(stringResource(R.string.home_feature_muyu))
                         }
                     }
                 }

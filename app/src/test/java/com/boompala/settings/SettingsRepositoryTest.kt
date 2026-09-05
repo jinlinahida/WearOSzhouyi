@@ -178,4 +178,24 @@ class SettingsRepositoryTest {
         assertEquals(12, reset.userBirthHour)
         assertEquals(com.boompala.engine.bazi.BaziGender.FEMALE, reset.userGender)
     }
+
+    @Test
+    fun `muyu count increments and resets correctly`() = runBlocking {
+        val dataStore = PreferenceDataStoreFactory.create(
+            scope = dataStoreScope,
+            produceFile = { dataStoreFile },
+        )
+        val repository = SettingsRepository(dataStore)
+
+        assertEquals(0L, repository.settings.first().muyuTotalCount)
+
+        repository.incrementMuyuCount(1L)
+        assertEquals(1L, repository.settings.first().muyuTotalCount)
+
+        repository.incrementMuyuCount(5L)
+        assertEquals(6L, repository.settings.first().muyuTotalCount)
+
+        repository.resetMuyuCount()
+        assertEquals(0L, repository.settings.first().muyuTotalCount)
+    }
 }

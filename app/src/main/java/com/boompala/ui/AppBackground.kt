@@ -40,6 +40,7 @@ val TarotSpotlightColor: Color = Color(0xFF9575CD) // 塔罗神秘蓝紫
 val CompassSpotlightColor: Color = Color(0xFF4DB6AC) // 罗盘青碧
 val ResultSpotlightColor: Color = Color(0xFF80CBC4) // 排盘结果苍璧青玉
 val PulseSpotlightColor: Color = Color(0xFF00E5A3) // 脉象推演翡翠青
+val MuyuSpotlightColor: Color = Color(0xFFD4AF37) // 腕上木鱼温润檀金
 
 /**
  * 根据当前界面计算目标环境光颜色。
@@ -57,6 +58,7 @@ internal fun resolveSpotlightColor(screen: AppScreen): Color = when (screen) {
     AppScreen.MEIHUA_RESULT -> ResultSpotlightColor
     AppScreen.PULSE_MEASURE,
     AppScreen.PULSE_RESULT -> PulseSpotlightColor
+    AppScreen.MUYU -> MuyuSpotlightColor
     else -> DefaultSpotlightColor
 }
 

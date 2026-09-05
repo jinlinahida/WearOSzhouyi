@@ -55,6 +55,7 @@ enum class HomeFeature(
     XIAO_LIU_REN("xiao_liu_ren", "小六壬", "Xiao Liu Ren"),
     COMPASS("compass", "罗盘", "Compass"),
     PULSE("pulse", "把脉", "Pulse Diagnosis"),
+    MUYU("muyu", "腕上木鱼", "Wooden Fish"),
     ARCHIVES("archives", "归档", "Archives"),
     BROWSE("browse", "浏览", "Browse");
 
@@ -71,6 +72,7 @@ enum class HomeFeature(
             XIAO_LIU_REN,
             COMPASS,
             PULSE,
+            MUYU,
             ARCHIVES,
             BROWSE,
         )
@@ -98,6 +100,7 @@ data class AppSettings(
     val compassDeclination: Float = 0f,
     val tarotReversedEnabled: Boolean = true,
     val tarotMajorArcanaOnly: Boolean = false,
+    val muyuTotalCount: Long = 0L,
 ) {
     companion object {
         val DEFAULT = AppSettings()
