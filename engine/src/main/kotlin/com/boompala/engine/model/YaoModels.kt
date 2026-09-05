@@ -211,6 +211,50 @@ data class HexagramPattern(
     }
 }
 
+enum class FeiFuRelation(
+    val displayName: String,
+) {
+    FEI_SHENG_FU("飞生伏"),
+    FEI_KE_FU("飞克伏"),
+    FU_SHENG_FEI("伏生飞"),
+    FU_KE_FEI("伏克飞"),
+    SAME("比和"),
+}
+
+data class FuShenInfo(
+    val position: YaoPosition,
+    val heavenlyStem: HeavenlyStem,
+    val earthlyBranch: EarthlyBranch,
+    val element: FiveElement,
+    val sixRelation: SixRelation,
+    val feiFuRelation: FeiFuRelation,
+) {
+    val displayName: String
+        get() = "${sixRelation.displayName}${heavenlyStem.displayName}${earthlyBranch.displayName}"
+}
+
+enum class YaoStatus(
+    val displayName: String,
+) {
+    MONTH_BROKEN("月破"),
+    DAY_CLASHED("日冲"),
+    DARK_MOVING("暗动"),
+    DAY_BROKEN("日破"),
+    ADVANCING("进神"),
+    RETREATING("退神"),
+    LINE_FU_YIN("伏吟"),
+    LINE_FAN_YIN("反吟"),
+}
+
+enum class HexagramStatus(
+    val displayName: String,
+) {
+    SIX_COMBINE("六合卦"),
+    SIX_CLASH("六冲卦"),
+    HEX_FU_YIN("卦伏吟"),
+    HEX_FAN_YIN("卦反吟"),
+}
+
 data class Hexagram(
     val pattern: HexagramPattern,
     val name: String,
@@ -218,6 +262,7 @@ data class Hexagram(
     val element: FiveElement,
     val palaceStage: PalaceStage,
     val yaoFromBottom: List<Yao>,
+    val statuses: Set<HexagramStatus> = emptySet(),
 ) {
     init {
         require(yaoFromBottom.map { it.position } == YaoPosition.entries) {
@@ -233,6 +278,9 @@ data class Hexagram(
 
     val yingPosition: YaoPosition
         get() = yaoFromBottom.single { it.isYing }.position
+
+    val hasFuShen: Boolean
+        get() = yaoFromBottom.any { it.fuShen != null }
 }
 
 data class Yao(
@@ -248,6 +296,8 @@ data class Yao(
     val isYing: Boolean,
     val isVoid: Boolean,
     val lineText: String? = null,
+    val fuShen: FuShenInfo? = null,
+    val statuses: Set<YaoStatus> = emptySet(),
 )
 
 /**

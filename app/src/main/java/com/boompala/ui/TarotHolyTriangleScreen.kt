@@ -49,6 +49,8 @@ fun TarotHolyTriangleScreen(
     reading: TarotReading?,
     rotaryScrollingEnabled: Boolean,
     animationsEnabled: Boolean = true,
+    allowReversed: Boolean = true,
+    deckType: DeckType = DeckType.FULL_78,
     onReadingChanged: (TarotReading?) -> Unit,
     onBack: () -> Unit,
     onArchive: (TarotReading) -> Unit = { },
@@ -58,8 +60,8 @@ fun TarotHolyTriangleScreen(
     val hapticEnabled = LocalHapticFeedbackEnabled.current
     val hapticIntensity = LocalHapticIntensity.current
     val spread = TarotSpread.HOLY_TRIANGLE
-    var deckType by remember { mutableStateOf(DeckType.FULL_78) }
-    var allowReversed by remember { mutableStateOf(true) }
+    var currentDeckType by remember(deckType) { mutableStateOf(deckType) }
+    var currentAllowReversed by remember(allowReversed) { mutableStateOf(allowReversed) }
 
     // Step state during reveal: 0 = slot 0, 1 = slot 1, 2 = slot 2, 3 = full results
     var currentStep by remember(reading) { mutableIntStateOf(0) }
@@ -109,15 +111,11 @@ fun TarotHolyTriangleScreen(
 
             item(key = "holy-triangle-deck-selection") {
                 ResultCard {
-                    DetailField("牌组类型", deckType.displayName)
+                    DetailField("抽牌牌库", if (currentDeckType == DeckType.FULL_78) "78张全牌" else "22张大阿卡纳")
                     val deckInteraction = remember { MutableInteractionSource() }
                     BoompalaCardButton(
                         onClick = {
-                            deckType = if (deckType == DeckType.FULL_78) {
-                                DeckType.MAJOR_22
-                            } else {
-                                DeckType.FULL_78
-                            }
+                            currentDeckType = if (currentDeckType == DeckType.FULL_78) DeckType.MAJOR_22 else DeckType.FULL_78
                         },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -125,24 +123,24 @@ fun TarotHolyTriangleScreen(
                         interactionSource = deckInteraction,
                         colors = BoompalaButtonDefaults.outlinedButtonColors(),
                     ) {
-                        Text(if (deckType == DeckType.FULL_78) "切换为仅大牌 (22张)" else "切换为全牌组 (78张)")
+                        Text(if (currentDeckType == DeckType.FULL_78) "切换为仅大牌 (22张)" else "切换为全牌组 (78张)")
                     }
                 }
             }
 
             item(key = "holy-triangle-reversed-selection") {
                 ResultCard {
-                    DetailField("逆位规则", if (allowReversed) "允许逆位" else "仅正位")
+                    DetailField("逆位规则", if (currentAllowReversed) "允许逆位" else "仅正位")
                     val reversedInteraction = remember { MutableInteractionSource() }
                     BoompalaCardButton(
-                        onClick = { allowReversed = !allowReversed },
+                        onClick = { currentAllowReversed = !currentAllowReversed },
                         modifier = Modifier
                             .fillMaxWidth()
                             .wearPressFeedback(reversedInteraction),
                         interactionSource = reversedInteraction,
                         colors = BoompalaButtonDefaults.outlinedButtonColors(),
                     ) {
-                        Text(if (allowReversed) "切换为仅正位" else "切换为允许逆位")
+                        Text(if (currentAllowReversed) "切换为仅正位" else "切换为允许逆位")
                     }
                 }
             }
@@ -153,8 +151,8 @@ fun TarotHolyTriangleScreen(
                     onClick = {
                         val newReading = engine.cast(
                             spread = spread,
-                            deckType = deckType,
-                            allowReversed = allowReversed,
+                            deckType = currentDeckType,
+                            allowReversed = currentAllowReversed,
                         )
                         currentStep = 0
                         flippedList.clear()

@@ -33,6 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.wear.compose.material3.MaterialTheme
@@ -43,6 +44,8 @@ import com.boompala.engine.model.Hexagram
 import com.boompala.engine.model.Yao
 import com.boompala.engine.model.YaoPosition
 import com.boompala.engine.model.DivinationResult
+import com.boompala.engine.rules.YongShenCategory
+import com.boompala.engine.rules.YongShenEvaluator
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
@@ -65,10 +68,19 @@ fun LiuYaoResultContent(
     val castTime = remember(result.timeInfo.gregorianDateTime) {
         dateTimeFormatter.format(result.timeInfo.gregorianDateTime)
     }
-    val originalYaoCards = remember(result.original) {
+    var selectedYongShen by rememberSaveable { mutableStateOf(YongShenCategory.SHI_YAO) }
+    val yongShenEval = remember(result, selectedYongShen) {
+        YongShenEvaluator.evaluate(result, selectedYongShen)
+    }
+
+    val originalYaoCards = remember(result.original, selectedYongShen, yongShenEval) {
         result.yaoFromBottom
             .forResultDisplay()
-            .map(Yao::toCardData)
+            .map { yao ->
+                yao.toCardData(
+                    isYongShenTarget = yongShenEval?.targetPosition == yao.position && (!yongShenEval.isFuShen),
+                )
+            }
     }
     val changedYaoCards = remember(result) {
         result.changed?.yaoFromBottom
@@ -107,10 +119,64 @@ fun LiuYaoResultContent(
         // ResultScreen: shared chrome owns only the Wear scrolling shell.
         item(key = "calendar-time") {
             ResultCard {
-                Text("公历", style = MaterialTheme.typography.titleSmall)
-                Text(castTime, style = MaterialTheme.typography.bodySmall)
-                Text("农历", style = MaterialTheme.typography.titleSmall)
-                Text(result.timeInfo.lunarDate, style = MaterialTheme.typography.bodySmall)
+                DetailField("公历", castTime)
+                DetailField("农历", result.timeInfo.lunarDate)
+            }
+        }
+        item(key = "yongshen-selector") {
+            ResultCard {
+                Text(
+                    text = "用神选择",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.primary,
+                    maxLines = 1,
+                )
+                Spacer(Modifier.height(4.dp))
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    YongShenCategory.entries.chunked(2).forEach { pair ->
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(4.dp),
+                        ) {
+                            pair.forEach { category ->
+                                val selected = category == selectedYongShen
+                                val pressInteraction = remember { MutableInteractionSource() }
+                                SelectableCardButton(
+                                    selected = selected,
+                                    onClick = { selectedYongShen = category },
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .wearPressFeedback(pressInteraction),
+                                    interactionSource = pressInteraction,
+                                ) {
+                                    Text(
+                                        text = category.displayName,
+                                        style = MaterialTheme.typography.labelSmall,
+                                        fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
+                                        maxLines = 1,
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        yongShenEval?.let { eval ->
+            item(key = "yongshen-evaluation") {
+                ResultCard(
+                    borderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f),
+                ) {
+                    Text(
+                        text = "用神 · ${eval.category.displayName}",
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.Bold,
+                        maxLines = 1,
+                    )
+                    Spacer(Modifier.height(2.dp))
+                    Text(eval.summary, style = MaterialTheme.typography.bodySmall)
+                }
             }
         }
         item(key = "original-hexagram") {
@@ -146,10 +212,10 @@ fun LiuYaoResultContent(
             FourPillarsCard(result)
         }
         item(key = "moving-summary") {
-            Text(movingSummary, style = MaterialTheme.typography.bodyMedium)
+            Text(movingSummary, style = MaterialTheme.typography.bodyMedium, maxLines = 1)
         }
         item(key = "original-yao-section-title") {
-            Text("本卦完整装卦", style = MaterialTheme.typography.titleSmall)
+            Text("本卦装卦", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1)
         }
         items(
             items = originalYaoCards,
@@ -160,8 +226,10 @@ fun LiuYaoResultContent(
         result.changed?.let { changed ->
             item(key = "changed-yao-section-title") {
                 Text(
-                    "变卦完整装卦：${changed.name}",
-                    style = MaterialTheme.typography.titleSmall,
+                    text = "变卦装卦 · ${changed.name}",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1,
                 )
             }
             items(
@@ -211,6 +279,18 @@ private fun HexagramSummaryCard(
     val displayModel = hexagram.toDisplayModel()
     ResultCard {
         Text("$title：${hexagram.name}", style = MaterialTheme.typography.titleSmall)
+        if (hexagram.statuses.isNotEmpty()) {
+            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                hexagram.statuses.forEach { status ->
+                    Text(
+                        text = "· ${status.displayName}",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.Bold,
+                    )
+                }
+            }
+        }
         Text(
             "卦宫：${hexagram.palace.displayName} · ${hexagram.element.displayName}",
             style = MaterialTheme.typography.bodySmall,
@@ -239,8 +319,14 @@ private fun FourPillarsCard(result: DivinationResult) {
 @Composable
 private fun YaoDetailCard(card: YaoCardData, animationsEnabled: Boolean = true) {
     val isMoving = card.lineDisplay.isMoving
-    val glowModifier = if (isMoving) {
-        if (animationsEnabled) {
+    val isYongShen = card.isYongShenTarget
+    val glowModifier = when {
+        isYongShen -> Modifier.border(
+            width = 1.5.dp,
+            color = Color(0xFFFFD700),
+            shape = ResultCardShape,
+        )
+        isMoving -> if (animationsEnabled) {
             val infiniteTransition = rememberInfiniteTransition(label = "MovingYaoGlow")
             val glowAlpha by infiniteTransition.animateFloat(
                 initialValue = 0.35f,
@@ -257,23 +343,21 @@ private fun YaoDetailCard(card: YaoCardData, animationsEnabled: Boolean = true) 
                 shape = ResultCardShape,
             )
         } else {
-            // 关闭动画时保持静态高亮边框，避免无限循环动画持续耗电。
             Modifier.border(
                 width = 1.2.dp,
                 color = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f),
                 shape = ResultCardShape,
             )
         }
-    } else {
-        Modifier
+        else -> Modifier
     }
 
     ResultCard(modifier = glowModifier) {
         HexagramLine(card.lineDisplay)
         Text(
-            "${card.position.displayName} · ${card.yinYang} · ${card.motion}",
+            "${card.position.displayName} · ${card.yinYang} · ${card.motion}" + if (isYongShen) " [用神]" else "",
             style = MaterialTheme.typography.titleSmall,
-            color = if (isMoving) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
+            color = if (isYongShen) Color(0xFFFFD700) else if (isMoving) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
         )
         card.changeDescription?.let { description ->
             Text(description, style = MaterialTheme.typography.labelMedium)
@@ -285,8 +369,14 @@ private fun YaoDetailCard(card: YaoCardData, animationsEnabled: Boolean = true) 
         DetailField(label = "六亲", value = card.sixRelation)
         DetailField(label = "天干地支", value = card.ganzhi)
         DetailField(label = "五行", value = card.element)
+        card.fuShenDisplay?.let { fuShenText ->
+            DetailField(label = "伏神", value = fuShenText)
+        }
+        if (card.statusBadges.isNotEmpty()) {
+            DetailField(label = "神煞/状态", value = card.statusBadges.joinToString(" · "))
+        }
         if (card.isVoid) {
-            DetailField(label = "状态", value = "空亡")
+            DetailField(label = "旬空", value = "空亡")
         }
         card.lineText?.let { lineText ->
             Text("动爻爻辞", style = MaterialTheme.typography.labelMedium)
@@ -455,6 +545,9 @@ private data class YaoCardData(
     val shiYing: String?,
     val isVoid: Boolean,
     val lineText: String?,
+    val fuShenDisplay: String?,
+    val statusBadges: List<String>,
+    val isYongShenTarget: Boolean,
 )
 
 internal fun List<Yao>.forResultDisplay(): List<Yao> =
@@ -469,7 +562,10 @@ internal fun Hexagram.toDisplayModel(): HexagramDisplayModel = HexagramDisplayMo
         .toSet(),
 )
 
-private fun Yao.toCardData(originalYao: Yao? = null): YaoCardData = YaoCardData(
+private fun Yao.toCardData(
+    originalYao: Yao? = null,
+    isYongShenTarget: Boolean = false,
+): YaoCardData = YaoCardData(
     position = position,
     lineDisplay = toLineDisplay(),
     yinYang = yinYang.displayName,
@@ -492,6 +588,9 @@ private fun Yao.toCardData(originalYao: Yao? = null): YaoCardData = YaoCardData(
     },
     isVoid = isVoid,
     lineText = if (moving) lineText ?: "爻辞数据不可用" else null,
+    fuShenDisplay = fuShen?.let { "${it.displayName}(${it.feiFuRelation.displayName})" },
+    statusBadges = statuses.map { it.displayName },
+    isYongShenTarget = isYongShenTarget,
 )
 
 private fun com.boompala.engine.model.YaoPolarity.opposite() =

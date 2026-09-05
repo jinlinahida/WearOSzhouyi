@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -62,6 +63,8 @@ private enum class SettingsSection {
     MENU,
     PROFILE,
     APPEARANCE,
+    TAROT,
+    COMPASS,
     LANGUAGE,
     HOME,
     HAPTICS,
@@ -88,6 +91,12 @@ fun SettingsScreen(
     onToggleHomeFeatureVisibility: (HomeFeature) -> Unit = {},
     onSaveUserBirth: (birthDate: String, birthHour: Int?, gender: BaziGender) -> Unit = { _, _, _ -> },
     onClearUserBirth: () -> Unit = {},
+    onKeepScreenOnEnabledChange: (Boolean) -> Unit = {},
+    onCompassTrueNorthEnabledChange: (Boolean) -> Unit = {},
+    onCompassDeclinationChange: (Float) -> Unit = {},
+    onTarotReversedEnabledChange: (Boolean) -> Unit = {},
+    onTarotMajorArcanaOnlyChange: (Boolean) -> Unit = {},
+    onResetAllPreferences: () -> Unit = {},
     archiveRepository: ArchiveRepository? = null,
     rotaryScrollingEnabled: Boolean,
     onAboutClick: () -> Unit,
@@ -155,6 +164,26 @@ fun SettingsScreen(
                         title = stringResource(R.string.settings_module_appearance),
                         subtitle = stringResource(R.string.settings_module_appearance_desc),
                         onClick = { currentSection = SettingsSection.APPEARANCE },
+                        animationsEnabled = settings.animationsEnabled,
+                    )
+                }
+
+                item(key = "module-tarot") {
+                    SettingsModuleButton(
+                        iconRes = R.drawable.ic_settings_tarot,
+                        title = stringResource(R.string.settings_module_tarot),
+                        subtitle = stringResource(R.string.settings_module_tarot_desc),
+                        onClick = { currentSection = SettingsSection.TAROT },
+                        animationsEnabled = settings.animationsEnabled,
+                    )
+                }
+
+                item(key = "module-compass") {
+                    SettingsModuleButton(
+                        iconRes = R.drawable.ic_settings_compass,
+                        title = stringResource(R.string.settings_module_compass),
+                        subtitle = stringResource(R.string.settings_module_compass_desc),
+                        onClick = { currentSection = SettingsSection.COMPASS },
                         animationsEnabled = settings.animationsEnabled,
                     )
                 }
@@ -295,7 +324,211 @@ fun SettingsScreen(
                     )
                 }
 
+                item(key = "keep-screen-on-title") {
+                    Text(
+                        text = stringResource(R.string.settings_keep_screen_on),
+                        style = MaterialTheme.typography.titleSmall,
+                    )
+                }
+                item(key = "keep-screen-on-toggle") {
+                    SelectionButton(
+                        selected = settings.keepScreenOnEnabled,
+                        text = if (settings.keepScreenOnEnabled) stringResource(R.string.action_enabled) else stringResource(R.string.action_disabled),
+                        onClick = { onKeepScreenOnEnabledChange(!settings.keepScreenOnEnabled) },
+                    )
+                }
+
                 item(key = "appearance-back") {
+                    val backInteraction = remember { MutableInteractionSource() }
+                    BoompalaCardButton(
+                        onClick = { currentSection = SettingsSection.MENU },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wearPressFeedback(backInteraction),
+                        interactionSource = backInteraction,
+                        colors = BoompalaButtonDefaults.outlinedButtonColors(),
+                    ) {
+                        Text(stringResource(R.string.action_back))
+                    }
+                }
+            }
+        }
+
+        SettingsSection.TAROT -> {
+            RotaryScrollColumn(
+                rotaryEnabled = rotaryScrollingEnabled,
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = metrics.screenPadding,
+                itemSpacing = metrics.itemSpacing,
+            ) {
+                item(key = "tarot-title") {
+                    Text(
+                        text = stringResource(R.string.settings_module_tarot),
+                        style = MaterialTheme.typography.titleMedium,
+                    )
+                }
+
+                item(key = "tarot-reversed-title") {
+                    Text(
+                        text = stringResource(R.string.settings_tarot_reversed),
+                        style = MaterialTheme.typography.titleSmall,
+                    )
+                }
+                item(key = "tarot-reversed-allow") {
+                    SelectionButton(
+                        selected = settings.tarotReversedEnabled,
+                        text = stringResource(R.string.settings_tarot_reversed_allow),
+                        onClick = { onTarotReversedEnabledChange(true) },
+                    )
+                }
+                item(key = "tarot-reversed-disallow") {
+                    SelectionButton(
+                        selected = !settings.tarotReversedEnabled,
+                        text = stringResource(R.string.settings_tarot_reversed_disallow),
+                        onClick = { onTarotReversedEnabledChange(false) },
+                    )
+                }
+
+                item(key = "tarot-deck-title") {
+                    Text(
+                        text = stringResource(R.string.settings_tarot_deck),
+                        style = MaterialTheme.typography.titleSmall,
+                    )
+                }
+                item(key = "tarot-deck-full") {
+                    SelectionButton(
+                        selected = !settings.tarotMajorArcanaOnly,
+                        text = stringResource(R.string.settings_tarot_deck_full),
+                        onClick = { onTarotMajorArcanaOnlyChange(false) },
+                    )
+                }
+                item(key = "tarot-deck-major") {
+                    SelectionButton(
+                        selected = settings.tarotMajorArcanaOnly,
+                        text = stringResource(R.string.settings_tarot_deck_major),
+                        onClick = { onTarotMajorArcanaOnlyChange(true) },
+                    )
+                }
+
+                item(key = "tarot-back") {
+                    val backInteraction = remember { MutableInteractionSource() }
+                    BoompalaCardButton(
+                        onClick = { currentSection = SettingsSection.MENU },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wearPressFeedback(backInteraction),
+                        interactionSource = backInteraction,
+                        colors = BoompalaButtonDefaults.outlinedButtonColors(),
+                    ) {
+                        Text(stringResource(R.string.action_back))
+                    }
+                }
+            }
+        }
+
+        SettingsSection.COMPASS -> {
+            RotaryScrollColumn(
+                rotaryEnabled = rotaryScrollingEnabled,
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = metrics.screenPadding,
+                itemSpacing = metrics.itemSpacing,
+            ) {
+                item(key = "compass-title") {
+                    Text(
+                        text = stringResource(R.string.settings_module_compass),
+                        style = MaterialTheme.typography.titleMedium,
+                    )
+                }
+
+                item(key = "compass-north-title") {
+                    Text(
+                        text = stringResource(R.string.settings_compass_north),
+                        style = MaterialTheme.typography.titleSmall,
+                    )
+                }
+                item(key = "compass-magnetic-north") {
+                    SelectionButton(
+                        selected = !settings.compassTrueNorthEnabled,
+                        text = stringResource(R.string.settings_compass_magnetic_north),
+                        onClick = { onCompassTrueNorthEnabledChange(false) },
+                    )
+                }
+                item(key = "compass-true-north") {
+                    SelectionButton(
+                        selected = settings.compassTrueNorthEnabled,
+                        text = stringResource(R.string.settings_compass_true_north),
+                        onClick = { onCompassTrueNorthEnabledChange(true) },
+                    )
+                }
+
+                if (settings.compassTrueNorthEnabled) {
+                    item(key = "compass-declination-title") {
+                        Text(
+                            text = stringResource(R.string.settings_compass_declination),
+                            style = MaterialTheme.typography.titleSmall,
+                        )
+                    }
+                    item(key = "compass-declination-desc") {
+                        Text(
+                            text = stringResource(R.string.settings_compass_declination_desc),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                    item(key = "compass-declination-adjust") {
+                        ResultCard {
+                            val declinationInt = settings.compassDeclination.toInt()
+                            val declinationText = if (declinationInt > 0) "+$declinationInt°" else "$declinationInt°"
+                            Text(
+                                text = "偏角校准：$declinationText",
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.primary,
+                            )
+                            Spacer(Modifier.height(4.dp))
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(metrics.itemSpacing),
+                            ) {
+                                val minusInter = remember { MutableInteractionSource() }
+                                BoompalaCardButton(
+                                    onClick = {
+                                        val newDec = (settings.compassDeclination - 1f).coerceIn(-15f, 15f)
+                                        onCompassDeclinationChange(newDec)
+                                    },
+                                    modifier = Modifier.weight(1f).wearPressFeedback(minusInter),
+                                    interactionSource = minusInter,
+                                    colors = BoompalaButtonDefaults.outlinedButtonColors(),
+                                ) {
+                                    Text("-1°")
+                                }
+                                val resetInter = remember { MutableInteractionSource() }
+                                BoompalaCardButton(
+                                    onClick = { onCompassDeclinationChange(0f) },
+                                    modifier = Modifier.weight(1f).wearPressFeedback(resetInter),
+                                    interactionSource = resetInter,
+                                    colors = BoompalaButtonDefaults.outlinedButtonColors(),
+                                ) {
+                                    Text("0°")
+                                }
+                                val plusInter = remember { MutableInteractionSource() }
+                                BoompalaCardButton(
+                                    onClick = {
+                                        val newDec = (settings.compassDeclination + 1f).coerceIn(-15f, 15f)
+                                        onCompassDeclinationChange(newDec)
+                                    },
+                                    modifier = Modifier.weight(1f).wearPressFeedback(plusInter),
+                                    interactionSource = plusInter,
+                                    colors = BoompalaButtonDefaults.outlinedButtonColors(),
+                                ) {
+                                    Text("+1°")
+                                }
+                            }
+                        }
+                    }
+                }
+
+                item(key = "compass-back") {
                     val backInteraction = remember { MutableInteractionSource() }
                     BoompalaCardButton(
                         onClick = { currentSection = SettingsSection.MENU },
@@ -1051,6 +1284,7 @@ fun SettingsScreen(
             val scope = rememberCoroutineScope()
             var archiveCount by remember { mutableIntStateOf(0) }
             var showClearDialog by remember { mutableStateOf(false) }
+            var showResetAllDialog by remember { mutableStateOf(false) }
 
             LaunchedEffect(archiveRepository) {
                 if (archiveRepository != null) {
@@ -1099,6 +1333,23 @@ fun SettingsScreen(
                                 color = MaterialTheme.colorScheme.error,
                             )
                         }
+                    }
+                }
+
+                item(key = "data-reset-all") {
+                    val pressInteraction = remember { MutableInteractionSource() }
+                    BoompalaCardButton(
+                        onClick = { showResetAllDialog = true },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wearPressFeedback(pressInteraction),
+                        interactionSource = pressInteraction,
+                        colors = BoompalaButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error),
+                    ) {
+                        Text(
+                            text = stringResource(R.string.settings_reset_all),
+                            color = MaterialTheme.colorScheme.error,
+                        )
                     }
                 }
 
@@ -1152,6 +1403,45 @@ fun SettingsScreen(
                         val dismissInteraction = remember { MutableInteractionSource() }
                         BoompalaCardButton(
                             onClick = { showClearDialog = false },
+                            modifier = Modifier.wearPressFeedback(dismissInteraction),
+                            interactionSource = dismissInteraction,
+                            colors = BoompalaButtonDefaults.outlinedButtonColors(),
+                        ) {
+                            Text(stringResource(R.string.action_cancel))
+                        }
+                    },
+                )
+            }
+
+            if (showResetAllDialog) {
+                AlertDialog(
+                    visible = true,
+                    onDismissRequest = { showResetAllDialog = false },
+                    title = { Text(stringResource(R.string.settings_reset_all_confirm_title)) },
+                    text = { Text(stringResource(R.string.settings_reset_all_confirm_desc)) },
+                    confirmButton = {
+                        val confirmInteraction = remember { MutableInteractionSource() }
+                        BoompalaCardButton(
+                            onClick = {
+                                onResetAllPreferences()
+                                showResetAllDialog = false
+                            },
+                            modifier = Modifier.wearPressFeedback(confirmInteraction),
+                            interactionSource = confirmInteraction,
+                            colors = BoompalaButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.error.copy(alpha = 0.25f),
+                            ),
+                        ) {
+                            Text(
+                                stringResource(R.string.settings_reset_all),
+                                color = MaterialTheme.colorScheme.error,
+                            )
+                        }
+                    },
+                    dismissButton = {
+                        val dismissInteraction = remember { MutableInteractionSource() }
+                        BoompalaCardButton(
+                            onClick = { showResetAllDialog = false },
                             modifier = Modifier.wearPressFeedback(dismissInteraction),
                             interactionSource = dismissInteraction,
                             colors = BoompalaButtonDefaults.outlinedButtonColors(),

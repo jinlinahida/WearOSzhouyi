@@ -113,6 +113,27 @@
     <string name="settings_data_clear_confirm_title">确认清空所有归档？</string>
     <string name="settings_data_clear_confirm_desc">此操作不可恢复，所有保存在手表本地的归档都将被删除。</string>
     <string name="settings_data_clear_success">已清空所有归档</string>
+    <string name="settings_module_tarot">塔罗偏好</string>
+    <string name="settings_module_tarot_desc">正逆位控制与牌库模式</string>
+    <string name="settings_module_compass">罗盘偏好</string>
+    <string name="settings_module_compass_desc">磁北与真北指向选择</string>
+    <string name="settings_keep_screen_on">屏幕常亮防熄灭</string>
+    <string name="settings_keep_screen_on_desc">看盘与罗盘时屏幕保持亮起</string>
+    <string name="settings_tarot_reversed">开启卡牌逆位</string>
+    <string name="settings_tarot_reversed_allow">允许正逆位</string>
+    <string name="settings_tarot_reversed_disallow">仅正位模式</string>
+    <string name="settings_tarot_deck">抽牌牌库范围</string>
+    <string name="settings_tarot_deck_full">78张全牌</string>
+    <string name="settings_tarot_deck_major">仅22张大阿卡纳</string>
+    <string name="settings_compass_north">指向参照基准</string>
+    <string name="settings_compass_magnetic_north">地磁北 (默认)</string>
+    <string name="settings_compass_true_north">地理真北</string>
+    <string name="settings_compass_declination">当地磁偏角补偿</string>
+    <string name="settings_compass_declination_desc">西偏为负，东偏为正。设置后罗盘自动几何校准。</string>
+    <string name="settings_reset_all">重置所有设置</string>
+    <string name="settings_reset_all_confirm_title">确认重置所有设置？</string>
+    <string name="settings_reset_all_confirm_desc">除个人生辰档案外，界面显示、触觉、首页顺序、塔罗及罗盘偏好都将恢复默认值。</string>
+    <string name="settings_reset_all_success">已恢复默认设置</string>
 
     <!-- Daily Fortune -->
     <string name="daily_fortune_title">今日运势</string>

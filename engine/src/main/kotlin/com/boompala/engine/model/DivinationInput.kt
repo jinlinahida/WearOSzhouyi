@@ -9,6 +9,7 @@ enum class DivinationInputMode(
     COIN_CAST("铜钱摇卦"),
     MANUAL_CAST("手动排爻"),
     DIRECT_INPUT("已知卦象"),
+    NUMBER_CAST("数字起卦"),
 }
 
 data class YaoPolarityInput(

@@ -113,6 +113,7 @@ assets JSON -> Json*Repository -> BoompalaApp 离线依赖 -> 浏览页/结果�
   - 所有纵向 Wear 页面优先复用 `RotaryScrollColumn`：`ScreenScaffold` 与 `LazyColumn` 共享同一 `LazyListState`；启用时安装 `RotaryScrollableDefaults.behavior` 和 haptic，scaffold 提供右侧位置指示；禁用表冠时仍保留触摸滚动和点击。
   - `AppBackground.kt` 提供根据当前页面主题自适应的环境顶光与多层星空微光（如今日运势流金、塔罗蓝紫、罗盘青碧、排盘苍璧），营造 Wear OS 深色屏幕的视觉层次。
   - `WearLoadingIndicator.kt` 采用 `androidx.graphics.shapes` 实现呼吸多边形形变加载动画。
+  - 设置与功能模块线条图标规范：统一遵循 **Morphicons / Lucide** 现代极简 Stroke 线条规范（标准 24×24 视口、`strokeWidth="1.8"`、`strokeLineCap="round"`、`strokeLineJoin="round"`、`fillColor="#00000000"`），所有设置模块图标（生辰八字 `ic_settings_bazi`、显示外观 `ic_settings_display`、塔罗设置 `ic_settings_tarot`、罗盘设置 `ic_settings_compass`、多语言 `ic_settings_language`、首页管理 `ic_settings_home`、触觉反馈 `ic_settings_haptics`、数据管理 `ic_settings_data`、关于鸣谢 `ic_settings_about`）均统一收录维护于 `app/src/main/res/drawable/`，后续设置及相关功能界面的线条图标均以此为准并在该目录查找与扩充。
 - 六爻结果显示通过 `forResultDisplay()` 在 UI 边界按 `indexFromBottom` 倒序；`YaoLineDisplay` 将阴阳线形状与动爻标记分离。三线经卦必须使用 `trigramLineDisplayAt`，不能塞入要求六线的 `HexagramDisplayModel`。
 - 罗盘读取加速度计/磁力计并可回退 rotation vector，做屏幕 remap、磁北方位规范化和跨 359°/0° 平滑；Compose 状态发布限制为最高约 15Hz。传统口径、24 山、后天八卦和元运数据以 `docs/compass-data-conventions.md` 为准。
 - 归档体系覆盖六爻、梅花、小六壬和塔罗 4 类占卜源 (`ArchiveSource`)，统一保存为不可变结构化快照；详情通过 `ArchiveSnapshotCodec` 安全解析，避免用当前引擎重新计算历史结果。

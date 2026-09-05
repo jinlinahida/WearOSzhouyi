@@ -26,14 +26,14 @@ class LiuYaoEngine(
         val voidBranches = VoidRules.voidBranches(timeInfo.dayGanzhi)
         val spirits = SixSpiritRules.spiritsFromBottom(timeInfo.dayGanzhi.heavenlyStem)
 
-        val original = buildHexagram(
+        val rawOriginal = buildHexagram(
             pattern = basic.original,
             movingPositions = basic.changingPositions.toSet(),
             voidBranches = voidBranches.toSet(),
             spirits = spirits,
             includeMovingLineTexts = true,
         )
-        val changed = basic.changed?.let { changedPattern ->
+        val rawChanged = basic.changed?.let { changedPattern ->
             buildHexagram(
                 pattern = changedPattern,
                 movingPositions = emptySet(),
@@ -43,11 +43,57 @@ class LiuYaoEngine(
             )
         }
 
+        val fuShenMap = com.boompala.engine.rules.FuShenRules.calculateFuShen(rawOriginal.palace, rawOriginal.yaoFromBottom)
+
+        val finalOriginalYao = rawOriginal.yaoFromBottom.mapIndexed { index, yao ->
+            val changedYao = rawChanged?.yaoFromBottom?.get(index)
+            val statuses = com.boompala.engine.rules.LiuYaoStatusRules.evaluateYaoStatuses(
+                yao = yao,
+                monthGanzhi = timeInfo.monthGanzhi,
+                dayGanzhi = timeInfo.dayGanzhi,
+                changedYao = changedYao,
+            )
+            yao.copy(
+                fuShen = fuShenMap[yao.position],
+                statuses = statuses,
+            )
+        }
+
+        val originalHexStatuses = com.boompala.engine.rules.LiuYaoStatusRules.evaluateHexagramStatuses(
+            original = rawOriginal,
+            changed = rawChanged,
+        )
+
+        val finalOriginal = rawOriginal.copy(
+            yaoFromBottom = finalOriginalYao,
+            statuses = originalHexStatuses,
+        )
+
+        val finalChanged = rawChanged?.let { changed ->
+            val changedHexStatuses = com.boompala.engine.rules.LiuYaoStatusRules.evaluateHexagramStatuses(
+                original = changed,
+                changed = null,
+            )
+            val finalChangedYao = changed.yaoFromBottom.map { yao ->
+                val statuses = com.boompala.engine.rules.LiuYaoStatusRules.evaluateYaoStatuses(
+                    yao = yao,
+                    monthGanzhi = timeInfo.monthGanzhi,
+                    dayGanzhi = timeInfo.dayGanzhi,
+                    changedYao = null,
+                )
+                yao.copy(statuses = statuses)
+            }
+            changed.copy(
+                yaoFromBottom = finalChangedYao,
+                statuses = changedHexStatuses,
+            )
+        }
+
         return DivinationResult(
             timeInfo = timeInfo,
             voidBranches = voidBranches,
-            original = original,
-            changed = changed,
+            original = finalOriginal,
+            changed = finalChanged,
         )
     }
 

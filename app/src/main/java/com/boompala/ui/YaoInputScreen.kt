@@ -20,6 +20,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -103,11 +104,40 @@ fun YaoInputScreen(
         }
     }
 
+    // Number cast wheel states (0-indexed for picker)
+    var selectedUpperIndex by remember { mutableIntStateOf(0) }
+    var selectedLowerIndex by remember { mutableIntStateOf(0) }
+    var selectedMovingIndex by remember { mutableIntStateOf(0) }
+
+    val trigramItems = remember {
+        listOf(
+            "1 乾",
+            "2 兑",
+            "3 离",
+            "4 震",
+            "5 巽",
+            "6 坎",
+            "7 艮",
+            "8 坤",
+        )
+    }
+    val movingLineItems = remember {
+        listOf(
+            "1 初",
+            "2 二",
+            "3 三",
+            "4 四",
+            "5 五",
+            "6 上",
+        )
+    }
+
     val canGenerate = when (inputMode) {
         DivinationInputMode.COIN_CAST -> coinRecords.all { it != null }
         DivinationInputMode.MANUAL_CAST -> selectedStates.all { it != null }
         DivinationInputMode.DIRECT_INPUT ->
             originalPolarities.all { it != null } && changedPolarities.all { it != null }
+        DivinationInputMode.NUMBER_CAST -> true
     }
 
     RotaryScrollColumn(
@@ -146,12 +176,23 @@ fun YaoInputScreen(
                         modifier = Modifier.weight(1f),
                     )
                 }
-                ModeButton(
-                    mode = DivinationInputMode.DIRECT_INPUT,
-                    selectedMode = inputMode,
-                    onSelected = { inputMode = it },
+                Row(
                     modifier = Modifier.fillMaxWidth(),
-                )
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                ) {
+                    ModeButton(
+                        mode = DivinationInputMode.DIRECT_INPUT,
+                        selectedMode = inputMode,
+                        onSelected = { inputMode = it },
+                        modifier = Modifier.weight(1f),
+                    )
+                    ModeButton(
+                        mode = DivinationInputMode.NUMBER_CAST,
+                        selectedMode = inputMode,
+                        onSelected = { inputMode = it },
+                        modifier = Modifier.weight(1f),
+                    )
+                }
             }
         }
 
@@ -160,45 +201,38 @@ fun YaoInputScreen(
                 val currentLineIndex = coinRecords.indexOfFirst { it == null }
                 val allCoinsCast = currentLineIndex == -1
 
-                item(key = "coin-cast-guidance") {
+                item(key = "coin-deck") {
                     ResultCard {
-                        if (!allCoinsCast) {
-                            if (currentLineIndex == 0 && lastToss == null) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Text(
+                                text = if (!allCoinsCast) "【${YaoPosition.entries[currentLineIndex].displayName}】第 ${currentLineIndex + 1}/6 爻" else "【六爻已就绪】",
+                                style = MaterialTheme.typography.labelMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = if (allCoinsCast) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
+                                maxLines = 1,
+                            )
+                            if (lastToss != null) {
+                                val stateDesc = when (lastToss!!.sum) {
+                                    6 -> "老阴(动)"
+                                    7 -> "少阳"
+                                    8 -> "少阴"
+                                    9 -> "老阳(动)"
+                                    else -> lastToss!!.state.displayName
+                                }
                                 Text(
-                                    text = "三枚铜钱 · 连续摇六次",
-                                    style = MaterialTheme.typography.labelLarge,
+                                    text = "${lastToss!!.sum} · $stateDesc",
+                                    style = MaterialTheme.typography.labelSmall,
                                     fontWeight = FontWeight.Bold,
-                                )
-                            } else {
-                                Text(
-                                    text = "【第 ${currentLineIndex + 1} / 6 爻】· ${YaoPosition.entries[currentLineIndex].displayName}",
-                                    style = MaterialTheme.typography.labelLarge,
-                                    fontWeight = FontWeight.Bold,
-                                )
-                                Text(
-                                    text = "投掷三枚铜钱：字(3) / 背(2)",
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    color = if (lastToss!!.state.isChanging) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                                    maxLines = 1,
                                 )
                             }
-                        } else {
-                            Text(
-                                text = "六爻已全部摇出",
-                                style = MaterialTheme.typography.labelLarge,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.primary,
-                            )
-                            Text(
-                                text = "可点击下方按钮生成完整卦盘。",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
                         }
-                    }
-                }
-
-                item(key = "coin-visuals") {
-                    ResultCard {
+                        Spacer(Modifier.height(6.dp))
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceEvenly,
@@ -211,31 +245,6 @@ fun YaoInputScreen(
                                     animProgress = tossAnimProgress.value,
                                 )
                             }
-                        }
-
-                        if (lastToss != null) {
-                            Spacer(Modifier.height(2.dp))
-                            Text(
-                                text = "点数：${lastToss!!.coins.joinToString(" + ") { "${it.displayName}(${it.value})" }} = ${lastToss!!.sum}",
-                                style = MaterialTheme.typography.bodySmall,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier.fillMaxWidth(),
-                            )
-                            val stateDesc = when (lastToss!!.sum) {
-                                6 -> "老阴 · 动"
-                                7 -> "少阳 · 静"
-                                8 -> "少阴 · 静"
-                                9 -> "老阳 · 动"
-                                else -> lastToss!!.state.displayName
-                            }
-                            Text(
-                                text = "结论：${lastToss!!.sum} $stateDesc",
-                                style = MaterialTheme.typography.labelMedium,
-                                fontWeight = FontWeight.Bold,
-                                color = if (lastToss!!.state.isChanging) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier.fillMaxWidth(),
-                            )
                         }
                     }
                 }
@@ -283,8 +292,8 @@ fun YaoInputScreen(
                             interactionSource = tossInteraction,
                         ) {
                             Text(
-                                if (isTossing) "正在摇卦…"
-                                else "摇 ${YaoPosition.entries[currentLineIndex].displayName}"
+                                text = if (isTossing) "正在摇卦…" else "摇 ${YaoPosition.entries[currentLineIndex].displayName}",
+                                maxLines = 1,
                             )
                         }
                     } else {
@@ -302,7 +311,7 @@ fun YaoInputScreen(
                             interactionSource = resetInteraction,
                             colors = BoompalaButtonDefaults.outlinedButtonColors(),
                         ) {
-                            Text("重新摇卦")
+                            Text("重新摇卦", maxLines = 1)
                         }
                     }
                 }
@@ -310,9 +319,11 @@ fun YaoInputScreen(
                 item(key = "coin-preview-card") {
                     ResultCard {
                         Text(
-                            text = "卦象实时预览",
-                            style = MaterialTheme.typography.labelLarge,
+                            text = "卦象记录",
+                            style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            maxLines = 1,
                         )
                         Spacer(Modifier.height(4.dp))
                         YaoPosition.entries.reversed().forEach { position ->
@@ -327,14 +338,6 @@ fun YaoInputScreen(
             }
 
             DivinationInputMode.MANUAL_CAST -> {
-                item(key = "manual-guidance") {
-                    val allFilled = selectedStates.all { it != null }
-                    Text(
-                        text = if (allFilled) "六爻已全部填写，可排盘" else "当前待选：${YaoPosition.entries[manualNextIndex].displayName}",
-                        style = MaterialTheme.typography.bodySmall,
-                        modifier = Modifier.padding(bottom = metrics.itemSpacing / 2),
-                    )
-                }
                 itemsIndexed(
                     items = YaoPosition.entries.toList().asReversed(),
                     key = { _, position -> "manual-${position.name}" },
@@ -351,6 +354,7 @@ fun YaoInputScreen(
                             text = position.displayName,
                             modifier = Modifier.weight(0.8f),
                             style = MaterialTheme.typography.labelSmall,
+                            maxLines = 1,
                         )
                         val isSelected = selected != null
                         SelectableCardButton(
@@ -371,6 +375,7 @@ fun YaoInputScreen(
                             Text(
                                 text = selected?.displayName ?: "未选择",
                                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+                                maxLines = 1,
                             )
                         }
                     }
@@ -378,20 +383,14 @@ fun YaoInputScreen(
             }
 
             DivinationInputMode.DIRECT_INPUT -> {
-                item(key = "direct-guidance") {
-                    Text(
-                        text = "分别输入本卦与变卦，动爻由阴阳差异自动推导",
-                        style = MaterialTheme.typography.bodySmall,
-                    )
-                }
                 item(key = "direct-column-labels") {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(metrics.itemSpacing),
                     ) {
-                        Text("爻位", modifier = Modifier.weight(0.7f), style = MaterialTheme.typography.labelSmall)
-                        Text("本卦", modifier = Modifier.weight(1f), style = MaterialTheme.typography.labelSmall)
-                        Text("变卦", modifier = Modifier.weight(1f), style = MaterialTheme.typography.labelSmall)
+                        Text("爻位", modifier = Modifier.weight(0.7f), style = MaterialTheme.typography.labelSmall, maxLines = 1)
+                        Text("本卦", modifier = Modifier.weight(1f), style = MaterialTheme.typography.labelSmall, maxLines = 1)
+                        Text("变卦", modifier = Modifier.weight(1f), style = MaterialTheme.typography.labelSmall, maxLines = 1)
                     }
                 }
                 itemsIndexed(
@@ -408,6 +407,7 @@ fun YaoInputScreen(
                             position.displayName,
                             modifier = Modifier.weight(0.7f),
                             style = MaterialTheme.typography.labelSmall,
+                            maxLines = 1,
                         )
                         PolarityButton(
                             position = position,
@@ -426,6 +426,89 @@ fun YaoInputScreen(
                                 changedPolarities[internalIndex] = nextPolarity(changedPolarities[internalIndex])
                             },
                             modifier = Modifier.weight(1f),
+                        )
+                    }
+                }
+            }
+
+            DivinationInputMode.NUMBER_CAST -> {
+                val upperTrigram = com.boompala.engine.rules.Trigram.fromNumber(selectedUpperIndex + 1)
+                val lowerTrigram = com.boompala.engine.rules.Trigram.fromNumber(selectedLowerIndex + 1)
+                val originalCode = lowerTrigram.bitsFromBottom + upperTrigram.bitsFromBottom
+                val originalHexName = com.boompala.engine.rules.HexagramCatalog.nameFor(originalCode)
+
+                val changedCode = originalCode.mapIndexed { idx, bit ->
+                    if (idx == selectedMovingIndex) (if (bit == '1') '0' else '1') else bit
+                }.joinToString("")
+                val changedHexName = com.boompala.engine.rules.HexagramCatalog.nameFor(changedCode)
+
+                item(key = "number-cast-wheels") {
+                    ResultCard {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                        ) {
+                            Text("上卦", modifier = Modifier.weight(1f), textAlign = TextAlign.Center, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary, maxLines = 1)
+                            Text("下卦", modifier = Modifier.weight(1f), textAlign = TextAlign.Center, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary, maxLines = 1)
+                            Text("动爻", modifier = Modifier.weight(1f), textAlign = TextAlign.Center, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary, maxLines = 1)
+                        }
+                        Spacer(Modifier.height(4.dp))
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(4.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            BoompalaWheelPicker(
+                                items = trigramItems,
+                                selectedIndex = selectedUpperIndex,
+                                onSelectedIndexChanged = { selectedUpperIndex = it },
+                                modifier = Modifier.weight(1f),
+                            )
+                            BoompalaWheelPicker(
+                                items = trigramItems,
+                                selectedIndex = selectedLowerIndex,
+                                onSelectedIndexChanged = { selectedLowerIndex = it },
+                                modifier = Modifier.weight(1f),
+                            )
+                            BoompalaWheelPicker(
+                                items = movingLineItems,
+                                selectedIndex = selectedMovingIndex,
+                                onSelectedIndexChanged = { selectedMovingIndex = it },
+                                modifier = Modifier.weight(1f),
+                            )
+                        }
+                    }
+                }
+
+                item(key = "number-cast-live-preview") {
+                    ResultCard(
+                        borderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
+                    ) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Text(
+                                text = "本卦 $originalHexName",
+                                style = MaterialTheme.typography.titleSmall,
+                                fontWeight = FontWeight.Bold,
+                                maxLines = 1,
+                            )
+                            Text(
+                                text = "▶ 变卦 $changedHexName",
+                                style = MaterialTheme.typography.titleSmall,
+                                fontWeight = FontWeight.Bold,
+                                color = Color(0xFFFFD700),
+                                maxLines = 1,
+                            )
+                        }
+                        Spacer(Modifier.height(2.dp))
+                        Text(
+                            text = "动爻：${YaoPosition.entries[selectedMovingIndex].displayName} · ${if (originalCode[selectedMovingIndex] == '1') "阳动变阴" else "阴动变阳"}",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            maxLines = 1,
                         )
                     }
                 }
@@ -459,6 +542,14 @@ fun YaoInputScreen(
                             castAt = castAt,
                             zoneId = zoneId,
                         ).toEngineInput()
+
+                        DivinationInputMode.NUMBER_CAST -> com.boompala.engine.liuyao.NumberCastingEngine.castThreeNumbers(
+                            numA = selectedUpperIndex + 1,
+                            numB = selectedLowerIndex + 1,
+                            numC = selectedMovingIndex + 1,
+                            castAt = castAt,
+                            zoneId = zoneId,
+                        )
                     }
                     onGenerate(input)
                 },

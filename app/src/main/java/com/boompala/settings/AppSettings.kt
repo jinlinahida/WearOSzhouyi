@@ -93,6 +93,11 @@ data class AppSettings(
     val userBirthDate: String? = null,
     val userBirthHour: Int? = null,
     val userGender: BaziGender = BaziGender.MALE,
+    val keepScreenOnEnabled: Boolean = false,
+    val compassTrueNorthEnabled: Boolean = false,
+    val compassDeclination: Float = 0f,
+    val tarotReversedEnabled: Boolean = true,
+    val tarotMajorArcanaOnly: Boolean = false,
 ) {
     companion object {
         val DEFAULT = AppSettings()

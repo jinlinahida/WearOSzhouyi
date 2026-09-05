@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
+import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -47,6 +48,11 @@ class SettingsRepository(
                 userBirthDate = preferences[USER_BIRTH_DATE_KEY],
                 userBirthHour = preferences[USER_BIRTH_HOUR_KEY]?.takeIf { it in 0..23 },
                 userGender = preferences[USER_GENDER_KEY].toEnumOrDefault(BaziGender.MALE),
+                keepScreenOnEnabled = preferences[KEEP_SCREEN_ON_ENABLED_KEY] ?: false,
+                compassTrueNorthEnabled = preferences[COMPASS_TRUE_NORTH_ENABLED_KEY] ?: false,
+                compassDeclination = preferences[COMPASS_DECLINATION_KEY] ?: 0f,
+                tarotReversedEnabled = preferences[TAROT_REVERSED_ENABLED_KEY] ?: true,
+                tarotMajorArcanaOnly = preferences[TAROT_MAJOR_ARCANA_ONLY_KEY] ?: false,
             )
         }
 
@@ -66,6 +72,11 @@ class SettingsRepository(
                 userBirthDate = preferences[USER_BIRTH_DATE_KEY],
                 userBirthHour = preferences[USER_BIRTH_HOUR_KEY]?.takeIf { it in 0..23 },
                 userGender = preferences[USER_GENDER_KEY].toEnumOrDefault(BaziGender.MALE),
+                keepScreenOnEnabled = preferences[KEEP_SCREEN_ON_ENABLED_KEY] ?: false,
+                compassTrueNorthEnabled = preferences[COMPASS_TRUE_NORTH_ENABLED_KEY] ?: false,
+                compassDeclination = preferences[COMPASS_DECLINATION_KEY] ?: 0f,
+                tarotReversedEnabled = preferences[TAROT_REVERSED_ENABLED_KEY] ?: true,
+                tarotMajorArcanaOnly = preferences[TAROT_MAJOR_ARCANA_ONLY_KEY] ?: false,
             )
             val next = transform(current)
             preferences[SCREEN_MODE_KEY] = next.screenMode.name
@@ -89,6 +100,11 @@ class SettingsRepository(
                 preferences.remove(USER_BIRTH_HOUR_KEY)
             }
             preferences[USER_GENDER_KEY] = next.userGender.name
+            preferences[KEEP_SCREEN_ON_ENABLED_KEY] = next.keepScreenOnEnabled
+            preferences[COMPASS_TRUE_NORTH_ENABLED_KEY] = next.compassTrueNorthEnabled
+            preferences[COMPASS_DECLINATION_KEY] = next.compassDeclination
+            preferences[TAROT_REVERSED_ENABLED_KEY] = next.tarotReversedEnabled
+            preferences[TAROT_MAJOR_ARCANA_ONLY_KEY] = next.tarotMajorArcanaOnly
         }
     }
 
@@ -180,6 +196,37 @@ class SettingsRepository(
         }
     }
 
+    suspend fun setKeepScreenOnEnabled(enabled: Boolean) {
+        update { it.copy(keepScreenOnEnabled = enabled) }
+    }
+
+    suspend fun setCompassTrueNorthEnabled(enabled: Boolean) {
+        update { it.copy(compassTrueNorthEnabled = enabled) }
+    }
+
+    suspend fun setCompassDeclination(declination: Float) {
+        update { it.copy(compassDeclination = declination) }
+    }
+
+    suspend fun setTarotReversedEnabled(enabled: Boolean) {
+        update { it.copy(tarotReversedEnabled = enabled) }
+    }
+
+    suspend fun setTarotMajorArcanaOnly(enabled: Boolean) {
+        update { it.copy(tarotMajorArcanaOnly = enabled) }
+    }
+
+    suspend fun resetAllPreferences() {
+        update { current ->
+            AppSettings(
+                userBirthDate = current.userBirthDate,
+                userBirthHour = current.userBirthHour,
+                userGender = current.userGender,
+                hasCompletedOnboarding = current.hasCompletedOnboarding,
+            )
+        }
+    }
+
     private companion object {
         val SCREEN_MODE_KEY = stringPreferencesKey("screen_mode")
         val CONTENT_SIZE_KEY = stringPreferencesKey("content_size")
@@ -194,6 +241,11 @@ class SettingsRepository(
         val USER_BIRTH_DATE_KEY = stringPreferencesKey("user_birth_date")
         val USER_BIRTH_HOUR_KEY = intPreferencesKey("user_birth_hour")
         val USER_GENDER_KEY = stringPreferencesKey("user_gender")
+        val KEEP_SCREEN_ON_ENABLED_KEY = booleanPreferencesKey("keep_screen_on_enabled")
+        val COMPASS_TRUE_NORTH_ENABLED_KEY = booleanPreferencesKey("compass_true_north_enabled")
+        val COMPASS_DECLINATION_KEY = floatPreferencesKey("compass_declination")
+        val TAROT_REVERSED_ENABLED_KEY = booleanPreferencesKey("tarot_reversed_enabled")
+        val TAROT_MAJOR_ARCANA_ONLY_KEY = booleanPreferencesKey("tarot_major_arcana_only")
 
         inline fun <reified T : Enum<T>> String?.toEnumOrDefault(default: T): T =
             runCatching { enumValueOf<T>(this.orEmpty()) }.getOrDefault(default)

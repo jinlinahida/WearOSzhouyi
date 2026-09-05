@@ -35,7 +35,12 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 @Composable
-fun CompassScreen(rotaryScrollingEnabled: Boolean, onBack: () -> Unit) {
+fun CompassScreen(
+    rotaryScrollingEnabled: Boolean,
+    trueNorthEnabled: Boolean = false,
+    declination: Float = 0f,
+    onBack: () -> Unit,
+) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     var sensorState by remember { mutableStateOf(SensorCompassState()) }
@@ -53,11 +58,16 @@ fun CompassScreen(rotaryScrollingEnabled: Boolean, onBack: () -> Unit) {
     }
 
     val locked = lockedHeading != null
-    val visibleHeading = lockedHeading ?: sensorState.heading
+    val rawHeading = lockedHeading ?: sensorState.heading
+    val visibleHeading = rawHeading?.let {
+        if (trueNorthEnabled) CompassMath.normalize(it + declination) else it
+    }
     val reading = visibleHeading?.let(CompassMath::reading)
     val period = remember { YuanYunData.periodFor(LocalDate.now()) }
     val statusText = sensorStatusText(sensorState, locked)
     val metrics = LocalUiMetrics.current
+    val declinationLabel = if (declination >= 0f) "+${declination.toInt()}°" else "${declination.toInt()}°"
+    val northLabel = if (trueNorthEnabled) "真北 ($declinationLabel)" else "磁北"
 
     RotaryScrollColumn(
         rotaryEnabled = rotaryScrollingEnabled,
@@ -69,8 +79,8 @@ fun CompassScreen(rotaryScrollingEnabled: Boolean, onBack: () -> Unit) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 ModernLuoPan(reading)
                 Text(
-                    text = reading?.let { String.format(Locale.US, "%.1f°  %s · 磁北", it.degrees, it.eightDirection) }
-                        ?: "等待磁北方向数据",
+                    text = reading?.let { String.format(Locale.US, "%.1f°  %s · %s", it.degrees, it.eightDirection, northLabel) }
+                        ?: "等待${northLabel}方向数据",
                     style = MaterialTheme.typography.titleMedium,
                     textAlign = TextAlign.Center,
                 )
@@ -79,8 +89,9 @@ fun CompassScreen(rotaryScrollingEnabled: Boolean, onBack: () -> Unit) {
         }
         item(key = "reading-card") {
             ResultCard {
-                Text("当前方位", style = MaterialTheme.typography.titleSmall)
+                Text("当前方位 (${northLabel})", style = MaterialTheme.typography.titleSmall)
                 DetailField("精确角度", reading?.let { String.format(Locale.US, "%.1f° · %s", it.degrees, it.eightDirection) } ?: "暂无")
+                DetailField("参照基准", if (trueNorthEnabled) "地理真北 (偏角 $declinationLabel)" else "天然地磁北")
                 DetailField("朝向山位", reading?.let { "${it.mountain.name}山 · ${it.mountain.element} · ${it.mountain.yinYang.displayName}" } ?: "暂无")
                 DetailField("坐山朝向", reading?.let { "坐${it.sittingMountain.name}山，向${it.mountain.name}山" } ?: "暂无")
                 DetailField("后天八卦", reading?.let { "${it.trigram.symbol}${it.trigram.name}卦 · ${it.trigram.direction} · ${it.trigram.element}" } ?: "暂无")

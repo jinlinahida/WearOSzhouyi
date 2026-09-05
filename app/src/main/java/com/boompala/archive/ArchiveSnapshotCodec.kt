@@ -39,6 +39,9 @@ object ArchiveSnapshotCodec {
                 buildList {
                     add("卦名：${result.original.name}")
                     add("卦宫：${result.original.palace.displayName} · ${result.original.element.displayName}（世爻${result.original.shiPosition.displayName} / 应爻${result.original.yingPosition.displayName}）")
+                    if (result.original.statuses.isNotEmpty()) {
+                        add("卦象状态：${result.original.statuses.joinToString(" · ") { it.displayName }}")
+                    }
                     if (originalInterp != null) {
                         add("核心含义：${originalInterp.coreMeaning}")
                         add("关键词：${originalInterp.keywords.joinToString(" · ")}")
@@ -52,6 +55,9 @@ object ArchiveSnapshotCodec {
                     buildList {
                         add("卦名：${changed.name}")
                         add("卦宫：${changed.palace.displayName} · ${changed.element.displayName}（世爻${changed.shiPosition.displayName} / 应爻${changed.yingPosition.displayName}）")
+                        if (changed.statuses.isNotEmpty()) {
+                            add("卦象状态：${changed.statuses.joinToString(" · ") { it.displayName }}")
+                        }
                         if (changedInterp != null) {
                             add("核心含义：${changedInterp.coreMeaning}")
                             add("关键词：${changedInterp.keywords.joinToString(" · ")}")
@@ -78,6 +84,13 @@ object ArchiveSnapshotCodec {
                         append(" · ${yao.sixSpirit.displayName}")
                         if (yao.isVoid) append(" [空亡]")
                         if (yao.isShi) append(" [世]") else if (yao.isYing) append(" [应]")
+                        val fu = yao.fuShen
+                        if (fu != null) {
+                            append(" · 伏神:${fu.displayName}(${fu.feiFuRelation.displayName})")
+                        }
+                        if (yao.statuses.isNotEmpty()) {
+                            append(" [${yao.statuses.joinToString("·") { it.displayName }}]")
+                        }
                         if (!yao.lineText.isNullOrBlank()) append(" · ${yao.lineText}")
                     }
                 },
@@ -93,6 +106,9 @@ object ArchiveSnapshotCodec {
                             append(" · ${yao.sixSpirit.displayName}")
                             if (yao.isVoid) append(" [空亡]")
                             if (yao.isShi) append(" [世]") else if (yao.isYing) append(" [应]")
+                            if (yao.statuses.isNotEmpty()) {
+                                append(" [${yao.statuses.joinToString("·") { it.displayName }}]")
+                            }
                         }
                     },
                 )

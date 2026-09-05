@@ -113,6 +113,27 @@
     <string name="settings_data_clear_confirm_title">Clear All Archives?</string>
     <string name="settings_data_clear_confirm_desc">This action cannot be undone. All local archives will be permanently deleted.</string>
     <string name="settings_data_clear_success">All archives cleared</string>
+    <string name="settings_module_tarot">Tarot Preferences</string>
+    <string name="settings_module_tarot_desc">Reversed cards &amp; deck selection</string>
+    <string name="settings_module_compass">Compass Preferences</string>
+    <string name="settings_module_compass_desc">Magnetic vs True North selection</string>
+    <string name="settings_keep_screen_on">Keep Screen On</string>
+    <string name="settings_keep_screen_on_desc">Prevent screen dimming during reading</string>
+    <string name="settings_tarot_reversed">Card Reversals</string>
+    <string name="settings_tarot_reversed_allow">Upright &amp; Reversed</string>
+    <string name="settings_tarot_reversed_disallow">Upright Only</string>
+    <string name="settings_tarot_deck">Deck Selection</string>
+    <string name="settings_tarot_deck_full">Full 78 Cards</string>
+    <string name="settings_tarot_deck_major">22 Major Arcana Only</string>
+    <string name="settings_compass_north">North Reference</string>
+    <string name="settings_compass_magnetic_north">Magnetic North (Default)</string>
+    <string name="settings_compass_true_north">True North</string>
+    <string name="settings_compass_declination">Magnetic Declination Offset</string>
+    <string name="settings_compass_declination_desc">Negative for West, positive for East. Geometric offset applied automatically.</string>
+    <string name="settings_reset_all">Reset All Settings</string>
+    <string name="settings_reset_all_confirm_title">Reset All Settings?</string>
+    <string name="settings_reset_all_confirm_desc">All layout, haptic, tarot, and compass settings will be reset to defaults (birth profile preserved).</string>
+    <string name="settings_reset_all_success">All settings reset to defaults</string>
 
     <!-- Daily Fortune -->
     <string name="daily_fortune_title">Daily Fortune</string>

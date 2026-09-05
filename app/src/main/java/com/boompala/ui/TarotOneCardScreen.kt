@@ -52,6 +52,8 @@ fun TarotOneCardScreen(
     reading: TarotReading?,
     rotaryScrollingEnabled: Boolean,
     animationsEnabled: Boolean = true,
+    allowReversed: Boolean = true,
+    deckType: DeckType = DeckType.FULL_78,
     onReadingChanged: (TarotReading?) -> Unit,
     onBack: () -> Unit,
     onArchive: (TarotReading) -> Unit = { },
@@ -60,8 +62,8 @@ fun TarotOneCardScreen(
     val hapticContext = androidx.compose.ui.platform.LocalContext.current
     val hapticEnabled = LocalHapticFeedbackEnabled.current
     val hapticIntensity = LocalHapticIntensity.current
-    var deckType by remember { mutableStateOf(DeckType.FULL_78) }
-    var allowReversed by remember { mutableStateOf(true) }
+    var currentDeckType by remember(deckType) { mutableStateOf(deckType) }
+    var currentAllowReversed by remember(allowReversed) { mutableStateOf(allowReversed) }
     var isFlipped by remember(reading) { mutableStateOf(false) }
 
     RotaryScrollColumn(
@@ -93,7 +95,7 @@ fun TarotOneCardScreen(
 
             item(key = "tarot-deck-selection") {
                 ResultCard {
-                    DetailField("牌组类型", deckType.displayName)
+                    DetailField("牌组类型", currentDeckType.displayName)
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(metrics.itemSpacing),
@@ -101,7 +103,7 @@ fun TarotOneCardScreen(
                         val deckInteraction = remember { MutableInteractionSource() }
                         BoompalaCardButton(
                             onClick = {
-                                deckType = if (deckType == DeckType.FULL_78) {
+                                currentDeckType = if (currentDeckType == DeckType.FULL_78) {
                                     DeckType.MAJOR_22
                                 } else {
                                     DeckType.FULL_78
@@ -113,7 +115,7 @@ fun TarotOneCardScreen(
                             interactionSource = deckInteraction,
                             colors = BoompalaButtonDefaults.outlinedButtonColors(),
                         ) {
-                            Text(if (deckType == DeckType.FULL_78) "切换为仅大牌 (22张)" else "切换为全牌组 (78张)")
+                            Text(if (currentDeckType == DeckType.FULL_78) "切换为仅大牌 (22张)" else "切换为全牌组 (78张)")
                         }
                     }
                 }
@@ -121,17 +123,17 @@ fun TarotOneCardScreen(
 
             item(key = "tarot-reversed-selection") {
                 ResultCard {
-                    DetailField("逆位规则", if (allowReversed) "允许逆位" else "仅正位")
+                    DetailField("逆位规则", if (currentAllowReversed) "允许逆位" else "仅正位")
                     val reversedInteraction = remember { MutableInteractionSource() }
                     BoompalaCardButton(
-                        onClick = { allowReversed = !allowReversed },
+                        onClick = { currentAllowReversed = !currentAllowReversed },
                         modifier = Modifier
                             .fillMaxWidth()
                             .wearPressFeedback(reversedInteraction),
                         interactionSource = reversedInteraction,
                         colors = BoompalaButtonDefaults.outlinedButtonColors(),
                     ) {
-                        Text(if (allowReversed) "切换为仅正位" else "切换为允许逆位")
+                        Text(if (currentAllowReversed) "切换为仅正位" else "切换为允许逆位")
                     }
                 }
             }
@@ -142,8 +144,8 @@ fun TarotOneCardScreen(
                     onClick = {
                         val newReading = engine.cast(
                             spread = TarotSpread.ONE_CARD,
-                            deckType = deckType,
-                            allowReversed = allowReversed,
+                            deckType = currentDeckType,
+                            allowReversed = currentAllowReversed,
                         )
                         isFlipped = false
                         onReadingChanged(newReading)

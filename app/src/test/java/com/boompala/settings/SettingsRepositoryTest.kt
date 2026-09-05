@@ -132,4 +132,50 @@ class SettingsRepositoryTest {
         assertEquals(null, cleared.userBirthHour)
         assertEquals(com.boompala.engine.bazi.BaziGender.MALE, cleared.userGender)
     }
+
+    @Test
+    fun `new preferences and resetAllPreferences work as expected`() = runBlocking {
+        val dataStore = PreferenceDataStoreFactory.create(
+            scope = dataStoreScope,
+            produceFile = { dataStoreFile },
+        )
+        val repository = SettingsRepository(dataStore)
+
+        val initial = repository.settings.first()
+        assertFalse(initial.keepScreenOnEnabled)
+        assertFalse(initial.compassTrueNorthEnabled)
+        assertEquals(0f, initial.compassDeclination)
+        assertTrue(initial.tarotReversedEnabled)
+        assertFalse(initial.tarotMajorArcanaOnly)
+
+        repository.setKeepScreenOnEnabled(true)
+        repository.setCompassTrueNorthEnabled(true)
+        repository.setCompassDeclination(-6.0f)
+        repository.setTarotReversedEnabled(false)
+        repository.setTarotMajorArcanaOnly(true)
+        repository.setScreenMode(ScreenMode.ROUND)
+        repository.setUserBirth("1990-01-01", 12, com.boompala.engine.bazi.BaziGender.FEMALE)
+
+        var updated = repository.settings.first()
+        assertTrue(updated.keepScreenOnEnabled)
+        assertTrue(updated.compassTrueNorthEnabled)
+        assertEquals(-6.0f, updated.compassDeclination)
+        assertFalse(updated.tarotReversedEnabled)
+        assertTrue(updated.tarotMajorArcanaOnly)
+        assertEquals(ScreenMode.ROUND, updated.screenMode)
+        assertEquals("1990-01-01", updated.userBirthDate)
+
+        repository.resetAllPreferences()
+        val reset = repository.settings.first()
+        assertFalse(reset.keepScreenOnEnabled)
+        assertFalse(reset.compassTrueNorthEnabled)
+        assertEquals(0f, reset.compassDeclination)
+        assertTrue(reset.tarotReversedEnabled)
+        assertFalse(reset.tarotMajorArcanaOnly)
+        assertEquals(ScreenMode.AUTO, reset.screenMode)
+        // Birth profile should be preserved
+        assertEquals("1990-01-01", reset.userBirthDate)
+        assertEquals(12, reset.userBirthHour)
+        assertEquals(com.boompala.engine.bazi.BaziGender.FEMALE, reset.userGender)
+    }
 }

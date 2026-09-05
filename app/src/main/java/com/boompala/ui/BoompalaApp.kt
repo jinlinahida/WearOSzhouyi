@@ -173,6 +173,23 @@ fun BoompalaApp() {
     val settingsState by settingsRepository.settings.collectAsState(initial = null)
     if (settingsState == null) return
     val settings = settingsState!!
+
+    val activity = remember(context) {
+        generateSequence(context) { (it as? android.content.ContextWrapper)?.baseContext }
+            .filterIsInstance<android.app.Activity>()
+            .firstOrNull()
+    }
+    androidx.compose.runtime.DisposableEffect(activity, settings.keepScreenOnEnabled) {
+        if (settings.keepScreenOnEnabled) {
+            activity?.window?.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        } else {
+            activity?.window?.clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        }
+        onDispose {
+            activity?.window?.clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        }
+    }
+
     val screenShape = settings.resolvedScreenShape(configuration.isScreenRound)
     val homeListState = rememberLazyListState()
     val scope = rememberCoroutineScope()
@@ -491,7 +508,12 @@ fun BoompalaApp() {
                                 else ArchiveDetailScreen(snapshot, archiveRepository, settings.rotaryScrollingEnabled, { archiveRefresh++; goBack(true) }, { goBack(true) })
                             }
                         }
-                        AppScreen.COMPASS -> CompassScreen(settings.rotaryScrollingEnabled) { goBack(true) }
+                        AppScreen.COMPASS -> CompassScreen(
+                            rotaryScrollingEnabled = settings.rotaryScrollingEnabled,
+                            trueNorthEnabled = settings.compassTrueNorthEnabled,
+                            declination = settings.compassDeclination,
+                            onBack = { goBack(true) },
+                        )
                         AppScreen.DAILY_FORTUNE -> {
                             LaunchedEffect(dailyFortuneEngineReady) {
                                 if (!dailyFortuneEngineReady.isCompleted) {
@@ -743,6 +765,24 @@ fun BoompalaApp() {
                                     settingsRepository.clearUserBirth()
                                 }
                             },
+                            onKeepScreenOnEnabledChange = { enabled ->
+                                scope.launch { settingsRepository.setKeepScreenOnEnabled(enabled) }
+                            },
+                            onCompassTrueNorthEnabledChange = { enabled ->
+                                scope.launch { settingsRepository.setCompassTrueNorthEnabled(enabled) }
+                            },
+                            onCompassDeclinationChange = { declination ->
+                                scope.launch { settingsRepository.setCompassDeclination(declination) }
+                            },
+                            onTarotReversedEnabledChange = { enabled ->
+                                scope.launch { settingsRepository.setTarotReversedEnabled(enabled) }
+                            },
+                            onTarotMajorArcanaOnlyChange = { enabled ->
+                                scope.launch { settingsRepository.setTarotMajorArcanaOnly(enabled) }
+                            },
+                            onResetAllPreferences = {
+                                scope.launch { settingsRepository.resetAllPreferences() }
+                            },
                             archiveRepository = archiveRepository,
                             rotaryScrollingEnabled = settings.rotaryScrollingEnabled,
                             onAboutClick = { navigateTo(AppScreen.ABOUT) },
@@ -755,6 +795,8 @@ fun BoompalaApp() {
                             reading = tarotReading,
                             rotaryScrollingEnabled = settings.rotaryScrollingEnabled,
                             animationsEnabled = settings.animationsEnabled,
+                            allowReversed = settings.tarotReversedEnabled,
+                            deckType = if (settings.tarotMajorArcanaOnly) com.boompala.engine.tarot.DeckType.MAJOR_22 else com.boompala.engine.tarot.DeckType.FULL_78,
                             onReadingChanged = { tarotReading = it },
                             onBack = { goBack(true) },
                             onArchive = { r ->
@@ -777,6 +819,8 @@ fun BoompalaApp() {
                             reading = tarotThreeReading,
                             rotaryScrollingEnabled = settings.rotaryScrollingEnabled,
                             animationsEnabled = settings.animationsEnabled,
+                            allowReversed = settings.tarotReversedEnabled,
+                            deckType = if (settings.tarotMajorArcanaOnly) com.boompala.engine.tarot.DeckType.MAJOR_22 else com.boompala.engine.tarot.DeckType.FULL_78,
                             onReadingChanged = { tarotThreeReading = it },
                             onBack = { goBack(true) },
                             onArchive = { r ->
@@ -799,6 +843,8 @@ fun BoompalaApp() {
                             reading = tarotHolyTriangleReading,
                             rotaryScrollingEnabled = settings.rotaryScrollingEnabled,
                             animationsEnabled = settings.animationsEnabled,
+                            allowReversed = settings.tarotReversedEnabled,
+                            deckType = if (settings.tarotMajorArcanaOnly) com.boompala.engine.tarot.DeckType.MAJOR_22 else com.boompala.engine.tarot.DeckType.FULL_78,
                             onReadingChanged = { tarotHolyTriangleReading = it },
                             onBack = { goBack(true) },
                             onArchive = { r ->
@@ -821,6 +867,8 @@ fun BoompalaApp() {
                             reading = tarotCelticCrossReading,
                             rotaryScrollingEnabled = settings.rotaryScrollingEnabled,
                             animationsEnabled = settings.animationsEnabled,
+                            allowReversed = settings.tarotReversedEnabled,
+                            deckType = if (settings.tarotMajorArcanaOnly) com.boompala.engine.tarot.DeckType.MAJOR_22 else com.boompala.engine.tarot.DeckType.FULL_78,
                             onReadingChanged = { tarotCelticCrossReading = it },
                             onBack = { goBack(true) },
                             onInnerBackAvailabilityChanged = { tarotCelticCrossInnerBackAvailable = it },
