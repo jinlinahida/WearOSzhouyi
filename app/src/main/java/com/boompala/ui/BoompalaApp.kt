@@ -791,6 +791,9 @@ fun BoompalaApp() {
                             onResetAllPreferences = {
                                 scope.launch { settingsRepository.resetAllPreferences() }
                             },
+                            onResetMuyuCount = {
+                                scope.launch { settingsRepository.resetMuyuCount() }
+                            },
                             archiveRepository = archiveRepository,
                             rotaryScrollingEnabled = settings.rotaryScrollingEnabled,
                             onAboutClick = { navigateTo(AppScreen.ABOUT) },

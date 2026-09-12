@@ -123,6 +123,11 @@
     <string name="settings_data_clear_confirm_title">确认清空所有归档？</string>
     <string name="settings_data_clear_confirm_desc">此操作不可恢复，所有保存在手表本地的归档都将被删除。</string>
     <string name="settings_data_clear_success">已清空所有归档</string>
+    <string name="settings_data_muyu_total">累积功德数：%1$d 次</string>
+    <string name="settings_data_muyu_reset">清零功德计数</string>
+    <string name="settings_data_muyu_reset_confirm_title">确认清零功德计数？</string>
+    <string name="settings_data_muyu_reset_confirm_desc">此操作不可恢复，木鱼累积的敲击次数将归零。</string>
+    <string name="settings_data_muyu_reset_success">已清零功德计数</string>
     <string name="settings_module_tarot">塔罗偏好</string>
     <string name="settings_module_tarot_desc">正逆位控制与牌库模式</string>
     <string name="settings_module_compass">罗盘偏好</string>

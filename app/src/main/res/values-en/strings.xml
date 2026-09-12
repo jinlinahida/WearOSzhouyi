@@ -123,6 +123,11 @@
     <string name="settings_data_clear_confirm_title">Clear All Archives?</string>
     <string name="settings_data_clear_confirm_desc">This action cannot be undone. All local archives will be permanently deleted.</string>
     <string name="settings_data_clear_success">All archives cleared</string>
+    <string name="settings_data_muyu_total">Total Merit Count: %1$d</string>
+    <string name="settings_data_muyu_reset">Reset Merit Count</string>
+    <string name="settings_data_muyu_reset_confirm_title">Reset Merit Count?</string>
+    <string name="settings_data_muyu_reset_confirm_desc">This action cannot be undone. All accumulated wooden fish taps will be reset to zero.</string>
+    <string name="settings_data_muyu_reset_success">Merit count reset</string>
     <string name="settings_module_tarot">Tarot Preferences</string>
     <string name="settings_module_tarot_desc">Reversed cards &amp; deck selection</string>
     <string name="settings_module_compass">Compass Preferences</string>

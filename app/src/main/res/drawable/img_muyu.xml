@@ -1,64 +1,163 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
     android:width="140dp"
     android:height="140dp"
     android:viewportWidth="120"
     android:viewportHeight="120">
 
-    <!-- 底层柔和微光底晕 -->
+    <!-- 0. 柔和背光微晕 -->
     <path
-        android:fillColor="#15D4AF37"
-        android:pathData="M60,60m-54,0a54,54 0 1,0 108,0a54,54 0 1,0 -108,0" />
+        android:pathData="M60,60m-52,0a52,52 0 1,0 104,0a52,52 0 1,0 -104,0">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:centerX="60"
+                android:centerY="60"
+                android:gradientRadius="52"
+                android:type="radial">
+                <item android:offset="0.0" android:color="#26D4AF37" />
+                <item android:offset="0.7" android:color="#0CD4AF37" />
+                <item android:offset="1.0" android:color="#00000000" />
+            </gradient>
+        </aapt:attr>
+    </path>
 
-    <!-- 木鱼主躯体：饱满浑圆的古木主体 -->
+    <!-- 1. 底部接地微投影 -->
     <path
-        android:fillColor="#221B14"
-        android:strokeColor="#C5A059"
-        android:strokeWidth="3.2"
-        android:strokeLineCap="round"
-        android:strokeLineJoin="round"
-        android:pathData="M24,68 C20,44 38,20 64,20 C88,20 106,40 106,64 C106,86 86,104 62,104 C42,104 26,88 24,68 Z" />
+        android:pathData="M30,103 C42,107 78,107 92,103 C99,101 88,111 60,111 C32,111 23,101 30,103 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:centerX="60"
+                android:centerY="106"
+                android:gradientRadius="35"
+                android:type="radial">
+                <item android:offset="0.0" android:color="#4D000000" />
+                <item android:offset="1.0" android:color="#00000000" />
+            </gradient>
+        </aapt:attr>
+    </path>
 
-    <!-- 顶部鱼背祥云弧线刻纹 -->
+    <!-- 2. 木鱼实体躯干：饱满浑圆的红木/金丝楠木实体渐变体 -->
     <path
-        android:strokeColor="#80C5A059"
-        android:strokeWidth="2.0"
-        android:strokeLineCap="round"
-        android:fillColor="#00000000"
-        android:pathData="M44,34 C52,28 68,28 78,36" />
+        android:pathData="M24,67 C20,41 38,18 64,18 C90,18 107,38 107,64 C107,88 88,105 62,105 C42,105 26,89 24,67 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="42"
+                android:startY="18"
+                android:endX="78"
+                android:endY="105"
+                android:type="linear">
+                <!-- 顶部高光木色到下部醇厚暗红木质感 -->
+                <item android:offset="0.0" android:color="#5A3A22" />
+                <item android:offset="0.25" android:color="#462B17" />
+                <item android:offset="0.65" android:color="#321D0E" />
+                <item android:offset="1.0" android:color="#211208" />
+            </gradient>
+        </aapt:attr>
+    </path>
 
-    <!-- 鱼眼雕刻（外圈与内珠） -->
+    <!-- 3. 木鱼背部丰满立体高光弧面（3D球形光泽） -->
     <path
-        android:fillColor="#3A2E20"
-        android:strokeColor="#D4AF37"
-        android:strokeWidth="2.2"
-        android:pathData="M46,48m-7,0a7,7 0 1,0 14,0a7,7 0 1,0 -14,0" />
-    <path
-        android:fillColor="#E5C384"
-        android:pathData="M46,48m-2.5,0a2.5,2.5 0 1,0 5,0a2.5,2.5 0 1,0 -5,0" />
+        android:pathData="M28,62 C26,43 40,23 62,22 C84,21 98,36 100,56 C93,38 78,28 60,28 C40,28 29,44 28,62 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="60"
+                android:startY="20"
+                android:endX="60"
+                android:endY="60"
+                android:type="linear">
+                <item android:offset="0.0" android:color="#4D9C683B" />
+                <item android:offset="0.6" android:color="#1A9C683B" />
+                <item android:offset="1.0" android:color="#00000000" />
+            </gradient>
+        </aapt:attr>
+    </path>
 
-    <!-- 出音回旋鸣槽（木鱼中缝开口与共鸣回纹） -->
+    <!-- 4. 鱼身雕刻祥云暗纹（实体内凹木刻立体感） -->
+    <!-- 祥云凹槽暗部 -->
     <path
-        android:strokeColor="#E5C384"
-        android:strokeWidth="3.2"
-        android:strokeLineCap="round"
-        android:strokeLineJoin="round"
-        android:fillColor="#18130E"
-        android:pathData="M104,64 L72,64 C64,64 64,80 72,80 L92,80 C98,80 102,74 102,68 Z" />
-
-    <!-- 鱼尾把手与基座回旋 -->
-    <path
-        android:fillColor="#2D2319"
-        android:strokeColor="#C5A059"
+        android:pathData="M42,35 C52,28 68,28 78,36"
+        android:strokeColor="#180C05"
         android:strokeWidth="2.8"
         android:strokeLineCap="round"
-        android:strokeLineJoin="round"
-        android:pathData="M25,74 C16,82 18,96 28,100 C36,103 44,98 46,92 C42,90 32,88 25,74 Z" />
-
-    <!-- 鱼鳞精工暗纹 -->
+        android:fillColor="#00000000" />
+    <!-- 祥云边缘受光微亮线 -->
     <path
-        android:strokeColor="#40C5A059"
-        android:strokeWidth="1.8"
+        android:pathData="M43,36 C53,29 67,29 77,37"
+        android:strokeColor="#40C2945D"
+        android:strokeWidth="1.2"
         android:strokeLineCap="round"
-        android:fillColor="#00000000"
-        android:pathData="M48,66 C54,72 60,68 62,62" />
+        android:fillColor="#00000000" />
+
+    <!-- 5. 实体鱼眼雕刻（内凹圆窝 + 浮雕内珠） -->
+    <!-- 鱼眼外凹窝阴影 -->
+    <path
+        android:pathData="M46,49m-8,0a8,8 0 1,0 16,0a8,8 0 1,0 -16,0"
+        android:fillColor="#1B0E07" />
+    <!-- 鱼眼窝高光边缘 -->
+    <path
+        android:pathData="M46,49m-8,0a8,8 0 1,0 16,0a8,8 0 1,0 -16,0"
+        android:strokeColor="#40C2945D"
+        android:strokeWidth="1.0"
+        android:fillColor="#00000000" />
+    <!-- 鱼眼立体凸起内珠（球状光泽） -->
+    <path
+        android:pathData="M46,49m-4.2,0a4.2,4.2 0 1,0 8.4,0a4.2,4.2 0 1,0 -8.4,0">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:centerX="44.5"
+                android:centerY="47.5"
+                android:gradientRadius="4.2"
+                android:type="radial">
+                <item android:offset="0.0" android:color="#F4D399" />
+                <item android:offset="0.4" android:color="#D6A75E" />
+                <item android:offset="1.0" android:color="#5A3A22" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- 6. 出音中缝深邃鸣槽（实体深凹缝隙，带倒角与内腔深邃感） -->
+    <!-- 鸣槽外部倒角阴影 -->
+    <path
+        android:pathData="M106,63 L72,63 C63,63 63,81 72,81 L94,81 C100,81 104,74 104,67 Z"
+        android:fillColor="#120904" />
+    <!-- 鸣槽内腔极深黑色空洞 -->
+    <path
+        android:pathData="M105,65 L73,65 C66,65 66,79 73,79 L92,79 C97,79 101,74 101,69 Z"
+        android:fillColor="#0A0502" />
+    <!-- 鸣槽下唇受光边缘（实木高光倒角） -->
+    <path
+        android:pathData="M73,81 L94,81 C100,81 104,75 104,68"
+        android:strokeColor="#4DC2945D"
+        android:strokeWidth="1.6"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000" />
+
+    <!-- 7. 木鱼实体鱼尾手柄（圆润实木把手，具独立圆柱光影） -->
+    <path
+        android:pathData="M26,73 C16,81 18,97 29,101 C37,104 45,99 47,93 C42,91 32,88 26,73 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="20"
+                android:startY="75"
+                android:endX="42"
+                android:endY="101"
+                android:type="linear">
+                <item android:offset="0.0" android:color="#4A2F1B" />
+                <item android:offset="0.5" android:color="#361F10" />
+                <item android:offset="1.0" android:color="#1F1108" />
+            </gradient>
+        </aapt:attr>
+    </path>
+    <!-- 鱼尾受光侧微高光 -->
+    <path
+        android:pathData="M23,78 C18,84 19,95 28,99"
+        android:strokeColor="#33C2945D"
+        android:strokeWidth="1.4"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000" />
+
+    <!-- 8. 鱼身下腹立体阴影压暗（烘托整体实物厚重感） -->
+    <path
+        android:pathData="M38,98 C50,104 74,104 86,97 C76,102 52,102 38,98 Z"
+        android:fillColor="#26000000" />
 </vector>

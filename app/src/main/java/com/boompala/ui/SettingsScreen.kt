@@ -97,6 +97,7 @@ fun SettingsScreen(
     onTarotReversedEnabledChange: (Boolean) -> Unit = {},
     onTarotMajorArcanaOnlyChange: (Boolean) -> Unit = {},
     onResetAllPreferences: () -> Unit = {},
+    onResetMuyuCount: () -> Unit = {},
     archiveRepository: ArchiveRepository? = null,
     rotaryScrollingEnabled: Boolean,
     onAboutClick: () -> Unit,
@@ -760,32 +761,6 @@ fun SettingsScreen(
                     )
                 }
 
-                if (settings.hapticFeedbackEnabled) {
-                    item(key = "haptic-intensity-title") {
-                        Text(
-                            text = stringResource(R.string.settings_haptic_intensity),
-                            style = MaterialTheme.typography.titleSmall,
-                        )
-                    }
-                    HapticIntensity.entries.forEach { intensity ->
-                        item(key = "haptic-intensity-${intensity.name}") {
-                            val label = when (intensity) {
-                                HapticIntensity.LIGHT -> stringResource(R.string.settings_haptic_intensity_light)
-                                HapticIntensity.STANDARD -> stringResource(R.string.settings_haptic_intensity_standard)
-                                HapticIntensity.STRONG -> stringResource(R.string.settings_haptic_intensity_strong)
-                            }
-                            SelectionButton(
-                                selected = settings.hapticIntensity == intensity,
-                                text = label,
-                                targetIntensity = intensity,
-                                onClick = {
-                                    onHapticIntensityChange(intensity)
-                                },
-                            )
-                        }
-                    }
-                }
-
                 item(key = "haptics-back") {
                     val backInteraction = remember { MutableInteractionSource() }
                     BoompalaCardButton(
@@ -1285,6 +1260,7 @@ fun SettingsScreen(
             val scope = rememberCoroutineScope()
             var archiveCount by remember { mutableIntStateOf(0) }
             var showClearDialog by remember { mutableStateOf(false) }
+            var showResetMuyuDialog by remember { mutableStateOf(false) }
             var showResetAllDialog by remember { mutableStateOf(false) }
 
             LaunchedEffect(archiveRepository) {
@@ -1331,6 +1307,34 @@ fun SettingsScreen(
                         ) {
                             Text(
                                 text = stringResource(R.string.settings_data_clear_all),
+                                color = MaterialTheme.colorScheme.error,
+                            )
+                        }
+                    }
+                }
+
+                item(key = "data-muyu-stats") {
+                    ResultCard {
+                        Text(
+                            text = stringResource(R.string.settings_data_muyu_total, settings.muyuTotalCount),
+                            style = MaterialTheme.typography.bodyMedium,
+                        )
+                    }
+                }
+
+                if (settings.muyuTotalCount > 0L) {
+                    item(key = "data-muyu-reset") {
+                        val pressInteraction = remember { MutableInteractionSource() }
+                        BoompalaCardButton(
+                            onClick = { showResetMuyuDialog = true },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wearPressFeedback(pressInteraction),
+                            interactionSource = pressInteraction,
+                            colors = BoompalaButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error),
+                        ) {
+                            Text(
+                                text = stringResource(R.string.settings_data_muyu_reset),
                                 color = MaterialTheme.colorScheme.error,
                             )
                         }
@@ -1404,6 +1408,45 @@ fun SettingsScreen(
                         val dismissInteraction = remember { MutableInteractionSource() }
                         BoompalaCardButton(
                             onClick = { showClearDialog = false },
+                            modifier = Modifier.wearPressFeedback(dismissInteraction),
+                            interactionSource = dismissInteraction,
+                            colors = BoompalaButtonDefaults.outlinedButtonColors(),
+                        ) {
+                            Text(stringResource(R.string.action_cancel))
+                        }
+                    },
+                )
+            }
+
+            if (showResetMuyuDialog) {
+                AlertDialog(
+                    visible = true,
+                    onDismissRequest = { showResetMuyuDialog = false },
+                    title = { Text(stringResource(R.string.settings_data_muyu_reset_confirm_title)) },
+                    text = { Text(stringResource(R.string.settings_data_muyu_reset_confirm_desc)) },
+                    confirmButton = {
+                        val confirmInteraction = remember { MutableInteractionSource() }
+                        BoompalaCardButton(
+                            onClick = {
+                                onResetMuyuCount()
+                                showResetMuyuDialog = false
+                            },
+                            modifier = Modifier.wearPressFeedback(confirmInteraction),
+                            interactionSource = confirmInteraction,
+                            colors = BoompalaButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.error.copy(alpha = 0.25f),
+                            ),
+                        ) {
+                            Text(
+                                stringResource(R.string.action_delete),
+                                color = MaterialTheme.colorScheme.error,
+                            )
+                        }
+                    },
+                    dismissButton = {
+                        val dismissInteraction = remember { MutableInteractionSource() }
+                        BoompalaCardButton(
+                            onClick = { showResetMuyuDialog = false },
                             modifier = Modifier.wearPressFeedback(dismissInteraction),
                             interactionSource = dismissInteraction,
                             colors = BoompalaButtonDefaults.outlinedButtonColors(),
@@ -1519,17 +1562,15 @@ private fun SelectionButton(
     selected: Boolean,
     text: String,
     onClick: () -> Unit,
-    targetIntensity: HapticIntensity? = null,
 ) {
     val pressInteraction = remember { MutableInteractionSource() }
-    val intensity = targetIntensity ?: LocalHapticIntensity.current
     SelectableCardButton(
         selected = selected,
         onClick = onClick,
         contentPadding = BoompalaButtonDefaults.compactContentPadding,
         modifier = Modifier
             .fillMaxWidth()
-            .wearPressFeedback(pressInteraction, intensity = intensity),
+            .wearPressFeedback(pressInteraction),
         interactionSource = pressInteraction,
     ) {
         Text(

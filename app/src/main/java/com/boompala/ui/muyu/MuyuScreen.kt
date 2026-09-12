@@ -211,25 +211,25 @@ fun MuyuScreen(
             }
         }
 
-        // 顶层界面元素布局
+        // 顶层界面元素布局：顶部预留 28dp 安全边距，彻底避免圆屏手表顶部系统状态栏（时间/电量等）遮挡
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(vertical = 12.dp, horizontal = 16.dp),
+                .padding(top = 28.dp, bottom = 14.dp, start = 16.dp, end = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            // 顶部：功德计数
+            // 顶部：功德计数（字号微调至 22sp，间距适度收紧，确保位于安全显示区内）
             Text(
                 text = stringResource(R.string.muyu_merit),
                 style = MaterialTheme.typography.labelSmall,
                 color = Color(0xFFA8987E),
             )
-            Spacer(modifier = Modifier.height(2.dp))
+            Spacer(modifier = Modifier.height(1.dp))
             Text(
                 text = totalCount.toString(),
                 style = MaterialTheme.typography.titleLarge.copy(
                     fontWeight = FontWeight.Bold,
-                    fontSize = 24.sp,
+                    fontSize = 22.sp,
                     letterSpacing = 1.sp,
                 ),
                 color = Color(0xFFF2E6CE),
@@ -237,17 +237,17 @@ fun MuyuScreen(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            // 中央：木鱼主图与浮动文字
+            // 中央：木鱼主图与浮动文字（实体木鱼尺寸 120dp，视觉比例饱满和谐）
             Box(
-                modifier = Modifier.size(132.dp),
+                modifier = Modifier.size(128.dp),
                 contentAlignment = Alignment.Center,
             ) {
-                // 木鱼图形主体（受弹性缩放驱动）
+                // 木鱼实体主体（受弹性缩放驱动）
                 Image(
                     painter = painterResource(id = R.drawable.img_muyu),
                     contentDescription = stringResource(R.string.muyu_title),
                     modifier = Modifier
-                        .size(124.dp)
+                        .size(120.dp)
                         .scale(scaleAnim.value),
                 )
 
