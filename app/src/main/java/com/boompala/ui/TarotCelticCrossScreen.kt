@@ -91,6 +91,11 @@ fun TarotCelticCrossScreen(
 
     // Inner back handler: step back to previous card during reveal or results
     BackHandler(enabled = reading != null && currentStep > 0) {
+        AppHaptics.back(
+            context = hapticContext,
+            intensity = hapticIntensity,
+            enabled = hapticEnabled,
+        )
         if (currentStep == 10) {
             currentStep = 9 // Return to 10th card revealing step
         } else {

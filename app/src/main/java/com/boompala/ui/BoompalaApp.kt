@@ -401,6 +401,11 @@ fun BoompalaApp() {
     }
 
     BackHandler(enabled = !isFirstRunWelcome && effectiveBackDestination != null) {
+        AppHaptics.back(
+            context = context,
+            intensity = settings.hapticIntensity,
+            enabled = settings.hapticFeedbackEnabled,
+        )
         goBack(true)
     }
 
@@ -1198,7 +1203,14 @@ fun BoompalaApp() {
                         contentKey = screen,
                         backgroundScrimColor = Color.Transparent,
                         contentScrimColor = Color.Transparent,
-                        onDismissed = { goBack(false) },
+                        onDismissed = {
+                            AppHaptics.back(
+                                context = context,
+                                intensity = settings.hapticIntensity,
+                                enabled = settings.hapticFeedbackEnabled,
+                            )
+                            goBack(false)
+                        },
                     ) { isBackground ->
                         if (isBackground) {
                             val bgScreen = effectiveBackDestination ?: AppScreen.HOME

@@ -266,6 +266,34 @@ internal object AppHaptics {
     }
 
     /**
+     * Level 6 · 页面返回与手势 Dismiss 触感：
+     * 针对手表端物理返回键与 SwipeToDismissBox 滑动关闭落定设计。
+     * 采用 6~14ms 极短微脉冲与收敛振幅，区别于前向点击的坚实感，
+     * 营造轻盈清爽的退后、层级下沉与解除阻尼感。
+     */
+    fun back(
+        context: android.content.Context,
+        intensity: HapticIntensity = HapticIntensity.STANDARD,
+        enabled: Boolean = true,
+    ) {
+        if (!enabled) return
+        val v = getVibrator(context) ?: return
+        if (!v.hasVibrator()) return
+
+        val (duration, amplitude) = when (intensity) {
+            HapticIntensity.LIGHT -> 6L to 150
+            HapticIntensity.STANDARD -> 10L to 190
+            HapticIntensity.STRONG -> 14L to 230
+        }
+        val effect = try {
+            android.os.VibrationEffect.createOneShot(duration, amplitude)
+        } catch (_: Throwable) {
+            return
+        }
+        vibrateEffect(v, effect)
+    }
+
+    /**
      * 设置项预览试听触感：直接执行对应 Level 1 点击。
      */
     fun preview(context: android.content.Context, intensity: HapticIntensity) {

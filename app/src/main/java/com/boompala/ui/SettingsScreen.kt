@@ -111,6 +111,11 @@ fun SettingsScreen(
     var currentSection by rememberSaveable { mutableStateOf(SettingsSection.MENU) }
 
     BackHandler(enabled = currentSection != SettingsSection.MENU) {
+        AppHaptics.back(
+            context = context,
+            intensity = settings.hapticIntensity,
+            enabled = settings.hapticFeedbackEnabled,
+        )
         currentSection = SettingsSection.MENU
     }
 
