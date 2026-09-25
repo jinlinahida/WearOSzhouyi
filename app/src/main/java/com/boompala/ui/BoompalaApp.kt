@@ -27,6 +27,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.runtime.snapshotFlow
+import androidx.wear.compose.foundation.SwipeToDismissValue
 import androidx.wear.compose.foundation.rememberSwipeToDismissBoxState
 import androidx.wear.compose.material3.SwipeToDismissBox
 import androidx.wear.compose.material3.MaterialTheme
@@ -1203,6 +1205,21 @@ fun BoompalaApp() {
                     !tarotCelticCrossInnerBackAvailable
                 val screenWidthPx = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp.toPx() }
 
+                // 监听滑动返回手势判定：在用户手势跨过有效阈值的瞬间即刻激发返回触感，
+                // 彻底消除等待 300ms 退出动画完全播完后才滞后补震的严重脱节问题
+                LaunchedEffect(swipeToDismissBoxState, settings.hapticIntensity, settings.hapticFeedbackEnabled) {
+                    snapshotFlow { swipeToDismissBoxState.targetValue }
+                        .collect { target ->
+                            if (target == SwipeToDismissValue.Dismissed) {
+                                AppHaptics.back(
+                                    context = context,
+                                    intensity = settings.hapticIntensity,
+                                    enabled = settings.hapticFeedbackEnabled,
+                                )
+                            }
+                        }
+                }
+
                 CompositionLocalProvider(
                     LocalHapticFeedbackEnabled provides settings.hapticFeedbackEnabled,
                     LocalHapticIntensity provides settings.hapticIntensity,
@@ -1216,11 +1233,7 @@ fun BoompalaApp() {
                         backgroundScrimColor = Color.Transparent,
                         contentScrimColor = Color.Transparent,
                         onDismissed = {
-                            AppHaptics.back(
-                                context = context,
-                                intensity = settings.hapticIntensity,
-                                enabled = settings.hapticFeedbackEnabled,
-                            )
+                            // 触觉已在手势判定跨过阈值的瞬间 (targetValue == Dismissed) 即刻触发，此处仅负责逻辑返回收尾
                             goBack(false)
                         },
                     ) { isBackground ->

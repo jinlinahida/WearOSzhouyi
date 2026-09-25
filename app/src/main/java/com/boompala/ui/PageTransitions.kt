@@ -262,10 +262,10 @@ internal object AppHaptics {
 
     /**
      * Level 1 · 基础按键与卡片点击反馈：
-     * 100% 对齐 Wear Compose 官方按键触感，极度干脆清爽、零拖尾余震。
-     * - LIGHT：原厂微点 TICK (Watch 5: 101)；
-     * - STANDARD：原厂清脆 CLICK (Watch 5: 102)；
-     * - STRONG：原厂重阻尼 LIMIT (Watch 5: 50107)。
+     * 针对手腕软组织与 X 轴线性马达（LRA）动力学深度校准，摆脱羽量级旋钮微动的轻浮感。
+     * - LIGHT：轻柔灵动微动 (8ms, 170)；
+     * - STANDARD：坚实清脆的原生按键打击感 (12ms, 235，完美对齐 Wear OS 原生按钮手感)；
+     * - STRONG：满幅硬件推力 (16ms, 255，深沉扎实)。
      */
     fun click(
         context: android.content.Context,
@@ -273,18 +273,30 @@ internal object AppHaptics {
         enabled: Boolean = true,
     ) {
         if (!enabled) return
-        val (constant, duration, amplitude) = when (intensity) {
-            HapticIntensity.LIGHT -> Triple(WearComposeHapticsSpec.TICK, 4L, 95)
-            HapticIntensity.STANDARD -> Triple(WearComposeHapticsSpec.CLICK, 6L, 135)
-            HapticIntensity.STRONG -> Triple(WearComposeHapticsSpec.LIMIT, 8L, 185)
+        val v = getVibrator(context)
+        if (v != null && v.hasVibrator()) {
+            val (duration, amplitude) = when (intensity) {
+                HapticIntensity.LIGHT -> 8L to 170
+                HapticIntensity.STANDARD -> 12L to 235
+                HapticIntensity.STRONG -> 16L to 255
+            }
+            val effect = android.os.VibrationEffect.createOneShot(duration, amplitude)
+            vibratePhysical(v, effect)
+        } else {
+            val constant = when (intensity) {
+                HapticIntensity.LIGHT -> android.view.HapticFeedbackConstants.KEYBOARD_TAP
+                HapticIntensity.STANDARD -> android.view.HapticFeedbackConstants.VIRTUAL_KEY
+                HapticIntensity.STRONG -> android.view.HapticFeedbackConstants.CONFIRM
+            }
+            performWearHaptic(context, constant, 12L, 235, enabled)
         }
-        performWearHaptic(context, constant, duration, amplitude, enabled)
     }
 
     /**
      * Level 2 · 设置项开关专属拟物触感 (Switch / Toggle)：
-     * - targetState == true (开启)：模拟机械微动开关推入并"卡入卡槽" (Latch In) 的上升双相吸附波 (轻动 + 15ms + 清脆吸附)；
-     * - targetState == false (关闭)：模拟弹簧释放"钝感脱扣" (Latch Out) 的单相柔和阻尼释放波，告别千篇一律的单调点击。
+     * - targetState == true (开启)：高能量紧凑双相卡扣吸附波 (8ms 起势 + 10ms 紧凑间隙 + 12ms 满幅入槽)，
+     *   手腕能真切感知到机械微动开关瞬间“推入并锁死在卡槽”的利落“嗒-哒”质感；
+     * - targetState == false (关闭)：单相沉稳阻尼脱扣波 (10ms, 180)，呈现干净利落的开关释放手感。
      */
     fun toggle(
         context: android.content.Context,
@@ -297,54 +309,54 @@ internal object AppHaptics {
         val v = getVibrator(context)
         if (v != null && v.hasVibrator()) {
             val effect = if (targetState) {
-                // 开启 (ON)：阶梯上升轻快吸附 (双触波)
+                // 开启 (ON)：紧凑双击阶梯上升吸附波
                 when (intensity) {
                     HapticIntensity.LIGHT -> android.os.VibrationEffect.createWaveform(
-                        longArrayOf(0, 4, 15, 6),
-                        intArrayOf(0, 95, 0, 150),
+                        longArrayOf(0, 6, 10, 10),
+                        intArrayOf(0, 160, 0, 205),
                         -1,
                     )
                     HapticIntensity.STANDARD -> android.os.VibrationEffect.createWaveform(
-                        longArrayOf(0, 5, 15, 8),
-                        intArrayOf(0, 120, 0, 190),
+                        longArrayOf(0, 8, 10, 12),
+                        intArrayOf(0, 220, 0, 255),
                         -1,
                     )
                     HapticIntensity.STRONG -> android.os.VibrationEffect.createWaveform(
-                        longArrayOf(0, 7, 14, 11),
-                        intArrayOf(0, 150, 0, 235),
+                        longArrayOf(0, 10, 10, 14),
+                        intArrayOf(0, 255, 0, 255),
                         -1,
                     )
                 }
             } else {
-                // 关闭 (OFF)：单相温和顿挫脱扣 (单触阻尼)
+                // 关闭 (OFF)：单相沉稳钝感脱扣阻尼
                 when (intensity) {
                     HapticIntensity.LIGHT -> android.os.VibrationEffect.createWaveform(
-                        longArrayOf(0, 5),
-                        intArrayOf(0, 95),
+                        longArrayOf(0, 8),
+                        intArrayOf(0, 130),
                         -1,
                     )
                     HapticIntensity.STANDARD -> android.os.VibrationEffect.createWaveform(
-                        longArrayOf(0, 7),
-                        intArrayOf(0, 135),
+                        longArrayOf(0, 10),
+                        intArrayOf(0, 185),
                         -1,
                     )
                     HapticIntensity.STRONG -> android.os.VibrationEffect.createWaveform(
-                        longArrayOf(0, 9),
-                        intArrayOf(0, 180),
+                        longArrayOf(0, 14),
+                        intArrayOf(0, 235),
                         -1,
                     )
                 }
             }
             vibratePhysical(v, effect)
         } else {
-            val constant = if (targetState) WearComposeHapticsSpec.CLICK else WearComposeHapticsSpec.TICK
-            performWearHaptic(context, constant, 6L, 130, enabled)
+            val constant = if (targetState) android.view.HapticFeedbackConstants.CONFIRM else android.view.HapticFeedbackConstants.KEYBOARD_TAP
+            performWearHaptic(context, constant, 12L, 220, enabled)
         }
     }
 
     /**
      * Level 3 · 仪式与翻牌阻尼：用于塔罗翻牌、六爻落定。
-     * 拟物意象：厚磅纸牌从指尖揭开微滑动 + 沉稳拍落于桌面绒布的阻尼感。
+     * 拟物意象：厚磅纸牌从指尖揭开微滑动 + 沉稳拍落于桌面绒布的厚重阻尼感。
      */
     fun cardFlip(
         context: android.content.Context,
@@ -357,32 +369,32 @@ internal object AppHaptics {
         if (v != null && v.hasVibrator()) {
             val effect = when (intensity) {
                 HapticIntensity.LIGHT -> android.os.VibrationEffect.createWaveform(
-                    longArrayOf(0, 4, 18, 7),
-                    intArrayOf(0, 85, 0, 145),
+                    longArrayOf(0, 5, 12, 9),
+                    intArrayOf(0, 120, 0, 195),
                     -1,
                 )
                 HapticIntensity.STANDARD -> android.os.VibrationEffect.createWaveform(
-                    longArrayOf(0, 5, 18, 9),
-                    intArrayOf(0, 110, 0, 190),
+                    longArrayOf(0, 6, 12, 12),
+                    intArrayOf(0, 160, 0, 245),
                     -1,
                 )
                 HapticIntensity.STRONG -> android.os.VibrationEffect.createWaveform(
-                    longArrayOf(0, 7, 16, 12),
-                    intArrayOf(0, 140, 0, 235),
+                    longArrayOf(0, 8, 12, 15),
+                    intArrayOf(0, 200, 0, 255),
                     -1,
                 )
             }
             vibratePhysical(v, effect)
         } else {
-            performWearHaptic(context, WearComposeHapticsSpec.LIMIT, 8L, 160, enabled)
+            performWearHaptic(context, WearComposeHapticsSpec.LIMIT, 12L, 235, enabled)
         }
     }
 
     /**
      * Level 4 · 六爻铜钱掷卦拟物反馈：
-     * - 静爻（少阳 7 / 少阴 8）：单枚金属铜钱平稳清脆落盘 (单次金属短促撞击)；
-     * - 动爻（老阳 9 / 老阴 6）：三枚铜钱翻滚交错跳跃 (第 1 枚触底轻弹 -> 22ms 滞空翻滚 -> 第 2/3 枚合力实击 -> 金属余颤)，
-     *   无需看屏幕，凭手腕金属节拍即可分辨动爻与静爻。
+     * - 静爻（少阳 7 / 少阴 8）：单枚金属铜钱平稳硬朗落盘 (10ms, 225 单次坚实撞击)；
+     * - 动爻（老阳 9 / 老阴 6）：三枚铜钱连续紧凑跳跃翻滚 (第 1 枚弹起 7ms -> 12ms 紧凑翻转 -> 第 2/3 枚合力实击 12ms 满幅 -> 金属微颤 6ms)，
+     *   金属节拍分明，手腕触觉瞬间辨别动爻与静爻。
      */
     fun coinToss(
         context: android.content.Context,
@@ -395,56 +407,56 @@ internal object AppHaptics {
         val v = getVibrator(context)
         if (v != null && v.hasVibrator()) {
             val effect = if (isChanging) {
-                // 动爻：三枚铜钱翻滚交错跳跃
+                // 动爻：三枚铜钱翻滚交错跳跃 (紧凑高能金属节奏)
                 when (intensity) {
                     HapticIntensity.LIGHT -> android.os.VibrationEffect.createWaveform(
-                        longArrayOf(0, 5, 22, 7, 12, 3),
-                        intArrayOf(0, 100, 0, 140, 0, 70),
+                        longArrayOf(0, 6, 12, 10, 8, 5),
+                        intArrayOf(0, 140, 0, 200, 0, 100),
                         -1,
                     )
                     HapticIntensity.STANDARD -> android.os.VibrationEffect.createWaveform(
-                        longArrayOf(0, 6, 22, 9, 12, 4),
-                        intArrayOf(0, 125, 0, 180, 0, 90),
+                        longArrayOf(0, 7, 12, 12, 10, 6),
+                        intArrayOf(0, 180, 0, 255, 0, 130),
                         -1,
                     )
                     HapticIntensity.STRONG -> android.os.VibrationEffect.createWaveform(
-                        longArrayOf(0, 8, 20, 12, 12, 6),
-                        intArrayOf(0, 155, 0, 230, 0, 125),
+                        longArrayOf(0, 9, 10, 15, 10, 8),
+                        intArrayOf(0, 220, 0, 255, 0, 170),
                         -1,
                     )
                 }
             } else {
-                // 静爻：单枚铜钱平稳落盘
+                // 静爻：单枚铜钱平稳坚实落盘
                 when (intensity) {
                     HapticIntensity.LIGHT -> android.os.VibrationEffect.createWaveform(
-                        longArrayOf(0, 5),
-                        intArrayOf(0, 120),
+                        longArrayOf(0, 8),
+                        intArrayOf(0, 170),
                         -1,
                     )
                     HapticIntensity.STANDARD -> android.os.VibrationEffect.createWaveform(
-                        longArrayOf(0, 7),
-                        intArrayOf(0, 165),
+                        longArrayOf(0, 10),
+                        intArrayOf(0, 225),
                         -1,
                     )
                     HapticIntensity.STRONG -> android.os.VibrationEffect.createWaveform(
-                        longArrayOf(0, 10),
-                        intArrayOf(0, 215),
+                        longArrayOf(0, 14),
+                        intArrayOf(0, 255),
                         -1,
                     )
                 }
             }
             vibratePhysical(v, effect)
         } else {
-            val constant = if (isChanging) WearComposeHapticsSpec.LIMIT else WearComposeHapticsSpec.CLICK
-            performWearHaptic(context, constant, 8L, 150, enabled)
+            val constant = if (isChanging) WearComposeHapticsSpec.LIMIT else android.view.HapticFeedbackConstants.KEYBOARD_TAP
+            performWearHaptic(context, constant, 12L, 225, enabled)
         }
     }
 
     /**
      * Level 5 · 中医把脉血流脉冲波 (Somatic Pulse Wave)：
      * 针对把脉界面的生理波峰设计，完全脱离 View 依赖（保证在无触摸输入、传感器后台回调时 100% 稳定直发硬件马达）。
-     * 采用真实生理动脉脉搏波：收缩期主动脉冲血主波 (Systolic Peak) + 舒张期流经 + 主动脉瓣关闭重搏波 (Dicrotic Notch)。
-     * 击穿腕部脂肪阻尼，产生极度逼真、有生命起伏的脉搏跳动感。
+     * 采用真实生理动脉脉搏波：收缩期主动脉冲血主波 (Systolic Peak，16ms 强力喷血冲击) + 24ms 紧凑舒张期 + 主动脉瓣关闭重搏波 (Dicrotic Notch，10ms 沉稳回弹)。
+     * 强力击穿腕部脂肪阻尼，产生极度逼真、有生命起伏的脉搏跳动感。
      */
     fun pulseBeat(
         context: android.content.Context,
@@ -458,18 +470,18 @@ internal object AppHaptics {
 
         val effect = when (intensity) {
             HapticIntensity.LIGHT -> android.os.VibrationEffect.createWaveform(
-                longArrayOf(0, 10, 36, 6),
-                intArrayOf(0, 135, 0, 80),
+                longArrayOf(0, 12, 26, 8),
+                intArrayOf(0, 190, 0, 120),
                 -1,
             )
             HapticIntensity.STANDARD -> android.os.VibrationEffect.createWaveform(
-                longArrayOf(0, 12, 34, 8),
-                intArrayOf(0, 180, 0, 110),
+                longArrayOf(0, 16, 24, 10),
+                intArrayOf(0, 245, 0, 165),
                 -1,
             )
             HapticIntensity.STRONG -> android.os.VibrationEffect.createWaveform(
-                longArrayOf(0, 15, 30, 10),
-                intArrayOf(0, 230, 0, 155),
+                longArrayOf(0, 18, 22, 12),
+                intArrayOf(0, 255, 0, 200),
                 -1,
             )
         }
@@ -478,8 +490,8 @@ internal object AppHaptics {
 
     /**
      * Level 6 · 电子木鱼实木空腔敲击 (Solid Wood & Cavity Resonance)：
-     * 拟物意象：硬木槌头破空叩击实木外壳 (Attack) + 空心木腔微弱声波共鸣与吸收阻尼 (Decay)。
-     * 彻底告别单薄的电子按键“哒”，还原沉稳有肉感的木质“笃——”反作用力。
+     * 拟物意象：硬木槌头破空重重叩击实木外壳 (Attack，14ms 满幅冲击) + 10ms 腔体声波吸收微波 (Decay，8ms 沉厚微震)。
+     * 告别单薄发飘的电子按键“哒”，还原沉稳有肉感的木质“笃——”反作用力。
      */
     fun muyuTap(
         context: android.content.Context,
@@ -492,31 +504,31 @@ internal object AppHaptics {
         if (v != null && v.hasVibrator()) {
             val effect = when (intensity) {
                 HapticIntensity.LIGHT -> android.os.VibrationEffect.createWaveform(
-                    longArrayOf(0, 7, 14, 4),
-                    intArrayOf(0, 130, 0, 65),
+                    longArrayOf(0, 10, 10, 6),
+                    intArrayOf(0, 200, 0, 100),
                     -1,
                 )
                 HapticIntensity.STANDARD -> android.os.VibrationEffect.createWaveform(
-                    longArrayOf(0, 9, 14, 5),
-                    intArrayOf(0, 185, 0, 95),
+                    longArrayOf(0, 14, 10, 8),
+                    intArrayOf(0, 255, 0, 150),
                     -1,
                 )
                 HapticIntensity.STRONG -> android.os.VibrationEffect.createWaveform(
-                    longArrayOf(0, 12, 14, 7),
-                    intArrayOf(0, 240, 0, 140),
+                    longArrayOf(0, 16, 10, 10),
+                    intArrayOf(0, 255, 0, 185),
                     -1,
                 )
             }
             vibratePhysical(v, effect)
         } else {
-            performWearHaptic(context, WearComposeHapticsSpec.CLICK, 8L, 160, enabled)
+            performWearHaptic(context, android.view.HapticFeedbackConstants.KEYBOARD_TAP, 14L, 250, enabled)
         }
     }
 
     /**
      * Level 7 · 页面返回与手势 Dismiss 触感：
-     * 针对手表端物理返回键与 SwipeToDismissBox 滑动关闭落定设计。
-     * 采用清爽轻盈的 TICK 级微触感 (Watch 5: 101)，传达“退后、解绑、归位”的轻盈质感。
+     * 针对手表端物理返回键与 SwipeToDismissBox 滑动关闭判定设计。
+     * 在手势跨过有效阈值的瞬间即刻激发紧凑干脆的 Detent 脱扣微触感 (11ms, 220)，即刻确认“退后、解绑、归位”。
      */
     fun back(
         context: android.content.Context,
@@ -524,12 +536,23 @@ internal object AppHaptics {
         enabled: Boolean = true,
     ) {
         if (!enabled) return
-        val (constant, duration, amplitude) = when (intensity) {
-            HapticIntensity.LIGHT -> Triple(WearComposeHapticsSpec.TICK, 3L, 75)
-            HapticIntensity.STANDARD -> Triple(WearComposeHapticsSpec.TICK, 4L, 110)
-            HapticIntensity.STRONG -> Triple(WearComposeHapticsSpec.CLICK, 6L, 145)
+        val v = getVibrator(context)
+        if (v != null && v.hasVibrator()) {
+            val (duration, amplitude) = when (intensity) {
+                HapticIntensity.LIGHT -> 7L to 160
+                HapticIntensity.STANDARD -> 11L to 220
+                HapticIntensity.STRONG -> 14L to 255
+            }
+            val effect = android.os.VibrationEffect.createOneShot(duration, amplitude)
+            vibratePhysical(v, effect)
+        } else {
+            val constant = when (intensity) {
+                HapticIntensity.LIGHT -> WearComposeHapticsSpec.TICK
+                HapticIntensity.STANDARD -> WearComposeHapticsSpec.TICK
+                HapticIntensity.STRONG -> WearComposeHapticsSpec.LIMIT
+            }
+            performWearHaptic(context, constant, 11L, 220, enabled)
         }
-        performWearHaptic(context, constant, duration, amplitude, enabled)
     }
 
     /**
