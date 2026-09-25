@@ -109,6 +109,8 @@
     <string name="settings_content_size_standard">Standard</string>
     <string name="settings_content_size_large">Large</string>
     <string name="settings_animations">Transitions</string>
+    <string name="settings_scaling_list">Scaling List</string>
+    <string name="settings_scaling_list_desc">Center items expand while edges curve and fade</string>
     <string name="settings_rotary">Rotary Crown Scrolling</string>
     <string name="settings_haptic">Haptic Feedback</string>
     <string name="settings_haptic_intensity">Haptic Intensity</string>
@@ -151,11 +153,17 @@
     <string name="settings_reset_all_success">All settings reset to defaults</string>
 
     <!-- Daily Fortune -->
-    <string name="daily_fortune_title">Daily Fortune</string>
-    <string name="daily_fortune_loading">Calculating Daily Fortune…</string>
-    <string name="daily_fortune_day_hexagram">Daily Primary Hexagram · %1$s</string>
-    <string name="daily_fortune_day_line">Governing Line · %1$s</string>
-    <string name="daily_fortune_colors">Daily Colors</string>
+    <string name="daily_fortune_title">Today\'s Fortune</string>
+    <string name="daily_fortune_tomorrow_title">Tomorrow\'s Fortune</string>
+    <string name="daily_fortune_tab_today">Today</string>
+    <string name="daily_fortune_tab_tomorrow">Tomorrow</string>
+    <string name="daily_fortune_loading">Calculating Fortune…</string>
+    <string name="daily_fortune_day_hexagram">Today\'s Hexagram · %1$s</string>
+    <string name="daily_fortune_tomorrow_day_hexagram">Tomorrow\'s Hexagram · %1$s</string>
+    <string name="daily_fortune_day_line">Today\'s Line · %1$s</string>
+    <string name="daily_fortune_tomorrow_day_line">Tomorrow\'s Line · %1$s</string>
+    <string name="daily_fortune_colors">Today\'s Colors</string>
+    <string name="daily_fortune_tomorrow_colors">Tomorrow\'s Colors</string>
     <string name="daily_fortune_lucky_color">Lucky Color</string>
     <string name="daily_fortune_support_color">Supporting Color</string>
     <string name="daily_fortune_avoid_color">Avoid Color</string>

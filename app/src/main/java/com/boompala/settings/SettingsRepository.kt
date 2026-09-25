@@ -55,6 +55,7 @@ class SettingsRepository(
                 tarotReversedEnabled = preferences[TAROT_REVERSED_ENABLED_KEY] ?: true,
                 tarotMajorArcanaOnly = preferences[TAROT_MAJOR_ARCANA_ONLY_KEY] ?: false,
                 muyuTotalCount = preferences[MUYU_TOTAL_COUNT_KEY] ?: 0L,
+                scalingListEnabled = preferences[SCALING_LIST_ENABLED_KEY] ?: true,
             )
         }
 
@@ -80,6 +81,7 @@ class SettingsRepository(
                 tarotReversedEnabled = preferences[TAROT_REVERSED_ENABLED_KEY] ?: true,
                 tarotMajorArcanaOnly = preferences[TAROT_MAJOR_ARCANA_ONLY_KEY] ?: false,
                 muyuTotalCount = preferences[MUYU_TOTAL_COUNT_KEY] ?: 0L,
+                scalingListEnabled = preferences[SCALING_LIST_ENABLED_KEY] ?: true,
             )
             val next = transform(current)
             preferences[SCREEN_MODE_KEY] = next.screenMode.name
@@ -92,6 +94,7 @@ class SettingsRepository(
             preferences[HOME_ORDER_KEY] = next.homeOrder.joinToString(",") { it.id }
             preferences[HIDDEN_HOME_FEATURES_KEY] = next.hiddenHomeFeatures.joinToString(",") { it.id }
             preferences[ONBOARDING_COMPLETED_KEY] = next.hasCompletedOnboarding
+            preferences[SCALING_LIST_ENABLED_KEY] = next.scalingListEnabled
             if (next.userBirthDate != null) {
                 preferences[USER_BIRTH_DATE_KEY] = next.userBirthDate
             } else {
@@ -220,6 +223,10 @@ class SettingsRepository(
         update { it.copy(tarotMajorArcanaOnly = enabled) }
     }
 
+    suspend fun setScalingListEnabled(enabled: Boolean) {
+        update { it.copy(scalingListEnabled = enabled) }
+    }
+
     suspend fun resetAllPreferences() {
         update { current ->
             AppSettings(
@@ -267,6 +274,7 @@ class SettingsRepository(
         val TAROT_REVERSED_ENABLED_KEY = booleanPreferencesKey("tarot_reversed_enabled")
         val TAROT_MAJOR_ARCANA_ONLY_KEY = booleanPreferencesKey("tarot_major_arcana_only")
         val MUYU_TOTAL_COUNT_KEY = longPreferencesKey("muyu_total_count")
+        val SCALING_LIST_ENABLED_KEY = booleanPreferencesKey("scaling_list_enabled")
 
         inline fun <reified T : Enum<T>> String?.toEnumOrDefault(default: T): T =
             runCatching { enumValueOf<T>(this.orEmpty()) }.getOrDefault(default)

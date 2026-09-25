@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -193,7 +194,7 @@ fun BoompalaApp() {
     }
 
     val screenShape = settings.resolvedScreenShape(configuration.isScreenRound)
-    val homeListState = rememberLazyListState()
+    val homeListState = rememberScalingLazyListState()
     val scope = rememberCoroutineScope()
     var screen by remember {
         mutableStateOf(if (!settings.hasCompletedOnboarding) AppScreen.WELCOME else AppScreen.HOME)
@@ -226,6 +227,7 @@ fun BoompalaApp() {
     val xlrEngine = remember { XiaoLiuRenEngine(SixTailGanzhiCalendar()) }
     val dailyFortuneEngineReady = remember(context) { CompletableDeferred<DailyFortuneEngine>() }
     var dailyFortuneReading by remember { mutableStateOf<DailyFortuneReading?>(null) }
+    var tomorrowFortuneReading by remember { mutableStateOf<DailyFortuneReading?>(null) }
     var tarotCardRepository by remember { mutableStateOf<TarotCardRepository?>(null) }
     val tarotEngine = remember(tarotCardRepository) {
         TarotEngine(tarotCardRepository ?: EmptyTarotCardRepository)
@@ -544,15 +546,21 @@ fun BoompalaApp() {
                             LaunchedEffect(Unit) {
                                 val now = Instant.now()
                                 val zone = ZoneId.systemDefault()
-                                val cached = dailyFortuneReading
-                                if (cached == null || cached.date != now.atZone(zone).toLocalDate()) {
+                                val today = now.atZone(zone).toLocalDate()
+                                val tomorrow = today.plusDays(1)
+                                val cachedToday = dailyFortuneReading
+                                val cachedTomorrow = tomorrowFortuneReading
+                                if (cachedToday == null || cachedToday.date != today || cachedTomorrow == null || cachedTomorrow.date != tomorrow) {
                                     val engine = dailyFortuneEngineReady.await()
-                                    dailyFortuneReading = withContext(Dispatchers.Default) {
-                                        engine.fortuneFor(now, zone)
+                                    val (readToday, readTomorrow) = withContext(Dispatchers.Default) {
+                                        engine.fortuneFor(today, zone) to engine.fortuneFor(tomorrow, zone)
                                     }
+                                    dailyFortuneReading = readToday
+                                    tomorrowFortuneReading = readTomorrow
                                 }
                             }
                             val currentReading = dailyFortuneReading
+                            val tomorrowReading = tomorrowFortuneReading
                             AnimatedContent(
                                 targetState = currentReading,
                                 transitionSpec = { loadingContentTransitionSpec(settings.animationsEnabled) },
@@ -560,7 +568,8 @@ fun BoompalaApp() {
                             ) { reading ->
                                 if (reading != null) {
                                     DailyFortuneScreen(
-                                        reading = reading,
+                                        todayReading = reading,
+                                        tomorrowReading = tomorrowReading,
                                         rotaryScrollingEnabled = settings.rotaryScrollingEnabled,
                                         onBack = { goBack(true) },
                                         baziProfile = settings.resolvedBaziProfile(),
@@ -737,6 +746,9 @@ fun BoompalaApp() {
                             },
                             onAnimationsEnabledChange = { enabled ->
                                 scope.launch { settingsRepository.setAnimationsEnabled(enabled) }
+                            },
+                            onScalingListEnabledChange = { enabled ->
+                                scope.launch { settingsRepository.setScalingListEnabled(enabled) }
                             },
                             onRotaryScrollingEnabledChange = { enabled ->
                                 scope.launch {

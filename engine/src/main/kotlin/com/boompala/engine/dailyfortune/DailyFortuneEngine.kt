@@ -8,6 +8,7 @@ import com.boompala.engine.data.HexagramInterpretationRepository
 import com.boompala.engine.data.LineTextRepository
 import com.boompala.engine.rules.HexagramCatalog
 import java.time.Instant
+import java.time.LocalDate
 import java.time.ZoneId
 
 /**
@@ -15,10 +16,10 @@ import java.time.ZoneId
  * function of the device-zone Gregorian date with no randomness involved.
  *
  * The day boundary follows the local calendar date: the reading is computed
- * from the local date of [instant] and all calendar queries are sampled at
- * 12:00 (午时) of that date, so any moment within the same natural day yields
- * the identical reading while 23:59 and the next 00:01 belong to different
- * days.
+ * from the local date of [instant] (or explicit [localDate]) and all calendar
+ * queries are sampled at 12:00 (午时) of that date, so any moment within the
+ * same natural day yields the identical reading while 23:59 and the next 00:01
+ * belong to different days.
  */
 class DailyFortuneEngine(
     private val calendar: GanzhiCalendar,
@@ -27,8 +28,7 @@ class DailyFortuneEngine(
     private val interpretationRepository: HexagramInterpretationRepository = EmptyHexagramInterpretationRepository,
 ) {
 
-    fun fortuneFor(instant: Instant, zoneId: ZoneId): DailyFortuneReading {
-        val localDate = instant.atZone(zoneId).toLocalDate()
+    fun fortuneFor(localDate: LocalDate, zoneId: ZoneId): DailyFortuneReading {
         val noon = localDate.atTime(12, 0).atZone(zoneId).toInstant()
         val timeInfo = calendar.divinationTimeInfo(noon, zoneId)
         val almanacDay = almanac.almanacDay(localDate)
@@ -63,4 +63,7 @@ class DailyFortuneEngine(
             ),
         )
     }
+
+    fun fortuneFor(instant: Instant, zoneId: ZoneId): DailyFortuneReading =
+        fortuneFor(instant.atZone(zoneId).toLocalDate(), zoneId)
 }

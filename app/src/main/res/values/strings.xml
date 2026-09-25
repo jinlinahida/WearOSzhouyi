@@ -109,6 +109,8 @@
     <string name="settings_content_size_standard">标准</string>
     <string name="settings_content_size_large">大</string>
     <string name="settings_animations">页面过渡动效</string>
+    <string name="settings_scaling_list">圆屏缩放列表</string>
+    <string name="settings_scaling_list_desc">沿圆形表盘曲率呈现中间放大、边缘渐隐的鱼眼效果</string>
     <string name="settings_rotary">表冠旋转滚动</string>
     <string name="settings_haptic">触感振动反馈</string>
     <string name="settings_haptic_intensity">震动强度</string>
@@ -152,10 +154,16 @@
 
     <!-- Daily Fortune -->
     <string name="daily_fortune_title">今日运势</string>
-    <string name="daily_fortune_loading">排算今日运势…</string>
+    <string name="daily_fortune_tomorrow_title">明日运势</string>
+    <string name="daily_fortune_tab_today">今日</string>
+    <string name="daily_fortune_tab_tomorrow">明日</string>
+    <string name="daily_fortune_loading">排算运势…</string>
     <string name="daily_fortune_day_hexagram">今日主卦 · %1$s</string>
+    <string name="daily_fortune_tomorrow_day_hexagram">明日主卦 · %1$s</string>
     <string name="daily_fortune_day_line">今日值日爻 · %1$s</string>
+    <string name="daily_fortune_tomorrow_day_line">明日值日爻 · %1$s</string>
     <string name="daily_fortune_colors">今日色彩</string>
+    <string name="daily_fortune_tomorrow_colors">明日色彩</string>
     <string name="daily_fortune_lucky_color">幸运色</string>
     <string name="daily_fortune_support_color">辅助色</string>
     <string name="daily_fortune_avoid_color">忌色</string>

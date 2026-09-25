@@ -101,6 +101,7 @@ data class AppSettings(
     val tarotReversedEnabled: Boolean = true,
     val tarotMajorArcanaOnly: Boolean = false,
     val muyuTotalCount: Long = 0L,
+    val scalingListEnabled: Boolean = true,
 ) {
     companion object {
         val DEFAULT = AppSettings()

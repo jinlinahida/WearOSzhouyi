@@ -50,6 +50,7 @@ class SettingsRepositoryTest {
         repository.setHapticFeedbackEnabled(false)
         repository.setHapticIntensity(HapticIntensity.STRONG)
         repository.setLanguage(AppLanguage.ENGLISH)
+        repository.setScalingListEnabled(false)
 
         val updated = SettingsRepository(dataStore).settings.first()
         assertEquals(ScreenMode.ROUND, updated.screenMode)
@@ -59,6 +60,7 @@ class SettingsRepositoryTest {
         assertEquals(false, updated.hapticFeedbackEnabled)
         assertEquals(HapticIntensity.STRONG, updated.hapticIntensity)
         assertEquals(AppLanguage.ENGLISH, updated.language)
+        assertEquals(false, updated.scalingListEnabled)
     }
 
     @Test

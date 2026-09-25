@@ -4,7 +4,7 @@
 
 ## 日界与取样
 
-- 以设备时区的公历日期为日界：先取 `instant.atZone(zoneId).toLocalDate()`。
+- 以设备时区的公历日期为日界：先取 `instant.atZone(zoneId).toLocalDate()`（支持在界面查看明日运势，目标日期取 `localDate.plusDays(1)`）。
 - 所有历法查询固定在该日 12:00（午时）取样，经 Solar → Lunar 流程换算，避免晚子时口径歧义。四柱日干支、节气月柱、喜神/贵人方位、黄道吉时均以该取样点为准。
 
 ## 主卦与寄语：固定历元 384 日轮值

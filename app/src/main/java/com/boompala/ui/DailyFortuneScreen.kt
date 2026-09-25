@@ -3,15 +3,21 @@ package com.boompala.ui
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.wear.compose.material3.MaterialTheme
-import androidx.wear.compose.material3.OutlinedButton
 import androidx.wear.compose.material3.Text
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -20,13 +26,24 @@ import com.boompala.R
 import com.boompala.engine.bazi.BaziProfile
 import com.boompala.engine.dailyfortune.DailyFortuneReading
 import com.boompala.engine.dailyfortune.PersonalFortuneEvaluator
+import kotlinx.coroutines.launch
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 /**
+ * 运势查看日期模式：今日或明日。
+ */
+enum class FortuneDayTab {
+    TODAY,
+    TOMORROW,
+}
+
+/**
  * Daily fortune page: a deterministic almanac-style presentation of the
- * current natural day. Readings with null text fields (repository degraded)
- * hide the affected section instead of crashing.
+ * natural day (supports viewing today and tomorrow).
+ *
+ * Readings with null text fields (repository degraded) hide the affected section
+ * instead of crashing.
  *
  * When [baziProfile] is provided, personal daily fortune (ShiShen theme,
  * active ShenSha, branch interactions, and personal balance color) is
@@ -34,14 +51,26 @@ import java.util.Locale
  */
 @Composable
 fun DailyFortuneScreen(
-    reading: DailyFortuneReading,
+    todayReading: DailyFortuneReading,
+    tomorrowReading: DailyFortuneReading? = null,
     rotaryScrollingEnabled: Boolean,
     onBack: () -> Unit,
     baziProfile: BaziProfile? = null,
     animationsEnabled: Boolean = true,
     onConfigureBazi: (() -> Unit)? = null,
+    initialTab: FortuneDayTab = FortuneDayTab.TODAY,
 ) {
     val metrics = LocalUiMetrics.current
+    val context = LocalContext.current
+    val hapticEnabled = LocalHapticFeedbackEnabled.current
+    val hapticIntensity = LocalHapticIntensity.current
+    val listState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
+
+    var selectedTab by remember { mutableStateOf(initialTab) }
+    val isTomorrow = selectedTab == FortuneDayTab.TOMORROW && tomorrowReading != null
+    val reading = if (isTomorrow) tomorrowReading!! else todayReading
+
     val gregorianText = remember(reading.date) {
         DateTimeFormatter.ofPattern("yyyy-MM-dd EEEE", Locale.getDefault()).format(reading.date)
     }
@@ -51,17 +80,72 @@ fun DailyFortuneScreen(
 
     RotaryScrollColumn(
         rotaryEnabled = rotaryScrollingEnabled,
+        state = listState,
         modifier = Modifier.fillMaxSize(),
         contentPadding = metrics.screenPadding,
         itemSpacing = metrics.itemSpacing,
     ) {
         item(key = "header") {
             Text(
-                text = stringResource(R.string.daily_fortune_title),
+                text = stringResource(
+                    if (isTomorrow) R.string.daily_fortune_tomorrow_title else R.string.daily_fortune_title,
+                ),
                 style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.padding(bottom = metrics.itemSpacing / 2),
+                modifier = Modifier.padding(bottom = metrics.itemSpacing / 4),
             )
         }
+
+        if (tomorrowReading != null) {
+            item(key = "tab-selector") {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = metrics.itemSpacing / 4),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    SelectableCardButton(
+                        selected = selectedTab == FortuneDayTab.TODAY,
+                        onClick = {
+                            if (selectedTab != FortuneDayTab.TODAY) {
+                                AppHaptics.click(context, intensity = hapticIntensity, enabled = hapticEnabled)
+                                selectedTab = FortuneDayTab.TODAY
+                                coroutineScope.launch { listState.scrollToItem(0) }
+                            }
+                        },
+                        modifier = Modifier.weight(1f),
+                        highlightColor = DailyFortuneSpotlightColor,
+                        contentPadding = BoompalaButtonDefaults.compactContentPadding,
+                    ) {
+                        Text(
+                            text = stringResource(R.string.daily_fortune_tab_today),
+                            style = MaterialTheme.typography.labelMedium,
+                            fontWeight = if (selectedTab == FortuneDayTab.TODAY) FontWeight.Bold else FontWeight.Normal,
+                        )
+                    }
+
+                    SelectableCardButton(
+                        selected = selectedTab == FortuneDayTab.TOMORROW,
+                        onClick = {
+                            if (selectedTab != FortuneDayTab.TOMORROW) {
+                                AppHaptics.click(context, intensity = hapticIntensity, enabled = hapticEnabled)
+                                selectedTab = FortuneDayTab.TOMORROW
+                                coroutineScope.launch { listState.scrollToItem(0) }
+                            }
+                        },
+                        modifier = Modifier.weight(1f),
+                        highlightColor = DailyFortuneSpotlightColor,
+                        contentPadding = BoompalaButtonDefaults.compactContentPadding,
+                    ) {
+                        Text(
+                            text = stringResource(R.string.daily_fortune_tab_tomorrow),
+                            style = MaterialTheme.typography.labelMedium,
+                            fontWeight = if (selectedTab == FortuneDayTab.TOMORROW) FontWeight.Bold else FontWeight.Normal,
+                        )
+                    }
+                }
+            }
+        }
+
         item(key = "date") {
             Column(
                 verticalArrangement = Arrangement.spacedBy(metrics.itemSpacing / 2),
@@ -122,6 +206,8 @@ fun DailyFortuneScreen(
                             fontWeight = FontWeight.Bold,
                         )
                         personalFortune.events.forEach { event ->
+                            val displayTitle = if (isTomorrow) event.title.replace("今日", "明日") else event.title
+                            val displayDesc = if (isTomorrow) event.description.replace("今日", "明日") else event.description
                             Column(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -129,7 +215,7 @@ fun DailyFortuneScreen(
                                 verticalArrangement = Arrangement.spacedBy(1.dp),
                             ) {
                                 Text(
-                                    text = (if (event.isAuspicious) "✦ " else "▲ ") + event.title,
+                                    text = (if (event.isAuspicious) "✦ " else "▲ ") + displayTitle,
                                     style = MaterialTheme.typography.labelMedium,
                                     fontWeight = FontWeight.Bold,
                                     color = if (event.isAuspicious) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error,
@@ -139,7 +225,7 @@ fun DailyFortuneScreen(
                                     modifier = Modifier.wearMarquee(animationsEnabled),
                                 )
                                 Text(
-                                    text = event.description,
+                                    text = displayDesc,
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 )
@@ -187,7 +273,10 @@ fun DailyFortuneScreen(
                 verticalArrangement = Arrangement.spacedBy(metrics.itemSpacing / 2),
             ) {
                 Text(
-                    stringResource(R.string.daily_fortune_day_hexagram, reading.dayHexagramName),
+                    stringResource(
+                        if (isTomorrow) R.string.daily_fortune_tomorrow_day_hexagram else R.string.daily_fortune_day_hexagram,
+                        reading.dayHexagramName,
+                    ),
                     style = MaterialTheme.typography.titleMedium,
                 )
                 val summary = reading.hexagramSummary
@@ -205,7 +294,10 @@ fun DailyFortuneScreen(
             item(key = "day-line") {
                 ResultCard {
                     Text(
-                        stringResource(R.string.daily_fortune_day_line, reading.dayLinePosition.displayName),
+                        stringResource(
+                            if (isTomorrow) R.string.daily_fortune_tomorrow_day_line else R.string.daily_fortune_day_line,
+                            reading.dayLinePosition.displayName,
+                        ),
                         style = MaterialTheme.typography.titleSmall,
                     )
                     Text(lineText, style = MaterialTheme.typography.bodySmall)
@@ -214,7 +306,12 @@ fun DailyFortuneScreen(
         }
         item(key = "colors") {
             ResultCard {
-                Text(stringResource(R.string.daily_fortune_colors), style = MaterialTheme.typography.titleSmall)
+                Text(
+                    stringResource(
+                        if (isTomorrow) R.string.daily_fortune_tomorrow_colors else R.string.daily_fortune_colors,
+                    ),
+                    style = MaterialTheme.typography.titleSmall,
+                )
                 DetailField(stringResource(R.string.daily_fortune_lucky_color), reading.luckyColor.displayName)
                 DetailField(stringResource(R.string.daily_fortune_support_color), reading.supportColor.displayName)
                 DetailField(stringResource(R.string.daily_fortune_avoid_color), reading.avoidColor.displayName)
@@ -289,3 +386,24 @@ fun DailyFortuneScreen(
         }
     }
 }
+
+/**
+ * 向后兼容重载：仅传入单一 reading 时，默认作为今日运势展示。
+ */
+@Composable
+fun DailyFortuneScreen(
+    reading: DailyFortuneReading,
+    rotaryScrollingEnabled: Boolean,
+    onBack: () -> Unit,
+    baziProfile: BaziProfile? = null,
+    animationsEnabled: Boolean = true,
+    onConfigureBazi: (() -> Unit)? = null,
+) = DailyFortuneScreen(
+    todayReading = reading,
+    tomorrowReading = null,
+    rotaryScrollingEnabled = rotaryScrollingEnabled,
+    onBack = onBack,
+    baziProfile = baziProfile,
+    animationsEnabled = animationsEnabled,
+    onConfigureBazi = onConfigureBazi,
+)

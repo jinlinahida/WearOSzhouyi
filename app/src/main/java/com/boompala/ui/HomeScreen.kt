@@ -3,24 +3,16 @@ package com.boompala.ui
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.wear.compose.foundation.lazy.ScalingLazyListState
+import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.wear.compose.material3.Button
-import androidx.wear.compose.material3.MaterialTheme
-import androidx.wear.compose.material3.OutlinedButton
 import androidx.wear.compose.material3.Text
 import com.boompala.R
 import com.boompala.settings.AppSettings
 import com.boompala.settings.HomeFeature
-
-private const val CONTENT_TYPE_TITLE = "title"
-private const val CONTENT_TYPE_BUTTON = "button"
-private const val CONTENT_TYPE_OUTLINED_BUTTON = "outlined_button"
 
 @Composable
 fun HomeScreen(
@@ -40,36 +32,27 @@ fun HomeScreen(
     onTarotCelticCrossClick: () -> Unit = { },
     onPulseClick: () -> Unit = { },
     onMuyuClick: () -> Unit = { },
-    state: LazyListState = rememberLazyListState(),
+    state: ScalingLazyListState = rememberScalingLazyListState(),
 ) {
     val metrics = LocalUiMetrics.current
-    val titlePaddingModifier = remember(metrics.itemSpacing) {
-        Modifier.padding(bottom = metrics.itemSpacing / 2)
-    }
     val fullWidthModifier = Modifier.fillMaxWidth()
     val visibleFeatures = remember(settings.homeOrder, settings.hiddenHomeFeatures) {
         settings.visibleHomeFeatures()
     }
 
-    RotaryScrollColumn(
+    ScalingRotaryScrollColumn(
         rotaryEnabled = settings.rotaryScrollingEnabled,
+        hapticFeedbackEnabled = settings.hapticFeedbackEnabled,
+        animationsEnabled = settings.scalingListEnabled && settings.animationsEnabled,
         modifier = Modifier.fillMaxSize(),
         state = state,
         contentPadding = metrics.screenPadding,
         itemSpacing = metrics.itemSpacing,
     ) {
-        item(key = "title", contentType = CONTENT_TYPE_TITLE) {
-            Text(
-                text = stringResource(R.string.app_name),
-                style = MaterialTheme.typography.titleLarge,
-                modifier = titlePaddingModifier,
-            )
-        }
-
         visibleFeatures.forEach { feature ->
             when (feature) {
                 HomeFeature.SIX_YAO -> {
-                    item(key = "six-yao", contentType = CONTENT_TYPE_BUTTON) {
+                    item(key = "six-yao") {
                         val pressInteraction = remember { MutableInteractionSource() }
                         BoompalaCardButton(
                             onClick = onSixYaoClick,
@@ -82,7 +65,7 @@ fun HomeScreen(
                 }
 
                 HomeFeature.MEI_HUA -> {
-                    item(key = "mei-hua", contentType = CONTENT_TYPE_BUTTON) {
+                    item(key = "mei-hua") {
                         val pressInteraction = remember { MutableInteractionSource() }
                         BoompalaCardButton(
                             onClick = onMeiHuaClick,
@@ -95,7 +78,7 @@ fun HomeScreen(
                 }
 
                 HomeFeature.DESTINY_CHART -> {
-                    item(key = "destiny-chart", contentType = CONTENT_TYPE_BUTTON) {
+                    item(key = "destiny-chart") {
                         val pressInteraction = remember { MutableInteractionSource() }
                         BoompalaCardButton(
                             onClick = onDestinyChartClick,
@@ -108,7 +91,7 @@ fun HomeScreen(
                 }
 
                 HomeFeature.TAROT_ONE -> {
-                    item(key = "tarot", contentType = CONTENT_TYPE_BUTTON) {
+                    item(key = "tarot") {
                         val pressInteraction = remember { MutableInteractionSource() }
                         BoompalaCardButton(
                             onClick = onTarotClick,
@@ -121,7 +104,7 @@ fun HomeScreen(
                 }
 
                 HomeFeature.TAROT_THREE -> {
-                    item(key = "tarot-three", contentType = CONTENT_TYPE_BUTTON) {
+                    item(key = "tarot-three") {
                         val pressInteraction = remember { MutableInteractionSource() }
                         BoompalaCardButton(
                             onClick = onTarotThreeCardClick,
@@ -134,7 +117,7 @@ fun HomeScreen(
                 }
 
                 HomeFeature.TAROT_HOLY_TRIANGLE -> {
-                    item(key = "tarot-holy-triangle", contentType = CONTENT_TYPE_BUTTON) {
+                    item(key = "tarot-holy-triangle") {
                         val pressInteraction = remember { MutableInteractionSource() }
                         BoompalaCardButton(
                             onClick = onTarotHolyTriangleClick,
@@ -147,7 +130,7 @@ fun HomeScreen(
                 }
 
                 HomeFeature.TAROT_CELTIC_CROSS -> {
-                    item(key = "tarot-celtic-cross", contentType = CONTENT_TYPE_BUTTON) {
+                    item(key = "tarot-celtic-cross") {
                         val pressInteraction = remember { MutableInteractionSource() }
                         BoompalaCardButton(
                             onClick = onTarotCelticCrossClick,
@@ -160,7 +143,7 @@ fun HomeScreen(
                 }
 
                 HomeFeature.DAILY_FORTUNE -> {
-                    item(key = "daily-fortune", contentType = CONTENT_TYPE_BUTTON) {
+                    item(key = "daily-fortune") {
                         val pressInteraction = remember { MutableInteractionSource() }
                         BoompalaCardButton(
                             onClick = onDailyFortuneClick,
@@ -173,7 +156,7 @@ fun HomeScreen(
                 }
 
                 HomeFeature.XIAO_LIU_REN -> {
-                    item(key = "xiaoliuren", contentType = CONTENT_TYPE_BUTTON) {
+                    item(key = "xiaoliuren") {
                         val pressInteraction = remember { MutableInteractionSource() }
                         BoompalaCardButton(
                             onClick = onXiaoLiuRenClick,
@@ -186,7 +169,7 @@ fun HomeScreen(
                 }
 
                 HomeFeature.COMPASS -> {
-                    item(key = "compass", contentType = CONTENT_TYPE_BUTTON) {
+                    item(key = "compass") {
                         val pressInteraction = remember { MutableInteractionSource() }
                         BoompalaCardButton(
                             onClick = onCompassClick,
@@ -199,7 +182,7 @@ fun HomeScreen(
                 }
 
                 HomeFeature.PULSE -> {
-                    item(key = "pulse", contentType = CONTENT_TYPE_BUTTON) {
+                    item(key = "pulse") {
                         val pressInteraction = remember { MutableInteractionSource() }
                         BoompalaCardButton(
                             onClick = onPulseClick,
@@ -212,7 +195,7 @@ fun HomeScreen(
                 }
 
                 HomeFeature.MUYU -> {
-                    item(key = "muyu", contentType = CONTENT_TYPE_BUTTON) {
+                    item(key = "muyu") {
                         val pressInteraction = remember { MutableInteractionSource() }
                         BoompalaCardButton(
                             onClick = onMuyuClick,
@@ -225,7 +208,7 @@ fun HomeScreen(
                 }
 
                 HomeFeature.ARCHIVES -> {
-                    item(key = "archives", contentType = CONTENT_TYPE_OUTLINED_BUTTON) {
+                    item(key = "archives") {
                         val pressInteraction = remember { MutableInteractionSource() }
                         BoompalaCardButton(
                             onClick = onArchiveClick,
@@ -239,7 +222,7 @@ fun HomeScreen(
                 }
 
                 HomeFeature.BROWSE -> {
-                    item(key = "browse", contentType = CONTENT_TYPE_BUTTON) {
+                    item(key = "browse") {
                         val pressInteraction = remember { MutableInteractionSource() }
                         BoompalaCardButton(
                             onClick = onBrowseClick,
@@ -254,7 +237,7 @@ fun HomeScreen(
         }
 
         // Settings entry is permanent and can never be hidden
-        item(key = "settings", contentType = CONTENT_TYPE_OUTLINED_BUTTON) {
+        item(key = "settings") {
             val pressInteraction = remember { MutableInteractionSource() }
             BoompalaCardButton(
                 onClick = onSettingsClick,

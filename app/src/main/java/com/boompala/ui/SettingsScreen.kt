@@ -83,6 +83,7 @@ fun SettingsScreen(
     onScreenModeSelected: (ScreenMode) -> Unit,
     onContentSizeSelected: (ContentSize) -> Unit,
     onAnimationsEnabledChange: (Boolean) -> Unit,
+    onScalingListEnabledChange: (Boolean) -> Unit = {},
     onRotaryScrollingEnabledChange: (Boolean) -> Unit,
     onHapticFeedbackEnabledChange: (Boolean) -> Unit = {},
     onHapticIntensityChange: (HapticIntensity) -> Unit = {},
@@ -138,8 +139,10 @@ fun SettingsScreen(
     ) { section ->
         when (section) {
         SettingsSection.MENU -> {
-            RotaryScrollColumn(
+            ScalingRotaryScrollColumn(
                 rotaryEnabled = rotaryScrollingEnabled,
+                hapticFeedbackEnabled = settings.hapticFeedbackEnabled,
+                animationsEnabled = settings.scalingListEnabled && settings.animationsEnabled,
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = metrics.screenPadding,
                 itemSpacing = metrics.itemSpacing,
@@ -148,6 +151,8 @@ fun SettingsScreen(
                     Text(
                         text = stringResource(R.string.settings_title),
                         style = MaterialTheme.typography.titleLarge,
+                        textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth(),
                     )
                 }
 
@@ -327,6 +332,20 @@ fun SettingsScreen(
                         selected = settings.animationsEnabled,
                         text = if (settings.animationsEnabled) stringResource(R.string.action_enabled) else stringResource(R.string.action_disabled),
                         onClick = { onAnimationsEnabledChange(!settings.animationsEnabled) },
+                    )
+                }
+
+                item(key = "scaling-list-title") {
+                    Text(
+                        text = stringResource(R.string.settings_scaling_list),
+                        style = MaterialTheme.typography.titleSmall,
+                    )
+                }
+                item(key = "scaling-list-toggle") {
+                    SelectionButton(
+                        selected = settings.scalingListEnabled,
+                        text = if (settings.scalingListEnabled) stringResource(R.string.action_enabled) else stringResource(R.string.action_disabled),
+                        onClick = { onScalingListEnabledChange(!settings.scalingListEnabled) },
                     )
                 }
 

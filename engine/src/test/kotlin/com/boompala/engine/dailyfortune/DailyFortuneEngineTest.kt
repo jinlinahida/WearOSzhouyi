@@ -9,6 +9,7 @@ import com.boompala.engine.model.FiveElement
 import com.boompala.engine.model.YaoPosition
 import java.io.File
 import java.time.Instant
+import java.time.LocalDate
 import java.time.ZoneId
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
@@ -130,5 +131,19 @@ class DailyFortuneEngineTest {
         assertEquals(FiveElement.WOOD, jiaZiDay.dayStemElement)
         assertEquals(FortuneColor.BLACK, jiaZiDay.luckyColor)
         assertEquals(listOf(1, 6), jiaZiDay.luckyNumbers)
+    }
+
+    @Test
+    fun `fortuneFor localDate directly computes today and tomorrow correctly`() {
+        val today = LocalDate.of(2026, 8, 11)
+        val tomorrow = today.plusDays(1)
+        val todayReading = engine.fortuneFor(today, zone)
+        val tomorrowReading = engine.fortuneFor(tomorrow, zone)
+
+        assertEquals("2026-08-11", todayReading.date.toString())
+        assertEquals("2026-08-12", tomorrowReading.date.toString())
+        assertEquals("丁巳", todayReading.dayGanzhi.displayName)
+        assertEquals("戊午", tomorrowReading.dayGanzhi.displayName)
+        assertEquals((todayReading.rotationIndex + 1) % 384, tomorrowReading.rotationIndex)
     }
 }
