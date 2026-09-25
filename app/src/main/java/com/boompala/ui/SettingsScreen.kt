@@ -328,10 +328,12 @@ fun SettingsScreen(
                     )
                 }
                 item(key = "animation-toggle") {
-                    SelectionButton(
-                        selected = settings.animationsEnabled,
+                    ToggleSwitchButton(
+                        checked = settings.animationsEnabled,
                         text = if (settings.animationsEnabled) stringResource(R.string.action_enabled) else stringResource(R.string.action_disabled),
-                        onClick = { onAnimationsEnabledChange(!settings.animationsEnabled) },
+                        onCheckedChange = { onAnimationsEnabledChange(it) },
+                        hapticIntensity = settings.hapticIntensity,
+                        hapticEnabled = settings.hapticFeedbackEnabled,
                     )
                 }
 
@@ -342,10 +344,12 @@ fun SettingsScreen(
                     )
                 }
                 item(key = "scaling-list-toggle") {
-                    SelectionButton(
-                        selected = settings.scalingListEnabled,
+                    ToggleSwitchButton(
+                        checked = settings.scalingListEnabled,
                         text = if (settings.scalingListEnabled) stringResource(R.string.action_enabled) else stringResource(R.string.action_disabled),
-                        onClick = { onScalingListEnabledChange(!settings.scalingListEnabled) },
+                        onCheckedChange = { onScalingListEnabledChange(it) },
+                        hapticIntensity = settings.hapticIntensity,
+                        hapticEnabled = settings.hapticFeedbackEnabled,
                     )
                 }
 
@@ -356,10 +360,12 @@ fun SettingsScreen(
                     )
                 }
                 item(key = "keep-screen-on-toggle") {
-                    SelectionButton(
-                        selected = settings.keepScreenOnEnabled,
+                    ToggleSwitchButton(
+                        checked = settings.keepScreenOnEnabled,
                         text = if (settings.keepScreenOnEnabled) stringResource(R.string.action_enabled) else stringResource(R.string.action_disabled),
-                        onClick = { onKeepScreenOnEnabledChange(!settings.keepScreenOnEnabled) },
+                        onCheckedChange = { onKeepScreenOnEnabledChange(it) },
+                        hapticIntensity = settings.hapticIntensity,
+                        hapticEnabled = settings.hapticFeedbackEnabled,
                     )
                 }
 
@@ -688,10 +694,19 @@ fun SettingsScreen(
                             val upInteraction = remember { MutableInteractionSource() }
                             val downInteraction = remember { MutableInteractionSource() }
                             BoompalaCardButton(
-                                onClick = { onToggleHomeFeatureVisibility(feature) },
+                                onClick = {
+                                    val willBeShown = isHidden
+                                    AppHaptics.toggle(
+                                        context = context,
+                                        targetState = willBeShown,
+                                        intensity = settings.hapticIntensity,
+                                        enabled = settings.hapticFeedbackEnabled,
+                                    )
+                                    onToggleHomeFeatureVisibility(feature)
+                                },
                                 modifier = Modifier
                                     .weight(1f)
-                                    .wearPressFeedback(toggleInteraction),
+                                    .wearPressFeedback(toggleInteraction, hapticEnabled = false),
                                 interactionSource = toggleInteraction,
                                 colors = BoompalaButtonDefaults.outlinedButtonColors(),
                             ) {
@@ -760,12 +775,12 @@ fun SettingsScreen(
                     )
                 }
                 item(key = "rotary-toggle") {
-                    SelectionButton(
-                        selected = settings.rotaryScrollingEnabled,
+                    ToggleSwitchButton(
+                        checked = settings.rotaryScrollingEnabled,
                         text = if (settings.rotaryScrollingEnabled) stringResource(R.string.action_enabled) else stringResource(R.string.action_disabled),
-                        onClick = {
-                            onRotaryScrollingEnabledChange(!settings.rotaryScrollingEnabled)
-                        },
+                        onCheckedChange = { onRotaryScrollingEnabledChange(it) },
+                        hapticIntensity = settings.hapticIntensity,
+                        hapticEnabled = settings.hapticFeedbackEnabled,
                     )
                 }
 
@@ -776,13 +791,47 @@ fun SettingsScreen(
                     )
                 }
                 item(key = "haptic-toggle") {
-                    SelectionButton(
-                        selected = settings.hapticFeedbackEnabled,
+                    ToggleSwitchButton(
+                        checked = settings.hapticFeedbackEnabled,
                         text = if (settings.hapticFeedbackEnabled) stringResource(R.string.action_enabled) else stringResource(R.string.action_disabled),
-                        onClick = {
-                            onHapticFeedbackEnabledChange(!settings.hapticFeedbackEnabled)
+                        onCheckedChange = { nextState ->
+                            AppHaptics.toggle(
+                                context = context,
+                                targetState = nextState,
+                                intensity = settings.hapticIntensity,
+                                enabled = true,
+                            )
+                            onHapticFeedbackEnabledChange(nextState)
                         },
+                        hapticIntensity = settings.hapticIntensity,
+                        hapticEnabled = false,
                     )
+                }
+
+                if (settings.hapticFeedbackEnabled) {
+                    item(key = "haptic-intensity-title") {
+                        Text(
+                            text = stringResource(R.string.settings_haptic_intensity),
+                            style = MaterialTheme.typography.titleSmall,
+                        )
+                    }
+                    HapticIntensity.entries.forEach { intensity ->
+                        item(key = "haptic-intensity-${intensity.name}") {
+                            val label = when (intensity) {
+                                HapticIntensity.LIGHT -> stringResource(R.string.settings_haptic_intensity_light)
+                                HapticIntensity.STANDARD -> stringResource(R.string.settings_haptic_intensity_standard)
+                                HapticIntensity.STRONG -> stringResource(R.string.settings_haptic_intensity_strong)
+                            }
+                            SelectionButton(
+                                selected = settings.hapticIntensity == intensity,
+                                text = label,
+                                onClick = {
+                                    onHapticIntensityChange(intensity)
+                                    AppHaptics.preview(context, intensity)
+                                },
+                            )
+                        }
+                    }
                 }
 
                 item(key = "haptics-back") {
@@ -1600,6 +1649,44 @@ private fun SelectionButton(
         Text(
             text = if (selected) "✓ $text" else text,
             fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
+            maxLines = 1,
+            softWrap = false,
+            overflow = TextOverflow.Ellipsis,
+        )
+    }
+}
+
+@Composable
+private fun ToggleSwitchButton(
+    checked: Boolean,
+    text: String,
+    onCheckedChange: (Boolean) -> Unit,
+    hapticIntensity: HapticIntensity,
+    hapticEnabled: Boolean,
+) {
+    val context = LocalContext.current
+    val pressInteraction = remember { MutableInteractionSource() }
+    SelectableCardButton(
+        selected = checked,
+        onClick = {
+            val nextState = !checked
+            AppHaptics.toggle(
+                context = context,
+                targetState = nextState,
+                intensity = hapticIntensity,
+                enabled = hapticEnabled,
+            )
+            onCheckedChange(nextState)
+        },
+        contentPadding = BoompalaButtonDefaults.compactContentPadding,
+        modifier = Modifier
+            .fillMaxWidth()
+            .wearPressFeedback(pressInteraction, hapticEnabled = false),
+        interactionSource = pressInteraction,
+    ) {
+        Text(
+            text = if (checked) "✓ $text" else text,
+            fontWeight = if (checked) FontWeight.Bold else FontWeight.Normal,
             maxLines = 1,
             softWrap = false,
             overflow = TextOverflow.Ellipsis,

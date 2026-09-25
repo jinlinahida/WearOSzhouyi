@@ -320,4 +320,11 @@ class PageTransitionsTest {
             }
         }
     }
+
+    @Test
+    fun wearComposeHapticsSpecConstantsArePositive() {
+        assertTrue(AppHaptics.WearComposeHapticsSpec.TICK > 0)
+        assertTrue(AppHaptics.WearComposeHapticsSpec.CLICK > 0)
+        assertTrue(AppHaptics.WearComposeHapticsSpec.LIMIT > 0)
+    }
 }
