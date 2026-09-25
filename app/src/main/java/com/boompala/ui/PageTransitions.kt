@@ -114,9 +114,47 @@ internal object AppHaptics {
     }
 
     /**
-     * Level 1 · 基础按键点击反馈：
-     * 针对 Galaxy Watch 等高端 X 轴线性马达（LRA），采用 12ms 极短微脉冲（避免方波连续多周期震荡引起的粗糙“嗡嗡”感），
-     * 同时摒弃在 Galaxy Watch HAL 上会被静默丢弃的 createPredefined 黑盒，确保 100% 触发且手感清脆利落。
+     * 针对智能手表高端 X 轴线性马达（LRA）的底层触觉分发器：
+     * 1. 优先调用系统预定义硬件微脉冲（[VibrationEffect.createPredefined]）：
+     *    在 Wear OS 3/4/5（Galaxy Watch、Pixel Watch、TicWatch 等）上，系统驱动芯片（如 TI/Cirrus Logic）
+     *    会直接合成包含“起振加速”与“反向主动电制动（Active Braking）”的专属谐振波形，彻底消除方波余震与外壳嗡鸣；
+     * 2. 在极端精简系统或不支持 Predefined 的场景下，平滑回退为毫秒级超短微脉冲（4~8ms，振幅收敛至 80~190），
+     *    避免强行灌入 220+ 满功率方波导致表壳共鸣与手腕发麻；
+     * 3. 始终挂载 [android.os.VibrationAttributes.USAGE_TOUCH]，确保系统将其视为高优先级前台交互反馈。
+     */
+    private fun performHaptic(
+        context: android.content.Context,
+        predefinedEffectId: Int,
+        fallbackDurationMs: Long,
+        fallbackAmplitude: Int,
+        enabled: Boolean = true,
+    ) {
+        if (!enabled) return
+        val v = getVibrator(context) ?: return
+        if (!v.hasVibrator()) return
+
+        val effect = try {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                try {
+                    android.os.VibrationEffect.createPredefined(predefinedEffectId)
+                } catch (_: Throwable) {
+                    android.os.VibrationEffect.createOneShot(fallbackDurationMs, fallbackAmplitude)
+                }
+            } else {
+                android.os.VibrationEffect.createOneShot(fallbackDurationMs, fallbackAmplitude)
+            }
+        } catch (_: Throwable) {
+            return
+        }
+        vibrateEffect(v, effect)
+    }
+
+    /**
+     * Level 1 · 基础按键与卡片点击反馈：
+     * 模拟高级机械腕表微动开关手感，极度干脆清爽、零拖尾余震。
+     * - LIGHT：原厂微点 Tick；
+     * - STANDARD：标准清脆 Click；
+     * - STRONG：扎实微触 Heavy Click。
      */
     fun click(
         context: android.content.Context,
@@ -124,25 +162,17 @@ internal object AppHaptics {
         enabled: Boolean = true,
     ) {
         if (!enabled) return
-        val v = getVibrator(context) ?: return
-        if (!v.hasVibrator()) return
-
-        val effect = try {
-            val (duration, amplitude) = when (intensity) {
-                HapticIntensity.LIGHT -> 8L to 180
-                HapticIntensity.STANDARD -> 12L to 220
-                HapticIntensity.STRONG -> 16L to 255
-            }
-            android.os.VibrationEffect.createOneShot(duration, amplitude)
-        } catch (_: Throwable) {
-            return
+        val (predefinedId, duration, amplitude) = when (intensity) {
+            HapticIntensity.LIGHT -> Triple(android.os.VibrationEffect.EFFECT_TICK, 4L, 95)
+            HapticIntensity.STANDARD -> Triple(android.os.VibrationEffect.EFFECT_CLICK, 6L, 135)
+            HapticIntensity.STRONG -> Triple(android.os.VibrationEffect.EFFECT_HEAVY_CLICK, 8L, 185)
         }
-        vibrateEffect(v, effect)
+        performHaptic(context, predefinedId, duration, amplitude, enabled)
     }
 
     /**
-     * Level 2 · 仪式阻尼反馈：用于塔罗翻牌、六爻静爻铜钱落定。
-     * 32ms 短中冲程，提供适度顿挫阻尼感。
+     * Level 2 · 仪式阻尼反馈：用于塔罗翻牌、六爻静爻落定。
+     * 提供温润微顿挫阻尼感。
      */
     fun cardFlip(
         context: android.content.Context,
@@ -150,26 +180,18 @@ internal object AppHaptics {
         enabled: Boolean = true,
     ) {
         if (!enabled) return
-        val v = getVibrator(context) ?: return
-        if (!v.hasVibrator()) return
-
-        val (duration, amplitude) = when (intensity) {
-            HapticIntensity.LIGHT -> 20L to 180
-            HapticIntensity.STANDARD -> 32L to 225
-            HapticIntensity.STRONG -> 45L to 255
+        val (predefinedId, duration, amplitude) = when (intensity) {
+            HapticIntensity.LIGHT -> Triple(android.os.VibrationEffect.EFFECT_CLICK, 6L, 115)
+            HapticIntensity.STANDARD -> Triple(android.os.VibrationEffect.EFFECT_HEAVY_CLICK, 8L, 155)
+            HapticIntensity.STRONG -> Triple(android.os.VibrationEffect.EFFECT_HEAVY_CLICK, 12L, 205)
         }
-        val effect = try {
-            android.os.VibrationEffect.createOneShot(duration, amplitude)
-        } catch (_: Throwable) {
-            return
-        }
-        vibrateEffect(v, effect)
+        performHaptic(context, predefinedId, duration, amplitude, enabled)
     }
 
     /**
      * Level 3 · 变爻揭晓 / 动爻专属反馈：
-     * - 静爻（少阳 7 / 少阴 8）：Level 2 仪式落定单脉冲（30ms）；
-     * - 动爻（老阳 9 / 老阴 6）：显式节奏双脉冲（震 - 停 - 强震），在各款手表上节拍分明。
+     * - 静爻（少阳 7 / 少阴 8）：单枚金属铜钱清脆落定（Level 1 Click）；
+     * - 动爻（老阳 9 / 老阴 6）：两枚铜钱交错清脆轻撞（优先 Double Click 硬件微脉冲），金属节拍分明。
      */
     fun coinToss(
         context: android.content.Context,
@@ -183,30 +205,30 @@ internal object AppHaptics {
 
         val effect = try {
             if (isChanging) {
-                when (intensity) {
-                    HapticIntensity.LIGHT -> android.os.VibrationEffect.createWaveform(
-                        longArrayOf(0, 16, 30, 24),
-                        intArrayOf(0, 180, 0, 200),
-                        -1,
-                    )
-                    HapticIntensity.STANDARD -> android.os.VibrationEffect.createWaveform(
-                        longArrayOf(0, 22, 35, 38),
-                        intArrayOf(0, 210, 0, 245),
-                        -1,
-                    )
-                    HapticIntensity.STRONG -> android.os.VibrationEffect.createWaveform(
-                        longArrayOf(0, 30, 35, 55),
-                        intArrayOf(0, 255, 0, 255),
-                        -1,
-                    )
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                    try {
+                        android.os.VibrationEffect.createPredefined(android.os.VibrationEffect.EFFECT_DOUBLE_CLICK)
+                    } catch (_: Throwable) {
+                        createCoinDoublePulse(intensity)
+                    }
+                } else {
+                    createCoinDoublePulse(intensity)
                 }
             } else {
-                val (duration, amplitude) = when (intensity) {
-                    HapticIntensity.LIGHT -> 20L to 180
-                    HapticIntensity.STANDARD -> 30L to 225
-                    HapticIntensity.STRONG -> 45L to 255
+                val (predefinedId, duration, amplitude) = when (intensity) {
+                    HapticIntensity.LIGHT -> Triple(android.os.VibrationEffect.EFFECT_TICK, 4L, 95)
+                    HapticIntensity.STANDARD -> Triple(android.os.VibrationEffect.EFFECT_CLICK, 6L, 135)
+                    HapticIntensity.STRONG -> Triple(android.os.VibrationEffect.EFFECT_HEAVY_CLICK, 8L, 185)
                 }
-                android.os.VibrationEffect.createOneShot(duration, amplitude)
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                    try {
+                        android.os.VibrationEffect.createPredefined(predefinedId)
+                    } catch (_: Throwable) {
+                        android.os.VibrationEffect.createOneShot(duration, amplitude)
+                    }
+                } else {
+                    android.os.VibrationEffect.createOneShot(duration, amplitude)
+                }
             }
         } catch (_: Throwable) {
             return
@@ -214,8 +236,29 @@ internal object AppHaptics {
         vibrateEffect(v, effect)
     }
 
+    private fun createCoinDoublePulse(intensity: HapticIntensity): android.os.VibrationEffect {
+        return when (intensity) {
+            HapticIntensity.LIGHT -> android.os.VibrationEffect.createWaveform(
+                longArrayOf(0, 5, 24, 6),
+                intArrayOf(0, 100, 0, 120),
+                -1,
+            )
+            HapticIntensity.STANDARD -> android.os.VibrationEffect.createWaveform(
+                longArrayOf(0, 6, 24, 8),
+                intArrayOf(0, 130, 0, 155),
+                -1,
+            )
+            HapticIntensity.STRONG -> android.os.VibrationEffect.createWaveform(
+                longArrayOf(0, 8, 24, 11),
+                intArrayOf(0, 160, 0, 195),
+                -1,
+            )
+        }
+    }
+
     /**
      * Level 4 · 脉冲微搏动：用于切脉时脉搏波峰微震反馈。
+     * 极轻柔、收敛的微波形，模拟指下微弱起伏。
      */
     fun pulseBeat(
         context: android.content.Context,
@@ -227,12 +270,20 @@ internal object AppHaptics {
         if (!v.hasVibrator()) return
 
         val (duration, amplitude) = when (intensity) {
-            HapticIntensity.LIGHT -> 10L to 130
-            HapticIntensity.STANDARD -> 15L to 175
-            HapticIntensity.STRONG -> 22L to 220
+            HapticIntensity.LIGHT -> 3L to 70
+            HapticIntensity.STANDARD -> 5L to 100
+            HapticIntensity.STRONG -> 7L to 140
         }
         val effect = try {
-            android.os.VibrationEffect.createOneShot(duration, amplitude)
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q && intensity == HapticIntensity.LIGHT) {
+                try {
+                    android.os.VibrationEffect.createPredefined(android.os.VibrationEffect.EFFECT_TICK)
+                } catch (_: Throwable) {
+                    android.os.VibrationEffect.createOneShot(duration, amplitude)
+                }
+            } else {
+                android.os.VibrationEffect.createOneShot(duration, amplitude)
+            }
         } catch (_: Throwable) {
             return
         }
@@ -241,7 +292,7 @@ internal object AppHaptics {
 
     /**
      * Level 5 · 腕上木鱼专属敲击反馈：
-     * 标定为 14ms 纯正微脉冲，消除长波引起的“嗡嗡”余震，还原如敲击实木般的紧凑、清脆反作用力触感。
+     * 紧凑实木叩击微触感，彻底消除低频余震拖影，还原实木木槌的干脆反作用力。
      */
     fun muyuTap(
         context: android.content.Context,
@@ -249,27 +300,18 @@ internal object AppHaptics {
         enabled: Boolean = true,
     ) {
         if (!enabled) return
-        val v = getVibrator(context) ?: return
-        if (!v.hasVibrator()) return
-
-        val effect = try {
-            val (duration, amplitude) = when (intensity) {
-                HapticIntensity.LIGHT -> 10L to 190
-                HapticIntensity.STANDARD -> 14L to 240
-                HapticIntensity.STRONG -> 18L to 255
-            }
-            android.os.VibrationEffect.createOneShot(duration, amplitude)
-        } catch (_: Throwable) {
-            return
+        val (predefinedId, duration, amplitude) = when (intensity) {
+            HapticIntensity.LIGHT -> Triple(android.os.VibrationEffect.EFFECT_TICK, 4L, 105)
+            HapticIntensity.STANDARD -> Triple(android.os.VibrationEffect.EFFECT_CLICK, 6L, 145)
+            HapticIntensity.STRONG -> Triple(android.os.VibrationEffect.EFFECT_HEAVY_CLICK, 8L, 195)
         }
-        vibrateEffect(v, effect)
+        performHaptic(context, predefinedId, duration, amplitude, enabled)
     }
 
     /**
      * Level 6 · 页面返回与手势 Dismiss 触感：
      * 针对手表端物理返回键与 SwipeToDismissBox 滑动关闭落定设计。
-     * 采用 6~14ms 极短微脉冲与收敛振幅，区别于前向点击的坚实感，
-     * 营造轻盈清爽的退后、层级下沉与解除阻尼感。
+     * 采用清爽轻盈的 Tick 级微触感，传达“退后、解绑、归位”的轻盈质感。
      */
     fun back(
         context: android.content.Context,
@@ -277,20 +319,12 @@ internal object AppHaptics {
         enabled: Boolean = true,
     ) {
         if (!enabled) return
-        val v = getVibrator(context) ?: return
-        if (!v.hasVibrator()) return
-
-        val (duration, amplitude) = when (intensity) {
-            HapticIntensity.LIGHT -> 6L to 150
-            HapticIntensity.STANDARD -> 10L to 190
-            HapticIntensity.STRONG -> 14L to 230
+        val (predefinedId, duration, amplitude) = when (intensity) {
+            HapticIntensity.LIGHT -> Triple(android.os.VibrationEffect.EFFECT_TICK, 3L, 75)
+            HapticIntensity.STANDARD -> Triple(android.os.VibrationEffect.EFFECT_TICK, 4L, 110)
+            HapticIntensity.STRONG -> Triple(android.os.VibrationEffect.EFFECT_CLICK, 6L, 145)
         }
-        val effect = try {
-            android.os.VibrationEffect.createOneShot(duration, amplitude)
-        } catch (_: Throwable) {
-            return
-        }
-        vibrateEffect(v, effect)
+        performHaptic(context, predefinedId, duration, amplitude, enabled)
     }
 
     /**
