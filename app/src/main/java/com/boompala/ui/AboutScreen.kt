@@ -44,11 +44,8 @@ fun AboutScreen(
         itemSpacing = metrics.itemSpacing,
     ) {
         item(key = "title") {
-            Text(
+            ScreenTitle(
                 text = stringResource(R.string.about_title),
-                style = MaterialTheme.typography.titleLarge,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth(),
             )
         }
 

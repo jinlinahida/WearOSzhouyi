@@ -86,11 +86,10 @@ fun DailyFortuneScreen(
         itemSpacing = metrics.itemSpacing,
     ) {
         item(key = "header") {
-            Text(
+            ScreenTitle(
                 text = stringResource(
                     if (isTomorrow) R.string.daily_fortune_tomorrow_title else R.string.daily_fortune_title,
                 ),
-                style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.padding(bottom = metrics.itemSpacing / 4),
             )
         }

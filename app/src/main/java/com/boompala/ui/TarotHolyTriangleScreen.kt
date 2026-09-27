@@ -78,11 +78,8 @@ fun TarotHolyTriangleScreen(
             itemSpacing = metrics.itemSpacing,
         ) {
             item(key = "holy-triangle-title") {
-                Text(
+                ScreenTitle(
                     text = spread.name,
-                    style = MaterialTheme.typography.titleLarge,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth(),
                 )
             }
 
@@ -271,11 +268,8 @@ fun TarotHolyTriangleScreen(
             itemSpacing = metrics.itemSpacing,
         ) {
             item(key = "holy-triangle-results-title") {
-                Text(
+                ScreenTitle(
                     text = "圣三角完整解读",
-                    style = MaterialTheme.typography.titleLarge,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth(),
                 )
             }
 

@@ -120,6 +120,8 @@
     <string name="settings_language_chinese">简体中文</string>
     <string name="settings_language_english">English</string>
     <string name="settings_home_fixed_hint">“设置”入口作为系统基础入口，始终固定显示。</string>
+    <string name="settings_home_drag_hint">长按卡片或拖动手柄可上下排序，点击眼睛可切换首页显隐。</string>
+    <string name="action_drag_reorder">拖拽排序</string>
     <string name="settings_data_total">本地总归档数：%1$d 条</string>
     <string name="settings_data_clear_all">清空全部归档</string>
     <string name="settings_data_clear_confirm_title">确认清空所有归档？</string>

@@ -777,6 +777,11 @@ fun BoompalaApp() {
                                     settingsRepository.moveHomeFeature(feature, up)
                                 }
                             },
+                            onReorderHomeFeatures = { order ->
+                                scope.launch {
+                                    settingsRepository.setHomeOrder(order)
+                                }
+                            },
                             onToggleHomeFeatureVisibility = { feature ->
                                 scope.launch {
                                     settingsRepository.toggleHomeFeatureVisibility(feature)

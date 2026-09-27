@@ -490,8 +490,12 @@ internal object AppHaptics {
 
     /**
      * Level 6 · 电子木鱼实木空腔敲击 (Solid Wood & Cavity Resonance)：
-     * 拟物意象：硬木槌头破空重重叩击实木外壳 (Attack，14ms 满幅冲击) + 10ms 腔体声波吸收微波 (Decay，8ms 沉厚微震)。
-     * 告别单薄发飘的电子按键“哒”，还原沉稳有肉感的木质“笃——”反作用力。
+     * 拟物意象：硬木槌头沉稳厚重叩击实木外壳，产生能量饱满、扎实清脆的实木反作用力。
+     * - 针对手腕 LRA 线性谐振马达机械动能与起振冲程深度校准，彻底解决多段刹车波形造成的力道疲软虚浮；
+     * - 采用高优先级单相强脉冲 (OneShot)，在快速高频连击时支持驱动 HAL 零死区瞬时重触发，彻底根除漏震。
+     * - LIGHT：16ms 坚实轻击 (振幅 220)；
+     * - STANDARD：24ms 满幅深沉敲击 (振幅 255，饱满浑厚)；
+     * - STRONG：32ms 强劲重击 (振幅 255，力道穿透)。
      */
     fun muyuTap(
         context: android.content.Context,
@@ -502,26 +506,15 @@ internal object AppHaptics {
 
         val v = getVibrator(context)
         if (v != null && v.hasVibrator()) {
-            val effect = when (intensity) {
-                HapticIntensity.LIGHT -> android.os.VibrationEffect.createWaveform(
-                    longArrayOf(0, 10, 10, 6),
-                    intArrayOf(0, 200, 0, 100),
-                    -1,
-                )
-                HapticIntensity.STANDARD -> android.os.VibrationEffect.createWaveform(
-                    longArrayOf(0, 14, 10, 8),
-                    intArrayOf(0, 255, 0, 150),
-                    -1,
-                )
-                HapticIntensity.STRONG -> android.os.VibrationEffect.createWaveform(
-                    longArrayOf(0, 16, 10, 10),
-                    intArrayOf(0, 255, 0, 185),
-                    -1,
-                )
+            val (duration, amplitude) = when (intensity) {
+                HapticIntensity.LIGHT -> 16L to 220
+                HapticIntensity.STANDARD -> 24L to 255
+                HapticIntensity.STRONG -> 32L to 255
             }
+            val effect = android.os.VibrationEffect.createOneShot(duration, amplitude)
             vibratePhysical(v, effect)
         } else {
-            performWearHaptic(context, android.view.HapticFeedbackConstants.KEYBOARD_TAP, 14L, 250, enabled)
+            performWearHaptic(context, android.view.HapticFeedbackConstants.KEYBOARD_TAP, 24L, 255, enabled)
         }
     }
 
@@ -788,13 +781,12 @@ fun Modifier.wearPressFeedback(
     val isPressed by interactionSource.collectIsPressedAsState()
     val context = LocalContext.current
 
-    // 震动用事件流而非按压状态采样：collectIsPressedAsState 按帧合并状态，
-    // 快速点击（按下+抬起在同一帧内）永远不会观察到按压，震动被静默丢弃；
-    // interactions 流能看到每一次 Press 事件，与帧率无关。
+    // 触觉反馈绑定到 Release（抬手确认点击）：滑动取消时派发 Cancel 不会触发震动，
+    // 彻底解决按着按钮/卡片滑动时产生误震动以及 Binder IPC 阻塞滑动起步帧的问题。
     LaunchedEffect(interactionSource, hapticEnabled, intensity) {
         if (hapticEnabled) {
             interactionSource.interactions.collect { interaction ->
-                if (interaction is PressInteraction.Press) {
+                if (interaction is PressInteraction.Release) {
                     AppHaptics.click(context, intensity = intensity, enabled = hapticEnabled)
                 }
             }

@@ -8,11 +8,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.style.TextAlign
 import com.boompala.settings.AppSettings
 import com.boompala.settings.ContentSize
 import com.boompala.settings.ScreenShape
 
 data class UiMetrics(
+    val screenShape: ScreenShape = ScreenShape.ROUND,
     val horizontalPadding: Dp,
     val verticalPadding: Dp,
     val itemSpacing: Dp,
@@ -21,7 +23,10 @@ data class UiMetrics(
         horizontal = horizontalPadding,
         vertical = verticalPadding,
     ),
-)
+) {
+    val isRound: Boolean get() = screenShape == ScreenShape.ROUND
+    val titleTextAlign: TextAlign get() = if (isRound) TextAlign.Center else TextAlign.Start
+}
 
 val LocalUiMetrics = staticCompositionLocalOf {
     ContentSize.STANDARD.uiMetrics(ScreenShape.ROUND)
@@ -35,6 +40,7 @@ fun ContentSize.uiMetrics(screenShape: ScreenShape): UiMetrics {
     }
     val horizontalBase = if (screenShape == ScreenShape.ROUND) 20.dp else 16.dp
     return UiMetrics(
+        screenShape = screenShape,
         horizontalPadding = horizontalBase * scale,
         verticalPadding = 24.dp * scale,
         itemSpacing = 8.dp * scale,

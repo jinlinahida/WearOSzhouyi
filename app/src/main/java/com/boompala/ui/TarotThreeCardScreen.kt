@@ -79,11 +79,8 @@ fun TarotThreeCardScreen(
             itemSpacing = metrics.itemSpacing,
         ) {
             item(key = "three-card-title") {
-                Text(
+                ScreenTitle(
                     text = "时间流三牌",
-                    style = MaterialTheme.typography.titleLarge,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth(),
                 )
             }
 
@@ -263,11 +260,8 @@ fun TarotThreeCardScreen(
             itemSpacing = metrics.itemSpacing,
         ) {
             item(key = "results-title") {
-                Text(
+                ScreenTitle(
                     text = "时间流完整结果",
-                    style = MaterialTheme.typography.titleLarge,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth(),
                 )
             }
 

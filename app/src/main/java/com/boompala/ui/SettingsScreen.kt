@@ -2,6 +2,13 @@ package com.boompala.ui
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,6 +22,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -45,10 +55,19 @@ import com.boompala.settings.AppSettings
 import com.boompala.settings.ContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.zIndex
 import androidx.wear.compose.material3.DatePicker
 import androidx.wear.compose.material3.Picker
 import androidx.wear.compose.material3.rememberPickerState
+import sh.calvin.reorderable.ReorderableItem
+import sh.calvin.reorderable.rememberReorderableLazyListState
 import com.boompala.settings.HomeFeature
 import com.boompala.settings.ScreenMode
 import com.boompala.engine.bazi.BaziEngine
@@ -89,6 +108,7 @@ fun SettingsScreen(
     onHapticIntensityChange: (HapticIntensity) -> Unit = {},
     onLanguageSelected: (AppLanguage) -> Unit = {},
     onMoveHomeFeature: (HomeFeature, Boolean) -> Unit = { _, _ -> },
+    onReorderHomeFeatures: (List<HomeFeature>) -> Unit = {},
     onToggleHomeFeatureVisibility: (HomeFeature) -> Unit = {},
     onSaveUserBirth: (birthDate: String, birthHour: Int?, gender: BaziGender) -> Unit = { _, _, _ -> },
     onClearUserBirth: () -> Unit = {},
@@ -148,11 +168,8 @@ fun SettingsScreen(
                 itemSpacing = metrics.itemSpacing,
             ) {
                 item(key = "title") {
-                    Text(
+                    ScreenTitle(
                         text = stringResource(R.string.settings_title),
-                        style = MaterialTheme.typography.titleLarge,
-                        textAlign = androidx.compose.ui.text.style.TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth(),
                     )
                 }
 
@@ -273,7 +290,7 @@ fun SettingsScreen(
                 itemSpacing = metrics.itemSpacing,
             ) {
                 item(key = "appearance-title") {
-                    Text(
+                    ScreenTitle(
                         text = stringResource(R.string.settings_module_appearance),
                         style = MaterialTheme.typography.titleMedium,
                     )
@@ -393,7 +410,7 @@ fun SettingsScreen(
                 itemSpacing = metrics.itemSpacing,
             ) {
                 item(key = "tarot-title") {
-                    Text(
+                    ScreenTitle(
                         text = stringResource(R.string.settings_module_tarot),
                         style = MaterialTheme.typography.titleMedium,
                     )
@@ -465,7 +482,7 @@ fun SettingsScreen(
                 itemSpacing = metrics.itemSpacing,
             ) {
                 item(key = "compass-title") {
-                    Text(
+                    ScreenTitle(
                         text = stringResource(R.string.settings_module_compass),
                         style = MaterialTheme.typography.titleMedium,
                     )
@@ -583,7 +600,7 @@ fun SettingsScreen(
                 itemSpacing = metrics.itemSpacing,
             ) {
                 item(key = "language-title") {
-                    Text(
+                    ScreenTitle(
                         text = stringResource(R.string.settings_module_language),
                         style = MaterialTheme.typography.titleMedium,
                     )
@@ -616,18 +633,53 @@ fun SettingsScreen(
         }
 
         SettingsSection.HOME -> {
-            val fullOrder = settings.effectiveHomeOrder()
+            var localOrder by remember(settings.homeOrder) {
+                mutableStateOf(settings.effectiveHomeOrder())
+            }
+            val lazyListState = rememberLazyListState()
+            val reorderableLazyColumnState = rememberReorderableLazyListState(lazyListState) { from, to ->
+                val fromKey = (from.key as? String)?.removePrefix("home-feat-")
+                val toKey = (to.key as? String)?.removePrefix("home-feat-")
+
+                if (fromKey != null && toKey != null) {
+                    val fromIndex = localOrder.indexOfFirst { it.id == fromKey }
+                    val toIndex = localOrder.indexOfFirst { it.id == toKey }
+
+                    if (fromIndex != -1 && toIndex != -1 && fromIndex != toIndex) {
+                        localOrder = localOrder.toMutableList().apply {
+                            add(toIndex, removeAt(fromIndex))
+                        }
+                        AppHaptics.click(
+                            context = context,
+                            intensity = HapticIntensity.LIGHT,
+                            enabled = settings.hapticFeedbackEnabled,
+                        )
+                    }
+                }
+            }
+
             RotaryScrollColumn(
                 rotaryEnabled = rotaryScrollingEnabled,
                 modifier = Modifier.fillMaxSize(),
+                state = lazyListState,
                 contentPadding = metrics.screenPadding,
                 itemSpacing = metrics.itemSpacing,
             ) {
                 item(key = "home-manage-title") {
-                    Text(
+                    ScreenTitle(
                         text = stringResource(R.string.settings_module_home),
                         style = MaterialTheme.typography.titleMedium,
                     )
+                }
+
+                item(key = "home-drag-hint") {
+                    ResultCard {
+                        Text(
+                            text = stringResource(R.string.settings_home_drag_hint),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
                 }
 
                 item(key = "home-fixed-note") {
@@ -640,108 +692,80 @@ fun SettingsScreen(
                     }
                 }
 
-                itemsIndexed(fullOrder, key = { _, feature -> "home-feat-${feature.id}" }) { index, feature ->
+                itemsIndexed(localOrder, key = { _, feature -> "home-feat-${feature.id}" }) { index, feature ->
                     val isHidden = settings.hiddenHomeFeatures.contains(feature)
-                    val featureName = when (feature) {
-                        HomeFeature.SIX_YAO -> stringResource(R.string.home_feature_six_yao)
-                        HomeFeature.MEI_HUA -> stringResource(R.string.home_feature_mei_hua)
-                        HomeFeature.DESTINY_CHART -> stringResource(R.string.home_feature_destiny_chart)
-                        HomeFeature.TAROT_ONE -> stringResource(R.string.home_feature_tarot_one)
-                        HomeFeature.TAROT_THREE -> stringResource(R.string.home_feature_tarot_three)
-                        HomeFeature.TAROT_HOLY_TRIANGLE -> stringResource(R.string.home_feature_tarot_holy_triangle)
-                        HomeFeature.TAROT_CELTIC_CROSS -> stringResource(R.string.home_feature_tarot_celtic_cross)
-                        HomeFeature.DAILY_FORTUNE -> stringResource(R.string.home_feature_daily_fortune)
-                        HomeFeature.XIAO_LIU_REN -> stringResource(R.string.home_feature_xiao_liu_ren)
-                        HomeFeature.COMPASS -> stringResource(R.string.home_feature_compass)
-                        HomeFeature.PULSE -> stringResource(R.string.home_feature_pulse)
-                        HomeFeature.MUYU -> stringResource(R.string.home_feature_muyu)
-                        HomeFeature.ARCHIVES -> stringResource(R.string.home_feature_archives)
-                        HomeFeature.BROWSE -> stringResource(R.string.home_feature_browse)
-                    }
+                    ReorderableItem(
+                        state = reorderableLazyColumnState,
+                        key = "home-feat-${feature.id}",
+                    ) { isDragging ->
+                        val handleInteraction = remember { MutableInteractionSource() }
+                        val cardInteraction = remember { MutableInteractionSource() }
 
-                    ResultCard {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Text(
-                                text = featureName,
-                                style = MaterialTheme.typography.titleSmall,
-                                fontWeight = FontWeight.Bold,
-                                color = if (isHidden) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurface,
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .wearMarquee(settings.animationsEnabled),
-                                maxLines = 1,
-                                softWrap = false,
-                                overflow = TextOverflow.Ellipsis,
-                            )
-                            Spacer(Modifier.width(6.dp))
-                            Text(
-                                text = if (isHidden) stringResource(R.string.action_hide) else stringResource(R.string.action_show),
-                                style = MaterialTheme.typography.labelSmall,
-                                color = if (isHidden) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
-                                maxLines = 1,
-                            )
-                        }
-
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(4.dp),
-                        ) {
-                            val toggleInteraction = remember { MutableInteractionSource() }
-                            val upInteraction = remember { MutableInteractionSource() }
-                            val downInteraction = remember { MutableInteractionSource() }
-                            BoompalaCardButton(
-                                onClick = {
-                                    val willBeShown = isHidden
-                                    AppHaptics.toggle(
+                        HomeFeatureReorderCard(
+                            feature = feature,
+                            index = index,
+                            isHidden = isHidden,
+                            isDragging = isDragging,
+                            animationsEnabled = settings.animationsEnabled,
+                            onToggleVisibility = {
+                                val willBeShown = isHidden
+                                AppHaptics.toggle(
+                                    context = context,
+                                    targetState = willBeShown,
+                                    intensity = settings.hapticIntensity,
+                                    enabled = settings.hapticFeedbackEnabled,
+                                )
+                                onToggleHomeFeatureVisibility(feature)
+                            },
+                            modifier = Modifier.longPressDraggableHandle(
+                                onDragStarted = {
+                                    AppHaptics.cardFlip(
                                         context = context,
-                                        targetState = willBeShown,
                                         intensity = settings.hapticIntensity,
                                         enabled = settings.hapticFeedbackEnabled,
                                     )
-                                    onToggleHomeFeatureVisibility(feature)
                                 },
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .wearPressFeedback(toggleInteraction, hapticEnabled = false),
-                                interactionSource = toggleInteraction,
-                                colors = BoompalaButtonDefaults.outlinedButtonColors(),
-                            ) {
-                                Text(if (isHidden) stringResource(R.string.action_show) else stringResource(R.string.action_hide))
-                            }
-                            BoompalaCardButton(
-                                onClick = { onMoveHomeFeature(feature, true) },
-                                enabled = index > 0,
-                                modifier = Modifier
-                                    .weight(0.7f)
-                                    .wearPressFeedback(upInteraction, enabled = index > 0),
-                                interactionSource = upInteraction,
-                                colors = BoompalaButtonDefaults.outlinedButtonColors(),
-                            ) {
-                                Text("▲")
-                            }
-                            BoompalaCardButton(
-                                onClick = { onMoveHomeFeature(feature, false) },
-                                enabled = index < fullOrder.size - 1,
-                                modifier = Modifier
-                                    .weight(0.7f)
-                                    .wearPressFeedback(downInteraction, enabled = index < fullOrder.size - 1),
-                                interactionSource = downInteraction,
-                                colors = BoompalaButtonDefaults.outlinedButtonColors(),
-                            ) {
-                                Text("▼")
-                            }
-                        }
+                                onDragStopped = {
+                                    onReorderHomeFeatures(localOrder)
+                                    AppHaptics.click(
+                                        context = context,
+                                        intensity = settings.hapticIntensity,
+                                        enabled = settings.hapticFeedbackEnabled,
+                                    )
+                                },
+                                interactionSource = cardInteraction,
+                            ),
+                            handleModifier = Modifier.draggableHandle(
+                                onDragStarted = {
+                                    AppHaptics.cardFlip(
+                                        context = context,
+                                        intensity = settings.hapticIntensity,
+                                        enabled = settings.hapticFeedbackEnabled,
+                                    )
+                                },
+                                onDragStopped = {
+                                    onReorderHomeFeatures(localOrder)
+                                    AppHaptics.click(
+                                        context = context,
+                                        intensity = settings.hapticIntensity,
+                                        enabled = settings.hapticFeedbackEnabled,
+                                    )
+                                },
+                                interactionSource = handleInteraction,
+                            ),
+                        )
                     }
                 }
 
                 item(key = "home-manage-back") {
                     val backInteraction = remember { MutableInteractionSource() }
                     BoompalaCardButton(
-                        onClick = { currentSection = SettingsSection.MENU },
+                        onClick = {
+                            if (localOrder != settings.homeOrder) {
+                                onReorderHomeFeatures(localOrder)
+                            }
+                            currentSection = SettingsSection.MENU
+                        },
                         modifier = Modifier
                             .fillMaxWidth()
                             .wearPressFeedback(backInteraction),
@@ -762,7 +786,7 @@ fun SettingsScreen(
                 itemSpacing = metrics.itemSpacing,
             ) {
                 item(key = "haptics-title") {
-                    Text(
+                    ScreenTitle(
                         text = stringResource(R.string.settings_module_haptics),
                         style = MaterialTheme.typography.titleMedium,
                     )
@@ -919,7 +943,7 @@ fun SettingsScreen(
                             val profile = settings.resolvedBaziProfile()
                             if (profile != null) {
                                 item(key = "bazi-view-title") {
-                                    Text(
+                                    ScreenTitle(
                                         text = stringResource(R.string.settings_module_profile),
                                         style = MaterialTheme.typography.titleMedium,
                                     )
@@ -1046,7 +1070,7 @@ fun SettingsScreen(
                             }
                         } else {
                             item(key = "bazi-edit-title") {
-                                Text(
+                                ScreenTitle(
                                     text = stringResource(R.string.settings_module_profile),
                                     style = MaterialTheme.typography.titleMedium,
                                 )
@@ -1352,7 +1376,7 @@ fun SettingsScreen(
                 itemSpacing = metrics.itemSpacing,
             ) {
                 item(key = "data-title") {
-                    Text(
+                    ScreenTitle(
                         text = stringResource(R.string.settings_module_data),
                         style = MaterialTheme.typography.titleMedium,
                     )
@@ -1807,6 +1831,183 @@ private fun ShichenPicker(
                     fontWeight = FontWeight.Bold,
                     maxLines = 1,
                 )
+            }
+        }
+    }
+}
+
+@Composable
+private fun HomeFeatureReorderCard(
+    feature: HomeFeature,
+    index: Int,
+    isHidden: Boolean,
+    isDragging: Boolean,
+    animationsEnabled: Boolean,
+    onToggleVisibility: () -> Unit,
+    modifier: Modifier = Modifier,
+    handleModifier: Modifier = Modifier,
+) {
+    val scale by animateFloatAsState(
+        targetValue = if (isDragging) 1.04f else 1.0f,
+        animationSpec = if (animationsEnabled) {
+            spring(
+                dampingRatio = Spring.DampingRatioMediumBouncy,
+                stiffness = Spring.StiffnessMediumLow,
+            )
+        } else {
+            androidx.compose.animation.core.snap()
+        },
+        label = "dragScale",
+    )
+    val borderColor by animateColorAsState(
+        targetValue = if (isDragging) MaterialTheme.colorScheme.primary else CardBorderColor,
+        label = "dragBorderColor",
+    )
+    val borderWidth by animateDpAsState(
+        targetValue = if (isDragging) 1.8.dp else CardBorderWidth,
+        label = "dragBorderWidth",
+    )
+    val cardBgColor by animateColorAsState(
+        targetValue = when {
+            isDragging -> MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.95f)
+            isHidden -> CardBackgroundColor.copy(alpha = 0.18f)
+            else -> CardBackgroundColor
+        },
+        label = "dragBgColor",
+    )
+
+    val featureName = when (feature) {
+        HomeFeature.SIX_YAO -> stringResource(R.string.home_feature_six_yao)
+        HomeFeature.MEI_HUA -> stringResource(R.string.home_feature_mei_hua)
+        HomeFeature.DESTINY_CHART -> stringResource(R.string.home_feature_destiny_chart)
+        HomeFeature.TAROT_ONE -> stringResource(R.string.home_feature_tarot_one)
+        HomeFeature.TAROT_THREE -> stringResource(R.string.home_feature_tarot_three)
+        HomeFeature.TAROT_HOLY_TRIANGLE -> stringResource(R.string.home_feature_tarot_holy_triangle)
+        HomeFeature.TAROT_CELTIC_CROSS -> stringResource(R.string.home_feature_tarot_celtic_cross)
+        HomeFeature.DAILY_FORTUNE -> stringResource(R.string.home_feature_daily_fortune)
+        HomeFeature.XIAO_LIU_REN -> stringResource(R.string.home_feature_xiao_liu_ren)
+        HomeFeature.COMPASS -> stringResource(R.string.home_feature_compass)
+        HomeFeature.PULSE -> stringResource(R.string.home_feature_pulse)
+        HomeFeature.MUYU -> stringResource(R.string.home_feature_muyu)
+        HomeFeature.ARCHIVES -> stringResource(R.string.home_feature_archives)
+        HomeFeature.BROWSE -> stringResource(R.string.home_feature_browse)
+    }
+
+    Box(
+        modifier = modifier
+            .scale(scale)
+            .zIndex(if (isDragging) 10f else 1f)
+            .clip(CardShape)
+            .border(
+                width = borderWidth,
+                shape = CardShape,
+                brush = if (isDragging) {
+                    SolidColor(borderColor)
+                } else {
+                    Brush.linearGradient(
+                        listOf(borderColor, Color.Transparent),
+                        start = Offset.Zero,
+                        end = Offset.Infinite,
+                    )
+                },
+            )
+            .background(cardBgColor)
+            .padding(horizontal = 8.dp, vertical = 7.dp)
+            .fillMaxWidth(),
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            // 序号胶囊徽章
+            Box(
+                modifier = Modifier
+                    .size(width = 26.dp, height = 22.dp)
+                    .clip(RoundedCornerShape(6.dp))
+                    .background(
+                        if (isDragging) MaterialTheme.colorScheme.primaryContainer
+                        else if (isHidden) MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.5f)
+                        else MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.45f)
+                    ),
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(
+                    text = "%02d".format(index + 1),
+                    style = MaterialTheme.typography.labelSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = if (isHidden) MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f) else MaterialTheme.colorScheme.primary,
+                )
+            }
+
+            Spacer(Modifier.width(8.dp))
+
+            // 功能名称与状态文本
+            Column(
+                modifier = Modifier.weight(1f),
+            ) {
+                Text(
+                    text = featureName,
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = if (isHidden) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.wearMarquee(animationsEnabled),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                Text(
+                    text = if (isHidden) stringResource(R.string.action_hide) else stringResource(R.string.action_show),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = if (isHidden) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary.copy(alpha = 0.85f),
+                )
+            }
+
+            Spacer(Modifier.width(6.dp))
+
+            // 右侧操作：眼睛显隐切换按钮 + 拖拽手柄
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+            ) {
+                val toggleInteraction = remember { MutableInteractionSource() }
+                Box(
+                    modifier = Modifier
+                        .size(32.dp)
+                        .clip(CircleShape)
+                        .clickable(
+                            interactionSource = toggleInteraction,
+                            indication = null,
+                            onClick = onToggleVisibility,
+                        )
+                        .background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.5f)),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Icon(
+                        painter = painterResource(if (isHidden) R.drawable.ic_visibility_off else R.drawable.ic_visibility),
+                        contentDescription = if (isHidden) stringResource(R.string.action_show) else stringResource(R.string.action_hide),
+                        tint = if (isHidden) MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f) else MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(17.dp),
+                    )
+                }
+
+                Box(
+                    modifier = Modifier
+                        .size(32.dp)
+                        .clip(CircleShape)
+                        .then(handleModifier)
+                        .background(
+                            if (isDragging) MaterialTheme.colorScheme.primary.copy(alpha = 0.25f)
+                            else MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.5f)
+                        ),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_drag_handle),
+                        contentDescription = stringResource(R.string.action_drag_reorder),
+                        tint = if (isDragging) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.size(17.dp),
+                    )
+                }
             }
         }
     }

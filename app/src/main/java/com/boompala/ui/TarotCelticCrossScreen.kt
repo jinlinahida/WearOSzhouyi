@@ -112,11 +112,8 @@ fun TarotCelticCrossScreen(
             itemSpacing = metrics.itemSpacing,
         ) {
             item(key = "celtic-cross-title") {
-                Text(
+                ScreenTitle(
                     text = spread.name,
-                    style = MaterialTheme.typography.titleLarge,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth(),
                 )
             }
 
@@ -346,11 +343,8 @@ fun TarotCelticCrossScreen(
             itemSpacing = metrics.itemSpacing,
         ) {
             item(key = "results-title") {
-                Text(
+                ScreenTitle(
                     text = "凯尔特十字结果",
-                    style = MaterialTheme.typography.titleLarge,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth(),
                 )
             }
 

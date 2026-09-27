@@ -10,8 +10,12 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -90,6 +94,25 @@ fun MuyuScreen(
     var totalCount by remember { mutableLongStateOf(initialCount) }
     var isAutoMode by remember { mutableStateOf(false) }
 
+    // 内存即时累加 + 异步防抖批量持久化：杜绝高频敲击时每敲一下写一次 DataStore 引起的主线程卡顿与全树重组
+    var pendingIncrement by remember { mutableLongStateOf(0L) }
+    val flushPending = remember(onIncrementCount) {
+        {
+            if (pendingIncrement > 0L) {
+                val delta = pendingIncrement
+                pendingIncrement = 0L
+                onIncrementCount(delta)
+            }
+        }
+    }
+
+    LaunchedEffect(pendingIncrement) {
+        if (pendingIncrement > 0L) {
+            delay(500L)
+            flushPending()
+        }
+    }
+
     // 木鱼弹性形变动效（Spring Physics）
     val scaleAnim = remember { Animatable(1.0f) }
 
@@ -103,12 +126,12 @@ fun MuyuScreen(
     // 核心敲击触发逻辑
     val triggerStrike: () -> Unit = remember(hapticIntensity, hapticEnabled) {
         {
-            // 1. 手腕硬件级清脆触感
+            // 1. 手腕硬件级清脆触感 (高能量单脉冲，极速连击零死区重触发)
             AppHaptics.muyuTap(context, intensity = hapticIntensity, enabled = hapticEnabled)
 
-            // 2. 本地计数递增与异步持久化
+            // 2. 本地计数即时递增与批量持久化缓冲
             totalCount += 1L
-            onIncrementCount(1L)
+            pendingIncrement += 1L
 
             // 3. 产生漂浮文字
             val meritId = System.nanoTime()
@@ -156,10 +179,11 @@ fun MuyuScreen(
         }
     }
 
-    // 退出界面时自动停止自动敲击
+    // 退出界面时自动停止自动敲击并提交全部未落盘计数
     DisposableEffect(Unit) {
         onDispose {
             isAutoMode = false
+            flushPending()
         }
     }
 
@@ -189,12 +213,14 @@ fun MuyuScreen(
                     false
                 }
             }
-            // 全屏点击即敲击（全屏盲操）
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null,
-                onClick = triggerStrike,
-            ),
+            // 全屏点击即敲击（底层指针捕获：接触屏幕第一毫秒立即触发，彻底杜绝抬手延迟与滑动丢击）
+            .pointerInput(triggerStrike) {
+                awaitEachGesture {
+                    awaitFirstDown(requireUnconsumed = true)
+                    triggerStrike()
+                    waitForUpOrCancellation()
+                }
+            },
         contentAlignment = Alignment.Center,
     ) {
         // 背景层：敲击扩散的光晕涟漪

@@ -30,4 +30,20 @@ class CommonCardsTest {
         val highlightedStroke = BoompalaButtonDefaults.highlightedBorderStroke()
         assertEquals(1.dp, highlightedStroke.width)
     }
+
+    @Test
+    fun roundScreenUiMetricsConfiguresCenterAlignment() {
+        val roundMetrics = com.boompala.settings.ContentSize.STANDARD.uiMetrics(com.boompala.settings.ScreenShape.ROUND)
+        assertTrue(roundMetrics.isRound)
+        assertEquals(androidx.compose.ui.text.style.TextAlign.Center, roundMetrics.titleTextAlign)
+        assertEquals(20.dp, roundMetrics.horizontalPadding)
+    }
+
+    @Test
+    fun squareScreenUiMetricsConfiguresStartAlignment() {
+        val squareMetrics = com.boompala.settings.ContentSize.STANDARD.uiMetrics(com.boompala.settings.ScreenShape.SQUARE)
+        assertTrue(!squareMetrics.isRound)
+        assertEquals(androidx.compose.ui.text.style.TextAlign.Start, squareMetrics.titleTextAlign)
+        assertEquals(16.dp, squareMetrics.horizontalPadding)
+    }
 }

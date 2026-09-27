@@ -75,11 +75,8 @@ fun TarotOneCardScreen(
         if (reading == null) {
             // Setup & Cast Stage
             item(key = "tarot-title") {
-                Text(
+                ScreenTitle(
                     text = "单牌塔罗",
-                    style = MaterialTheme.typography.titleLarge,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth(),
                 )
             }
 

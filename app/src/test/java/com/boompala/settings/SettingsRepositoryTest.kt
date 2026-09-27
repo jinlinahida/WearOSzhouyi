@@ -86,6 +86,13 @@ class SettingsRepositoryTest {
         current = repository.settings.first()
         assertEquals(secondFeature, current.effectiveHomeOrder().first())
         assertEquals(firstFeature, current.effectiveHomeOrder()[1])
+
+        val reorderedList = listOf(HomeFeature.MUYU, HomeFeature.COMPASS, HomeFeature.DAILY_FORTUNE)
+        repository.setHomeOrder(reorderedList)
+        current = repository.settings.first()
+        assertEquals(HomeFeature.MUYU, current.homeOrder[0])
+        assertEquals(HomeFeature.COMPASS, current.homeOrder[1])
+        assertEquals(HomeFeature.DAILY_FORTUNE, current.homeOrder[2])
     }
 
     @Test

@@ -26,6 +26,7 @@ import com.boompala.ui.LocalHapticIntensity
 import com.boompala.ui.LocalUiMetrics
 import com.boompala.ui.ResultCard
 import com.boompala.ui.RotaryScrollColumn
+import com.boompala.ui.ScreenTitle
 import com.boompala.ui.wearPressFeedback
 
 /**
@@ -61,9 +62,8 @@ fun PulseResultScreen(
     ) {
         // 顶部标题
         item(key = "result-title") {
-            Text(
+            ScreenTitle(
                 text = "把脉结果",
-                style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.padding(bottom = metrics.itemSpacing / 2),
             )
         }

@@ -158,7 +158,7 @@ fun DestinyChartMenuScreen(
                 itemSpacing = metrics.itemSpacing,
             ) {
                 item(key = "title") {
-                    Text(
+                    ScreenTitle(
                         text = stringResource(R.string.destiny_chart_title),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
@@ -381,7 +381,7 @@ fun BaziDetailScreen(
         itemSpacing = metrics.itemSpacing,
     ) {
         item(key = "bazi-title") {
-            Text(
+            ScreenTitle(
                 text = "生辰八字排盘",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
@@ -571,7 +571,7 @@ fun WesternChartScreen(
         itemSpacing = metrics.itemSpacing,
     ) {
         item(key = "western-title") {
-            Text(
+            ScreenTitle(
                 text = "西方本命星盘",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
@@ -785,7 +785,7 @@ fun NumerologyDetailScreen(
         itemSpacing = metrics.itemSpacing,
     ) {
         item(key = "num-title") {
-            Text(
+            ScreenTitle(
                 text = "毕达哥拉斯生命灵数",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
@@ -962,7 +962,7 @@ fun BoneWeightDetailScreen(
         itemSpacing = metrics.itemSpacing,
     ) {
         item(key = "bone-title") {
-            Text(
+            ScreenTitle(
                 text = "袁天罡称骨算命",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
@@ -1082,7 +1082,7 @@ fun NineStarDetailScreen(
         itemSpacing = metrics.itemSpacing,
     ) {
         item(key = "ninestar-title") {
-            Text(
+            ScreenTitle(
                 text = "九星气学命盘",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,

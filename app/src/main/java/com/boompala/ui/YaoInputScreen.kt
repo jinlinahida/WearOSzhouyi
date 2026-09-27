@@ -147,7 +147,7 @@ fun YaoInputScreen(
         itemSpacing = metrics.itemSpacing,
     ) {
         item(key = "title") {
-            Text(
+            ScreenTitle(
                 text = "六爻排盘",
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.padding(bottom = metrics.itemSpacing / 4),

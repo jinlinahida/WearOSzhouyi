@@ -120,6 +120,8 @@
     <string name="settings_language_chinese">简体中文</string>
     <string name="settings_language_english">English</string>
     <string name="settings_home_fixed_hint">Settings is a core entry and is always visible.</string>
+    <string name="settings_home_drag_hint">Long press card or drag handle to reorder, tap eye to toggle visibility.</string>
+    <string name="action_drag_reorder">Drag to reorder</string>
     <string name="settings_data_total">Total Local Archives: %1$d</string>
     <string name="settings_data_clear_all">Clear All Archives</string>
     <string name="settings_data_clear_confirm_title">Clear All Archives?</string>

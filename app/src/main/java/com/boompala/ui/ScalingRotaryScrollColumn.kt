@@ -21,14 +21,21 @@ import androidx.wear.compose.foundation.rotary.RotaryScrollableDefaults
 import androidx.wear.compose.foundation.rotary.rotaryScrollable
 import androidx.wear.compose.material3.ScreenScaffold
 
+private val defaultAnimatedScalingParams: ScalingParams by lazy {
+    ScalingLazyColumnDefaults.scalingParams()
+}
+private val defaultFlatScalingParams: ScalingParams by lazy {
+    ScalingLazyColumnDefaults.scalingParams(
+        edgeScale = 1.0f,
+        edgeAlpha = 1.0f,
+    )
+}
+
 internal fun resolveScalingParams(animationsEnabled: Boolean): ScalingParams =
     if (animationsEnabled) {
-        ScalingLazyColumnDefaults.scalingParams()
+        defaultAnimatedScalingParams
     } else {
-        ScalingLazyColumnDefaults.scalingParams(
-            edgeScale = 1.0f,
-            edgeAlpha = 1.0f,
-        )
+        defaultFlatScalingParams
     }
 
 /**

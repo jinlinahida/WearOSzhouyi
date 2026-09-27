@@ -9,6 +9,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.wear.compose.material3.Button
+import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.OutlinedButton
 import androidx.wear.compose.material3.Text
 import com.boompala.engine.meihua.MeiHuaTimeEngine
@@ -47,7 +48,12 @@ fun MeiHuaTimeScreen(
         contentPadding = metrics.screenPadding,
         itemSpacing = metrics.itemSpacing,
     ) {
-        item(key = "meihua-time-title") { Text("时间起卦") }
+        item(key = "meihua-time-title") {
+            ScreenTitle(
+                text = "时间起卦",
+                style = MaterialTheme.typography.titleMedium,
+            )
+        }
         item(key = "meihua-time-info") {
             ResultCard {
                 DetailField("公历", gregorian)

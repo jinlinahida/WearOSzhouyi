@@ -24,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material3.Button
@@ -71,11 +70,8 @@ fun BrowseHomeScreen(
         itemSpacing = m.itemSpacing,
     ) {
         item {
-            Text(
+            ScreenTitle(
                 text = "浏览",
-                style = MaterialTheme.typography.titleLarge,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth(),
             )
         }
         item {
@@ -224,11 +220,9 @@ fun HexagramBrowserScreen(
         itemSpacing = m.itemSpacing,
     ) {
         item {
-            Text(
+            ScreenTitle(
                 text = "六十四卦",
                 style = MaterialTheme.typography.titleMedium,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth(),
             )
         }
         items(data.hexagrams, key = { it.codeFromBottom }) { h ->
@@ -294,15 +288,11 @@ fun HexagramDetailScreen(
         itemSpacing = m.itemSpacing,
     ) {
         item {
-            Text(
+            ScreenTitle(
                 text = "${hex.order}. ${hex.name}",
                 style = MaterialTheme.typography.titleMedium,
-                textAlign = TextAlign.Center,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .then(if (animationsEnabled) Modifier.basicMarquee() else Modifier),
+                marquee = animationsEnabled,
+                animationsEnabled = animationsEnabled,
             )
         }
 
@@ -424,11 +414,9 @@ fun TarotBrowserScreen(
         itemSpacing = m.itemSpacing,
     ) {
         item {
-            Text(
+            ScreenTitle(
                 text = "塔罗牌库",
                 style = MaterialTheme.typography.titleMedium,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth(),
             )
         }
         item {
@@ -512,15 +500,11 @@ fun TarotCardDetailScreen(
         itemSpacing = m.itemSpacing,
     ) {
         item {
-            Text(
+            ScreenTitle(
                 text = "${card.nameZh} · ${card.nameEn}",
                 style = MaterialTheme.typography.titleMedium,
-                textAlign = TextAlign.Center,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .then(if (animationsEnabled) Modifier.basicMarquee() else Modifier),
+                marquee = animationsEnabled,
+                animationsEnabled = animationsEnabled,
             )
         }
 
@@ -610,11 +594,9 @@ fun KnowledgeListScreen(
         itemSpacing = m.itemSpacing,
     ) {
         item {
-            Text(
+            ScreenTitle(
                 text = "道教知识",
                 style = MaterialTheme.typography.titleMedium,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth(),
             )
         }
         articles.groupBy { it.category }.forEach { (category, values) ->
@@ -685,15 +667,11 @@ fun KnowledgeDetailScreen(
         itemSpacing = m.itemSpacing,
     ) {
         item {
-            Text(
+            ScreenTitle(
                 text = article.title,
                 style = MaterialTheme.typography.titleMedium,
-                textAlign = TextAlign.Center,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .then(if (animationsEnabled) Modifier.basicMarquee() else Modifier),
+                marquee = animationsEnabled,
+                animationsEnabled = animationsEnabled,
             )
         }
         item {

@@ -30,7 +30,10 @@ fun CommonDivinationResultScreen(
         itemSpacing = itemSpacing,
     ) {
         item(key = "common-result-title") {
-            Text(title, style = MaterialTheme.typography.titleMedium)
+            ScreenTitle(
+                text = title,
+                style = MaterialTheme.typography.titleMedium,
+            )
         }
         content()
     }

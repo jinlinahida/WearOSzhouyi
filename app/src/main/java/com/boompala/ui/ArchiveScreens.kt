@@ -62,7 +62,9 @@ fun ArchiveListScreen(
         itemSpacing = m.itemSpacing,
     ) {
         item {
-            Text(stringResource(R.string.archive_title), style = MaterialTheme.typography.titleLarge)
+            ScreenTitle(
+                text = stringResource(R.string.archive_title),
+            )
         }
         item {
             Text(stringResource(R.string.archive_category_title), style = MaterialTheme.typography.labelMedium)
@@ -444,7 +446,12 @@ fun ArchiveTagScreen(
         contentPadding = m.screenPadding,
         itemSpacing = m.itemSpacing,
     ) {
-        item { Text(stringResource(R.string.archive_tag_title), style = MaterialTheme.typography.titleMedium) }
+        item {
+            ScreenTitle(
+                text = stringResource(R.string.archive_tag_title),
+                style = MaterialTheme.typography.titleMedium,
+            )
+        }
         item { Text(stringResource(R.string.archive_tag_summary_prefix, draft.summary), style = MaterialTheme.typography.bodySmall) }
         item { ArchiveInput(stringResource(R.string.archive_tag_name_required), name) { name = it } }
         item { ArchiveInput(stringResource(R.string.archive_tag_note_optional), note) { note = it } }

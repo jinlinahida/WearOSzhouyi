@@ -41,6 +41,9 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.foundation.basicMarquee
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -117,7 +120,7 @@ fun Modifier.clickVfx(
             LaunchedEffect(interactionSource, hapticEnabled, intensity) {
                 if (hapticEnabled) {
                     interactionSource.interactions.collect { interaction ->
-                        if (interaction is PressInteraction.Press) {
+                        if (interaction is PressInteraction.Release) {
                             AppHaptics.click(context, intensity = intensity, enabled = hapticEnabled)
                         }
                     }
@@ -172,7 +175,7 @@ fun Modifier.clickVfx(
             LaunchedEffect(interactionSource, hapticEnabled, intensity) {
                 if (hapticEnabled) {
                     interactionSource.interactions.collect { interaction ->
-                        if (interaction is PressInteraction.Press) {
+                        if (interaction is PressInteraction.Release) {
                             AppHaptics.click(context, intensity = intensity, enabled = hapticEnabled)
                         }
                     }
@@ -185,8 +188,12 @@ fun Modifier.clickVfx(
                     onPress = {
                         val press = PressInteraction.Press(it)
                         interactionSource.emit(press)
-                        tryAwaitRelease()
-                        interactionSource.emit(PressInteraction.Release(press))
+                        val released = tryAwaitRelease()
+                        if (released) {
+                            interactionSource.emit(PressInteraction.Release(press))
+                        } else {
+                            interactionSource.emit(PressInteraction.Cancel(press))
+                        }
                     },
                 )
             }
@@ -413,15 +420,16 @@ fun DetailField(
  * - 30% alpha 半透明深灰暗色底色，让背景漫反射环境光自然透出，不再死黑遮挡
  */
 object BoompalaButtonDefaults {
-    val borderStroke: BorderStroke
-        get() = BorderStroke(
-            width = CardBorderWidth,
-            brush = Brush.linearGradient(
-                colors = listOf(CardBorderColor, Color.Transparent),
-                start = Offset.Zero,
-                end = Offset.Infinite,
-            ),
-        )
+    private val defaultBorderGradient: Brush = Brush.linearGradient(
+        colors = listOf(CardBorderColor, Color.Transparent),
+        start = Offset.Zero,
+        end = Offset.Infinite,
+    )
+
+    val borderStroke: BorderStroke = BorderStroke(
+        width = CardBorderWidth,
+        brush = defaultBorderGradient,
+    )
 
     fun highlightedBorderStroke(highlightColor: Color = CardHighlightColor): BorderStroke =
         BorderStroke(
@@ -562,5 +570,39 @@ fun SelectableCardButton(
         contentPadding = contentPadding,
         interactionSource = interactionSource,
         content = content,
+    )
+}
+
+/**
+ * 屏幕顶部标题组件：
+ * - 响应圆屏/方屏自适应对齐：开启圆屏时居中对齐，方屏时靠左对齐；
+ * - 默认铺满可用宽度 `Modifier.fillMaxWidth()`；
+ * - 支持长文本走马灯、折行裁剪与自定义样式/字色/字重。
+ */
+@Composable
+fun ScreenTitle(
+    text: String,
+    modifier: Modifier = Modifier,
+    style: TextStyle = MaterialTheme.typography.titleLarge,
+    color: Color = Color.Unspecified,
+    fontWeight: FontWeight? = null,
+    textAlign: TextAlign = LocalUiMetrics.current.titleTextAlign,
+    maxLines: Int = Int.MAX_VALUE,
+    overflow: TextOverflow = TextOverflow.Clip,
+    marquee: Boolean = false,
+    animationsEnabled: Boolean = true,
+) {
+    Text(
+        text = text,
+        style = style,
+        color = color,
+        fontWeight = fontWeight,
+        textAlign = textAlign,
+        maxLines = if (marquee) 1 else maxLines,
+        softWrap = !marquee,
+        overflow = if (marquee) TextOverflow.Ellipsis else overflow,
+        modifier = modifier
+            .fillMaxWidth()
+            .then(if (marquee) Modifier.wearMarquee(animationsEnabled) else Modifier),
     )
 }
