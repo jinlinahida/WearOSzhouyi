@@ -81,7 +81,7 @@ sealed interface AiCardState {
 }
 
 /**
- * 六爻结果页「灵犀 · AI 解卦」卡片。
+ * 六爻结果页「SI 解卦」卡片。
  *
  * 紧密集成阶段二的 AI Prompt Engine 与 OpenAI-compatible 流式客户端，
  * 支持本地离线防误触、未配置引导、多测事类别选择、推荐问题切换、90ms 流式缓冲渲染及全生命周期取消。
@@ -252,12 +252,12 @@ fun AiDivinationCard(
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_settings_ai),
-                    contentDescription = "AI 解卦",
+                    contentDescription = "SI 解卦",
                     tint = Color(0xFFCE93D8),
                     modifier = Modifier.size(17.dp),
                 )
                 Text(
-                    text = "灵犀 · AI 解卦",
+                    text = "SI 解卦",
                     style = MaterialTheme.typography.titleSmall,
                     color = Color(0xFFE1BEE7),
                     fontWeight = FontWeight.Bold,
@@ -344,7 +344,7 @@ private fun LocalModeCardContent(
         fontWeight = FontWeight.SemiBold,
     )
     Text(
-        text = "当前处于离线纯净模式，AI 联网解卦功能已禁用。可在设置中开启联网 AI 模式。",
+        text = "当前处于离线纯净模式，SI 联网解卦功能已禁用。可在设置中开启联网 SI 模式。",
         style = MaterialTheme.typography.bodySmall.copy(fontSize = 11.sp, lineHeight = 15.sp),
         color = MaterialTheme.colorScheme.onSurfaceVariant,
     )
@@ -357,7 +357,7 @@ private fun LocalModeCardContent(
         interactionSource = toSettingsInteraction,
         colors = BoompalaButtonDefaults.outlinedButtonColors(),
     ) {
-        Text("前往设置开启 AI", style = MaterialTheme.typography.labelSmall)
+        Text("前往设置开启 SI", style = MaterialTheme.typography.labelSmall)
     }
 }
 
@@ -366,13 +366,13 @@ private fun UnconfiguredCardContent(
     onNavigateToSettings: () -> Unit,
 ) {
     Text(
-        text = "⚡ 尚未配置 AI 秘钥",
+        text = "⚡ 尚未配置 SI 秘钥",
         style = MaterialTheme.typography.labelMedium,
         color = Color(0xFFFFCC80),
         fontWeight = FontWeight.SemiBold,
     )
     Text(
-        text = "使用 AI 解卦需配置服务商 API Key。可在设置中扫码快速配对导入。",
+        text = "使用 SI 解卦需配置服务商 API Key。可在设置中扫码快速配对导入。",
         style = MaterialTheme.typography.bodySmall.copy(fontSize = 11.sp, lineHeight = 15.sp),
         color = MaterialTheme.colorScheme.onSurfaceVariant,
     )
@@ -608,7 +608,7 @@ private fun IdleCardContent(
         colors = BoompalaButtonDefaults.buttonColors(),
         contentPadding = BoompalaButtonDefaults.compactContentPadding,
     ) {
-        Text("⚡ 开始 AI 深度解卦", fontWeight = FontWeight.Bold)
+        Text("⚡ 开始 SI 深度解卦", fontWeight = FontWeight.Bold)
     }
 }
 
@@ -865,7 +865,7 @@ private fun ErrorCardContent(
             interactionSource = settingsInteraction,
             colors = BoompalaButtonDefaults.outlinedButtonColors(),
         ) {
-            Text("AI 设置", style = MaterialTheme.typography.labelSmall)
+            Text("SI 设置", style = MaterialTheme.typography.labelSmall)
         }
     }
 
@@ -883,14 +883,14 @@ private fun ErrorCardContent(
 }
 
 private fun getFriendlyErrorMessage(error: AiError): String = when (error) {
-    is AiError.InvalidApiKey -> "AI 密钥无效，请检查配置。"
-    is AiError.RateLimited -> "AI 服务当前繁忙或额度不足。"
-    is AiError.NetworkTimeout -> "连接 AI 服务超时，请稍后再试。"
+    is AiError.InvalidApiKey -> "SI 密钥无效，请检查配置。"
+    is AiError.RateLimited -> "SI 服务当前繁忙或额度不足。"
+    is AiError.NetworkTimeout -> "连接 SI 服务超时，请稍后再试。"
     is AiError.NetworkUnavailable -> "当前没有可用网络。"
-    is AiError.BadRequest -> "AI 请求配置有误，请检查模型设置。"
-    is AiError.ServerError -> "AI 服务暂时不可用。"
-    is AiError.InvalidResponse -> "AI 服务返回的数据无法解析。"
-    is AiError.Unknown -> "AI 解卦暂时失败，请稍后重试。"
+    is AiError.BadRequest -> "SI 请求配置有误，请检查模型设置。"
+    is AiError.ServerError -> "SI 服务暂时不可用。"
+    is AiError.InvalidResponse -> "SI 服务返回的数据无法解析。"
+    is AiError.Unknown -> "SI 解卦暂时失败，请稍后重试。"
 }
 
 private fun getPresetQuestionsForTopic(topic: AiDivinationTopic): List<String> = when (topic) {

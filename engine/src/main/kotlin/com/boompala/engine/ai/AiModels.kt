@@ -79,7 +79,7 @@ sealed class AiError(
     data class ServerError(
         val statusCode: Int,
         val rawMessage: String? = null,
-        override val message: String = rawMessage?.let { "AI 服务商暂时异常 (HTTP $statusCode): $it" } ?: "AI 服务商暂时异常 (HTTP $statusCode)",
+        override val message: String = rawMessage?.let { "SI 服务商暂时异常 (HTTP $statusCode): $it" } ?: "SI 服务商暂时异常 (HTTP $statusCode)",
     ) : AiError(message)
 
     data class NetworkUnavailable(

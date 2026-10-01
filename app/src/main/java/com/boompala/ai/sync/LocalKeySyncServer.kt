@@ -370,7 +370,7 @@ class LocalKeySyncServer {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Boompala · 手表 AI 配置同步</title>
+  <title>Boompala · 手表 SI 配置同步</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -447,7 +447,7 @@ class LocalKeySyncServer {
 
     <form id="configForm">
       <div class="form-group">
-        <label for="provider">AI 服务商</label>
+        <label for="provider">SI 服务商</label>
         <select id="provider">
           <option value="deepseek" selected>DeepSeek (深度求索 - 推荐)</option>
           <option value="openai">OpenAI</option>

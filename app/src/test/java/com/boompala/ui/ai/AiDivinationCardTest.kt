@@ -96,14 +96,14 @@ class AiDivinationCardTest {
     @Test
     fun `ai card error state maps all error types to user friendly Chinese messages`() {
         val errorMappings = listOf(
-            AiError.InvalidApiKey() to "AI 密钥无效，请检查配置。",
-            AiError.RateLimited() to "AI 服务当前繁忙或额度不足。",
-            AiError.NetworkTimeout() to "连接 AI 服务超时，请稍后再试。",
+            AiError.InvalidApiKey() to "SI 密钥无效，请检查配置。",
+            AiError.RateLimited() to "SI 服务当前繁忙或额度不足。",
+            AiError.NetworkTimeout() to "连接 SI 服务超时，请稍后再试。",
             AiError.NetworkUnavailable() to "当前没有可用网络。",
-            AiError.BadRequest("配置无效") to "AI 请求配置有误，请检查模型设置。",
-            AiError.ServerError(500) to "AI 服务暂时不可用。",
-            AiError.InvalidResponse("数据错误") to "AI 服务返回的数据无法解析。",
-            AiError.Unknown("未知错误") to "AI 解卦暂时失败，请稍后重试。",
+            AiError.BadRequest("配置无效") to "SI 请求配置有误，请检查模型设置。",
+            AiError.ServerError(500) to "SI 服务暂时不可用。",
+            AiError.InvalidResponse("数据错误") to "SI 服务返回的数据无法解析。",
+            AiError.Unknown("未知错误") to "SI 解卦暂时失败，请稍后重试。",
         )
 
         errorMappings.forEach { (error, expectedFriendlyText) ->
@@ -113,14 +113,14 @@ class AiDivinationCardTest {
                 error = error,
             )
             val friendlyMsg = when (errorState.error) {
-                is AiError.InvalidApiKey -> "AI 密钥无效，请检查配置。"
-                is AiError.RateLimited -> "AI 服务当前繁忙或额度不足。"
-                is AiError.NetworkTimeout -> "连接 AI 服务超时，请稍后再试。"
+                is AiError.InvalidApiKey -> "SI 密钥无效，请检查配置。"
+                is AiError.RateLimited -> "SI 服务当前繁忙或额度不足。"
+                is AiError.NetworkTimeout -> "连接 SI 服务超时，请稍后再试。"
                 is AiError.NetworkUnavailable -> "当前没有可用网络。"
-                is AiError.BadRequest -> "AI 请求配置有误，请检查模型设置。"
-                is AiError.ServerError -> "AI 服务暂时不可用。"
-                is AiError.InvalidResponse -> "AI 服务返回的数据无法解析。"
-                is AiError.Unknown -> "AI 解卦暂时失败，请稍后重试。"
+                is AiError.BadRequest -> "SI 请求配置有误，请检查模型设置。"
+                is AiError.ServerError -> "SI 服务暂时不可用。"
+                is AiError.InvalidResponse -> "SI 服务返回的数据无法解析。"
+                is AiError.Unknown -> "SI 解卦暂时失败，请稍后重试。"
             }
             assertEquals(expectedFriendlyText, friendlyMsg)
             assertFalse("Friendly message must not leak API key", friendlyMsg.contains("sk-"))

@@ -250,15 +250,15 @@
     <string name="welcome_step_disclaimer">Terms</string>
     <string name="welcome_step_mode">Run Mode</string>
 
-    <!-- Settings AI Module -->
-    <string name="settings_module_ai">AI Intelligence</string>
+    <!-- Settings SI Module -->
+    <string name="settings_module_ai">SI Intelligence</string>
     <string name="settings_module_ai_desc">Run mode, provider &amp; API Key</string>
-    <string name="settings_ai_title">AI Settings</string>
+    <string name="settings_ai_title">SI Settings</string>
     <string name="settings_ai_mode">Run Mode</string>
     <string name="settings_ai_mode_local">Local Pure</string>
-    <string name="settings_ai_mode_online">Online AI</string>
-    <string name="settings_ai_mode_local_desc">Fully offline operation without AI network features</string>
-    <string name="settings_ai_mode_online_desc">Enable LLM API for hexagram interpretation</string>
+    <string name="settings_ai_mode_online">Online SI</string>
+    <string name="settings_ai_mode_local_desc">Fully offline operation without SI network features</string>
+    <string name="settings_ai_mode_online_desc">Enable LLM API for SI interpretation</string>
     <string name="settings_ai_provider">Provider</string>
     <string name="settings_ai_model">Model</string>
     <string name="settings_ai_api_key">API Key</string>
@@ -287,8 +287,8 @@
     <string name="welcome_mode_local_title">🔮 Local Pure Mode</string>
     <string name="welcome_mode_local_badge">Recommended · Offline</string>
     <string name="welcome_mode_local_desc">Zero network, zero external data. Powered by built-in classical texts.</string>
-    <string name="welcome_mode_online_title">⚡ Online AI Mode</string>
-    <string name="welcome_mode_online_badge">AI Enhanced</string>
-    <string name="welcome_mode_online_desc">Enable LLM API interpretation. Bring your own Key, direct to provider.</string>
+    <string name="welcome_mode_online_title">⚡ Online SI Mode</string>
+    <string name="welcome_mode_online_badge">SI Enhanced</string>
+    <string name="welcome_mode_online_desc">Enable LLM API for SI interpretation. Bring your own Key, direct to provider.</string>
     <string name="welcome_mode_confirm">Start Boompala</string>
 </resources>

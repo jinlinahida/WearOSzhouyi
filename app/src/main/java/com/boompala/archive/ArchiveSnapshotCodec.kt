@@ -122,7 +122,7 @@ object ArchiveSnapshotCodec {
             }
             if (aiData != null && aiData.fullText.isNotBlank()) {
                 put(
-                    "灵犀 · AI 解卦",
+                    "SI 解卦",
                     buildList {
                         if (aiData.topic.isNotBlank()) {
                             add("占问主题：${aiData.topic}")
@@ -355,7 +355,8 @@ object ArchiveSnapshotCodec {
 
     private fun sanitizeSnapshot(raw: ArchiveSnapshot): ArchiveSnapshot {
         val sanitizedSections = LinkedHashMap<String, List<String>>()
-        raw.sections.forEach { (sectionTitle, lines) ->
+        raw.sections.forEach { (rawTitle, lines) ->
+            val sectionTitle = if (rawTitle == "灵犀 · AI 解卦" || rawTitle == "AI 解卦") "SI 解卦" else rawTitle
             val cleanedLines = mutableListOf<String>()
             for (line in lines) {
                 val cleaned = sanitizeLine(line)

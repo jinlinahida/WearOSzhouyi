@@ -251,15 +251,15 @@
     <string name="welcome_step_disclaimer">声明</string>
     <string name="welcome_step_mode">模式选择</string>
 
-    <!-- Settings AI Module -->
-    <string name="settings_module_ai">AI 智能</string>
+    <!-- Settings SI Module -->
+    <string name="settings_module_ai">SI 智能</string>
     <string name="settings_module_ai_desc">运行模式、服务商与 API Key</string>
-    <string name="settings_ai_title">AI 智能设置</string>
+    <string name="settings_ai_title">SI 智能设置</string>
     <string name="settings_ai_mode">运行模式</string>
     <string name="settings_ai_mode_local">本地纯净</string>
-    <string name="settings_ai_mode_online">联网 AI</string>
-    <string name="settings_ai_mode_local_desc">完全离线运行，不使用网络 AI 功能</string>
-    <string name="settings_ai_mode_online_desc">启用大模型 API 智能解卦与推演</string>
+    <string name="settings_ai_mode_online">联网 SI</string>
+    <string name="settings_ai_mode_local_desc">完全离线运行，不使用网络 SI 功能</string>
+    <string name="settings_ai_mode_online_desc">启用大模型 API 进行 SI 解卦与推演</string>
     <string name="settings_ai_provider">服务商</string>
     <string name="settings_ai_model">模型</string>
     <string name="settings_ai_api_key">API 秘钥</string>
@@ -284,12 +284,12 @@
 
     <!-- Welcome Mode Selection -->
     <string name="welcome_mode_title">选择运行模式</string>
-    <string name="welcome_mode_subtitle">可在【设置 -> AI 智能】中随时切换</string>
+    <string name="welcome_mode_subtitle">可在【设置 -> SI 智能】中随时切换</string>
     <string name="welcome_mode_local_title">🔮 本地纯净模式</string>
     <string name="welcome_mode_local_badge">推荐 · 离线</string>
     <string name="welcome_mode_local_desc">零网络连接，零数据出端。使用设备内置典籍与知识库，稳定省电。</string>
-    <string name="welcome_mode_online_title">⚡ 联网 AI 模式</string>
+    <string name="welcome_mode_online_title">⚡ 联网 SI 模式</string>
     <string name="welcome_mode_online_badge">智能增强</string>
-    <string name="welcome_mode_online_desc">支持调用大模型 API 智能解卦。需自备 API Key，直连服务商。</string>
+    <string name="welcome_mode_online_desc">支持调用大模型 API 进行 SI 解卦。需自备 API Key，直连服务商。</string>
     <string name="welcome_mode_confirm">开启 Boompala</string>
 </resources>

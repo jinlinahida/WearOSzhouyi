@@ -43,7 +43,7 @@ enum class AiNetworkMode(
     val displayName: String,
 ) {
     LOCAL("本地纯净"),
-    ONLINE("联网 AI"),
+    ONLINE("联网 SI"),
 }
 
 enum class AiProvider(

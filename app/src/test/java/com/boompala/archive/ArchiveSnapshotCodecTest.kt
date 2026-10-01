@@ -212,13 +212,13 @@ class ArchiveSnapshotCodecTest {
         )
         val result = engine.calculate(input)
 
-        // 1. 无 AI 数据编码：保持向后兼容，不生成 AI 解卦区段
+        // 1. 无 SI 数据编码：保持向后兼容，不生成 SI 解卦区段
         val jsonWithoutAi = ArchiveSnapshotCodec.encode(result)
         val snapshotWithoutAi = ArchiveSnapshotCodec.decode(jsonWithoutAi).getOrThrow()
         assertEquals(ArchiveSource.LIU_YAO, snapshotWithoutAi.source)
-        assertFalse(snapshotWithoutAi.sections.containsKey("灵犀 · AI 解卦"))
+        assertFalse(snapshotWithoutAi.sections.containsKey("SI 解卦"))
 
-        // 2. 携带已完成的 AI 解读数据编码
+        // 2. 携带已完成的 SI 解读数据编码
         val aiData = AiArchiveData(
             topic = "事业官运",
             question = "求测升职前景",
@@ -227,18 +227,24 @@ class ArchiveSnapshotCodecTest {
         val jsonWithAi = ArchiveSnapshotCodec.encode(result, interpretations = null, aiData = aiData)
         val snapshotWithAi = ArchiveSnapshotCodec.decode(jsonWithAi).getOrThrow()
         assertEquals(ArchiveSource.LIU_YAO, snapshotWithAi.source)
-        assertTrue(snapshotWithAi.sections.containsKey("灵犀 · AI 解卦"))
+        assertTrue(snapshotWithAi.sections.containsKey("SI 解卦"))
 
-        val aiSection = snapshotWithAi.sections["灵犀 · AI 解卦"]!!
+        val aiSection = snapshotWithAi.sections["SI 解卦"]!!
         assertTrue(aiSection.any { it.contains("占问主题：事业官运") })
         assertTrue(aiSection.any { it.contains("占问问题：求测升职前景") })
         assertTrue(aiSection.any { it.contains("【核心判断】") })
         assertTrue(aiSection.any { it.contains("【建议】") })
 
-        // 3. 空白或失败的 AI 数据不会污染归档
+        // 3. 空白或失败的 SI 数据不会污染归档
         val blankAiData = AiArchiveData(topic = "综合", question = "", fullText = "   ")
         val jsonWithBlank = ArchiveSnapshotCodec.encode(result, interpretations = null, aiData = blankAiData)
         val snapshotWithBlank = ArchiveSnapshotCodec.decode(jsonWithBlank).getOrThrow()
-        assertFalse(snapshotWithBlank.sections.containsKey("灵犀 · AI 解卦"))
+        assertFalse(snapshotWithBlank.sections.containsKey("SI 解卦"))
+
+        // 4. 历史遗留的「灵犀 · AI 解卦」快照自动平滑归一化为「SI 解卦」
+        val legacyJson = """{"version":1,"source":"LIU_YAO","title":"乾为天","sections":{"灵犀 · AI 解卦":["占问主题：运势"]}}"""
+        val legacySnapshot = ArchiveSnapshotCodec.decode(legacyJson).getOrThrow()
+        assertTrue(legacySnapshot.sections.containsKey("SI 解卦"))
+        assertFalse(legacySnapshot.sections.containsKey("灵犀 · AI 解卦"))
     }
 }
