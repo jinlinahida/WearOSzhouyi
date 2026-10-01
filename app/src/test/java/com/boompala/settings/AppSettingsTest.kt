@@ -24,9 +24,45 @@ class AppSettingsTest {
                 userBirthDate = null,
                 userBirthHour = null,
                 userGender = com.boompala.engine.bazi.BaziGender.MALE,
+                aiNetworkMode = AiNetworkMode.LOCAL,
+                aiProvider = AiProvider.DEEPSEEK,
+                aiCustomBaseUrl = "",
+                aiCustomModel = "",
+                aiApiKey = "",
             ),
             AppSettings.DEFAULT,
         )
+    }
+
+    @Test
+    fun `ai settings masking and provider defaults work as expected`() {
+        val defaultSettings = AppSettings.DEFAULT
+        assertEquals(AiNetworkMode.LOCAL, defaultSettings.aiNetworkMode)
+        assertEquals(AiProvider.DEEPSEEK, defaultSettings.aiProvider)
+        assertEquals("https://api.deepseek.com/v1", defaultSettings.effectiveAiBaseUrl)
+        assertEquals("deepseek-chat", defaultSettings.effectiveAiModel)
+        assertFalse(defaultSettings.isAiConfigured)
+        assertEquals("", defaultSettings.maskedApiKey())
+
+        val configured = defaultSettings.copy(
+            aiNetworkMode = AiNetworkMode.ONLINE,
+            aiProvider = AiProvider.OPENAI,
+            aiApiKey = "sk-1234567890abcdef",
+        )
+        assertTrue(configured.isAiConfigured)
+        assertEquals("https://api.openai.com/v1", configured.effectiveAiBaseUrl)
+        assertEquals("gpt-4o-mini", configured.effectiveAiModel)
+        assertEquals("••••cdef", configured.maskedApiKey())
+
+        val custom = defaultSettings.copy(
+            aiProvider = AiProvider.CUSTOM,
+            aiCustomBaseUrl = "https://custom.api.com/v1",
+            aiCustomModel = "custom-llm",
+            aiApiKey = "1234",
+        )
+        assertEquals("https://custom.api.com/v1", custom.effectiveAiBaseUrl)
+        assertEquals("custom-llm", custom.effectiveAiModel)
+        assertEquals("••••", custom.maskedApiKey())
     }
 
     @Test

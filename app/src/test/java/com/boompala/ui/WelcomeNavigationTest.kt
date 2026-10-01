@@ -143,6 +143,16 @@ class WelcomeNavigationTest {
             "welcome_revisit_from_about_desc",
             "welcome_step_welcome",
             "welcome_step_disclaimer",
+            "welcome_step_mode",
+            "welcome_mode_title",
+            "welcome_mode_subtitle",
+            "welcome_mode_local_title",
+            "welcome_mode_local_badge",
+            "welcome_mode_local_desc",
+            "welcome_mode_online_title",
+            "welcome_mode_online_badge",
+            "welcome_mode_online_desc",
+            "welcome_mode_confirm",
         )
 
         for (key in expectedWelcomeKeys) {

@@ -32,3 +32,9 @@ data class ArchiveDraft(
 )
 
 data class ArchiveSnapshot(val version: Int, val source: ArchiveSource, val title: String, val sections: Map<String, List<String>>)
+
+data class AiArchiveData(
+    val topic: String,
+    val question: String,
+    val fullText: String,
+)

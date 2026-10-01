@@ -16,9 +16,16 @@ object ArchiveSnapshotCodec {
     private val timeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm", Locale.getDefault())
 
     fun encode(result: DivinationResult): String =
-        encode(result, null)
+        encode(result, null, null)
 
-    fun encode(result: DivinationResult, interpretations: HexagramInterpretationRepository?): String {
+    fun encode(result: DivinationResult, interpretations: HexagramInterpretationRepository?): String =
+        encode(result, interpretations, null)
+
+    fun encode(
+        result: DivinationResult,
+        interpretations: HexagramInterpretationRepository?,
+        aiData: AiArchiveData?,
+    ): String {
         val castTime = runCatching { timeFormatter.format(result.timeInfo.gregorianDateTime) }
             .getOrDefault(result.timeInfo.gregorianDateTime.toString())
         val originalInterp = interpretations?.interpretationFor(result.original.pattern.codeFromBottom)
@@ -108,6 +115,25 @@ object ArchiveSnapshotCodec {
                             if (yao.isShi) append(" [世]") else if (yao.isYing) append(" [应]")
                             if (yao.statuses.isNotEmpty()) {
                                 append(" [${yao.statuses.joinToString("·") { it.displayName }}]")
+                            }
+                        }
+                    },
+                )
+            }
+            if (aiData != null && aiData.fullText.isNotBlank()) {
+                put(
+                    "灵犀 · AI 解卦",
+                    buildList {
+                        if (aiData.topic.isNotBlank()) {
+                            add("占问主题：${aiData.topic}")
+                        }
+                        if (aiData.question.isNotBlank() && aiData.question != "请结合当前卦象综合解读。") {
+                            add("占问问题：${aiData.question}")
+                        }
+                        aiData.fullText.split("\n\n").forEach { paragraph ->
+                            val trimmed = paragraph.trim()
+                            if (trimmed.isNotBlank()) {
+                                add(trimmed)
                             }
                         }
                     },

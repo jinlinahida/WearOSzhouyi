@@ -56,6 +56,11 @@ class SettingsRepository(
                 tarotMajorArcanaOnly = preferences[TAROT_MAJOR_ARCANA_ONLY_KEY] ?: false,
                 muyuTotalCount = preferences[MUYU_TOTAL_COUNT_KEY] ?: 0L,
                 scalingListEnabled = preferences[SCALING_LIST_ENABLED_KEY] ?: true,
+                aiNetworkMode = preferences[AI_NETWORK_MODE_KEY].toEnumOrDefault(AiNetworkMode.LOCAL),
+                aiProvider = preferences[AI_PROVIDER_KEY]?.let { AiProvider.fromId(it) } ?: AiProvider.DEEPSEEK,
+                aiCustomBaseUrl = preferences[AI_CUSTOM_BASE_URL_KEY].orEmpty(),
+                aiCustomModel = preferences[AI_CUSTOM_MODEL_KEY].orEmpty(),
+                aiApiKey = KeyStoreCrypto.decrypt(preferences[AI_API_KEY_KEY].orEmpty()),
             )
         }
 
@@ -82,6 +87,11 @@ class SettingsRepository(
                 tarotMajorArcanaOnly = preferences[TAROT_MAJOR_ARCANA_ONLY_KEY] ?: false,
                 muyuTotalCount = preferences[MUYU_TOTAL_COUNT_KEY] ?: 0L,
                 scalingListEnabled = preferences[SCALING_LIST_ENABLED_KEY] ?: true,
+                aiNetworkMode = preferences[AI_NETWORK_MODE_KEY].toEnumOrDefault(AiNetworkMode.LOCAL),
+                aiProvider = preferences[AI_PROVIDER_KEY]?.let { AiProvider.fromId(it) } ?: AiProvider.DEEPSEEK,
+                aiCustomBaseUrl = preferences[AI_CUSTOM_BASE_URL_KEY].orEmpty(),
+                aiCustomModel = preferences[AI_CUSTOM_MODEL_KEY].orEmpty(),
+                aiApiKey = KeyStoreCrypto.decrypt(preferences[AI_API_KEY_KEY].orEmpty()),
             )
             val next = transform(current)
             preferences[SCREEN_MODE_KEY] = next.screenMode.name
@@ -95,6 +105,15 @@ class SettingsRepository(
             preferences[HIDDEN_HOME_FEATURES_KEY] = next.hiddenHomeFeatures.joinToString(",") { it.id }
             preferences[ONBOARDING_COMPLETED_KEY] = next.hasCompletedOnboarding
             preferences[SCALING_LIST_ENABLED_KEY] = next.scalingListEnabled
+            preferences[AI_NETWORK_MODE_KEY] = next.aiNetworkMode.name
+            preferences[AI_PROVIDER_KEY] = next.aiProvider.id
+            preferences[AI_CUSTOM_BASE_URL_KEY] = next.aiCustomBaseUrl
+            preferences[AI_CUSTOM_MODEL_KEY] = next.aiCustomModel
+            if (next.aiApiKey.isNotBlank()) {
+                preferences[AI_API_KEY_KEY] = KeyStoreCrypto.encrypt(next.aiApiKey)
+            } else {
+                preferences.remove(AI_API_KEY_KEY)
+            }
             if (next.userBirthDate != null) {
                 preferences[USER_BIRTH_DATE_KEY] = next.userBirthDate
             } else {
@@ -227,6 +246,34 @@ class SettingsRepository(
         update { it.copy(scalingListEnabled = enabled) }
     }
 
+    suspend fun setAiNetworkMode(mode: AiNetworkMode) {
+        update { it.copy(aiNetworkMode = mode) }
+    }
+
+    suspend fun setAiProvider(provider: AiProvider) {
+        update { it.copy(aiProvider = provider) }
+    }
+
+    suspend fun setAiConfig(
+        provider: AiProvider,
+        apiKey: String,
+        customBaseUrl: String = "",
+        customModel: String = "",
+    ) {
+        update {
+            it.copy(
+                aiProvider = provider,
+                aiApiKey = apiKey.trim(),
+                aiCustomBaseUrl = customBaseUrl.trim(),
+                aiCustomModel = customModel.trim(),
+            )
+        }
+    }
+
+    suspend fun clearAiApiKey() {
+        update { it.copy(aiApiKey = "") }
+    }
+
     suspend fun resetAllPreferences() {
         update { current ->
             AppSettings(
@@ -234,6 +281,7 @@ class SettingsRepository(
                 userBirthHour = current.userBirthHour,
                 userGender = current.userGender,
                 hasCompletedOnboarding = current.hasCompletedOnboarding,
+                aiNetworkMode = current.aiNetworkMode,
             )
         }
     }
@@ -275,6 +323,11 @@ class SettingsRepository(
         val TAROT_MAJOR_ARCANA_ONLY_KEY = booleanPreferencesKey("tarot_major_arcana_only")
         val MUYU_TOTAL_COUNT_KEY = longPreferencesKey("muyu_total_count")
         val SCALING_LIST_ENABLED_KEY = booleanPreferencesKey("scaling_list_enabled")
+        val AI_NETWORK_MODE_KEY = stringPreferencesKey("ai_network_mode")
+        val AI_PROVIDER_KEY = stringPreferencesKey("ai_provider")
+        val AI_CUSTOM_BASE_URL_KEY = stringPreferencesKey("ai_custom_base_url")
+        val AI_CUSTOM_MODEL_KEY = stringPreferencesKey("ai_custom_model")
+        val AI_API_KEY_KEY = stringPreferencesKey("ai_api_key")
 
         inline fun <reified T : Enum<T>> String?.toEnumOrDefault(default: T): T =
             runCatching { enumValueOf<T>(this.orEmpty()) }.getOrDefault(default)

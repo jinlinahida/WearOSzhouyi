@@ -487,8 +487,22 @@ fun BoompalaApp() {
                                 reading = currentReading,
                                 rotaryScrollingEnabled = settings.rotaryScrollingEnabled,
                                 animationsEnabled = settings.animationsEnabled,
+                                settings = settings,
+                                onNavigateToSettings = onSettingsClick,
                                 onBack = { goBack(true) },
-                                onArchive = { r -> archiveReturnScreen=AppScreen.RESULT; archiveDraft = ArchiveDraft("", "", 0xFF4CAF50, ArchiveSource.LIU_YAO, r.castAt.toEpochMilli(), "本卦${r.original.name}", ArchiveSnapshotCodec.encode(r, currentReading.interpretations)); navigateTo(AppScreen.ARCHIVE_TAG) },
+                                onArchive = { r, aiData ->
+                                    archiveReturnScreen = AppScreen.RESULT
+                                    archiveDraft = ArchiveDraft(
+                                        name = "",
+                                        note = "",
+                                        color = 0xFF4CAF50,
+                                        source = ArchiveSource.LIU_YAO,
+                                        castAt = r.castAt.toEpochMilli(),
+                                        summary = "本卦${r.original.name}",
+                                        snapshotJson = ArchiveSnapshotCodec.encode(r, currentReading.interpretations, aiData),
+                                    )
+                                    navigateTo(AppScreen.ARCHIVE_TAG)
+                                },
                             )
                         } ?: HomeScreen(
                             settings = settings,
@@ -818,6 +832,18 @@ fun BoompalaApp() {
                             onResetMuyuCount = {
                                 scope.launch { settingsRepository.resetMuyuCount() }
                             },
+                            onAiNetworkModeSelected = { mode ->
+                                scope.launch { settingsRepository.setAiNetworkMode(mode) }
+                            },
+                            onAiProviderSelected = { provider ->
+                                scope.launch { settingsRepository.setAiProvider(provider) }
+                            },
+                            onSaveAiConfig = { provider, apiKey, baseUrl, model ->
+                                scope.launch { settingsRepository.setAiConfig(provider, apiKey, baseUrl, model) }
+                            },
+                            onClearAiApiKey = {
+                                scope.launch { settingsRepository.clearAiApiKey() }
+                            },
                             archiveRepository = archiveRepository,
                             rotaryScrollingEnabled = settings.rotaryScrollingEnabled,
                             onAboutClick = { navigateTo(AppScreen.ABOUT) },
@@ -925,9 +951,11 @@ fun BoompalaApp() {
                         AppScreen.WELCOME -> WelcomeScreen(
                             rotaryScrollingEnabled = settings.rotaryScrollingEnabled,
                             animationsEnabled = settings.animationsEnabled,
-                            onFinish = {
-                                if (!settings.hasCompletedOnboarding) {
-                                    scope.launch {
+                            initialMode = settings.aiNetworkMode,
+                            onFinish = { selectedMode ->
+                                scope.launch {
+                                    settingsRepository.setAiNetworkMode(selectedMode)
+                                    if (!settings.hasCompletedOnboarding) {
                                         settingsRepository.setOnboardingCompleted(true)
                                     }
                                 }

@@ -43,9 +43,28 @@ import com.boompala.engine.data.HexagramInterpretation
 import com.boompala.engine.model.Hexagram
 import com.boompala.engine.model.Yao
 import com.boompala.engine.model.YaoPosition
+import com.boompala.archive.AiArchiveData
 import com.boompala.engine.model.DivinationResult
 import com.boompala.engine.rules.YongShenCategory
 import com.boompala.engine.rules.YongShenEvaluator
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
+import com.boompala.engine.ai.AiChatMessage
+import com.boompala.engine.ai.AiChatRequest
+import com.boompala.engine.ai.AiDivinationTopic
+import com.boompala.engine.ai.AiError
+import com.boompala.engine.ai.AiPromptBuilder
+import com.boompala.engine.ai.AiStreamEvent
+import com.boompala.engine.ai.OpenAiCompatibleClient
+import com.boompala.engine.ai.bufferTextDeltas
+import com.boompala.settings.AppSettings
+import com.boompala.ui.ai.AiCardState
+import com.boompala.ui.ai.AiDivinationCard
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
@@ -57,9 +76,12 @@ fun LiuYaoResultContent(
     reading: GeneratedReading,
     rotaryScrollingEnabled: Boolean,
     animationsEnabled: Boolean = true,
+    settings: AppSettings = AppSettings.DEFAULT,
+    onNavigateToSettings: () -> Unit = {},
     onBack: () -> Unit,
-    onArchive: (DivinationResult) -> Unit = {},
+    onArchive: (DivinationResult, AiArchiveData?) -> Unit = { _, _ -> },
 ) {
+    val context = LocalContext.current
     val metrics = LocalUiMetrics.current
     val result = reading.result
     val dateTimeFormatter = remember {
@@ -71,6 +93,112 @@ fun LiuYaoResultContent(
     var selectedYongShen by rememberSaveable { mutableStateOf(YongShenCategory.SHI_YAO) }
     val yongShenEval = remember(result, selectedYongShen) {
         YongShenEvaluator.evaluate(result, selectedYongShen)
+    }
+
+    val listState = rememberLazyListState()
+    val scope = rememberCoroutineScope()
+    var aiState by remember { mutableStateOf<AiCardState>(AiCardState.Idle) }
+    var activeAiJob by remember { mutableStateOf<Job?>(null) }
+
+    // 页面完全离开或退出时才取消后台网络流式请求
+    DisposableEffect(Unit) {
+        onDispose {
+            activeAiJob?.cancel()
+        }
+    }
+
+    val startAiDivination: (AiDivinationTopic, String) -> Unit = { topic, question ->
+        if (activeAiJob?.isActive != true) {
+            AppHaptics.click(context, settings.hapticIntensity, settings.hapticFeedbackEnabled)
+            aiState = AiCardState.Loading(topic, question)
+
+            // 自动平滑滚动至 AI 卡片位置（index = 2），确保在手表小屏上居中完全可见
+            scope.launch {
+                listState.animateScrollToItem(index = 2)
+            }
+
+            activeAiJob = scope.launch {
+                try {
+                    val prompt = AiPromptBuilder.buildPrompt(
+                        result = result,
+                        topic = topic,
+                        question = question,
+                        userGender = settings.userGender,
+                    )
+
+                    val request = AiChatRequest(
+                        model = settings.effectiveAiModel,
+                        messages = listOf(
+                            AiChatMessage(role = "system", content = prompt.systemPrompt),
+                            AiChatMessage(role = "user", content = prompt.userPrompt),
+                        ),
+                        temperature = 0.7,
+                        maxTokens = 1000,
+                    )
+
+                    val client = OpenAiCompatibleClient()
+                    val fullAccumulator = StringBuilder()
+
+                    client.streamChat(
+                        baseUrl = settings.effectiveAiBaseUrl,
+                        apiKey = settings.aiApiKey,
+                        request = request,
+                    )
+                        .bufferTextDeltas(windowMs = 90L)
+                        .collect { event ->
+                            when (event) {
+                                is AiStreamEvent.TextDelta -> {
+                                    fullAccumulator.append(event.text)
+                                    aiState = AiCardState.Streaming(
+                                        topic = topic,
+                                        question = question,
+                                        text = fullAccumulator.toString(),
+                                    )
+                                }
+                                is AiStreamEvent.Completed -> {
+                                    val finalText = if (fullAccumulator.isNotEmpty()) {
+                                        fullAccumulator.toString()
+                                    } else {
+                                        event.fullText
+                                    }
+                                    aiState = AiCardState.Completed(
+                                        topic = topic,
+                                        question = question,
+                                        fullText = finalText,
+                                    )
+                                    AppHaptics.success(context, settings.hapticIntensity, settings.hapticFeedbackEnabled)
+                                }
+                                is AiStreamEvent.Error -> {
+                                    aiState = AiCardState.Error(
+                                        topic = topic,
+                                        question = question,
+                                        error = event.error,
+                                    )
+                                    AppHaptics.click(context, settings.hapticIntensity, settings.hapticFeedbackEnabled)
+                                }
+                            }
+                        }
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Throwable) {
+                    aiState = AiCardState.Error(
+                        topic = topic,
+                        question = question,
+                        error = AiError.Unknown(e.message ?: "未知异常", e),
+                    )
+                    AppHaptics.click(context, settings.hapticIntensity, settings.hapticFeedbackEnabled)
+                }
+            }
+        }
+    }
+
+    val cancelAiDivination: () -> Unit = {
+        activeAiJob?.cancel()
+        aiState = AiCardState.Idle
+    }
+
+    val resetAiState: () -> Unit = {
+        aiState = AiCardState.Idle
     }
 
     val originalYaoCards = remember(result.original, selectedYongShen, yongShenEval) {
@@ -114,6 +242,7 @@ fun LiuYaoResultContent(
         rotaryEnabled = rotaryScrollingEnabled,
         contentPadding = metrics.screenPadding,
         itemSpacing = metrics.itemSpacing,
+        state = listState,
     ) {
         // The line-card order is intentionally unchanged from the former
         // ResultScreen: shared chrome owns only the Wear scrolling shell.
@@ -122,6 +251,17 @@ fun LiuYaoResultContent(
                 DetailField("公历", castTime)
                 DetailField("农历", result.timeInfo.lunarDate)
             }
+        }
+        item(key = "ai-divination") {
+            AiDivinationCard(
+                result = result,
+                settings = settings,
+                onNavigateToSettings = onNavigateToSettings,
+                aiState = aiState,
+                onStartDivination = startAiDivination,
+                onCancelDivination = cancelAiDivination,
+                onResetState = resetAiState,
+            )
         }
         item(key = "yongshen-selector") {
             ResultCard {
@@ -244,8 +384,15 @@ fun LiuYaoResultContent(
         }
         item(key = "archive") {
             val archiveInteraction = remember { MutableInteractionSource() }
+            val completedAiData = (aiState as? AiCardState.Completed)?.let {
+                AiArchiveData(
+                    topic = it.topic.displayName,
+                    question = it.question,
+                    fullText = it.fullText,
+                )
+            }
             BoompalaCardButton(
-                onClick = { onArchive(result) },
+                onClick = { onArchive(result, completedAiData) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .wearPressFeedback(archiveInteraction),

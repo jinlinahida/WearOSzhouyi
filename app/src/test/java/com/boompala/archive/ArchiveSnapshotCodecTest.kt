@@ -183,4 +183,62 @@ class ArchiveSnapshotCodecTest {
         assertTrue(snapshot.sections.containsKey("时辰经络"))
         assertTrue(snapshot.sections.containsKey("典籍渊源与医理"))
     }
+
+    @Test
+    fun liuYaoReadingEncodesAndDecodesWithAiDataOffline() {
+        val castAt = java.time.Instant.parse("2026-06-21T00:30:00Z")
+        val zoneId = java.time.ZoneId.of("Asia/Shanghai")
+        val timeInfo = com.boompala.engine.model.DivinationTimeInfo(
+            gregorianDateTime = java.time.ZonedDateTime.of(2026, 6, 21, 8, 30, 0, 0, zoneId),
+            lunarDate = "二〇二六年五月初七",
+            lunarYearGanzhi = com.boompala.engine.model.Ganzhi(com.boompala.engine.model.HeavenlyStem.BING, com.boompala.engine.model.EarthlyBranch.WU),
+            lunarMonth = 5,
+            lunarDay = 7,
+            yearGanzhi = com.boompala.engine.model.Ganzhi(com.boompala.engine.model.HeavenlyStem.BING, com.boompala.engine.model.EarthlyBranch.WU),
+            monthGanzhi = com.boompala.engine.model.Ganzhi(com.boompala.engine.model.HeavenlyStem.JIA, com.boompala.engine.model.EarthlyBranch.WU),
+            dayGanzhi = com.boompala.engine.model.Ganzhi(com.boompala.engine.model.HeavenlyStem.BING, com.boompala.engine.model.EarthlyBranch.YIN),
+            hourGanzhi = com.boompala.engine.model.Ganzhi(com.boompala.engine.model.HeavenlyStem.REN, com.boompala.engine.model.EarthlyBranch.CHEN),
+        )
+        val engine = com.boompala.engine.LiuYaoEngine(calendar = { _, _ -> timeInfo })
+        val input = com.boompala.engine.model.HexagramInput(
+            linesFromBottom = listOf(7, 7, 7, 7, 7, 7).mapIndexed { i, v ->
+                com.boompala.engine.model.YaoLineInput(
+                    com.boompala.engine.model.YaoPosition.entries[i],
+                    com.boompala.engine.model.YaoState.fromNumericValue(v),
+                )
+            },
+            castAt = castAt,
+            zoneId = zoneId,
+        )
+        val result = engine.calculate(input)
+
+        // 1. 无 AI 数据编码：保持向后兼容，不生成 AI 解卦区段
+        val jsonWithoutAi = ArchiveSnapshotCodec.encode(result)
+        val snapshotWithoutAi = ArchiveSnapshotCodec.decode(jsonWithoutAi).getOrThrow()
+        assertEquals(ArchiveSource.LIU_YAO, snapshotWithoutAi.source)
+        assertFalse(snapshotWithoutAi.sections.containsKey("灵犀 · AI 解卦"))
+
+        // 2. 携带已完成的 AI 解读数据编码
+        val aiData = AiArchiveData(
+            topic = "事业官运",
+            question = "求测升职前景",
+            fullText = "【核心判断】\n官星得月令生旺，晋升有望。\n\n【卦象依据】\n世爻持官鬼，临日建拱扶。\n\n【趋势分析】\n秋冬之际转机显现。\n\n【建议】\n稳扎稳打，宜主动沟通。",
+        )
+        val jsonWithAi = ArchiveSnapshotCodec.encode(result, interpretations = null, aiData = aiData)
+        val snapshotWithAi = ArchiveSnapshotCodec.decode(jsonWithAi).getOrThrow()
+        assertEquals(ArchiveSource.LIU_YAO, snapshotWithAi.source)
+        assertTrue(snapshotWithAi.sections.containsKey("灵犀 · AI 解卦"))
+
+        val aiSection = snapshotWithAi.sections["灵犀 · AI 解卦"]!!
+        assertTrue(aiSection.any { it.contains("占问主题：事业官运") })
+        assertTrue(aiSection.any { it.contains("占问问题：求测升职前景") })
+        assertTrue(aiSection.any { it.contains("【核心判断】") })
+        assertTrue(aiSection.any { it.contains("【建议】") })
+
+        // 3. 空白或失败的 AI 数据不会污染归档
+        val blankAiData = AiArchiveData(topic = "综合", question = "", fullText = "   ")
+        val jsonWithBlank = ArchiveSnapshotCodec.encode(result, interpretations = null, aiData = blankAiData)
+        val snapshotWithBlank = ArchiveSnapshotCodec.decode(jsonWithBlank).getOrThrow()
+        assertFalse(snapshotWithBlank.sections.containsKey("灵犀 · AI 解卦"))
+    }
 }

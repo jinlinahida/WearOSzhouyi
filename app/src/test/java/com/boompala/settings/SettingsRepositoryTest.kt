@@ -207,4 +207,39 @@ class SettingsRepositoryTest {
         repository.resetMuyuCount()
         assertEquals(0L, repository.settings.first().muyuTotalCount)
     }
+
+    @Test
+    fun `ai settings persist and mutate correctly in repository`() = runBlocking {
+        val dataStore = PreferenceDataStoreFactory.create(
+            scope = dataStoreScope,
+            produceFile = { dataStoreFile },
+        )
+        val repository = SettingsRepository(dataStore)
+
+        val initial = repository.settings.first()
+        assertEquals(AiNetworkMode.LOCAL, initial.aiNetworkMode)
+        assertEquals(AiProvider.DEEPSEEK, initial.aiProvider)
+        assertEquals("", initial.aiApiKey)
+
+        repository.setAiNetworkMode(AiNetworkMode.ONLINE)
+        repository.setAiProvider(AiProvider.OPENAI)
+        repository.setAiConfig(
+            provider = AiProvider.OPENAI,
+            apiKey = "sk-test-key-123456",
+            customBaseUrl = "https://custom.endpoint.com",
+            customModel = "gpt-4o",
+        )
+
+        val updated = repository.settings.first()
+        assertEquals(AiNetworkMode.ONLINE, updated.aiNetworkMode)
+        assertEquals(AiProvider.OPENAI, updated.aiProvider)
+        assertEquals("sk-test-key-123456", updated.aiApiKey)
+        assertEquals("https://custom.endpoint.com", updated.aiCustomBaseUrl)
+        assertEquals("gpt-4o", updated.aiCustomModel)
+
+        repository.clearAiApiKey()
+        val cleared = repository.settings.first()
+        assertEquals("", cleared.aiApiKey)
+        assertEquals(AiNetworkMode.ONLINE, cleared.aiNetworkMode)
+    }
 }

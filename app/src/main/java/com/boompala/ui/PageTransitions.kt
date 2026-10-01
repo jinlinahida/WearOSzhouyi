@@ -355,6 +355,17 @@ internal object AppHaptics {
     }
 
     /**
+     * 成功与确认振动：用于扫码配对成功、保存关键配置等积极操作确认。
+     */
+    fun success(
+        context: android.content.Context,
+        intensity: HapticIntensity = HapticIntensity.STANDARD,
+        enabled: Boolean = true,
+    ) {
+        toggle(context, targetState = true, intensity = intensity, enabled = enabled)
+    }
+
+    /**
      * Level 3 · 仪式与翻牌阻尼：用于塔罗翻牌、六爻落定。
      * 拟物意象：厚磅纸牌从指尖揭开微滑动 + 沉稳拍落于桌面绒布的厚重阻尼感。
      */

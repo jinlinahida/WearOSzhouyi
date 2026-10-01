@@ -39,6 +39,30 @@ enum class AppLanguage(
     ENGLISH("en", "English", "English"),
 }
 
+enum class AiNetworkMode(
+    val displayName: String,
+) {
+    LOCAL("本地纯净"),
+    ONLINE("联网 AI"),
+}
+
+enum class AiProvider(
+    val id: String,
+    val displayName: String,
+    val defaultBaseUrl: String,
+    val defaultModel: String,
+) {
+    DEEPSEEK("deepseek", "DeepSeek", "https://api.deepseek.com/v1", "deepseek-chat"),
+    OPENAI("openai", "OpenAI", "https://api.openai.com/v1", "gpt-4o-mini"),
+    MOONSHOT("moonshot", "Moonshot", "https://api.moonshot.cn/v1", "moonshot-v1-8k"),
+    CUSTOM("custom", "自定义", "", "");
+
+    companion object {
+        fun fromId(id: String): AiProvider =
+            entries.find { it.id.equals(id, ignoreCase = true) || it.name.equals(id, ignoreCase = true) } ?: DEEPSEEK
+    }
+}
+
 enum class HomeFeature(
     val id: String,
     val defaultTitleZh: String,
@@ -102,9 +126,29 @@ data class AppSettings(
     val tarotMajorArcanaOnly: Boolean = false,
     val muyuTotalCount: Long = 0L,
     val scalingListEnabled: Boolean = true,
+    val aiNetworkMode: AiNetworkMode = AiNetworkMode.LOCAL,
+    val aiProvider: AiProvider = AiProvider.DEEPSEEK,
+    val aiCustomBaseUrl: String = "",
+    val aiCustomModel: String = "",
+    val aiApiKey: String = "",
 ) {
     companion object {
         val DEFAULT = AppSettings()
+    }
+
+    val effectiveAiBaseUrl: String
+        get() = if (aiProvider == AiProvider.CUSTOM) aiCustomBaseUrl.trim() else aiProvider.defaultBaseUrl
+
+    val effectiveAiModel: String
+        get() = if (aiProvider == AiProvider.CUSTOM) aiCustomModel.trim() else aiProvider.defaultModel
+
+    val isAiConfigured: Boolean
+        get() = aiApiKey.isNotBlank()
+
+    fun maskedApiKey(): String {
+        val key = aiApiKey.trim()
+        if (key.isBlank()) return ""
+        return if (key.length <= 4) "••••" else "••••" + key.takeLast(4)
     }
 
     val isBaziConfigured: Boolean

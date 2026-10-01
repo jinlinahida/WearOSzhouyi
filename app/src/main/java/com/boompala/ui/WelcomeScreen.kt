@@ -76,6 +76,8 @@ import androidx.wear.compose.material3.Button
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.Text
 import com.boompala.R
+import com.boompala.settings.AiNetworkMode
+import androidx.compose.foundation.layout.Row
 import java.io.File
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -273,10 +275,12 @@ fun BoompalaBrandText(modifier: Modifier = Modifier, fontSize: TextUnit = 26.sp)
 fun WelcomeScreen(
     rotaryScrollingEnabled: Boolean,
     animationsEnabled: Boolean,
-    onFinish: () -> Unit,
+    initialMode: AiNetworkMode = AiNetworkMode.LOCAL,
+    onFinish: (AiNetworkMode) -> Unit,
     onBack: (() -> Unit)? = null,
 ) {
     var currentStep by remember { mutableIntStateOf(0) }
+    var selectedMode by remember { mutableStateOf(initialMode) }
 
     BackHandler(enabled = currentStep > 0 || onBack != null) {
         if (currentStep > 0) {
@@ -310,7 +314,15 @@ fun WelcomeScreen(
             1 -> DisclaimerScreen(
                 rotaryScrollingEnabled = rotaryScrollingEnabled,
                 animationsEnabled = animationsEnabled,
-                onFinish = onFinish,
+                onToNext = { currentStep = 2 },
+            )
+
+            2 -> ModeSelectionScreen(
+                rotaryScrollingEnabled = rotaryScrollingEnabled,
+                animationsEnabled = animationsEnabled,
+                selectedMode = selectedMode,
+                onModeSelected = { selectedMode = it },
+                onFinish = { onFinish(selectedMode) },
             )
         }
     }
@@ -417,7 +429,7 @@ private fun StartScreen(
 private fun DisclaimerScreen(
     rotaryScrollingEnabled: Boolean,
     animationsEnabled: Boolean,
-    onFinish: () -> Unit,
+    onToNext: () -> Unit,
 ) {
     val metrics = LocalUiMetrics.current
 
@@ -521,7 +533,7 @@ private fun DisclaimerScreen(
                 }
             }
 
-            // 底部协议提示与确认进入按钮
+            // 底部协议提示与继续按钮
             item(key = "action-enter") {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
@@ -539,7 +551,7 @@ private fun DisclaimerScreen(
                     )
                     val enterInteraction = remember { MutableInteractionSource() }
                     BoompalaCardButton(
-                        onClick = onFinish,
+                        onClick = onToNext,
                         modifier = Modifier
                             .fillMaxWidth()
                             .wearPressFeedback(enterInteraction),
@@ -550,6 +562,158 @@ private fun DisclaimerScreen(
                             fontWeight = FontWeight.Bold,
                         )
                     }
+                }
+            }
+        }
+    }
+}
+
+// =========================================================================
+// Mode Selection Screen (Step 2: Local Pure vs Online AI)
+// =========================================================================
+
+@Composable
+private fun ModeSelectionScreen(
+    rotaryScrollingEnabled: Boolean,
+    animationsEnabled: Boolean,
+    selectedMode: AiNetworkMode,
+    onModeSelected: (AiNetworkMode) -> Unit,
+    onFinish: () -> Unit,
+) {
+    val metrics = LocalUiMetrics.current
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        Image(
+            painter = painterResource(id = R.drawable.img_silk_background),
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop,
+        )
+
+        RotaryScrollColumn(
+            rotaryEnabled = rotaryScrollingEnabled,
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = metrics.screenPadding,
+            itemSpacing = metrics.itemSpacing,
+        ) {
+            item(key = "mode-header") {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(4.dp),
+                ) {
+                    Text(
+                        text = stringResource(R.string.welcome_mode_title),
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            fontWeight = FontWeight.Bold,
+                        ),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                    Text(
+                        text = stringResource(R.string.welcome_mode_subtitle),
+                        style = MaterialTheme.typography.bodySmall.copy(
+                            color = Color(0xB3FFFFFF),
+                            fontSize = 11.sp,
+                        ),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
+            }
+
+            // 卡片 1：🔮 本地纯净模式
+            item(key = "card-mode-local") {
+                val isSelected = selectedMode == AiNetworkMode.LOCAL
+                ReWearBiliCard(
+                    animationsEnabled = animationsEnabled,
+                    borderColor = if (isSelected) MaterialTheme.colorScheme.primary else CardBorderColor,
+                    onClick = { onModeSelected(AiNetworkMode.LOCAL) },
+                ) {
+                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Text(
+                                text = stringResource(R.string.welcome_mode_local_title),
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+                            )
+                            Text(
+                                text = stringResource(R.string.welcome_mode_local_badge),
+                                style = MaterialTheme.typography.labelSmall.copy(
+                                    fontSize = 10.sp,
+                                    color = if (isSelected) MaterialTheme.colorScheme.primary else Color(0xFF81D4FA),
+                                ),
+                            )
+                        }
+                        Text(
+                            text = stringResource(R.string.welcome_mode_local_desc),
+                            style = MaterialTheme.typography.bodySmall.copy(
+                                fontSize = 11.5.sp,
+                                lineHeight = 16.sp,
+                            ),
+                            color = Color(0xFFEEEEEE),
+                        )
+                    }
+                }
+            }
+
+            // 卡片 2：⚡ 联网 AI 模式
+            item(key = "card-mode-online") {
+                val isSelected = selectedMode == AiNetworkMode.ONLINE
+                ReWearBiliCard(
+                    animationsEnabled = animationsEnabled,
+                    borderColor = if (isSelected) MaterialTheme.colorScheme.primary else CardBorderColor,
+                    onClick = { onModeSelected(AiNetworkMode.ONLINE) },
+                ) {
+                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Text(
+                                text = stringResource(R.string.welcome_mode_online_title),
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+                            )
+                            Text(
+                                text = stringResource(R.string.welcome_mode_online_badge),
+                                style = MaterialTheme.typography.labelSmall.copy(
+                                    fontSize = 10.sp,
+                                    color = if (isSelected) MaterialTheme.colorScheme.primary else Color(0xFFFFD54F),
+                                ),
+                            )
+                        }
+                        Text(
+                            text = stringResource(R.string.welcome_mode_online_desc),
+                            style = MaterialTheme.typography.bodySmall.copy(
+                                fontSize = 11.5.sp,
+                                lineHeight = 16.sp,
+                            ),
+                            color = Color(0xFFEEEEEE),
+                        )
+                    }
+                }
+            }
+
+            // 确认进入按钮
+            item(key = "action-confirm-mode") {
+                val confirmInteraction = remember { MutableInteractionSource() }
+                BoompalaCardButton(
+                    onClick = onFinish,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wearPressFeedback(confirmInteraction),
+                    interactionSource = confirmInteraction,
+                ) {
+                    Text(
+                        text = stringResource(R.string.welcome_mode_confirm),
+                        fontWeight = FontWeight.Bold,
+                    )
                 }
             }
         }

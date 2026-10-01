@@ -248,4 +248,47 @@
     <string name="welcome_revisit_from_about_desc">Review onboarding guide and disclaimers</string>
     <string name="welcome_step_welcome">Welcome</string>
     <string name="welcome_step_disclaimer">Terms</string>
+    <string name="welcome_step_mode">Run Mode</string>
+
+    <!-- Settings AI Module -->
+    <string name="settings_module_ai">AI Intelligence</string>
+    <string name="settings_module_ai_desc">Run mode, provider &amp; API Key</string>
+    <string name="settings_ai_title">AI Settings</string>
+    <string name="settings_ai_mode">Run Mode</string>
+    <string name="settings_ai_mode_local">Local Pure</string>
+    <string name="settings_ai_mode_online">Online AI</string>
+    <string name="settings_ai_mode_local_desc">Fully offline operation without AI network features</string>
+    <string name="settings_ai_mode_online_desc">Enable LLM API for hexagram interpretation</string>
+    <string name="settings_ai_provider">Provider</string>
+    <string name="settings_ai_model">Model</string>
+    <string name="settings_ai_api_key">API Key</string>
+    <string name="settings_ai_key_configured">Configured · %1$s</string>
+    <string name="settings_ai_key_not_set">Not Configured</string>
+    <string name="settings_ai_sync_button">Scan QR to Configure Key</string>
+    <string name="settings_ai_sync_desc">Scan on phone to enter API Key easily</string>
+    <string name="settings_ai_test_button">Test Connection</string>
+    <string name="settings_ai_test_ready">Ready (Phase 2 integration pending)</string>
+    <string name="settings_ai_test_need_key">Please configure API Key first</string>
+    <string name="settings_ai_clear_key">Clear API Key</string>
+    <string name="settings_ai_clear_confirm_title">Clear API Key</string>
+    <string name="settings_ai_clear_confirm_desc">Are you sure you want to clear the saved API Key?</string>
+
+    <!-- AI Sync Screen -->
+    <string name="settings_ai_sync_title">Scan to Pair</string>
+    <string name="settings_ai_sync_no_wifi">Wi-Fi Not Connected</string>
+    <string name="settings_ai_sync_no_wifi_desc">Please connect watch to local Wi-Fi in settings</string>
+    <string name="settings_ai_sync_hint">Connect phone to same Wi-Fi, scan to enter Key securely</string>
+    <string name="settings_ai_sync_token_label">One-Time Token</string>
+    <string name="settings_ai_sync_success">Configuration Synced!</string>
+
+    <!-- Welcome Mode Selection -->
+    <string name="welcome_mode_title">Choose Run Mode</string>
+    <string name="welcome_mode_subtitle">Can be switched anytime in Settings</string>
+    <string name="welcome_mode_local_title">🔮 Local Pure Mode</string>
+    <string name="welcome_mode_local_badge">Recommended · Offline</string>
+    <string name="welcome_mode_local_desc">Zero network, zero external data. Powered by built-in classical texts.</string>
+    <string name="welcome_mode_online_title">⚡ Online AI Mode</string>
+    <string name="welcome_mode_online_badge">AI Enhanced</string>
+    <string name="welcome_mode_online_desc">Enable LLM API interpretation. Bring your own Key, direct to provider.</string>
+    <string name="welcome_mode_confirm">Start Boompala</string>
 </resources>

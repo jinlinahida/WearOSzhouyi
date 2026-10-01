@@ -7,6 +7,7 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -26,8 +27,13 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import com.boompala.settings.AiNetworkMode
+import com.boompala.settings.AiProvider
+import com.boompala.ai.sync.LocalKeySyncServer
+import com.boompala.ai.sync.QrCodeGenerator
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,7 +46,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.wear.compose.material3.AlertDialog
 import androidx.wear.compose.material3.Button
 import androidx.wear.compose.material3.Icon
@@ -88,6 +96,8 @@ private enum class SettingsSection {
     HOME,
     HAPTICS,
     DATA,
+    AI,
+    AI_SYNC,
 }
 
 private enum class ActivePicker {
@@ -119,6 +129,10 @@ fun SettingsScreen(
     onTarotMajorArcanaOnlyChange: (Boolean) -> Unit = {},
     onResetAllPreferences: () -> Unit = {},
     onResetMuyuCount: () -> Unit = {},
+    onAiNetworkModeSelected: (AiNetworkMode) -> Unit = {},
+    onAiProviderSelected: (AiProvider) -> Unit = {},
+    onSaveAiConfig: (provider: AiProvider, apiKey: String, baseUrl: String, model: String) -> Unit = { _, _, _, _ -> },
+    onClearAiApiKey: () -> Unit = {},
     archiveRepository: ArchiveRepository? = null,
     rotaryScrollingEnabled: Boolean,
     onAboutClick: () -> Unit,
@@ -137,7 +151,11 @@ fun SettingsScreen(
             intensity = settings.hapticIntensity,
             enabled = settings.hapticFeedbackEnabled,
         )
-        currentSection = SettingsSection.MENU
+        if (currentSection == SettingsSection.AI_SYNC) {
+            currentSection = SettingsSection.AI
+        } else {
+            currentSection = SettingsSection.MENU
+        }
     }
 
     LaunchedEffect(currentSection) {
@@ -252,6 +270,26 @@ fun SettingsScreen(
                         title = stringResource(R.string.settings_module_data),
                         subtitle = stringResource(R.string.settings_module_data_desc),
                         onClick = { currentSection = SettingsSection.DATA },
+                        animationsEnabled = settings.animationsEnabled,
+                    )
+                }
+
+                item(key = "module-ai") {
+                    val aiDesc = when (settings.aiNetworkMode) {
+                        AiNetworkMode.LOCAL -> stringResource(R.string.settings_ai_mode_local)
+                        AiNetworkMode.ONLINE -> {
+                            if (settings.isAiConfigured) {
+                                "${settings.aiProvider.displayName} · ${settings.maskedApiKey()}"
+                            } else {
+                                "${settings.aiProvider.displayName} · ${stringResource(R.string.settings_ai_key_not_set)}"
+                            }
+                        }
+                    }
+                    SettingsModuleButton(
+                        iconRes = R.drawable.ic_settings_ai,
+                        title = stringResource(R.string.settings_module_ai),
+                        subtitle = aiDesc,
+                        onClick = { currentSection = SettingsSection.AI },
                         animationsEnabled = settings.animationsEnabled,
                     )
                 }
@@ -1591,6 +1629,460 @@ fun SettingsScreen(
                         }
                     },
                 )
+            }
+        }
+
+        SettingsSection.AI -> {
+            var showClearKeyDialog by remember { mutableStateOf(false) }
+            var showTestResultDialog by remember { mutableStateOf(false) }
+
+            RotaryScrollColumn(
+                rotaryEnabled = rotaryScrollingEnabled,
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = metrics.screenPadding,
+                itemSpacing = metrics.itemSpacing,
+            ) {
+                item(key = "ai-title") {
+                    ScreenTitle(
+                        text = stringResource(R.string.settings_ai_title),
+                        style = MaterialTheme.typography.titleMedium,
+                    )
+                }
+
+                item(key = "ai-mode-header") {
+                    Text(
+                        text = stringResource(R.string.settings_ai_mode),
+                        style = MaterialTheme.typography.titleSmall,
+                    )
+                }
+
+                item(key = "ai-mode-selector") {
+                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        val isLocal = settings.aiNetworkMode == AiNetworkMode.LOCAL
+                        SelectableCardButton(
+                            selected = isLocal,
+                            onClick = { onAiNetworkModeSelected(AiNetworkMode.LOCAL) },
+                            contentPadding = BoompalaButtonDefaults.compactContentPadding,
+                            modifier = Modifier.fillMaxWidth(),
+                        ) {
+                            Text(
+                                text = if (isLocal) "✓ ${stringResource(R.string.settings_ai_mode_local)}" else stringResource(R.string.settings_ai_mode_local),
+                                fontWeight = if (isLocal) FontWeight.Bold else FontWeight.Normal,
+                            )
+                        }
+
+                        val isOnline = settings.aiNetworkMode == AiNetworkMode.ONLINE
+                        SelectableCardButton(
+                            selected = isOnline,
+                            onClick = { onAiNetworkModeSelected(AiNetworkMode.ONLINE) },
+                            contentPadding = BoompalaButtonDefaults.compactContentPadding,
+                            modifier = Modifier.fillMaxWidth(),
+                        ) {
+                            Text(
+                                text = if (isOnline) "✓ ${stringResource(R.string.settings_ai_mode_online)}" else stringResource(R.string.settings_ai_mode_online),
+                                fontWeight = if (isOnline) FontWeight.Bold else FontWeight.Normal,
+                            )
+                        }
+                    }
+                }
+
+                if (settings.aiNetworkMode == AiNetworkMode.ONLINE) {
+                    item(key = "ai-provider-header") {
+                        Text(
+                            text = stringResource(R.string.settings_ai_provider),
+                            style = MaterialTheme.typography.titleSmall,
+                        )
+                    }
+
+                    item(key = "ai-provider-chips") {
+                        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                            AiProvider.entries.forEach { provider ->
+                                val isSelected = settings.aiProvider == provider
+                                SelectableCardButton(
+                                    selected = isSelected,
+                                    onClick = { onAiProviderSelected(provider) },
+                                    contentPadding = BoompalaButtonDefaults.compactContentPadding,
+                                    modifier = Modifier.fillMaxWidth(),
+                                ) {
+                                    Text(
+                                        text = if (isSelected) "✓ ${provider.displayName}" else provider.displayName,
+                                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+                                    )
+                                }
+                            }
+                        }
+                    }
+
+                    item(key = "ai-info-card") {
+                        ResultCard {
+                            DetailField(
+                                label = stringResource(R.string.settings_ai_model),
+                                value = settings.effectiveAiModel.ifBlank { "默认" },
+                            )
+                            val keyDisplay = if (settings.isAiConfigured) {
+                                stringResource(R.string.settings_ai_key_configured, settings.maskedApiKey())
+                            } else {
+                                stringResource(R.string.settings_ai_key_not_set)
+                            }
+                            DetailField(
+                                label = stringResource(R.string.settings_ai_api_key),
+                                value = keyDisplay,
+                            )
+                            if (settings.effectiveAiBaseUrl.isNotBlank()) {
+                                DetailField(
+                                    label = "Base URL",
+                                    value = settings.effectiveAiBaseUrl,
+                                )
+                            }
+                        }
+                    }
+
+                    item(key = "ai-sync-action") {
+                        val syncInteraction = remember { MutableInteractionSource() }
+                        BoompalaCardButton(
+                            onClick = { currentSection = SettingsSection.AI_SYNC },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wearPressFeedback(syncInteraction),
+                            interactionSource = syncInteraction,
+                        ) {
+                            Text(
+                                text = stringResource(R.string.settings_ai_sync_button),
+                                fontWeight = FontWeight.Bold,
+                            )
+                        }
+                    }
+
+                    item(key = "ai-test-action") {
+                        val testInteraction = remember { MutableInteractionSource() }
+                        BoompalaCardButton(
+                            onClick = { showTestResultDialog = true },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wearPressFeedback(testInteraction),
+                            interactionSource = testInteraction,
+                            colors = BoompalaButtonDefaults.outlinedButtonColors(),
+                        ) {
+                            Text(stringResource(R.string.settings_ai_test_button))
+                        }
+                    }
+
+                    if (settings.isAiConfigured) {
+                        item(key = "ai-clear-action") {
+                            val clearInteraction = remember { MutableInteractionSource() }
+                            BoompalaCardButton(
+                                onClick = { showClearKeyDialog = true },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .wearPressFeedback(clearInteraction),
+                                interactionSource = clearInteraction,
+                                colors = BoompalaButtonDefaults.buttonColors(
+                                    containerColor = MaterialTheme.colorScheme.error.copy(alpha = 0.25f),
+                                ),
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.settings_ai_clear_key),
+                                    color = MaterialTheme.colorScheme.error,
+                                )
+                            }
+                        }
+                    }
+                } else {
+                    item(key = "ai-local-desc") {
+                        Text(
+                            text = stringResource(R.string.settings_ai_mode_local_desc),
+                            style = MaterialTheme.typography.bodySmall.copy(color = Color(0xB3FFFFFF)),
+                        )
+                    }
+                }
+
+                item(key = "ai-back") {
+                    val backInteraction = remember { MutableInteractionSource() }
+                    BoompalaCardButton(
+                        onClick = { currentSection = SettingsSection.MENU },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wearPressFeedback(backInteraction),
+                        interactionSource = backInteraction,
+                        colors = BoompalaButtonDefaults.outlinedButtonColors(),
+                    ) {
+                        Text(stringResource(R.string.action_back))
+                    }
+                }
+            }
+
+            if (showClearKeyDialog) {
+                AlertDialog(
+                    visible = true,
+                    onDismissRequest = { showClearKeyDialog = false },
+                    title = { Text(stringResource(R.string.settings_ai_clear_confirm_title)) },
+                    text = { Text(stringResource(R.string.settings_ai_clear_confirm_desc)) },
+                    confirmButton = {
+                        val confirmInteraction = remember { MutableInteractionSource() }
+                        BoompalaCardButton(
+                            onClick = {
+                                onClearAiApiKey()
+                                showClearKeyDialog = false
+                            },
+                            modifier = Modifier.wearPressFeedback(confirmInteraction),
+                            interactionSource = confirmInteraction,
+                            colors = BoompalaButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.error.copy(alpha = 0.25f),
+                            ),
+                        ) {
+                            Text(
+                                stringResource(R.string.action_confirm),
+                                color = MaterialTheme.colorScheme.error,
+                            )
+                        }
+                    },
+                    dismissButton = {
+                        val dismissInteraction = remember { MutableInteractionSource() }
+                        BoompalaCardButton(
+                            onClick = { showClearKeyDialog = false },
+                            modifier = Modifier.wearPressFeedback(dismissInteraction),
+                            interactionSource = dismissInteraction,
+                            colors = BoompalaButtonDefaults.outlinedButtonColors(),
+                        ) {
+                            Text(stringResource(R.string.action_cancel))
+                        }
+                    },
+                )
+            }
+
+            if (showTestResultDialog) {
+                AlertDialog(
+                    visible = true,
+                    onDismissRequest = { showTestResultDialog = false },
+                    title = { Text(stringResource(R.string.settings_ai_test_button)) },
+                    text = {
+                        Text(
+                            if (settings.isAiConfigured) stringResource(R.string.settings_ai_test_ready)
+                            else stringResource(R.string.settings_ai_test_need_key),
+                        )
+                    },
+                    confirmButton = {
+                        val confirmInteraction = remember { MutableInteractionSource() }
+                        BoompalaCardButton(
+                            onClick = { showTestResultDialog = false },
+                            modifier = Modifier.wearPressFeedback(confirmInteraction),
+                            interactionSource = confirmInteraction,
+                        ) {
+                            Text(stringResource(R.string.action_confirm))
+                        }
+                    },
+                )
+            }
+        }
+
+        SettingsSection.AI_SYNC -> {
+            var pairingInfo by remember { mutableStateOf<LocalKeySyncServer.PairingInfo?>(null) }
+            var isPairedSuccess by remember { mutableStateOf(false) }
+            var isTimeout by remember { mutableStateOf(false) }
+            var hasNoWifi by remember { mutableStateOf(false) }
+
+            val server = remember { LocalKeySyncServer() }
+            DisposableEffect(Unit) {
+                val info = server.start(
+                    onConfigReceived = { payload ->
+                        onSaveAiConfig(
+                            payload.provider,
+                            payload.apiKey,
+                            payload.customBaseUrl,
+                            payload.customModel,
+                        )
+                        AppHaptics.success(
+                            context = context,
+                            intensity = settings.hapticIntensity,
+                            enabled = settings.hapticFeedbackEnabled,
+                        )
+                        isPairedSuccess = true
+                    },
+                    onTimeout = {
+                        isTimeout = true
+                    },
+                )
+                if (info != null) {
+                    pairingInfo = info
+                } else {
+                    hasNoWifi = true
+                }
+                onDispose {
+                    server.stop()
+                }
+            }
+
+            LaunchedEffect(isPairedSuccess) {
+                if (isPairedSuccess) {
+                    kotlinx.coroutines.delay(1800)
+                    currentSection = SettingsSection.AI
+                }
+            }
+
+            val currentPairingUrl = pairingInfo?.url
+            val qrBitmap = remember(currentPairingUrl) {
+                currentPairingUrl?.let { QrCodeGenerator.generateQrBitmap(it, 220) }
+            }
+
+            RotaryScrollColumn(
+                rotaryEnabled = rotaryScrollingEnabled,
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = metrics.screenPadding,
+                itemSpacing = metrics.itemSpacing,
+            ) {
+                item(key = "sync-title") {
+                    ScreenTitle(
+                        text = stringResource(R.string.settings_ai_sync_title),
+                        style = MaterialTheme.typography.titleMedium,
+                    )
+                }
+
+                if (isPairedSuccess) {
+                    item(key = "sync-success-card") {
+                        ResultCard(
+                            borderColor = Color(0xFF66BB6A),
+                        ) {
+                            Text(
+                                text = "🎉 " + stringResource(R.string.settings_ai_sync_success),
+                                style = MaterialTheme.typography.titleSmall,
+                                color = Color(0xFF81C784),
+                            )
+                            Text(
+                                text = "秘钥与服务商配置已写入手表",
+                                style = MaterialTheme.typography.bodySmall,
+                            )
+                        }
+                    }
+                    item(key = "sync-success-back") {
+                        val doneInteraction = remember { MutableInteractionSource() }
+                        BoompalaCardButton(
+                            onClick = { currentSection = SettingsSection.AI },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wearPressFeedback(doneInteraction),
+                            interactionSource = doneInteraction,
+                        ) {
+                            Text(stringResource(R.string.action_confirm))
+                        }
+                    }
+                } else if (hasNoWifi) {
+                    item(key = "sync-no-wifi-card") {
+                        ResultCard(
+                            borderColor = MaterialTheme.colorScheme.error,
+                        ) {
+                            Text(
+                                text = "⚠️ " + stringResource(R.string.settings_ai_sync_no_wifi),
+                                style = MaterialTheme.typography.titleSmall,
+                                color = MaterialTheme.colorScheme.error,
+                            )
+                            Text(
+                                text = stringResource(R.string.settings_ai_sync_no_wifi_desc),
+                                style = MaterialTheme.typography.bodySmall,
+                            )
+                        }
+                    }
+                    item(key = "sync-no-wifi-back") {
+                        val backInteraction = remember { MutableInteractionSource() }
+                        BoompalaCardButton(
+                            onClick = { currentSection = SettingsSection.AI },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wearPressFeedback(backInteraction),
+                            interactionSource = backInteraction,
+                        ) {
+                            Text(stringResource(R.string.action_back))
+                        }
+                    }
+                } else if (isTimeout) {
+                    item(key = "sync-timeout-card") {
+                        ResultCard(
+                            borderColor = Color(0xFFFFB74D),
+                        ) {
+                            Text(
+                                text = "⏰ 配对超时",
+                                style = MaterialTheme.typography.titleSmall,
+                                color = Color(0xFFFFB74D),
+                            )
+                            Text(
+                                text = "配对服务已自动关闭，请重试",
+                                style = MaterialTheme.typography.bodySmall,
+                            )
+                        }
+                    }
+                    item(key = "sync-timeout-back") {
+                        val backInteraction = remember { MutableInteractionSource() }
+                        BoompalaCardButton(
+                            onClick = { currentSection = SettingsSection.AI },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wearPressFeedback(backInteraction),
+                            interactionSource = backInteraction,
+                        ) {
+                            Text(stringResource(R.string.action_back))
+                        }
+                    }
+                } else {
+                    pairingInfo?.let { info ->
+                        item(key = "sync-qr-box") {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 2.dp),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(136.dp)
+                                        .clip(RoundedCornerShape(12.dp))
+                                        .background(Color.White)
+                                        .padding(6.dp),
+                                    contentAlignment = Alignment.Center,
+                                ) {
+                                    if (qrBitmap != null) {
+                                        Image(
+                                            bitmap = qrBitmap,
+                                            contentDescription = "Pairing QR",
+                                            modifier = Modifier.fillMaxSize(),
+                                        )
+                                    }
+                                }
+                            }
+                        }
+
+                        item(key = "sync-hint") {
+                            Text(
+                                text = stringResource(R.string.settings_ai_sync_hint),
+                                style = MaterialTheme.typography.bodySmall.copy(
+                                    fontSize = 11.sp,
+                                    lineHeight = 15.sp,
+                                ),
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.fillMaxWidth(),
+                            )
+                        }
+
+                        item(key = "sync-address-card") {
+                            ResultCard {
+                                DetailField(label = "局域网", value = "${info.ip}:${info.port}")
+                                DetailField(label = "凭证", value = info.token)
+                            }
+                        }
+
+                        item(key = "sync-cancel-action") {
+                            val cancelInteraction = remember { MutableInteractionSource() }
+                            BoompalaCardButton(
+                                onClick = { currentSection = SettingsSection.AI },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .wearPressFeedback(cancelInteraction),
+                                interactionSource = cancelInteraction,
+                                colors = BoompalaButtonDefaults.outlinedButtonColors(),
+                            ) {
+                                Text(stringResource(R.string.action_cancel))
+                            }
+                        }
+                    }
+                }
             }
         }
     }

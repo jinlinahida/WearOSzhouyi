@@ -249,4 +249,47 @@
     <string name="welcome_revisit_from_about_desc">重新浏览首次进入指引与声明</string>
     <string name="welcome_step_welcome">欢迎</string>
     <string name="welcome_step_disclaimer">声明</string>
+    <string name="welcome_step_mode">模式选择</string>
+
+    <!-- Settings AI Module -->
+    <string name="settings_module_ai">AI 智能</string>
+    <string name="settings_module_ai_desc">运行模式、服务商与 API Key</string>
+    <string name="settings_ai_title">AI 智能设置</string>
+    <string name="settings_ai_mode">运行模式</string>
+    <string name="settings_ai_mode_local">本地纯净</string>
+    <string name="settings_ai_mode_online">联网 AI</string>
+    <string name="settings_ai_mode_local_desc">完全离线运行，不使用网络 AI 功能</string>
+    <string name="settings_ai_mode_online_desc">启用大模型 API 智能解卦与推演</string>
+    <string name="settings_ai_provider">服务商</string>
+    <string name="settings_ai_model">模型</string>
+    <string name="settings_ai_api_key">API 秘钥</string>
+    <string name="settings_ai_key_configured">已配置 · %1$s</string>
+    <string name="settings_ai_key_not_set">未配置</string>
+    <string name="settings_ai_sync_button">扫码配置 API Key</string>
+    <string name="settings_ai_sync_desc">手机扫码快速填写秘钥</string>
+    <string name="settings_ai_test_button">测试连接</string>
+    <string name="settings_ai_test_ready">配置就绪 (待阶段二接入验证)</string>
+    <string name="settings_ai_test_need_key">请先配置 API Key</string>
+    <string name="settings_ai_clear_key">清除 API Key</string>
+    <string name="settings_ai_clear_confirm_title">清除秘钥</string>
+    <string name="settings_ai_clear_confirm_desc">确定要清除当前保存的 API Key 吗？</string>
+
+    <!-- AI Sync Screen -->
+    <string name="settings_ai_sync_title">扫码配置</string>
+    <string name="settings_ai_sync_no_wifi">未连接 Wi-Fi</string>
+    <string name="settings_ai_sync_no_wifi_desc">请在手表系统设置中连接 Wi-Fi 局域网后再试</string>
+    <string name="settings_ai_sync_hint">手机连接同一 Wi-Fi，扫码即可安全填写 API Key</string>
+    <string name="settings_ai_sync_token_label">一次性凭证</string>
+    <string name="settings_ai_sync_success">配置同步成功！</string>
+
+    <!-- Welcome Mode Selection -->
+    <string name="welcome_mode_title">选择运行模式</string>
+    <string name="welcome_mode_subtitle">可在【设置 -> AI 智能】中随时切换</string>
+    <string name="welcome_mode_local_title">🔮 本地纯净模式</string>
+    <string name="welcome_mode_local_badge">推荐 · 离线</string>
+    <string name="welcome_mode_local_desc">零网络连接，零数据出端。使用设备内置典籍与知识库，稳定省电。</string>
+    <string name="welcome_mode_online_title">⚡ 联网 AI 模式</string>
+    <string name="welcome_mode_online_badge">智能增强</string>
+    <string name="welcome_mode_online_desc">支持调用大模型 API 智能解卦。需自备 API Key，直连服务商。</string>
+    <string name="welcome_mode_confirm">开启 Boompala</string>
 </resources>

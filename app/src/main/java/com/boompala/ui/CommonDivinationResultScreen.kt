@@ -3,6 +3,8 @@ package com.boompala.ui
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Modifier
@@ -21,11 +23,13 @@ fun CommonDivinationResultScreen(
     rotaryEnabled: Boolean,
     contentPadding: PaddingValues,
     itemSpacing: androidx.compose.ui.unit.Dp,
+    state: LazyListState = rememberLazyListState(),
     content: LazyListScope.() -> Unit,
 ) {
     RotaryScrollColumn(
         rotaryEnabled = rotaryEnabled,
         modifier = Modifier.fillMaxSize(),
+        state = state,
         contentPadding = contentPadding,
         itemSpacing = itemSpacing,
     ) {

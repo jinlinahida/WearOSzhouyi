@@ -12,12 +12,17 @@
     <!-- 身体传感器权限：用于心率与脉搏波采样 -->
     <uses-permission android:name="android.permission.BODY_SENSORS" />
 
+    <!-- 网络权限：用于局域网扫码配对 HTTP 服务及联网模式下 AI 接口调用 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:label="@string/app_name"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
         android:theme="@style/Theme.Boompala">
 
         <meta-data
