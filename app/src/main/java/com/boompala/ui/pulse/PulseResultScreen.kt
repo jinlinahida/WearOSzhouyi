@@ -3,6 +3,7 @@ package com.boompala.ui.pulse
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -72,7 +73,7 @@ fun PulseResultScreen(
         item(key = "pulse-name-card") {
             ResultCard {
                 Text(
-                    text = "【${result.category.chineseName}】",
+                    text = result.category.chineseName,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary,
@@ -88,7 +89,14 @@ fun PulseResultScreen(
         // 第 2 层：脉象波形图（置顶） + 脉象特征文字表述
         item(key = "pulse-feature-card") {
             ResultCard {
-                // 典型波形图示置于卡片顶部呈现
+                val hasMeasuredWaveform = result.measuredWaveform.isNotEmpty()
+                val waveformPoints = if (hasMeasuredWaveform) {
+                    result.measuredWaveform
+                } else {
+                    profile.waveformPoints
+                }
+
+                // 实测整段走带 / 典型波形图示置于卡片顶部呈现
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -97,12 +105,37 @@ fun PulseResultScreen(
                     contentAlignment = Alignment.Center,
                 ) {
                     ReferenceWaveformCanvas(
-                        points = profile.waveformPoints,
+                        points = waveformPoints,
                         lineColor = Color(0xFF00E5A3),
                     )
+                    if (hasMeasuredWaveform) {
+                        // 20 秒全时序两端标记
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .align(Alignment.BottomCenter)
+                                .padding(horizontal = 2.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                        ) {
+                            Text(
+                                text = "0s",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = Color.White.copy(alpha = 0.30f),
+                            )
+                            Text(
+                                text = "20s",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = Color.White.copy(alpha = 0.30f),
+                            )
+                        }
+                    }
                 }
                 Text(
-                    text = "脉象特征 · ${result.category.classicPhrase}",
+                    text = if (hasMeasuredWaveform) {
+                        "实测脉图 (20s) · ${result.category.classicPhrase}"
+                    } else {
+                        "脉象特征 · ${result.category.classicPhrase}"
+                    },
                     style = MaterialTheme.typography.labelSmall,
                     fontWeight = FontWeight.Bold,
                     color = Color(0xFF00E5A3),
@@ -255,7 +288,7 @@ fun PulseResultScreen(
                 interactionSource = archivePressInteraction,
                 colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) {
-                Text("存入归档")
+                Text("归档")
             }
         }
     }

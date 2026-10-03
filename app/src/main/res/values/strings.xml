@@ -31,25 +31,25 @@
     <!-- Destiny Chart Strings -->
     <string name="destiny_chart_title">命盘大厅</string>
     <string name="destiny_chart_bazi">生辰八字</string>
-    <string name="destiny_chart_bazi_desc">四柱格局 · 藏干十神 · 十年大运</string>
-    <string name="destiny_chart_western">西方本命星盘</string>
-    <string name="destiny_chart_western_desc">太阳月亮上升 · 四象元素能量</string>
+    <string name="destiny_chart_bazi_desc">四柱干支与大运</string>
+    <string name="destiny_chart_western">本命星盘</string>
+    <string name="destiny_chart_western_desc">日月上升与落座</string>
     <string name="destiny_chart_numerology">生命灵数</string>
-    <string name="destiny_chart_numerology_desc">生命道路数 · 九宫连线天赋</string>
+    <string name="destiny_chart_numerology_desc">道路数与九宫数盘</string>
     <string name="destiny_chart_bone_weight">袁天罡称骨</string>
-    <string name="destiny_chart_bone_weight_desc">四柱骨重 · 绝句断命歌诀</string>
+    <string name="destiny_chart_bone_weight_desc">骨重换算与歌诀</string>
     <string name="destiny_chart_nine_star">九星气学</string>
-    <string name="destiny_chart_nine_star_desc">本命九星 · 守护五行 · 吉凶方位</string>
+    <string name="destiny_chart_nine_star_desc">本命月命九星</string>
 
     <!-- Common Actions & Navigation -->
     <string name="action_back">返回</string>
-    <string name="action_back_home">返回首页</string>
+    <string name="action_back_home">首页</string>
     <string name="action_cancel">取消</string>
     <string name="action_confirm">确定</string>
     <string name="action_save">保存</string>
     <string name="action_delete">删除</string>
-    <string name="action_archive_result">归档此次结果</string>
-    <string name="action_recast">重新排盘</string>
+    <string name="action_archive_result">归档</string>
+    <string name="action_recast">重排</string>
     <string name="action_move_up">上移</string>
     <string name="action_move_down">下移</string>
     <string name="action_show">显示</string>
@@ -88,9 +88,9 @@
     <string name="settings_bazi_birth_day">日：%1$d</string>
     <string name="settings_bazi_birth_hour">出生时辰</string>
     <string name="settings_bazi_hour_unknown">时辰未知</string>
-    <string name="settings_bazi_save">保存档案</string>
-    <string name="settings_bazi_edit">修改生辰</string>
-    <string name="settings_bazi_clear">清除档案</string>
+    <string name="settings_bazi_save">保存</string>
+    <string name="settings_bazi_edit">修改</string>
+    <string name="settings_bazi_clear">清除</string>
     <string name="settings_bazi_clear_confirm_title">清除个人档案？</string>
     <string name="settings_bazi_clear_confirm_desc">清除后，将恢复通识黄历运势与常规排盘。</string>
     <string name="settings_bazi_preview_title">四柱排盘预览</string>
@@ -123,7 +123,7 @@
     <string name="settings_home_drag_hint">长按卡片或拖动手柄可上下排序，点击眼睛可切换首页显隐。</string>
     <string name="action_drag_reorder">拖拽排序</string>
     <string name="settings_data_total">本地总归档数：%1$d 条</string>
-    <string name="settings_data_clear_all">清空全部归档</string>
+    <string name="settings_data_clear_all">清空归档</string>
     <string name="settings_data_clear_confirm_title">确认清空所有归档？</string>
     <string name="settings_data_clear_confirm_desc">此操作不可恢复，所有保存在手表本地的归档都将被删除。</string>
     <string name="settings_data_clear_success">已清空所有归档</string>
@@ -143,13 +143,13 @@
     <string name="settings_tarot_reversed_disallow">仅正位模式</string>
     <string name="settings_tarot_deck">抽牌牌库范围</string>
     <string name="settings_tarot_deck_full">78张全牌</string>
-    <string name="settings_tarot_deck_major">仅22张大阿卡纳</string>
+    <string name="settings_tarot_deck_major">22张大牌</string>
     <string name="settings_compass_north">指向参照基准</string>
-    <string name="settings_compass_magnetic_north">地磁北 (默认)</string>
+    <string name="settings_compass_magnetic_north">地磁北</string>
     <string name="settings_compass_true_north">地理真北</string>
     <string name="settings_compass_declination">当地磁偏角补偿</string>
     <string name="settings_compass_declination_desc">西偏为负，东偏为正。设置后罗盘自动几何校准。</string>
-    <string name="settings_reset_all">重置所有设置</string>
+    <string name="settings_reset_all">恢复默认</string>
     <string name="settings_reset_all_confirm_title">确认重置所有设置？</string>
     <string name="settings_reset_all_confirm_desc">除个人生辰档案外，界面显示、触觉、首页顺序、塔罗及罗盘偏好都将恢复默认值。</string>
     <string name="settings_reset_all_success">已恢复默认设置</string>
@@ -192,13 +192,13 @@
     <string name="archive_field_summary">分类与概要</string>
     <string name="archive_field_cast_time">起卦时间</string>
     <string name="archive_field_note">备注</string>
-    <string name="archive_action_edit">修改标记</string>
-    <string name="archive_action_delete">删除归档</string>
-    <string name="archive_tag_title">归档此次结果</string>
+    <string name="archive_action_edit">编辑</string>
+    <string name="archive_action_delete">删除</string>
+    <string name="archive_tag_title">归档</string>
     <string name="archive_tag_summary_prefix">摘要：%1$s</string>
     <string name="archive_tag_name_required">标记名称</string>
     <string name="archive_tag_note_optional">备注</string>
-    <string name="archive_save_btn">保存归档</string>
+    <string name="archive_save_btn">保存</string>
     <string name="archive_edit_dialog_title">修改归档</string>
     <string name="archive_delete_dialog_title">确认删除？</string>
     <string name="archive_delete_dialog_desc">删除后不可恢复</string>
@@ -208,11 +208,11 @@
     <!-- Browse -->
     <string name="browse_title">浏览</string>
     <string name="browse_hexagrams_title">六十四卦</string>
-    <string name="browse_hexagrams_desc">查看全部卦象与爻辞</string>
+    <string name="browse_hexagrams_desc">全部卦象与爻辞</string>
     <string name="browse_tarot_title">塔罗牌库</string>
     <string name="browse_tarot_desc">78张大/小阿卡纳与牌义</string>
     <string name="browse_knowledge_title">道教知识</string>
-    <string name="browse_knowledge_desc">了解传统文化体系</string>
+    <string name="browse_knowledge_desc">传统文化体系与道术</string>
     <string name="browse_basics_title">易学基础</string>
     <string name="browse_basics_desc">阴阳五行、八卦、干支</string>
     <string name="browse_filter_category">分类筛选</string>
@@ -226,7 +226,7 @@
     <string name="about_disclaimer_title">免责声明</string>
     <string name="about_disclaimer_content">本应用提供的六爻、梅花易数、小六壬、每日运势及塔罗牌等内容仅供传统文化研究、学习与娱乐参考，不构成医疗、法律、金融或任何专业领域的决策建议，请勿将结果作为现实决定的唯一依据。</string>
     <string name="about_license_title">数据与版权声明</string>
-    <string name="about_back_to_settings">返回设置</string>
+    <string name="about_back_to_settings">返回</string>
 
     <!-- Welcome & Onboarding -->
     <string name="welcome_title_prefix">欢迎使用</string>
@@ -234,7 +234,7 @@
     <string name="welcome_badge_text">易</string>
     <string name="welcome_tagline">离线东方易学与西方塔罗研习工具</string>
     <string name="welcome_tap_to_start">轻点屏幕以开始</string>
-    <string name="welcome_start_button">查看声明并进入</string>
+    <string name="welcome_start_button">进入</string>
     <string name="welcome_terms_title">使用须知与协议说明</string>
     <string name="welcome_terms_subtitle">欢迎使用 Boompala。开始前请阅读以下关于内容性质与数据隐私的说明：</string>
     <string name="welcome_disclaimer_card_title">🔮</string>
@@ -244,9 +244,9 @@
     <string name="welcome_sources_card_title">📜</string>
     <string name="welcome_sources_card_content">周易经文爻辞源自维基文库（CC BY-SA 4.0），农历干支历法基于 6tail/lunar-java（MIT 开源），塔罗牌图像基于 1909 年经典公有领域修复版本（CC0 1.0）。感谢开源社区与文化典籍贡献者。</string>
     <string name="welcome_terms_footer_hint">点击下方按钮即表示您已阅读并同意上述说明</string>
-    <string name="welcome_agree_and_enter">同意并开启 Boompala</string>
-    <string name="welcome_revisit_from_about">查看欢迎与声明</string>
-    <string name="welcome_revisit_from_about_desc">重新浏览首次进入指引与声明</string>
+    <string name="welcome_agree_and_enter">进入</string>
+    <string name="welcome_revisit_from_about">欢迎与声明</string>
+    <string name="welcome_revisit_from_about_desc">首次进入指引与声明</string>
     <string name="welcome_step_welcome">欢迎</string>
     <string name="welcome_step_disclaimer">声明</string>
     <string name="welcome_step_mode">模式选择</string>
@@ -265,12 +265,12 @@
     <string name="settings_ai_api_key">API 秘钥</string>
     <string name="settings_ai_key_configured">已配置 · %1$s</string>
     <string name="settings_ai_key_not_set">未配置</string>
-    <string name="settings_ai_sync_button">扫码配置 API Key</string>
+    <string name="settings_ai_sync_button">扫码配置</string>
     <string name="settings_ai_sync_desc">手机扫码快速填写秘钥</string>
     <string name="settings_ai_test_button">测试连接</string>
-    <string name="settings_ai_test_ready">配置就绪 (待阶段二接入验证)</string>
+    <string name="settings_ai_test_ready">配置就绪</string>
     <string name="settings_ai_test_need_key">请先配置 API Key</string>
-    <string name="settings_ai_clear_key">清除 API Key</string>
+    <string name="settings_ai_clear_key">清除秘钥</string>
     <string name="settings_ai_clear_confirm_title">清除秘钥</string>
     <string name="settings_ai_clear_confirm_desc">确定要清除当前保存的 API Key 吗？</string>
 
@@ -291,5 +291,5 @@
     <string name="welcome_mode_online_title">⚡ 联网 SI 模式</string>
     <string name="welcome_mode_online_badge">智能增强</string>
     <string name="welcome_mode_online_desc">支持调用大模型 API 进行 SI 解卦。需自备 API Key，直连服务商。</string>
-    <string name="welcome_mode_confirm">开启 Boompala</string>
+    <string name="welcome_mode_confirm">进入</string>
 </resources>

@@ -97,8 +97,10 @@ fun PulseWaveCanvas(
 }
 
 /**
- * 结果页专用的典型脉象矢量波形图 Canvas。
- * 紧凑优雅地展示单个心动周期的主波、切迹与重搏波特征。
+ * 结果页专用的脉象矢量波形图 Canvas。
+ * 支持两种模式：
+ * 1. 20 秒全量实测走带脉图（高采样点序列）：采用高精折线与适度微光，附带基准参考线与时间等分刻度；
+ * 2. 单周期典型脉图（<= 32 点）：采用三阶贝塞尔平滑连接展示标准主波、切迹与重搏波特征。
  */
 @Composable
 fun ReferenceWaveformCanvas(
@@ -111,35 +113,84 @@ fun ReferenceWaveformCanvas(
 
         val w = size.width
         val h = size.height
-        val paddingV = h * 0.15f
+        val paddingV = h * 0.12f
         val availableH = h - (paddingV * 2)
         val stepX = w / (points.size - 1)
 
         val path = Path()
-        for (i in 0 until points.size - 1) {
-            val p0 = points[i]
-            val p1 = points[i + 1]
-            val x0 = i * stepX
-            val y0 = h - paddingV - (p0 * availableH)
-            val x1 = (i + 1) * stepX
-            val y1 = h - paddingV - (p1 * availableH)
+        val isFullStrip = points.size > 32
 
-            if (i == 0) path.moveTo(x0, y0)
-            val cx = (x0 + x1) / 2f
-            path.cubicTo(cx, y0, cx, y1, x1, y1)
+        if (isFullStrip) {
+            // 1. 绘制极细基准参考线 (对应舒张末期参考基线 0.20 附近)
+            val baselineY = h - paddingV - (0.20f * availableH)
+            drawLine(
+                color = Color.White.copy(alpha = 0.08f),
+                start = Offset(0f, baselineY),
+                end = Offset(w, baselineY),
+                strokeWidth = 0.8.dp.toPx(),
+            )
+
+            // 2. 5s、10s、15s 时间等分微刻度标
+            for (fraction in listOf(0.25f, 0.5f, 0.75f)) {
+                val tickX = w * fraction
+                drawLine(
+                    color = Color.White.copy(alpha = 0.15f),
+                    start = Offset(tickX, h - 3.dp.toPx()),
+                    end = Offset(tickX, h),
+                    strokeWidth = 0.8.dp.toPx(),
+                )
+            }
+
+            // 3. 高密度实测采样折线构建 (lineTo 保证极高波峰锐利度与极速渲染)
+            for (i in points.indices) {
+                val p = points[i]
+                val x = i * stepX
+                val y = h - paddingV - (p * availableH)
+                if (i == 0) {
+                    path.moveTo(x, y)
+                } else {
+                    path.lineTo(x, y)
+                }
+            }
+
+            // 4. 外层微光 (适度收敛，避免 500 点高密波峰光晕互相粘连)
+            drawPath(
+                path = path,
+                color = lineColor.copy(alpha = 0.22f),
+                style = Stroke(width = 2.4.dp.toPx(), cap = StrokeCap.Round),
+            )
+            // 5. 核心高精波形线
+            drawPath(
+                path = path,
+                color = lineColor,
+                style = Stroke(width = 1.2.dp.toPx(), cap = StrokeCap.Round),
+            )
+        } else {
+            for (i in 0 until points.size - 1) {
+                val p0 = points[i]
+                val p1 = points[i + 1]
+                val x0 = i * stepX
+                val y0 = h - paddingV - (p0 * availableH)
+                val x1 = (i + 1) * stepX
+                val y1 = h - paddingV - (p1 * availableH)
+
+                if (i == 0) path.moveTo(x0, y0)
+                val cx = (x0 + x1) / 2f
+                path.cubicTo(cx, y0, cx, y1, x1, y1)
+            }
+
+            // 外层微光
+            drawPath(
+                path = path,
+                color = lineColor.copy(alpha = 0.35f),
+                style = Stroke(width = 3.5.dp.toPx(), cap = StrokeCap.Round),
+            )
+            // 核心线
+            drawPath(
+                path = path,
+                color = lineColor,
+                style = Stroke(width = 1.6.dp.toPx(), cap = StrokeCap.Round),
+            )
         }
-
-        // 外层微光
-        drawPath(
-            path = path,
-            color = lineColor.copy(alpha = 0.35f),
-            style = Stroke(width = 3.5.dp.toPx(), cap = StrokeCap.Round),
-        )
-        // 核心线
-        drawPath(
-            path = path,
-            color = lineColor,
-            style = Stroke(width = 1.6.dp.toPx(), cap = StrokeCap.Round),
-        )
     }
 }

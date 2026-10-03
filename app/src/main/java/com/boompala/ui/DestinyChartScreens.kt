@@ -60,40 +60,6 @@ private fun shichenIdxToHour(idx: Int): Int? {
     }
 }
 
-// 十神通俗释义与人生大运阶段指引
-private data class ShiShenInfo(
-    val title: String,
-    val theme: String,
-    val description: String,
-)
-
-private val SHI_SHEN_INFO_MAP = mapOf(
-    "正官" to ShiShenInfo("正官", "事业规范 · 贵人提携", "主循规守序、责任担当、职业进阶与声誉积累。有上级或体制相助，宜守正求进。"),
-    "七杀" to ShiShenInfo("七杀", "开拓魄力 · 权威变革", "主果断威严、敢闯敢拼、直面竞争与破局。宜克服考验建立权威，忌急躁冲动。"),
-    "偏官" to ShiShenInfo("偏官", "开拓魄力 · 权威变革", "主果断威严、敢闯敢拼、直面竞争与破局。宜克服考验建立权威，忌急躁冲动。"),
-    "正印" to ShiShenInfo("正印", "学识涵养 · 仁厚福荫", "主文化修养、长辈师长庇佑、声望清贵。此期利进修深造、考学评职、蓄力厚发。"),
-    "偏印" to ShiShenInfo("偏印", "独门才智 · 洞察玄妙", "主钻研专长、直觉敏锐、偏门技艺与独立思考。利从事学术、设计研发与专业探索。"),
-    "枭神" to ShiShenInfo("枭神", "独门才智 · 洞察玄妙", "主钻研专长、直觉敏锐、偏门技艺与独立思考。利从事学术、设计研发与专业探索。"),
-    "比肩" to ShiShenInfo("比肩", "朋辈同道 · 自强立身", "主朋友助力、志同道合、自信笃定。宜结伴创业共赢、自立自强，注意包容不同意见。"),
-    "劫财" to ShiShenInfo("劫财", "广聚人脉 · 敢拼敢闯", "主社交活跃、敢打硬仗、善抓商机。人脉虽广但竞争激烈，利果断行动，注意守财防耗。"),
-    "食神" to ShiShenInfo("食神", "才艺灵感 · 福寿闲雅", "主温润宽厚、口福康泰、才华自然流露。利文化艺术、创意输出，生活悠然自得。"),
-    "伤官" to ShiShenInfo("伤官", "创新突围 · 锋芒才情", "主才思敏捷、打破常规、个性鲜明。利革新突破、巧思立功，注意谨言慎行防招忌。"),
-    "正财" to ShiShenInfo("正财", "勤勉致富 · 稳筑家业", "主本职收入、踏实经营、资产稳固积累。付出与回报成正比，宜循序渐进、稳健理财。"),
-    "偏财" to ShiShenInfo("偏财", "敏锐商机 · 财气亨通", "主眼界开阔、机缘巧合、资金流动活跃。利商务拓展、人脉变现，切忌盲目投机。"),
-)
-
-private fun getShiShenInfo(raw: String): ShiShenInfo? {
-    return SHI_SHEN_INFO_MAP[raw] ?: SHI_SHEN_INFO_MAP.entries.firstOrNull { raw.contains(it.key) }?.value
-}
-
-private fun getFiveElementDesc(wx: FiveElement): String = when (wx) {
-    FiveElement.METAL -> "金主义，沉稳果断、刚毅严正"
-    FiveElement.WOOD -> "木主仁，生发向上、宽厚仁爱"
-    FiveElement.WATER -> "水主智，聪颖机敏、润下通达"
-    FiveElement.FIRE -> "火主礼，热情明朗、豪迈进取"
-    FiveElement.EARTH -> "土主信，厚重敦实、稳健守诺"
-}
-
 private enum class DestinyPickerMode {
     NONE, DATE, SHICHEN
 }
@@ -169,27 +135,32 @@ fun DestinyChartMenuScreen(
 
                 // Profile Configuration Header Card
                 item(key = "profile-header") {
+                    val lunarDateText = remember(selectedDate, selectedHour) {
+                        BaziEngine.formatLunarDate(selectedDate, selectedHour)
+                    }
                     ResultCard {
                         Text(
-                            text = "当前推算生日时辰",
+                            text = "生辰信息",
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.primary,
                         )
                         Text(
-                            text = "${selectedDate.year}年${selectedDate.monthValue}月${selectedDate.dayOfMonth}日",
+                            text = "公历 ${selectedDate.year}年${selectedDate.monthValue}月${selectedDate.dayOfMonth}日 · ${SHICHEN_NAMES[selectedShichenIndex].substringBefore(" ·")}",
                             style = MaterialTheme.typography.bodySmall,
                             fontWeight = FontWeight.Bold,
                         )
-                        Text(
-                            text = "${SHICHEN_NAMES[selectedShichenIndex]} · ${selectedGender.titleZh}",
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.wearMarquee(settings.animationsEnabled),
-                        )
-                        Spacer(modifier = Modifier.height(2.dp))
+                        if (lunarDateText.isNotBlank()) {
+                            Text(
+                                text = "农历 $lunarDateText · ${selectedGender.titleZh}",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.wearMarquee(settings.animationsEnabled),
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(3.dp))
                         Row(
                             modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(4.dp),
+                            horizontalArrangement = Arrangement.spacedBy(6.dp),
                         ) {
                             val editDateInter = remember { MutableInteractionSource() }
                             BoompalaCardButton(
@@ -198,23 +169,10 @@ fun DestinyChartMenuScreen(
                                     .weight(1f)
                                     .wearPressFeedback(editDateInter),
                                 interactionSource = editDateInter,
-                                contentPadding = PaddingValues(vertical = 4.dp, horizontal = 4.dp),
+                                contentPadding = PaddingValues(vertical = 5.dp, horizontal = 4.dp),
                                 colors = BoompalaButtonDefaults.outlinedButtonColors(),
                             ) {
-                                Text("改日期", style = MaterialTheme.typography.labelSmall, maxLines = 1)
-                            }
-
-                            val editHourInter = remember { MutableInteractionSource() }
-                            BoompalaCardButton(
-                                onClick = { activePicker = DestinyPickerMode.SHICHEN },
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .wearPressFeedback(editHourInter),
-                                interactionSource = editHourInter,
-                                contentPadding = PaddingValues(vertical = 4.dp, horizontal = 4.dp),
-                                colors = BoompalaButtonDefaults.outlinedButtonColors(),
-                            ) {
-                                Text("改时辰", style = MaterialTheme.typography.labelSmall, maxLines = 1)
+                                Text("修改生辰", style = MaterialTheme.typography.labelSmall, maxLines = 1)
                             }
 
                             val genderInter = remember { MutableInteractionSource() }
@@ -226,7 +184,7 @@ fun DestinyChartMenuScreen(
                                     .weight(1f)
                                     .wearPressFeedback(genderInter),
                                 interactionSource = genderInter,
-                                contentPadding = PaddingValues(vertical = 4.dp, horizontal = 4.dp),
+                                contentPadding = PaddingValues(vertical = 5.dp, horizontal = 4.dp),
                                 colors = BoompalaButtonDefaults.outlinedButtonColors(),
                             ) {
                                 Text(selectedGender.titleZh, style = MaterialTheme.typography.labelSmall, maxLines = 1)
@@ -235,7 +193,7 @@ fun DestinyChartMenuScreen(
                     }
                 }
 
-                // 1. 生辰八字 (BaZi)
+                // 1. 生辰八字
                 item(key = "feature-bazi") {
                     val pressInter = remember { MutableInteractionSource() }
                     BoompalaCardButton(
@@ -243,22 +201,15 @@ fun DestinyChartMenuScreen(
                         modifier = fullWidthModifier.wearPressFeedback(pressInter),
                         interactionSource = pressInter,
                     ) {
-                        Column(modifier = Modifier.fillMaxWidth()) {
-                            Text(
-                                text = "生辰八字排盘",
-                                style = MaterialTheme.typography.titleSmall,
-                                fontWeight = FontWeight.Bold,
-                            )
-                            Text(
-                                text = "四柱十神 · 纳音藏干 · 十年大运",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
-                        }
+                        Text(
+                            text = "生辰八字",
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.Bold,
+                        )
                     }
                 }
 
-                // 2. 西方本命星盘 (Western Natal Chart & 4 Elements)
+                // 2. 本命星盘
                 item(key = "feature-western") {
                     val pressInter = remember { MutableInteractionSource() }
                     BoompalaCardButton(
@@ -266,45 +217,15 @@ fun DestinyChartMenuScreen(
                         modifier = fullWidthModifier.wearPressFeedback(pressInter),
                         interactionSource = pressInter,
                     ) {
-                        Column(modifier = Modifier.fillMaxWidth()) {
-                            Text(
-                                text = "西方本命星盘",
-                                style = MaterialTheme.typography.titleSmall,
-                                fontWeight = FontWeight.Bold,
-                            )
-                            Text(
-                                text = "三大巨头 · 四象元素能量条",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
-                        }
+                        Text(
+                            text = "本命星盘",
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.Bold,
+                        )
                     }
                 }
 
-                // 3. 生命灵数 (Numerology)
-                item(key = "feature-numerology") {
-                    val pressInter = remember { MutableInteractionSource() }
-                    BoompalaCardButton(
-                        onClick = { onNavigateToNumerology(selectedDate) },
-                        modifier = fullWidthModifier.wearPressFeedback(pressInter),
-                        interactionSource = pressInter,
-                    ) {
-                        Column(modifier = Modifier.fillMaxWidth()) {
-                            Text(
-                                text = "生命灵数",
-                                style = MaterialTheme.typography.titleSmall,
-                                fontWeight = FontWeight.Bold,
-                            )
-                            Text(
-                                text = "生命道路数 · 洛书九宫天赋",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
-                        }
-                    }
-                }
-
-                // 4. 袁天罡称骨算命 (Bone Weight)
+                // 3. 袁天罡称骨
                 item(key = "feature-bone") {
                     val pressInter = remember { MutableInteractionSource() }
                     BoompalaCardButton(
@@ -312,22 +233,31 @@ fun DestinyChartMenuScreen(
                         modifier = fullWidthModifier.wearPressFeedback(pressInter),
                         interactionSource = pressInter,
                     ) {
-                        Column(modifier = Modifier.fillMaxWidth()) {
-                            Text(
-                                text = "袁天罡称骨",
-                                style = MaterialTheme.typography.titleSmall,
-                                fontWeight = FontWeight.Bold,
-                            )
-                            Text(
-                                text = "四柱骨重 · 绝句传世歌诀",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
-                        }
+                        Text(
+                            text = "袁天罡称骨",
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.Bold,
+                        )
                     }
                 }
 
-                // 5. 九星气学 (Nine Star Ki)
+                // 4. 生命灵数
+                item(key = "feature-numerology") {
+                    val pressInter = remember { MutableInteractionSource() }
+                    BoompalaCardButton(
+                        onClick = { onNavigateToNumerology(selectedDate) },
+                        modifier = fullWidthModifier.wearPressFeedback(pressInter),
+                        interactionSource = pressInter,
+                    ) {
+                        Text(
+                            text = "生命灵数",
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.Bold,
+                        )
+                    }
+                }
+
+                // 5. 九星气学
                 item(key = "feature-ninestar") {
                     val pressInter = remember { MutableInteractionSource() }
                     BoompalaCardButton(
@@ -335,18 +265,11 @@ fun DestinyChartMenuScreen(
                         modifier = fullWidthModifier.wearPressFeedback(pressInter),
                         interactionSource = pressInter,
                     ) {
-                        Column(modifier = Modifier.fillMaxWidth()) {
-                            Text(
-                                text = "九星气学",
-                                style = MaterialTheme.typography.titleSmall,
-                                fontWeight = FontWeight.Bold,
-                            )
-                            Text(
-                                text = "本命九星 · 守护五行 · 吉凶方位",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
-                        }
+                        Text(
+                            text = "九星气学",
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.Bold,
+                        )
                     }
                 }
 
@@ -382,7 +305,7 @@ fun BaziDetailScreen(
     ) {
         item(key = "bazi-title") {
             ScreenTitle(
-                text = "生辰八字排盘",
+                text = "生辰八字",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary,
@@ -393,54 +316,91 @@ fun BaziDetailScreen(
         item(key = "bazi-summary-card") {
             ResultCard {
                 Text(
-                    text = profile.shortSummaryZh,
+                    text = "${profile.gender.titleZh} · 日主 ${profile.dayMaster.displayName}${profile.dayMasterElement.displayName}",
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.wearMarquee(animationsEnabled),
                 )
-                Text(
-                    text = "元神日主：${profile.dayMaster.displayName} (${profile.dayMasterElement.displayName})",
-                    style = MaterialTheme.typography.bodySmall,
-                    fontWeight = FontWeight.Bold,
-                )
-                Text(
-                    text = "日干代表自身根本心性与原动力，坐支代表内心归属。",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
+                if (profile.lunarDateText.isNotBlank()) {
+                    DetailField(label = "农历生辰", value = profile.lunarDateText)
+                }
                 DetailField(label = "四柱干支", value = profile.fourPillarsText)
                 DetailField(label = "生肖属相", value = profile.shengXiao)
                 DetailField(label = "胎元 · 命宫", value = "${profile.taiYuan} · ${profile.mingGong}")
             }
         }
 
-        // Four Pillars Card with Stage Explanations
+        // Four Pillars Card
         item(key = "bazi-pillars-card") {
+            val pillars = listOfNotNull(
+                Triple("年柱", profile.yearPillar, false),
+                Triple("月柱", profile.monthPillar, false),
+                Triple("日柱", profile.dayPillar, true),
+                profile.hourPillar?.let { Triple("时柱", it, false) },
+            )
             ResultCard {
                 Text(
-                    text = "四柱格局与十神",
+                    text = "四柱排盘",
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.primary,
                 )
-                DetailField(
-                    label = "年柱 · ${profile.yearPillar.ganzhi.displayName} (祖基)",
-                    value = "${profile.yearPillar.stemShiShen} · ${profile.yearPillar.naYin}",
-                )
-                DetailField(
-                    label = "月柱 · ${profile.monthPillar.ganzhi.displayName} (事业)",
-                    value = "${profile.monthPillar.stemShiShen} · ${profile.monthPillar.naYin}",
-                )
-                DetailField(
-                    label = "日柱 · ${profile.dayPillar.ganzhi.displayName} (自身)",
-                    value = "${profile.dayPillar.stemShiShen} · ${profile.dayPillar.naYin}",
-                )
-                val hourPillar = profile.hourPillar
-                if (hourPillar != null) {
-                    DetailField(
-                        label = "时柱 · ${hourPillar.ganzhi.displayName} (归宿)",
-                        value = "${hourPillar.stemShiShen} · ${hourPillar.naYin}",
-                    )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    pillars.forEach { (name, pillar, isDay) ->
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.weight(1f),
+                        ) {
+                            Text(
+                                text = name,
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                fontSize = 10.sp,
+                            )
+                            Text(
+                                text = if (isDay) "日元" else pillar.stemShiShen,
+                                style = MaterialTheme.typography.labelSmall,
+                                color = if (isDay) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 11.sp,
+                            )
+                            Spacer(modifier = Modifier.height(2.dp))
+                            Text(
+                                text = pillar.ganzhi.heavenlyStem.displayName,
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = if (isDay) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
+                            )
+                            Text(
+                                text = pillar.ganzhi.earthlyBranch.displayName,
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontWeight = FontWeight.Bold,
+                            )
+                            Spacer(modifier = Modifier.height(2.dp))
+                            Text(
+                                text = pillar.hiddenStemsText,
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                fontSize = 10.sp,
+                            )
+                            Text(
+                                text = pillar.naYin,
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+                                fontSize = 9.sp,
+                                maxLines = 1,
+                            )
+                            Text(
+                                text = pillar.diShi,
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+                                fontSize = 9.sp,
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -449,11 +409,23 @@ fun BaziDetailScreen(
         item(key = "bazi-wuxing-card") {
             val wx = profile.wuXingDistribution
             ResultCard {
-                Text(
-                    text = "五行力量统计",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.primary,
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = "五行分布",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.primary,
+                    )
+                    Text(
+                        text = "${wx.dominantElement.displayName}旺",
+                        style = MaterialTheme.typography.labelSmall,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary,
+                    )
+                }
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -465,41 +437,23 @@ fun BaziDetailScreen(
                     Text("火 ${wx.fireCount}", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold)
                     Text("土 ${wx.earthCount}", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold)
                 }
-                Spacer(modifier = Modifier.height(2.dp))
-                Text(
-                    text = "主导五行：${wx.dominantElement.displayName}旺",
-                    style = MaterialTheme.typography.bodySmall,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary,
-                )
-                Text(
-                    text = getFiveElementDesc(wx.dominantElement),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
             }
         }
 
-        // DaYun List with Detailed Plain Explanations
+        // DaYun List
         if (profile.daYunList.isNotEmpty()) {
             item(key = "bazi-dayun-title") {
-                Column {
-                    Text(
-                        text = "十年大运详解",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.primary,
-                        fontWeight = FontWeight.Bold,
-                    )
-                    Text(
-                        text = "每步大运主导十年人生阶段重点与气运导向",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
+                Text(
+                    text = "大运 · ${if (profile.isForward) "顺行" else "逆行"} · ${profile.startAge}岁起运",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.primary,
+                    fontWeight = FontWeight.Bold,
+                )
             }
+            val currentYear = LocalDate.now().year
             profile.daYunList.forEach { dy ->
                 item(key = "dayun-${dy.index}") {
-                    val shiShenInfo = getShiShenInfo(dy.stemShiShen)
+                    val isCurrent = currentYear in dy.startYear..dy.endYear
                     ResultCard {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
@@ -510,27 +464,24 @@ fun BaziDetailScreen(
                                 text = "${dy.startAge}-${dy.endAge}岁 · ${dy.ganzhi.displayName}",
                                 style = MaterialTheme.typography.bodySmall,
                                 fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.primary,
+                                color = if (isCurrent) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
                             )
-                            Text(
-                                text = dy.stemShiShen,
-                                style = MaterialTheme.typography.labelSmall,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.secondary,
-                            )
-                        }
-                        if (shiShenInfo != null) {
-                            Text(
-                                text = shiShenInfo.theme,
-                                style = MaterialTheme.typography.labelSmall,
-                                fontWeight = FontWeight.Medium,
-                                color = MaterialTheme.colorScheme.onSurface,
-                            )
-                            Text(
-                                text = shiShenInfo.description,
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
+                            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                                if (isCurrent) {
+                                    Text(
+                                        text = "当前",
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = MaterialTheme.colorScheme.primary,
+                                        fontWeight = FontWeight.Bold,
+                                    )
+                                }
+                                Text(
+                                    text = dy.stemShiShen,
+                                    style = MaterialTheme.typography.labelSmall,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.secondary,
+                                )
+                            }
                         }
                         Text(
                             text = "${dy.startYear}年 - ${dy.endYear}年",
@@ -572,18 +523,18 @@ fun WesternChartScreen(
     ) {
         item(key = "western-title") {
             ScreenTitle(
-                text = "西方本命星盘",
+                text = "本命星盘",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary,
             )
         }
 
-        // Big Three Card with Plain Meaning
+        // 核心落座 (太阳、月亮、上升)
         item(key = "big-three-card") {
             ResultCard {
                 Text(
-                    text = "三主星 · Big Three",
+                    text = "核心落座",
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.primary,
                 )
@@ -594,115 +545,116 @@ fun WesternChartScreen(
                     color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.wearMarquee(animationsEnabled),
                 )
-                Spacer(modifier = Modifier.height(2.dp))
+                Spacer(modifier = Modifier.height(4.dp))
 
                 // Sun
-                Text(
-                    text = "太阳 ☉ ${reading.sun.sign.displayNameZh} (${reading.sun.sign.element.displayNameZh})",
-                    style = MaterialTheme.typography.bodySmall,
-                    fontWeight = FontWeight.Bold,
-                )
-                Text(
-                    text = "【核心自我】意志追求、外在人格与生命目标",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-
-                Spacer(modifier = Modifier.height(2.dp))
-                // Moon
-                Text(
-                    text = "月亮 ☽ ${reading.moon.sign.displayNameZh} (${reading.moon.sign.element.displayNameZh})",
-                    style = MaterialTheme.typography.bodySmall,
-                    fontWeight = FontWeight.Bold,
-                )
-                Text(
-                    text = "【内心潜意识】情绪安全感来源与脆弱的情感需求",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-
-                val asc = reading.ascendant
-                if (asc != null) {
-                    Spacer(modifier = Modifier.height(2.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
                     Text(
-                        text = "上升 ASC ${asc.sign.displayNameZh} (${asc.sign.element.displayNameZh})",
+                        text = "太阳 ☉ ${reading.sun.sign.displayNameZh}",
                         style = MaterialTheme.typography.bodySmall,
                         fontWeight = FontWeight.Bold,
                     )
                     Text(
-                        text = "【外在面具】他人初见印象、处事风格与对外窗口",
+                        text = "第${reading.sun.houseNumber}宫 · ${reading.sun.formattedDegree}",
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
+
+                Spacer(modifier = Modifier.height(2.dp))
+                // Moon
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = "月亮 ☽ ${reading.moon.sign.displayNameZh}",
+                        style = MaterialTheme.typography.bodySmall,
+                        fontWeight = FontWeight.Bold,
+                    )
+                    Text(
+                        text = "第${reading.moon.houseNumber}宫 · ${reading.moon.formattedDegree}",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+
+                val asc = reading.ascendant
+                if (asc != null) {
+                    Spacer(modifier = Modifier.height(2.dp))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            text = "上升 ASC ${asc.sign.displayNameZh}",
+                            style = MaterialTheme.typography.bodySmall,
+                            fontWeight = FontWeight.Bold,
+                        )
+                        Text(
+                            text = "第${asc.houseNumber}宫 · ${asc.formattedDegree}",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                }
             }
         }
 
-        // 4 Elements Balance Card - Clean, Dedicated Rows with Progress Bars
+        // 四象元素分布：展示客观落座星体，彻底清除猎奇百分比与进度条
         item(key = "elements-card") {
             val eb = reading.elementBalance
             ResultCard {
                 Text(
-                    text = "四象元素能量分布",
+                    text = "四象元素分布",
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.primary,
                 )
                 Text(
                     text = eb.balanceSummaryZh,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Bold,
                 )
                 Spacer(modifier = Modifier.height(4.dp))
 
-                // Detailed individual breakdown for all 4 elements
-                val elementList = listOf(
-                    Triple(ZodiacElement.FIRE, "🔥 火象", "行动 · 热情 · 勇气探索"),
-                    Triple(ZodiacElement.EARTH, "🌍 土象", "务实 · 稳健 · 秩序筑基"),
-                    Triple(ZodiacElement.AIR, "💨 风象", "思维 · 理智 · 沟通洞察"),
-                    Triple(ZodiacElement.WATER, "💧 水象", "情感 · 直觉 · 深刻共情"),
+                val elements = listOf(
+                    ZodiacElement.FIRE,
+                    ZodiacElement.EARTH,
+                    ZodiacElement.AIR,
+                    ZodiacElement.WATER,
                 )
 
-                Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
-                    elementList.forEach { (elem, name, keywords) ->
-                        val pct = eb.percentage(elem)
-                        Column {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                Text(
-                                    text = name,
-                                    style = MaterialTheme.typography.labelSmall,
-                                    fontWeight = FontWeight.Bold,
-                                )
-                                Text(
-                                    text = "${pct}%",
-                                    style = MaterialTheme.typography.labelSmall,
-                                    fontWeight = FontWeight.Bold,
-                                    color = Color(elem.colorHex),
-                                )
-                            }
-                            Spacer(modifier = Modifier.height(2.dp))
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(5.dp)
-                                    .clip(RoundedCornerShape(2.dp))
-                                    .background(MaterialTheme.colorScheme.surfaceContainer),
-                            ) {
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxWidth(fraction = (pct / 100f).coerceIn(0.01f, 1f))
-                                        .fillMaxHeight()
-                                        .background(Color(elem.colorHex)),
-                                )
-                            }
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    elements.forEach { elem ->
+                        val bodies = eb.bodiesFor(elem)
+                        val bodiesText = if (bodies.isNotEmpty()) {
+                            bodies.joinToString("、") { it.displayNameZh }
+                        } else {
+                            "无落座"
+                        }
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
                             Text(
-                                text = keywords,
+                                text = "${elem.displayNameZh} (${bodies.size})",
+                                style = MaterialTheme.typography.labelSmall,
+                                fontWeight = FontWeight.Bold,
+                                color = Color(elem.colorHex),
+                            )
+                            Text(
+                                text = bodiesText,
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                fontSize = 10.sp,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
                             )
                         }
                     }
@@ -710,47 +662,33 @@ fun WesternChartScreen(
             }
         }
 
-        // Planets Placement with Astrological Meanings
+        // 主要行星落座：水金火木土（排除日月升，移除冗余套话）
         item(key = "planets-card") {
             ResultCard {
                 Text(
-                    text = "各大星体黄道落座",
+                    text = "主要行星落座",
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.primary,
                 )
-                val planetThemes = mapOf(
-                    CelestialBody.MERCURY to "思维与沟通表达",
-                    CelestialBody.VENUS to "情感审美与财禄",
-                    CelestialBody.MARS to "执行力与竞争冲劲",
-                    CelestialBody.JUPITER to "幸运机遇与宏观扩张",
-                    CelestialBody.SATURN to "责任纪律与人生考验",
-                )
-                reading.planets.forEach { p ->
-                    Column(modifier = Modifier.padding(vertical = 2.dp)) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Text(
-                                text = "${p.body.displayNameZh} ${p.body.symbol}",
-                                style = MaterialTheme.typography.bodySmall,
-                                fontWeight = FontWeight.Bold,
-                            )
-                            Text(
-                                text = "${p.sign.displayNameZh} · 第${p.houseNumber}宫",
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.primary,
-                            )
-                        }
-                        planetThemes[p.body]?.let { theme ->
-                            Text(
-                                text = "掌管：$theme",
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                fontSize = 10.sp,
-                            )
-                        }
+                Spacer(modifier = Modifier.height(2.dp))
+                reading.majorPlanets.forEach { p ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 2.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            text = "${p.body.displayNameZh} ${p.body.symbol}",
+                            style = MaterialTheme.typography.bodySmall,
+                            fontWeight = FontWeight.Bold,
+                        )
+                        Text(
+                            text = "${p.sign.displayNameZh} · 第${p.houseNumber}宫 (${p.formattedDegree})",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
                     }
                 }
             }
@@ -786,7 +724,7 @@ fun NumerologyDetailScreen(
     ) {
         item(key = "num-title") {
             ScreenTitle(
-                text = "毕达哥拉斯生命灵数",
+                text = "生命灵数",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary,
@@ -833,53 +771,31 @@ fun NumerologyDetailScreen(
             }
         }
 
-        // Core Numbers with Clear Explanations
+        // 核心灵数
         item(key = "core-numbers-card") {
             ResultCard {
                 Text(
-                    text = "核心天赋灵数",
+                    text = "核心灵数",
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.primary,
                 )
+                Spacer(modifier = Modifier.height(2.dp))
                 Column(modifier = Modifier.fillMaxWidth()) {
                     DetailField(label = "生日数", value = reading.birthdayNumber.toString())
-                    Text(
-                        text = "先天自带的直觉性格与基础天赋",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        fontSize = 10.sp,
-                    )
-                    Spacer(modifier = Modifier.height(3.dp))
-
                     DetailField(label = "态度数", value = reading.attitudeNumber.toString())
-                    Text(
-                        text = "面对外界与生活变故时的第一反应态度",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        fontSize = 10.sp,
-                    )
-                    Spacer(modifier = Modifier.height(3.dp))
-
-                    DetailField(label = "当年流年数", value = reading.personalYearNumber.toString())
-                    Text(
-                        text = "当前年度所处的9年灵数运势周期主题",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        fontSize = 10.sp,
-                    )
+                    DetailField(label = "流年数", value = reading.personalYearNumber.toString())
                 }
             }
         }
 
-        // Lo Shu Grid
+        // 九宫数盘
         item(key = "loshu-card") {
             ResultCard {
                 Text(
-                    text = "九宫数阵天赋连线",
+                    text = "九宫数盘",
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.primary,
                 )
-                // Render 3x3 Lo Shu visual grid
                 val loShuLayout = listOf(
                     listOf(4, 9, 2),
                     listOf(3, 5, 7),
@@ -925,7 +841,7 @@ fun NumerologyDetailScreen(
                 }
                 if (reading.loShuGrid.lines.none { it.isComplete }) {
                     Text(
-                        text = "能量均匀分布，多维平衡发展",
+                        text = "能量分布均匀",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -963,7 +879,7 @@ fun BoneWeightDetailScreen(
     ) {
         item(key = "bone-title") {
             ScreenTitle(
-                text = "袁天罡称骨算命",
+                text = "袁天罡称骨",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary,
@@ -1009,20 +925,13 @@ fun BoneWeightDetailScreen(
                     Text("日骨：${reading.dayWeightQian}钱", style = MaterialTheme.typography.labelSmall)
                     Text("时骨：${reading.hourWeightQian}钱", style = MaterialTheme.typography.labelSmall)
                 }
-                Spacer(modifier = Modifier.height(2.dp))
-                Text(
-                    text = "【称骨说明】年月日时四柱相加，十钱为一两。三至四两为常人格局；四两以上渐入佳境；五六两主富贵福寿。",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    fontSize = 10.sp,
-                )
             }
         }
 
         item(key = "bone-poem-card") {
             ResultCard {
                 Text(
-                    text = "称骨绝句歌诀",
+                    text = "称骨歌诀",
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.primary,
                 )
@@ -1041,7 +950,7 @@ fun BoneWeightDetailScreen(
         item(key = "bone-explanation-card") {
             ResultCard {
                 Text(
-                    text = "白话命运评注",
+                    text = "注解",
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.primary,
                 )
@@ -1083,7 +992,7 @@ fun NineStarDetailScreen(
     ) {
         item(key = "ninestar-title") {
             ScreenTitle(
-                text = "九星气学命盘",
+                text = "九星气学",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary,
@@ -1093,7 +1002,7 @@ fun NineStarDetailScreen(
         item(key = "year-star-card") {
             ResultCard {
                 Text(
-                    text = "本命年星 (终身根本气运)",
+                    text = "本命年星",
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.primary,
                 )
@@ -1105,7 +1014,7 @@ fun NineStarDetailScreen(
                 )
                 DetailField(label = "本命卦象", value = reading.yearStar.trigramZh)
                 DetailField(label = "守护五行", value = reading.yearStar.element.displayName)
-                DetailField(label = "吉神生旺方", value = reading.yearStar.luckyDirectionsZh)
+                DetailField(label = "吉旺方位", value = reading.yearStar.luckyDirectionsZh)
                 Text(
                     text = reading.yearStar.personalityZh,
                     style = MaterialTheme.typography.bodySmall,
@@ -1118,7 +1027,7 @@ fun NineStarDetailScreen(
         item(key = "month-star-card") {
             ResultCard {
                 Text(
-                    text = "月命星 (潜意识本能性格)",
+                    text = "月命星",
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.primary,
                 )
@@ -1135,7 +1044,7 @@ fun NineStarDetailScreen(
         item(key = "theme-card") {
             ResultCard {
                 Text(
-                    text = "命局五行气场主题",
+                    text = "气场主题",
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.primary,
                 )

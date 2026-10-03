@@ -382,8 +382,9 @@ fun LiuYaoResultContent(
         item(key = "void-summary") {
             VoidSummaryCard(voidSummary)
         }
-        item(key = "archive") {
+        item(key = "result-actions") {
             val archiveInteraction = remember { MutableInteractionSource() }
+            val backInteraction = remember { MutableInteractionSource() }
             val completedAiData = (aiState as? AiCardState.Completed)?.let {
                 AiArchiveData(
                     topic = it.topic.displayName,
@@ -391,28 +392,30 @@ fun LiuYaoResultContent(
                     fullText = it.fullText,
                 )
             }
-            BoompalaCardButton(
-                onClick = { onArchive(result, completedAiData) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wearPressFeedback(archiveInteraction),
-                interactionSource = archiveInteraction,
-                colors = BoompalaButtonDefaults.outlinedButtonColors(),
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
             ) {
-                Text("归档此次结果")
-            }
-        }
-        item(key = "back") {
-            val backInteraction = remember { MutableInteractionSource() }
-            BoompalaCardButton(
-                onClick = onBack,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wearPressFeedback(backInteraction),
-                interactionSource = backInteraction,
-                colors = BoompalaButtonDefaults.outlinedButtonColors(),
-            ) {
-                Text("返回修改")
+                BoompalaCardButton(
+                    onClick = { onArchive(result, completedAiData) },
+                    modifier = Modifier
+                        .weight(1f)
+                        .wearPressFeedback(archiveInteraction),
+                    interactionSource = archiveInteraction,
+                    colors = BoompalaButtonDefaults.outlinedButtonColors(),
+                ) {
+                    Text("归档")
+                }
+                BoompalaCardButton(
+                    onClick = onBack,
+                    modifier = Modifier
+                        .weight(1f)
+                        .wearPressFeedback(backInteraction),
+                    interactionSource = backInteraction,
+                    colors = BoompalaButtonDefaults.outlinedButtonColors(),
+                ) {
+                    Text("返回")
+                }
             }
         }
     }

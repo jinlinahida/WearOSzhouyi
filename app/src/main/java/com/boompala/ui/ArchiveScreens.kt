@@ -3,6 +3,7 @@ package com.boompala.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -87,8 +88,9 @@ fun ArchiveListScreen(
                         interactionSource = pressInteraction,
                     ) {
                         Text(
-                            text = if (selected) "✓ $t" else t,
+                            text = t,
                             fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
+                            maxLines = 1,
                         )
                     }
                 }
@@ -119,8 +121,9 @@ fun ArchiveListScreen(
                                 Box(Modifier.padding(end = 8.dp).size(10.dp).background(Color(c), RoundedCornerShape(50)))
                             }
                             Text(
-                                text = if (selected) "✓ $t" else t,
+                                text = t,
                                 fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
+                                maxLines = 1,
                             )
                         }
                     }
@@ -232,16 +235,33 @@ fun ArchiveDetailScreen(
             }
         }
         item {
-            val editInteraction = remember { MutableInteractionSource() }
-            BoompalaCardButton(
-                onClick = { edit = true },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wearPressFeedback(editInteraction),
-                interactionSource = editInteraction,
-                colors = BoompalaButtonDefaults.outlinedButtonColors(),
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
             ) {
-                Text(stringResource(R.string.archive_action_edit))
+                val editInteraction = remember { MutableInteractionSource() }
+                BoompalaCardButton(
+                    onClick = { edit = true },
+                    modifier = Modifier
+                        .weight(1f)
+                        .wearPressFeedback(editInteraction),
+                    interactionSource = editInteraction,
+                    colors = BoompalaButtonDefaults.outlinedButtonColors(),
+                ) {
+                    Text(stringResource(R.string.archive_action_edit))
+                }
+
+                val backInteraction = remember { MutableInteractionSource() }
+                BoompalaCardButton(
+                    onClick = onBack,
+                    modifier = Modifier
+                        .weight(1f)
+                        .wearPressFeedback(backInteraction),
+                    interactionSource = backInteraction,
+                    colors = BoompalaButtonDefaults.outlinedButtonColors(),
+                ) {
+                    Text(stringResource(R.string.action_back))
+                }
             }
         }
         item {
@@ -255,19 +275,6 @@ fun ArchiveDetailScreen(
                 colors = BoompalaButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error),
             ) {
                 Text(stringResource(R.string.archive_action_delete), color = MaterialTheme.colorScheme.error)
-            }
-        }
-        item {
-            val backInteraction = remember { MutableInteractionSource() }
-            BoompalaCardButton(
-                onClick = onBack,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wearPressFeedback(backInteraction),
-                interactionSource = backInteraction,
-                colors = BoompalaButtonDefaults.outlinedButtonColors(),
-            ) {
-                Text(stringResource(R.string.action_back))
             }
         }
     }
@@ -376,8 +383,9 @@ private fun ArchiveEditDialog(
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Box(Modifier.padding(end = 8.dp).size(10.dp).background(Color(c), RoundedCornerShape(50)))
                                 Text(
-                                    text = if (selected) "✓ $label" else label,
+                                    text = label,
                                     fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
+                                    maxLines = 1,
                                 )
                             }
                         }

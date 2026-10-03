@@ -12,6 +12,7 @@ object TcmPulseClassifier {
         metrics: PulseFeatureMetrics,
         hour24: Int = LocalTime.now().hour,
         timestampMillis: Long = System.currentTimeMillis(),
+        measuredWaveform: List<Float> = emptyList(),
     ): PulseDiagnosisResult {
         val category = determineCategory(metrics)
         val profile = PulseCatalog.getProfile(category)
@@ -23,6 +24,7 @@ object TcmPulseClassifier {
             profile = profile,
             meridianInfo = meridian,
             timestampMillis = timestampMillis,
+            measuredWaveform = measuredWaveform,
         )
     }
 

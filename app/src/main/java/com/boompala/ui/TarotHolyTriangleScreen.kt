@@ -83,29 +83,6 @@ fun TarotHolyTriangleScreen(
                 )
             }
 
-            item(key = "holy-triangle-guidance") {
-                ResultCard {
-                    Text(
-                        text = spread.description,
-                        style = MaterialTheme.typography.bodyMedium,
-                        textAlign = TextAlign.Center,
-                    )
-                }
-            }
-
-            item(key = "holy-triangle-slots-preview") {
-                ResultCard {
-                    Text(
-                        text = "牌位结构",
-                        style = MaterialTheme.typography.labelLarge,
-                        fontWeight = FontWeight.Bold,
-                    )
-                    spread.slots.forEach { slot ->
-                        DetailField(slot.name, slot.description)
-                    }
-                }
-            }
-
             item(key = "holy-triangle-deck-selection") {
                 ResultCard {
                     DetailField("抽牌牌库", if (currentDeckType == DeckType.FULL_78) "78张全牌" else "22张大阿卡纳")
@@ -120,7 +97,7 @@ fun TarotHolyTriangleScreen(
                         interactionSource = deckInteraction,
                         colors = BoompalaButtonDefaults.outlinedButtonColors(),
                     ) {
-                        Text(if (currentDeckType == DeckType.FULL_78) "切换为仅大牌 (22张)" else "切换为全牌组 (78张)")
+                        Text(if (currentDeckType == DeckType.FULL_78) "22张大牌" else "78张全牌")
                     }
                 }
             }
@@ -137,7 +114,7 @@ fun TarotHolyTriangleScreen(
                         interactionSource = reversedInteraction,
                         colors = BoompalaButtonDefaults.outlinedButtonColors(),
                     ) {
-                        Text(if (currentAllowReversed) "切换为仅正位" else "切换为允许逆位")
+                        Text(if (currentAllowReversed) "仅正位" else "允许逆位")
                     }
                 }
             }
@@ -161,7 +138,7 @@ fun TarotHolyTriangleScreen(
                         .wearPressFeedback(drawInteraction),
                     interactionSource = drawInteraction,
                 ) {
-                    Text("洗牌并抽牌")
+                    Text("抽牌")
                 }
             }
 
@@ -175,7 +152,7 @@ fun TarotHolyTriangleScreen(
                     interactionSource = backInteraction,
                     colors = BoompalaButtonDefaults.outlinedButtonColors(),
                 ) {
-                    Text("返回首页")
+                    Text("首页")
                 }
             }
         }
@@ -215,16 +192,7 @@ fun TarotHolyTriangleScreen(
                 )
             }
 
-            if (!isCardFlipped) {
-                item(key = "step-hint-$currentStep") {
-                    Text(
-                        text = "▲ 点击牌背揭晓「${drawnCard.slot.name}」",
-                        style = MaterialTheme.typography.labelSmall,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth(),
-                    )
-                }
-            } else {
+            if (isCardFlipped) {
                 item(key = "step-revealed-summary-$currentStep") {
                     ResultCard {
                         Text(
@@ -239,22 +207,63 @@ fun TarotHolyTriangleScreen(
                     }
                 }
 
-                item(key = "step-next-action-$currentStep") {
-                    val nextInteraction = remember { MutableInteractionSource() }
-                    BoompalaCardButton(
-                        onClick = {
-                            if (currentStep < 2) {
-                                currentStep++
-                            } else {
-                                currentStep = 3 // enter full interpretation view
+                item(key = "step-nav-$currentStep") {
+                    if (currentStep > 0) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(4.dp),
+                        ) {
+                            val prevInteraction = remember { MutableInteractionSource() }
+                            BoompalaCardButton(
+                                onClick = { currentStep-- },
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .wearPressFeedback(prevInteraction),
+                                interactionSource = prevInteraction,
+                                colors = BoompalaButtonDefaults.outlinedButtonColors(),
+                            ) {
+                                Text(
+                                    text = "上一张",
+                                    style = MaterialTheme.typography.labelSmall,
+                                )
                             }
-                        },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wearPressFeedback(nextInteraction),
-                        interactionSource = nextInteraction,
-                    ) {
-                        Text(if (currentStep < 2) "揭晓下一张 (${reading.drawnCards[currentStep + 1].slot.name})" else "查看圣三角完整解读")
+
+                            val nextInteraction = remember { MutableInteractionSource() }
+                            BoompalaCardButton(
+                                onClick = {
+                                    if (currentStep < 2) {
+                                        currentStep++
+                                    } else {
+                                        currentStep = 3
+                                    }
+                                },
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .wearPressFeedback(nextInteraction),
+                                interactionSource = nextInteraction,
+                            ) {
+                                Text(
+                                    text = if (currentStep < 2) "下一张" else "完整解读",
+                                    style = MaterialTheme.typography.labelSmall,
+                                    fontWeight = FontWeight.Bold,
+                                )
+                            }
+                        }
+                    } else {
+                        val nextInteraction = remember { MutableInteractionSource() }
+                        BoompalaCardButton(
+                            onClick = { currentStep = 1 },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wearPressFeedback(nextInteraction),
+                            interactionSource = nextInteraction,
+                        ) {
+                            Text(
+                                text = "下一张",
+                                style = MaterialTheme.typography.labelSmall,
+                                fontWeight = FontWeight.Bold,
+                            )
+                        }
                     }
                 }
             }
@@ -318,13 +327,13 @@ fun TarotHolyTriangleScreen(
                 item(key = "card-header-$index") {
                     ResultCard {
                         Text(
-                            text = "【${drawnCard.slot.name}】· ${card.nameZh} (${card.nameEn})",
+                            text = "【${drawnCard.slot.name}】· ${card.nameZh}",
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
                         )
                         DetailField(
                             "状态",
-                            if (isReversed) "逆位 (Reversed)" else "正位 (Upright)",
+                            if (isReversed) "逆位" else "正位",
                         )
                         DetailField("牌位意义", drawnCard.slot.description)
                         DetailField("卡牌属性", "${card.arcana.displayName} · ${card.element.displayName}")
@@ -400,35 +409,38 @@ fun TarotHolyTriangleScreen(
                 }
             }
 
-            item(key = "holy-triangle-archive") {
-                val archiveInteraction = remember { MutableInteractionSource() }
-                BoompalaCardButton(
-                    onClick = { onArchive(reading) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wearPressFeedback(archiveInteraction),
-                    interactionSource = archiveInteraction,
-                    colors = BoompalaButtonDefaults.outlinedButtonColors(),
+            item(key = "holy-triangle-actions") {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
                 ) {
-                    Text("归档此结果")
-                }
-            }
+                    val recastInteraction = remember { MutableInteractionSource() }
+                    BoompalaCardButton(
+                        onClick = {
+                            currentStep = 0
+                            flippedList.clear()
+                            repeat(3) { flippedList.add(false) }
+                            onReadingChanged(null)
+                        },
+                        modifier = Modifier
+                            .weight(1f)
+                            .wearPressFeedback(recastInteraction),
+                        interactionSource = recastInteraction,
+                    ) {
+                        Text("重抽")
+                    }
 
-            item(key = "holy-triangle-recast") {
-                val recastInteraction = remember { MutableInteractionSource() }
-                BoompalaCardButton(
-                    onClick = {
-                        currentStep = 0
-                        flippedList.clear()
-                        repeat(3) { flippedList.add(false) }
-                        onReadingChanged(null)
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wearPressFeedback(recastInteraction),
-                    interactionSource = recastInteraction,
-                ) {
-                    Text("重新抽牌")
+                    val archiveInteraction = remember { MutableInteractionSource() }
+                    BoompalaCardButton(
+                        onClick = { onArchive(reading) },
+                        modifier = Modifier
+                            .weight(1f)
+                            .wearPressFeedback(archiveInteraction),
+                        interactionSource = archiveInteraction,
+                        colors = BoompalaButtonDefaults.outlinedButtonColors(),
+                    ) {
+                        Text("归档")
+                    }
                 }
             }
 
@@ -442,7 +454,7 @@ fun TarotHolyTriangleScreen(
                     interactionSource = finishInteraction,
                     colors = BoompalaButtonDefaults.outlinedButtonColors(),
                 ) {
-                    Text("返回首页")
+                    Text("首页")
                 }
             }
         }

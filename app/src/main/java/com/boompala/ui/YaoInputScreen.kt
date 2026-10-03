@@ -38,6 +38,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material3.Button
 import androidx.wear.compose.material3.MaterialTheme
@@ -374,8 +375,11 @@ fun YaoInputScreen(
                         ) {
                             Text(
                                 text = selected?.displayName ?: "未选择",
+                                style = MaterialTheme.typography.labelSmall,
                                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
                                 maxLines = 1,
+                                softWrap = false,
+                                overflow = TextOverflow.Ellipsis,
                             )
                         }
                     }
@@ -759,8 +763,12 @@ private fun ModeButton(
         interactionSource = pressInteraction,
     ) {
         Text(
-            text = if (selected) "✓ ${mode.displayName}" else mode.displayName,
+            text = mode.displayName,
+            style = MaterialTheme.typography.labelSmall,
             fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
+            maxLines = 1,
+            softWrap = false,
+            overflow = TextOverflow.Ellipsis,
         )
     }
 }
@@ -786,7 +794,14 @@ private fun PolarityButton(
             },
         interactionSource = pressInteraction,
     ) {
-        Text(polarity?.displayName ?: "未选")
+        Text(
+            text = polarity?.displayName ?: "未选",
+            style = MaterialTheme.typography.labelSmall,
+            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+            maxLines = 1,
+            softWrap = false,
+            overflow = TextOverflow.Ellipsis,
+        )
     }
 }
 

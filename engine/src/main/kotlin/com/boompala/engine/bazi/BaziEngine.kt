@@ -14,6 +14,25 @@ import java.time.LocalDate
 object BaziEngine {
 
     /**
+     * Formats a Gregorian date and optional hour into a traditional Lunar date string (e.g. 乙巳年 正月初一).
+     */
+    fun formatLunarDate(birthDate: LocalDate, birthHour: Int? = null): String {
+        return runCatching {
+            val sampleHour = birthHour ?: 12
+            val solar = Solar.fromYmdHms(
+                birthDate.year,
+                birthDate.monthValue,
+                birthDate.dayOfMonth,
+                sampleHour,
+                0,
+                0,
+            )
+            val lunar = solar.getLunar()
+            "${lunar.yearInGanZhi}年 ${lunar.monthInChinese}月${lunar.dayInChinese}"
+        }.getOrDefault("")
+    }
+
+    /**
      * Calculates the complete Bazi profile.
      *
      * @param birthDate Gregorian birth date.
@@ -123,11 +142,21 @@ object BaziEngine {
             earthCount = allElements.count { it == com.boompala.engine.model.FiveElement.EARTH },
         )
 
+        val lunarDateText = runCatching {
+            "${lunar.yearInGanZhi}年 ${lunar.monthInChinese}月${lunar.dayInChinese}"
+        }.getOrDefault("")
+
+        var isForward = true
+        var startAge = 0
         val daYunList = runCatching {
             val yun = eightChar.getYun(if (gender == BaziGender.MALE) 1 else 0)
+            isForward = yun.isForward
             yun.daYun.mapNotNull { dy ->
                 val gzText = dy.ganZhi ?: ""
                 if (gzText.length == 2 && dy.index > 0) {
+                    if (startAge == 0) {
+                        startAge = dy.startAge
+                    }
                     val ganzhi = parseGanzhi(gzText)
                     val stemShiShen = com.nlf.calendar.util.LunarUtil.SHI_SHEN[dayGanzhi.heavenlyStem.displayName + ganzhi.heavenlyStem.displayName] ?: ""
                     DaYunPillar(
@@ -158,6 +187,9 @@ object BaziEngine {
             mingGong = eightChar.getMingGong(),
             dayXunKong = parseVoidBranches(eightChar.getDayXunKong()),
             yearXunKong = parseVoidBranches(eightChar.getYearXunKong()),
+            isForward = isForward,
+            startAge = startAge,
+            lunarDateText = lunarDateText,
             daYunList = daYunList,
             wuXingDistribution = wuXingDistribution,
         )

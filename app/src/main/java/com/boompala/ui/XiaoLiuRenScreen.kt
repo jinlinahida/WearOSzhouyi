@@ -1,12 +1,15 @@
 package com.boompala.ui
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material3.Button
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.OutlinedButton
@@ -41,25 +44,29 @@ fun XiaoLiuRenScreen(engine: XiaoLiuRenEngine, initial: XiaoLiuRenReading?, rota
                 onClick = { onReading(engine.calculate(Instant.now(), ZoneId.systemDefault())) },
                 modifier = Modifier.fillMaxWidth().wearPressFeedback(pressInteraction),
                 interactionSource = pressInteraction,
-            ) { Text("重新按当前时间起课") }
+            ) { Text("重新起课") }
         }
         item {
-            val pressInteraction = remember { MutableInteractionSource() }
-            BoompalaCardButton(
-                onClick = { onArchive(reading) },
-                modifier = Modifier.fillMaxWidth().wearPressFeedback(pressInteraction),
-                interactionSource = pressInteraction,
-                colors = BoompalaButtonDefaults.outlinedButtonColors(),
-            ) { Text("归档此次起课") }
-        }
-        item {
-            val pressInteraction = remember { MutableInteractionSource() }
-            BoompalaCardButton(
-                onClick = onBack,
-                modifier = Modifier.fillMaxWidth().wearPressFeedback(pressInteraction),
-                interactionSource = pressInteraction,
-                colors = BoompalaButtonDefaults.outlinedButtonColors(),
-            ) { Text("返回首页") }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+            ) {
+                val archiveInteraction = remember { MutableInteractionSource() }
+                BoompalaCardButton(
+                    onClick = { onArchive(reading) },
+                    modifier = Modifier.weight(1f).wearPressFeedback(archiveInteraction),
+                    interactionSource = archiveInteraction,
+                    colors = BoompalaButtonDefaults.outlinedButtonColors(),
+                ) { Text("归档") }
+
+                val backInteraction = remember { MutableInteractionSource() }
+                BoompalaCardButton(
+                    onClick = onBack,
+                    modifier = Modifier.weight(1f).wearPressFeedback(backInteraction),
+                    interactionSource = backInteraction,
+                    colors = BoompalaButtonDefaults.outlinedButtonColors(),
+                ) { Text("首页") }
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.boompala.ui
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.wear.compose.foundation.lazy.ScalingLazyListState
@@ -9,6 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.wear.compose.material3.ButtonColors
 import androidx.wear.compose.material3.Text
 import com.boompala.R
 import com.boompala.settings.AppSettings
@@ -53,184 +56,156 @@ fun HomeScreen(
             when (feature) {
                 HomeFeature.SIX_YAO -> {
                     item(key = "six-yao") {
-                        val pressInteraction = remember { MutableInteractionSource() }
-                        BoompalaCardButton(
+                        HomeFeatureButton(
                             onClick = onSixYaoClick,
-                            modifier = fullWidthModifier.wearPressFeedback(pressInteraction, hapticEnabled = settings.hapticFeedbackEnabled),
-                            interactionSource = pressInteraction,
-                        ) {
-                            Text(stringResource(R.string.home_feature_six_yao))
-                        }
+                            text = stringResource(R.string.home_feature_six_yao),
+                            modifier = fullWidthModifier,
+                            hapticEnabled = settings.hapticFeedbackEnabled,
+                        )
                     }
                 }
 
                 HomeFeature.MEI_HUA -> {
                     item(key = "mei-hua") {
-                        val pressInteraction = remember { MutableInteractionSource() }
-                        BoompalaCardButton(
+                        HomeFeatureButton(
                             onClick = onMeiHuaClick,
-                            modifier = fullWidthModifier.wearPressFeedback(pressInteraction, hapticEnabled = settings.hapticFeedbackEnabled),
-                            interactionSource = pressInteraction,
-                        ) {
-                            Text(stringResource(R.string.home_feature_mei_hua))
-                        }
+                            text = stringResource(R.string.home_feature_mei_hua),
+                            modifier = fullWidthModifier,
+                            hapticEnabled = settings.hapticFeedbackEnabled,
+                        )
                     }
                 }
 
                 HomeFeature.DESTINY_CHART -> {
                     item(key = "destiny-chart") {
-                        val pressInteraction = remember { MutableInteractionSource() }
-                        BoompalaCardButton(
+                        HomeFeatureButton(
                             onClick = onDestinyChartClick,
-                            modifier = fullWidthModifier.wearPressFeedback(pressInteraction, hapticEnabled = settings.hapticFeedbackEnabled),
-                            interactionSource = pressInteraction,
-                        ) {
-                            Text(stringResource(R.string.home_feature_destiny_chart))
-                        }
+                            text = stringResource(R.string.home_feature_destiny_chart),
+                            modifier = fullWidthModifier,
+                            hapticEnabled = settings.hapticFeedbackEnabled,
+                        )
                     }
                 }
 
                 HomeFeature.TAROT_ONE -> {
                     item(key = "tarot") {
-                        val pressInteraction = remember { MutableInteractionSource() }
-                        BoompalaCardButton(
+                        HomeFeatureButton(
                             onClick = onTarotClick,
-                            modifier = fullWidthModifier.wearPressFeedback(pressInteraction, hapticEnabled = settings.hapticFeedbackEnabled),
-                            interactionSource = pressInteraction,
-                        ) {
-                            Text(stringResource(R.string.home_feature_tarot_one))
-                        }
+                            text = stringResource(R.string.home_feature_tarot_one),
+                            modifier = fullWidthModifier,
+                            hapticEnabled = settings.hapticFeedbackEnabled,
+                        )
                     }
                 }
 
                 HomeFeature.TAROT_THREE -> {
                     item(key = "tarot-three") {
-                        val pressInteraction = remember { MutableInteractionSource() }
-                        BoompalaCardButton(
+                        HomeFeatureButton(
                             onClick = onTarotThreeCardClick,
-                            modifier = fullWidthModifier.wearPressFeedback(pressInteraction, hapticEnabled = settings.hapticFeedbackEnabled),
-                            interactionSource = pressInteraction,
-                        ) {
-                            Text(stringResource(R.string.home_feature_tarot_three))
-                        }
+                            text = stringResource(R.string.home_feature_tarot_three),
+                            modifier = fullWidthModifier,
+                            hapticEnabled = settings.hapticFeedbackEnabled,
+                        )
                     }
                 }
 
                 HomeFeature.TAROT_HOLY_TRIANGLE -> {
                     item(key = "tarot-holy-triangle") {
-                        val pressInteraction = remember { MutableInteractionSource() }
-                        BoompalaCardButton(
+                        HomeFeatureButton(
                             onClick = onTarotHolyTriangleClick,
-                            modifier = fullWidthModifier.wearPressFeedback(pressInteraction, hapticEnabled = settings.hapticFeedbackEnabled),
-                            interactionSource = pressInteraction,
-                        ) {
-                            Text(stringResource(R.string.home_feature_tarot_holy_triangle))
-                        }
+                            text = stringResource(R.string.home_feature_tarot_holy_triangle),
+                            modifier = fullWidthModifier,
+                            hapticEnabled = settings.hapticFeedbackEnabled,
+                        )
                     }
                 }
 
                 HomeFeature.TAROT_CELTIC_CROSS -> {
                     item(key = "tarot-celtic-cross") {
-                        val pressInteraction = remember { MutableInteractionSource() }
-                        BoompalaCardButton(
+                        HomeFeatureButton(
                             onClick = onTarotCelticCrossClick,
-                            modifier = fullWidthModifier.wearPressFeedback(pressInteraction, hapticEnabled = settings.hapticFeedbackEnabled),
-                            interactionSource = pressInteraction,
-                        ) {
-                            Text(stringResource(R.string.home_feature_tarot_celtic_cross))
-                        }
+                            text = stringResource(R.string.home_feature_tarot_celtic_cross),
+                            modifier = fullWidthModifier,
+                            hapticEnabled = settings.hapticFeedbackEnabled,
+                        )
                     }
                 }
 
                 HomeFeature.DAILY_FORTUNE -> {
                     item(key = "daily-fortune") {
-                        val pressInteraction = remember { MutableInteractionSource() }
-                        BoompalaCardButton(
+                        HomeFeatureButton(
                             onClick = onDailyFortuneClick,
-                            modifier = fullWidthModifier.wearPressFeedback(pressInteraction, hapticEnabled = settings.hapticFeedbackEnabled),
-                            interactionSource = pressInteraction,
-                        ) {
-                            Text(stringResource(R.string.home_feature_daily_fortune))
-                        }
+                            text = stringResource(R.string.home_feature_daily_fortune),
+                            modifier = fullWidthModifier,
+                            hapticEnabled = settings.hapticFeedbackEnabled,
+                        )
                     }
                 }
 
                 HomeFeature.XIAO_LIU_REN -> {
                     item(key = "xiaoliuren") {
-                        val pressInteraction = remember { MutableInteractionSource() }
-                        BoompalaCardButton(
+                        HomeFeatureButton(
                             onClick = onXiaoLiuRenClick,
-                            modifier = fullWidthModifier.wearPressFeedback(pressInteraction, hapticEnabled = settings.hapticFeedbackEnabled),
-                            interactionSource = pressInteraction,
-                        ) {
-                            Text(stringResource(R.string.home_feature_xiao_liu_ren))
-                        }
+                            text = stringResource(R.string.home_feature_xiao_liu_ren),
+                            modifier = fullWidthModifier,
+                            hapticEnabled = settings.hapticFeedbackEnabled,
+                        )
                     }
                 }
 
                 HomeFeature.COMPASS -> {
                     item(key = "compass") {
-                        val pressInteraction = remember { MutableInteractionSource() }
-                        BoompalaCardButton(
+                        HomeFeatureButton(
                             onClick = onCompassClick,
-                            modifier = fullWidthModifier.wearPressFeedback(pressInteraction, hapticEnabled = settings.hapticFeedbackEnabled),
-                            interactionSource = pressInteraction,
-                        ) {
-                            Text(stringResource(R.string.home_feature_compass))
-                        }
+                            text = stringResource(R.string.home_feature_compass),
+                            modifier = fullWidthModifier,
+                            hapticEnabled = settings.hapticFeedbackEnabled,
+                        )
                     }
                 }
 
                 HomeFeature.PULSE -> {
                     item(key = "pulse") {
-                        val pressInteraction = remember { MutableInteractionSource() }
-                        BoompalaCardButton(
+                        HomeFeatureButton(
                             onClick = onPulseClick,
-                            modifier = fullWidthModifier.wearPressFeedback(pressInteraction, hapticEnabled = settings.hapticFeedbackEnabled),
-                            interactionSource = pressInteraction,
-                        ) {
-                            Text(stringResource(R.string.home_feature_pulse))
-                        }
+                            text = stringResource(R.string.home_feature_pulse),
+                            modifier = fullWidthModifier,
+                            hapticEnabled = settings.hapticFeedbackEnabled,
+                        )
                     }
                 }
 
                 HomeFeature.MUYU -> {
                     item(key = "muyu") {
-                        val pressInteraction = remember { MutableInteractionSource() }
-                        BoompalaCardButton(
+                        HomeFeatureButton(
                             onClick = onMuyuClick,
-                            modifier = fullWidthModifier.wearPressFeedback(pressInteraction, hapticEnabled = settings.hapticFeedbackEnabled),
-                            interactionSource = pressInteraction,
-                        ) {
-                            Text(stringResource(R.string.home_feature_muyu))
-                        }
+                            text = stringResource(R.string.home_feature_muyu),
+                            modifier = fullWidthModifier,
+                            hapticEnabled = settings.hapticFeedbackEnabled,
+                        )
                     }
                 }
 
                 HomeFeature.ARCHIVES -> {
                     item(key = "archives") {
-                        val pressInteraction = remember { MutableInteractionSource() }
-                        BoompalaCardButton(
+                        HomeFeatureButton(
                             onClick = onArchiveClick,
-                            modifier = fullWidthModifier.wearPressFeedback(pressInteraction, hapticEnabled = settings.hapticFeedbackEnabled),
-                            interactionSource = pressInteraction,
+                            text = stringResource(R.string.home_feature_archives),
+                            modifier = fullWidthModifier,
                             colors = BoompalaButtonDefaults.outlinedButtonColors(),
-                        ) {
-                            Text(stringResource(R.string.home_feature_archives))
-                        }
+                            hapticEnabled = settings.hapticFeedbackEnabled,
+                        )
                     }
                 }
 
                 HomeFeature.BROWSE -> {
                     item(key = "browse") {
-                        val pressInteraction = remember { MutableInteractionSource() }
-                        BoompalaCardButton(
+                        HomeFeatureButton(
                             onClick = onBrowseClick,
-                            modifier = fullWidthModifier.wearPressFeedback(pressInteraction, hapticEnabled = settings.hapticFeedbackEnabled),
-                            interactionSource = pressInteraction,
-                        ) {
-                            Text(stringResource(R.string.home_feature_browse))
-                        }
+                            text = stringResource(R.string.home_feature_browse),
+                            modifier = fullWidthModifier,
+                            hapticEnabled = settings.hapticFeedbackEnabled,
+                        )
                     }
                 }
             }
@@ -238,15 +213,37 @@ fun HomeScreen(
 
         // Settings entry is permanent and can never be hidden
         item(key = "settings") {
-            val pressInteraction = remember { MutableInteractionSource() }
-            BoompalaCardButton(
+            HomeFeatureButton(
                 onClick = onSettingsClick,
-                modifier = fullWidthModifier.wearPressFeedback(pressInteraction, hapticEnabled = settings.hapticFeedbackEnabled),
-                interactionSource = pressInteraction,
+                text = stringResource(R.string.home_feature_settings),
+                modifier = fullWidthModifier,
                 colors = BoompalaButtonDefaults.outlinedButtonColors(),
-            ) {
-                Text(stringResource(R.string.home_feature_settings))
-            }
+                hapticEnabled = settings.hapticFeedbackEnabled,
+            )
         }
+    }
+}
+
+@Composable
+private fun HomeFeatureButton(
+    onClick: () -> Unit,
+    text: String,
+    modifier: Modifier = Modifier,
+    colors: ButtonColors = BoompalaButtonDefaults.buttonColors(),
+    hapticEnabled: Boolean = true,
+) {
+    val pressInteraction = remember { MutableInteractionSource() }
+    BoompalaCardButton(
+        onClick = onClick,
+        modifier = modifier.wearPressFeedback(pressInteraction, hapticEnabled = hapticEnabled),
+        interactionSource = pressInteraction,
+        colors = colors,
+        horizontalArrangement = Arrangement.Start,
+    ) {
+        Text(
+            text = text,
+            modifier = Modifier.weight(1f),
+            textAlign = TextAlign.Start,
+        )
     }
 }

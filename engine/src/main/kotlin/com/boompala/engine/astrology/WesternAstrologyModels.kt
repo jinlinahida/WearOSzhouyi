@@ -124,9 +124,14 @@ data class ElementBalance(
     val earthCount: Int,
     val airCount: Int,
     val waterCount: Int,
+    val fireBodies: List<CelestialBody> = emptyList(),
+    val earthBodies: List<CelestialBody> = emptyList(),
+    val airBodies: List<CelestialBody> = emptyList(),
+    val waterBodies: List<CelestialBody> = emptyList(),
 ) {
     val totalCount: Int get() = fireCount + earthCount + airCount + waterCount
 
+    @Deprecated("Percentages are unphysical in classical/modern astrology. Prefer raw counts.")
     fun percentage(element: ZodiacElement): Int {
         if (totalCount == 0) return 25
         val count = when (element) {
@@ -150,12 +155,14 @@ data class ElementBalance(
         }
 
     val balanceSummaryZh: String
-        get() = when (dominantElement) {
-            ZodiacElement.FIRE -> "火象充沛 · 行动力与进取心强"
-            ZodiacElement.EARTH -> "土象主导 · 沉稳务实且注重秩序"
-            ZodiacElement.AIR -> "风象突出 · 思维活跃且善于变通"
-            ZodiacElement.WATER -> "水象深厚 · 直觉敏锐且共情力强"
-        }
+        get() = "火 $fireCount · 土 $earthCount · 风 $airCount · 水 $waterCount"
+
+    fun bodiesFor(element: ZodiacElement): List<CelestialBody> = when (element) {
+        ZodiacElement.FIRE -> fireBodies
+        ZodiacElement.EARTH -> earthBodies
+        ZodiacElement.AIR -> airBodies
+        ZodiacElement.WATER -> waterBodies
+    }
 }
 
 /**
@@ -177,5 +184,13 @@ data class WesternChartReading(
             if (ascendant != null) {
                 append(" · 升${ascendant.sign.displayNameZh.removeSuffix("座")}")
             }
+        }
+
+    /**
+     * Major classical planets excluding the Big Three (Sun, Moon, Ascendant).
+     */
+    val majorPlanets: List<PlanetPlacement>
+        get() = planets.filter {
+            it.body != CelestialBody.SUN && it.body != CelestialBody.MOON && it.body != CelestialBody.ASCENDANT
         }
 }

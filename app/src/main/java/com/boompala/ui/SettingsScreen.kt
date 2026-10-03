@@ -710,26 +710,6 @@ fun SettingsScreen(
                     )
                 }
 
-                item(key = "home-drag-hint") {
-                    ResultCard {
-                        Text(
-                            text = stringResource(R.string.settings_home_drag_hint),
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
-                    }
-                }
-
-                item(key = "home-fixed-note") {
-                    ResultCard {
-                        Text(
-                            text = stringResource(R.string.settings_home_fixed_hint),
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
-                    }
-                }
-
                 itemsIndexed(localOrder, key = { _, feature -> "home-feat-${feature.id}" }) { index, feature ->
                     val isHidden = settings.hiddenHomeFeatures.contains(feature)
                     ReorderableItem(
@@ -1137,7 +1117,7 @@ fun SettingsScreen(
                                             interactionSource = mInter,
                                         ) {
                                             Text(
-                                                text = if (maleSelected) "✓ 乾造" else "乾造",
+                                                text = "乾造",
                                                 style = MaterialTheme.typography.bodySmall,
                                                 fontWeight = if (maleSelected) FontWeight.Bold else FontWeight.Normal,
                                                 maxLines = 1,
@@ -1157,7 +1137,7 @@ fun SettingsScreen(
                                             interactionSource = fInter,
                                         ) {
                                             Text(
-                                                text = if (femaleSelected) "✓ 坤造" else "坤造",
+                                                text = "坤造",
                                                 style = MaterialTheme.typography.bodySmall,
                                                 fontWeight = if (femaleSelected) FontWeight.Bold else FontWeight.Normal,
                                                 maxLines = 1,
@@ -1666,8 +1646,9 @@ fun SettingsScreen(
                             modifier = Modifier.fillMaxWidth(),
                         ) {
                             Text(
-                                text = if (isLocal) "✓ ${stringResource(R.string.settings_ai_mode_local)}" else stringResource(R.string.settings_ai_mode_local),
+                                text = stringResource(R.string.settings_ai_mode_local),
                                 fontWeight = if (isLocal) FontWeight.Bold else FontWeight.Normal,
+                                maxLines = 1,
                             )
                         }
 
@@ -1679,8 +1660,9 @@ fun SettingsScreen(
                             modifier = Modifier.fillMaxWidth(),
                         ) {
                             Text(
-                                text = if (isOnline) "✓ ${stringResource(R.string.settings_ai_mode_online)}" else stringResource(R.string.settings_ai_mode_online),
+                                text = stringResource(R.string.settings_ai_mode_online),
                                 fontWeight = if (isOnline) FontWeight.Bold else FontWeight.Normal,
+                                maxLines = 1,
                             )
                         }
                     }
@@ -1705,8 +1687,9 @@ fun SettingsScreen(
                                     modifier = Modifier.fillMaxWidth(),
                                 ) {
                                     Text(
-                                        text = if (isSelected) "✓ ${provider.displayName}" else provider.displayName,
+                                        text = provider.displayName,
                                         fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+                                        maxLines = 1,
                                     )
                                 }
                             }
@@ -2163,7 +2146,7 @@ private fun SelectionButton(
         interactionSource = pressInteraction,
     ) {
         Text(
-            text = if (selected) "✓ $text" else text,
+            text = text,
             fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
             maxLines = 1,
             softWrap = false,
@@ -2201,7 +2184,7 @@ private fun ToggleSwitchButton(
         interactionSource = pressInteraction,
     ) {
         Text(
-            text = if (checked) "✓ $text" else text,
+            text = text,
             fontWeight = if (checked) FontWeight.Bold else FontWeight.Normal,
             maxLines = 1,
             softWrap = false,

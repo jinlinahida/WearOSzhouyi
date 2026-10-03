@@ -84,16 +84,6 @@ fun TarotThreeCardScreen(
                 )
             }
 
-            item(key = "three-card-guidance") {
-                ResultCard {
-                    Text(
-                        text = "经典三牌阵：按「过去 → 现在 → 未来」的时间脉络深入洞察事件起因、当前处境与发展走向。",
-                        style = MaterialTheme.typography.bodyMedium,
-                        textAlign = TextAlign.Center,
-                    )
-                }
-            }
-
             item(key = "three-card-deck-selection") {
                 ResultCard {
                     DetailField("牌组类型", currentDeckType.displayName)
@@ -112,7 +102,7 @@ fun TarotThreeCardScreen(
                         interactionSource = deckInteraction,
                         colors = BoompalaButtonDefaults.outlinedButtonColors(),
                     ) {
-                        Text(if (currentDeckType == DeckType.FULL_78) "切换为仅大牌 (22张)" else "切换为全牌组 (78张)")
+                        Text(if (currentDeckType == DeckType.FULL_78) "22张大牌" else "78张全牌")
                     }
                 }
             }
@@ -129,7 +119,7 @@ fun TarotThreeCardScreen(
                         interactionSource = reversedInteraction,
                         colors = BoompalaButtonDefaults.outlinedButtonColors(),
                     ) {
-                        Text(if (currentAllowReversed) "切换为仅正位" else "切换为允许逆位")
+                        Text(if (currentAllowReversed) "仅正位" else "允许逆位")
                     }
                 }
             }
@@ -153,7 +143,7 @@ fun TarotThreeCardScreen(
                         .wearPressFeedback(drawInteraction),
                     interactionSource = drawInteraction,
                 ) {
-                    Text("洗牌并抽牌")
+                    Text("抽牌")
                 }
             }
 
@@ -167,7 +157,7 @@ fun TarotThreeCardScreen(
                     interactionSource = backInteraction,
                     colors = BoompalaButtonDefaults.outlinedButtonColors(),
                 ) {
-                    Text("返回首页")
+                    Text("首页")
                 }
             }
         }
@@ -207,16 +197,7 @@ fun TarotThreeCardScreen(
                 )
             }
 
-            if (!isCardFlipped) {
-                item(key = "step-hint-$currentStep") {
-                    Text(
-                        text = "▲ 点击牌背揭晓「${drawnCard.slot.name}」",
-                        style = MaterialTheme.typography.labelSmall,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth(),
-                    )
-                }
-            } else {
+            if (isCardFlipped) {
                 item(key = "step-revealed-summary-$currentStep") {
                     ResultCard {
                         Text(
@@ -231,22 +212,63 @@ fun TarotThreeCardScreen(
                     }
                 }
 
-                item(key = "step-next-action-$currentStep") {
-                    val nextInteraction = remember { MutableInteractionSource() }
-                    BoompalaCardButton(
-                        onClick = {
-                            if (currentStep < 2) {
-                                currentStep++
-                            } else {
-                                currentStep = 3 // enter full interpretation view
+                item(key = "step-nav-$currentStep") {
+                    if (currentStep > 0) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(4.dp),
+                        ) {
+                            val prevInteraction = remember { MutableInteractionSource() }
+                            BoompalaCardButton(
+                                onClick = { currentStep-- },
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .wearPressFeedback(prevInteraction),
+                                interactionSource = prevInteraction,
+                                colors = BoompalaButtonDefaults.outlinedButtonColors(),
+                            ) {
+                                Text(
+                                    text = "上一张",
+                                    style = MaterialTheme.typography.labelSmall,
+                                )
                             }
-                        },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wearPressFeedback(nextInteraction),
-                        interactionSource = nextInteraction,
-                    ) {
-                        Text(if (currentStep < 2) "揭晓下一张 (${reading.drawnCards[currentStep + 1].slot.name})" else "查看三牌完整解读")
+
+                            val nextInteraction = remember { MutableInteractionSource() }
+                            BoompalaCardButton(
+                                onClick = {
+                                    if (currentStep < 2) {
+                                        currentStep++
+                                    } else {
+                                        currentStep = 3
+                                    }
+                                },
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .wearPressFeedback(nextInteraction),
+                                interactionSource = nextInteraction,
+                            ) {
+                                Text(
+                                    text = if (currentStep < 2) "下一张" else "完整解读",
+                                    style = MaterialTheme.typography.labelSmall,
+                                    fontWeight = FontWeight.Bold,
+                                )
+                            }
+                        }
+                    } else {
+                        val nextInteraction = remember { MutableInteractionSource() }
+                        BoompalaCardButton(
+                            onClick = { currentStep = 1 },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wearPressFeedback(nextInteraction),
+                            interactionSource = nextInteraction,
+                        ) {
+                            Text(
+                                text = "下一张",
+                                style = MaterialTheme.typography.labelSmall,
+                                fontWeight = FontWeight.Bold,
+                            )
+                        }
                     }
                 }
             }
@@ -310,13 +332,13 @@ fun TarotThreeCardScreen(
                 item(key = "card-detail-header-$index") {
                     ResultCard {
                         Text(
-                            text = "【${drawnCard.slot.name}】· ${card.nameZh} (${card.nameEn})",
+                            text = "【${drawnCard.slot.name}】· ${card.nameZh}",
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
                         )
                         DetailField(
                             "状态",
-                            if (isReversed) "逆位 (Reversed)" else "正位 (Upright)",
+                            if (isReversed) "逆位" else "正位",
                         )
                         DetailField("含义", drawnCard.slot.description)
                         DetailField("属性", "${card.arcana.displayName} · ${card.element.displayName}")
@@ -392,35 +414,38 @@ fun TarotThreeCardScreen(
                 }
             }
 
-            item(key = "results-archive") {
-                val archiveInteraction = remember { MutableInteractionSource() }
-                BoompalaCardButton(
-                    onClick = { onArchive(reading) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wearPressFeedback(archiveInteraction),
-                    interactionSource = archiveInteraction,
-                    colors = BoompalaButtonDefaults.outlinedButtonColors(),
+            item(key = "results-actions") {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
                 ) {
-                    Text("归档此结果")
-                }
-            }
+                    val recastInteraction = remember { MutableInteractionSource() }
+                    BoompalaCardButton(
+                        onClick = {
+                            currentStep = 0
+                            flippedList.clear()
+                            repeat(3) { flippedList.add(false) }
+                            onReadingChanged(null)
+                        },
+                        modifier = Modifier
+                            .weight(1f)
+                            .wearPressFeedback(recastInteraction),
+                        interactionSource = recastInteraction,
+                    ) {
+                        Text("重抽")
+                    }
 
-            item(key = "results-recast") {
-                val recastInteraction = remember { MutableInteractionSource() }
-                BoompalaCardButton(
-                    onClick = {
-                        currentStep = 0
-                        flippedList.clear()
-                        repeat(3) { flippedList.add(false) }
-                        onReadingChanged(null)
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wearPressFeedback(recastInteraction),
-                    interactionSource = recastInteraction,
-                ) {
-                    Text("重新抽牌")
+                    val archiveInteraction = remember { MutableInteractionSource() }
+                    BoompalaCardButton(
+                        onClick = { onArchive(reading) },
+                        modifier = Modifier
+                            .weight(1f)
+                            .wearPressFeedback(archiveInteraction),
+                        interactionSource = archiveInteraction,
+                        colors = BoompalaButtonDefaults.outlinedButtonColors(),
+                    ) {
+                        Text("归档")
+                    }
                 }
             }
 
@@ -434,7 +459,7 @@ fun TarotThreeCardScreen(
                     interactionSource = finishInteraction,
                     colors = BoompalaButtonDefaults.outlinedButtonColors(),
                 ) {
-                    Text("返回首页")
+                    Text("首页")
                 }
             }
         }

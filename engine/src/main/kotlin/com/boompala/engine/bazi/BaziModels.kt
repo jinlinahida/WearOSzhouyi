@@ -36,7 +36,10 @@ data class BaziPillar(
     val diShi: String,
     val xun: String,
     val xunKong: String,
-)
+) {
+    val hiddenStemsText: String
+        get() = hiddenStems.joinToString("·") { it.displayName }
+}
 
 /**
  * A single 10-year step in DaYun (大运).
@@ -102,6 +105,9 @@ data class BaziProfile(
     val mingGong: String,
     val dayXunKong: List<EarthlyBranch>,
     val yearXunKong: List<EarthlyBranch>,
+    val isForward: Boolean = true,
+    val startAge: Int = 0,
+    val lunarDateText: String = "",
     val daYunList: List<DaYunPillar> = emptyList(),
     val wuXingDistribution: WuXingDistribution = WuXingDistribution(0, 0, 0, 0, 0),
 ) {

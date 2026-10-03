@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -489,6 +490,7 @@ fun BoompalaCardButton(
     border: BorderStroke? = BoompalaButtonDefaults.borderStroke,
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    horizontalArrangement: Arrangement.Horizontal = Arrangement.Center,
     content: @Composable RowScope.() -> Unit,
 ) {
     Button(
@@ -500,8 +502,14 @@ fun BoompalaCardButton(
         border = border,
         contentPadding = contentPadding,
         interactionSource = interactionSource,
-        content = content,
-    )
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = horizontalArrangement,
+            verticalAlignment = Alignment.CenterVertically,
+            content = content,
+        )
+    }
 }
 
 /**
@@ -520,6 +528,7 @@ fun SelectableCardButton(
     highlightColor: Color = Color(0xFF64B5F6),
     contentPadding: PaddingValues = BoompalaButtonDefaults.compactContentPadding,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    horizontalArrangement: Arrangement.Horizontal = Arrangement.Center,
     content: @Composable RowScope.() -> Unit,
 ) {
     val animatedBorderColor by animateColorAsState(
@@ -569,8 +578,14 @@ fun SelectableCardButton(
         border = borderStroke,
         contentPadding = contentPadding,
         interactionSource = interactionSource,
-        content = content,
-    )
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = horizontalArrangement,
+            verticalAlignment = Alignment.CenterVertically,
+            content = content,
+        )
+    }
 }
 
 /**

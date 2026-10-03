@@ -190,19 +190,19 @@ fun BrowseHomeScreen(
                 }
             }
         }
-        item {
-            val backInteraction = remember { MutableInteractionSource() }
-            BoompalaCardButton(
-                onClick = onBack,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wearPressFeedback(backInteraction),
-                interactionSource = backInteraction,
-                colors = BoompalaButtonDefaults.outlinedButtonColors(),
-            ) {
-                Text("返回首页")
+            item {
+                val backInteraction = remember { MutableInteractionSource() }
+                BoompalaCardButton(
+                    onClick = onBack,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wearPressFeedback(backInteraction),
+                    interactionSource = backInteraction,
+                    colors = BoompalaButtonDefaults.outlinedButtonColors(),
+                ) {
+                    Text("首页")
+                }
             }
-        }
     }
 }
 
@@ -364,7 +364,7 @@ fun HexagramDetailScreen(
                 interactionSource = pressInteraction,
                 colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) {
-                Text("返回卦列表")
+                Text("返回")
             }
         }
     }
@@ -389,12 +389,12 @@ fun TarotBrowserScreen(
     val m = LocalUiMetrics.current
     var selectedCategory by remember { mutableStateOf<String?>(null) }
     val categories = listOf(
-        null to "全部 (78)",
-        "MAJOR" to "大阿卡纳 (22)",
-        "WANDS" to "权杖 (14)",
-        "CUPS" to "圣杯 (14)",
-        "SWORDS" to "宝剑 (14)",
-        "PENTACLES" to "星币 (14)",
+        null to "全部",
+        "MAJOR" to "大阿卡纳",
+        "WANDS" to "权杖",
+        "CUPS" to "圣杯",
+        "SWORDS" to "宝剑",
+        "PENTACLES" to "星币",
     )
     val filteredCards = remember(selectedCategory, cards) {
         when (selectedCategory) {
@@ -434,8 +434,9 @@ fun TarotBrowserScreen(
                         interactionSource = pressInteraction,
                     ) {
                         Text(
-                            text = if (selected) "✓ $title" else title,
+                            text = title,
                             fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
+                            maxLines = 1,
                         )
                     }
                 }
@@ -457,7 +458,7 @@ fun TarotBrowserScreen(
                     verticalArrangement = Arrangement.spacedBy(2.dp),
                 ) {
                     Text(
-                        text = "${card.nameZh} · ${card.nameEn}",
+                        text = card.nameZh,
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface,
@@ -480,7 +481,7 @@ fun TarotBrowserScreen(
                 interactionSource = pressInteraction,
                 colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) {
-                Text("返回浏览首页")
+                Text("返回")
             }
         }
     }
@@ -501,7 +502,7 @@ fun TarotCardDetailScreen(
     ) {
         item {
             ScreenTitle(
-                text = "${card.nameZh} · ${card.nameEn}",
+                text = card.nameZh,
                 style = MaterialTheme.typography.titleMedium,
                 marquee = animationsEnabled,
                 animationsEnabled = animationsEnabled,
@@ -536,21 +537,20 @@ fun TarotCardDetailScreen(
         item {
             ResultCard {
                 Text("核心关键词", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
-                DetailField("中文关键词", card.keywordsZh.joinToString(" · "))
-                DetailField("英文关键词", card.keywordsEn.joinToString(" · "))
+                DetailField("关键词", card.keywordsZh.joinToString(" · "))
             }
         }
 
         item {
             ResultCard {
-                Text("正位核心释义 (Upright)", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
+                Text("正位核心释义", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
                 card.uprightMeaningsZh.forEach { Text("• $it", style = MaterialTheme.typography.bodySmall) }
             }
         }
 
         item {
             ResultCard {
-                Text("逆位核心释义 (Reversed)", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
+                Text("逆位核心释义", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
                 card.reversedMeaningsZh.forEach { Text("• $it", style = MaterialTheme.typography.bodySmall) }
             }
         }
@@ -574,7 +574,7 @@ fun TarotCardDetailScreen(
                 interactionSource = backInteraction,
                 colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) {
-                Text("返回塔罗列表")
+                Text("返回")
             }
         }
     }
@@ -696,7 +696,7 @@ fun KnowledgeDetailScreen(
                 interactionSource = pressInteraction,
                 colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) {
-                Text("返回知识列表")
+                Text("返回")
             }
         }
     }

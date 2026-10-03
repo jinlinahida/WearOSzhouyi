@@ -267,4 +267,17 @@ class PulseAlgorithmTest {
         // 证明区间穿越算法在快心率下有且仅有 1 次精准触发波峰判定
         assertEquals(1, peakTriggeredCount)
     }
+
+    @Test
+    fun testTcmPulseClassifierPreservesMeasuredWaveform() {
+        val metrics = PulseFeatureMetrics(
+            heartRateBpm = 75.0,
+            regularityPercent = 95.0,
+            rmssdMs = 32.0,
+            isRawPpg = false,
+        )
+        val measured = listOf(0.2f, 0.5f, 0.9f, 0.3f, 0.6f)
+        val result = TcmPulseClassifier.classify(metrics, hour24 = 10, measuredWaveform = measured)
+        assertEquals(measured, result.measuredWaveform)
+    }
 }

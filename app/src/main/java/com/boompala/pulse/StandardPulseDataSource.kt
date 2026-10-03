@@ -124,6 +124,7 @@ class StandardPulseDataSource(
 
             val waveLength = 28
             val waveBuffer = FloatArray(waveLength) { 0.2f }
+            val recordedWaveform = ArrayList<Float>(totalSteps)
 
             var elapsedMs = 0L
             var initialGraceElapsedMs = 0L
@@ -209,11 +210,12 @@ class StandardPulseDataSource(
                     pulsePacketPhase = newP
                 }
 
-                // 移位缓冲区
+                // 移位缓冲区与整段波形记录
                 for (j in 0 until waveLength - 1) {
                     waveBuffer[j] = waveBuffer[j + 1]
                 }
                 waveBuffer[waveLength - 1] = sampleValue
+                recordedWaveform.add(sampleValue)
 
                 _state.value = PulseSensorState.Measuring(
                     progress = progress,
@@ -245,6 +247,7 @@ class StandardPulseDataSource(
                     val result = TcmPulseClassifier.classify(
                         metrics = metrics,
                         hour24 = LocalTime.now().hour,
+                        measuredWaveform = recordedWaveform.toList(),
                     )
                     _state.value = PulseSensorState.Completed(result)
                 }

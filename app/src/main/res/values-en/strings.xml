@@ -31,24 +31,24 @@
     <!-- Destiny Chart Strings -->
     <string name="destiny_chart_title">Destiny Hub</string>
     <string name="destiny_chart_bazi">BaZi Four Pillars</string>
-    <string name="destiny_chart_bazi_desc">Four Pillars · Hidden Stems · 10-Yr Luck</string>
-    <string name="destiny_chart_western">Western Natal Chart</string>
-    <string name="destiny_chart_western_desc">Sun, Moon, Ascendant &amp; 4 Elements</string>
+    <string name="destiny_chart_bazi_desc">Four Pillars &amp; Major Luck</string>
+    <string name="destiny_chart_western">Natal Chart</string>
+    <string name="destiny_chart_western_desc">Sun, Moon, Ascendant &amp; Planets</string>
     <string name="destiny_chart_numerology">Numerology</string>
     <string name="destiny_chart_numerology_desc">Life Path Number &amp; Lo Shu Grid</string>
     <string name="destiny_chart_bone_weight">Bone Weight</string>
-    <string name="destiny_chart_bone_weight_desc">Bone Weight · Classical Destiny Poem</string>
+    <string name="destiny_chart_bone_weight_desc">Bone Weight &amp; Classical Poem</string>
     <string name="destiny_chart_nine_star">Nine Star Ki</string>
-    <string name="destiny_chart_nine_star_desc">Year Star · Guiding Element · Lucky Directions</string>
+    <string name="destiny_chart_nine_star_desc">Year &amp; Month Stars</string>
 
     <!-- Common Actions & Navigation -->
     <string name="action_back">Back</string>
-    <string name="action_back_home">Back to Home</string>
+    <string name="action_back_home">Home</string>
     <string name="action_cancel">Cancel</string>
     <string name="action_confirm">Confirm</string>
     <string name="action_save">Save</string>
     <string name="action_delete">Delete</string>
-    <string name="action_archive_result">Archive Result</string>
+    <string name="action_archive_result">Archive</string>
     <string name="action_recast">Recast</string>
     <string name="action_move_up">Move Up</string>
     <string name="action_move_down">Move Down</string>
@@ -88,9 +88,9 @@
     <string name="settings_bazi_birth_day">Day: %1$d</string>
     <string name="settings_bazi_birth_hour">Birth Hour</string>
     <string name="settings_bazi_hour_unknown">Unknown Hour</string>
-    <string name="settings_bazi_save">Save Profile</string>
-    <string name="settings_bazi_edit">Edit Birth Chart</string>
-    <string name="settings_bazi_clear">Clear Profile</string>
+    <string name="settings_bazi_save">Save</string>
+    <string name="settings_bazi_edit">Edit</string>
+    <string name="settings_bazi_clear">Clear</string>
     <string name="settings_bazi_clear_confirm_title">Clear Profile?</string>
     <string name="settings_bazi_clear_confirm_desc">Once cleared, generic daily fortune and casting will be restored.</string>
     <string name="settings_bazi_preview_title">Four Pillars Preview</string>
@@ -143,13 +143,13 @@
     <string name="settings_tarot_reversed_disallow">Upright Only</string>
     <string name="settings_tarot_deck">Deck Selection</string>
     <string name="settings_tarot_deck_full">Full 78 Cards</string>
-    <string name="settings_tarot_deck_major">22 Major Arcana Only</string>
+    <string name="settings_tarot_deck_major">22 Major Cards</string>
     <string name="settings_compass_north">North Reference</string>
-    <string name="settings_compass_magnetic_north">Magnetic North (Default)</string>
+    <string name="settings_compass_magnetic_north">Magnetic North</string>
     <string name="settings_compass_true_north">True North</string>
     <string name="settings_compass_declination">Magnetic Declination Offset</string>
     <string name="settings_compass_declination_desc">Negative for West, positive for East. Geometric offset applied automatically.</string>
-    <string name="settings_reset_all">Reset All Settings</string>
+    <string name="settings_reset_all">Reset Defaults</string>
     <string name="settings_reset_all_confirm_title">Reset All Settings?</string>
     <string name="settings_reset_all_confirm_desc">All layout, haptic, tarot, and compass settings will be reset to defaults (birth profile preserved).</string>
     <string name="settings_reset_all_success">All settings reset to defaults</string>
@@ -192,13 +192,13 @@
     <string name="archive_field_summary">Category &amp; Summary</string>
     <string name="archive_field_cast_time">Cast Time</string>
     <string name="archive_field_note">Note</string>
-    <string name="archive_action_edit">Edit Tag</string>
+    <string name="archive_action_edit">Edit</string>
     <string name="archive_action_delete">Delete</string>
-    <string name="archive_tag_title">Archive Result</string>
+    <string name="archive_tag_title">Archive</string>
     <string name="archive_tag_summary_prefix">Summary: %1$s</string>
     <string name="archive_tag_name_required">Tag Name</string>
     <string name="archive_tag_note_optional">Note</string>
-    <string name="archive_save_btn">Save Archive</string>
+    <string name="archive_save_btn">Save</string>
     <string name="archive_edit_dialog_title">Edit Archive</string>
     <string name="archive_delete_dialog_title">Confirm Delete?</string>
     <string name="archive_delete_dialog_desc">Cannot be undone after deletion</string>
@@ -208,7 +208,7 @@
     <!-- Browse -->
     <string name="browse_title">Browse</string>
     <string name="browse_hexagrams_title">64 Hexagrams</string>
-    <string name="browse_hexagrams_desc">View all hexagrams and lines</string>
+    <string name="browse_hexagrams_desc">Hexagrams and lines</string>
     <string name="browse_tarot_title">Tarot Cards</string>
     <string name="browse_tarot_desc">78 Major and Minor Arcana</string>
     <string name="browse_knowledge_title">Taoist Knowledge</string>
@@ -225,7 +225,7 @@
     <string name="about_disclaimer_title">Disclaimer</string>
     <string name="about_disclaimer_content">All divination content is for traditional cultural study, research and entertainment only, and does not constitute medical, legal or financial advice.</string>
     <string name="about_license_title">Data &amp; License Notices</string>
-    <string name="about_back_to_settings">Back to Settings</string>
+    <string name="about_back_to_settings">Back</string>
 
     <!-- Welcome & Onboarding -->
     <string name="welcome_title_prefix">Welcome to</string>
@@ -233,7 +233,7 @@
     <string name="welcome_badge_text">I Ching</string>
     <string name="welcome_tagline">Offline Eastern Divination &amp; Western Tarot</string>
     <string name="welcome_tap_to_start">Tap anywhere to begin</string>
-    <string name="welcome_start_button">Review Terms &amp; Enter</string>
+    <string name="welcome_start_button">Enter</string>
     <string name="welcome_terms_title">Terms &amp; Privacy Notice</string>
     <string name="welcome_terms_subtitle">Welcome to Boompala. Please review the following terms regarding content nature and data privacy before getting started:</string>
     <string name="welcome_disclaimer_card_title">🔮</string>
@@ -243,7 +243,7 @@
     <string name="welcome_sources_card_title">📜</string>
     <string name="welcome_sources_card_content">I Ching canonical texts are derived from Wikisource (CC BY-SA 4.0), Ganzhi calendar algorithms from 6tail/lunar-java (MIT), and Tarot illustrations from 1909 public domain restorations (CC0 1.0). Special thanks to open-source contributors.</string>
     <string name="welcome_terms_footer_hint">By tapping the button below, you acknowledge and agree to the terms above.</string>
-    <string name="welcome_agree_and_enter">Agree &amp; Open Boompala</string>
+    <string name="welcome_agree_and_enter">Enter</string>
     <string name="welcome_revisit_from_about">Welcome &amp; Disclaimers</string>
     <string name="welcome_revisit_from_about_desc">Review onboarding guide and disclaimers</string>
     <string name="welcome_step_welcome">Welcome</string>
@@ -264,12 +264,12 @@
     <string name="settings_ai_api_key">API Key</string>
     <string name="settings_ai_key_configured">Configured · %1$s</string>
     <string name="settings_ai_key_not_set">Not Configured</string>
-    <string name="settings_ai_sync_button">Scan QR to Configure Key</string>
+    <string name="settings_ai_sync_button">Scan to Pair</string>
     <string name="settings_ai_sync_desc">Scan on phone to enter API Key easily</string>
     <string name="settings_ai_test_button">Test Connection</string>
-    <string name="settings_ai_test_ready">Ready (Phase 2 integration pending)</string>
+    <string name="settings_ai_test_ready">Ready</string>
     <string name="settings_ai_test_need_key">Please configure API Key first</string>
-    <string name="settings_ai_clear_key">Clear API Key</string>
+    <string name="settings_ai_clear_key">Clear Key</string>
     <string name="settings_ai_clear_confirm_title">Clear API Key</string>
     <string name="settings_ai_clear_confirm_desc">Are you sure you want to clear the saved API Key?</string>
 
@@ -290,5 +290,5 @@
     <string name="welcome_mode_online_title">⚡ Online SI Mode</string>
     <string name="welcome_mode_online_badge">SI Enhanced</string>
     <string name="welcome_mode_online_desc">Enable LLM API for SI interpretation. Bring your own Key, direct to provider.</string>
-    <string name="welcome_mode_confirm">Start Boompala</string>
+    <string name="welcome_mode_confirm">Enter</string>
 </resources>

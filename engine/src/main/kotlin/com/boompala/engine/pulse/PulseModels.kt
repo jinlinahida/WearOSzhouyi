@@ -98,4 +98,5 @@ data class PulseDiagnosisResult(
     val profile: PulseRemedyProfile,
     val meridianInfo: MeridianInfluence,
     val timestampMillis: Long,
+    val measuredWaveform: List<Float> = emptyList(),
 )

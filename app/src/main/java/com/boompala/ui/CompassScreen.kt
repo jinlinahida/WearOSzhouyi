@@ -89,7 +89,7 @@ fun CompassScreen(
         }
         item(key = "reading-card") {
             ResultCard {
-                Text("当前方位 (${northLabel})", style = MaterialTheme.typography.titleSmall)
+                Text("当前方位 · ${northLabel}", style = MaterialTheme.typography.titleSmall)
                 DetailField("精确角度", reading?.let { String.format(Locale.US, "%.1f° · %s", it.degrees, it.eightDirection) } ?: "暂无")
                 DetailField("参照基准", if (trueNorthEnabled) "地理真北 (偏角 $declinationLabel)" else "天然地磁北")
                 DetailField("朝向山位", reading?.let { "${it.mountain.name}山 · ${it.mountain.element} · ${it.mountain.yinYang.displayName}" } ?: "暂无")
@@ -118,7 +118,7 @@ fun CompassScreen(
                     .fillMaxWidth()
                     .wearPressFeedback(lockInteraction),
                 interactionSource = lockInteraction,
-            ) { Text(if (locked) "恢复实时测量" else "锁定当前方位") }
+            ) { Text(if (locked) "实时测量" else "锁定方位") }
         }
         item(key = "calibration") {
             ResultCard {
@@ -135,7 +135,7 @@ fun CompassScreen(
                     .wearPressFeedback(backInteraction),
                 interactionSource = backInteraction,
                 colors = BoompalaButtonDefaults.outlinedButtonColors(),
-            ) { Text("返回首页") }
+            ) { Text("首页") }
         }
     }
 }

@@ -271,9 +271,9 @@ object ArchiveSnapshotCodec {
                     val card = drawn.card
                     val isReversed = drawn.orientation == TarotOrientation.REVERSED
                     val meanings = if (isReversed) card.reversedMeaningsZh else card.uprightMeaningsZh
-                    val orientationName = if (isReversed) "逆位 (Reversed)" else "正位 (Upright)"
+                    val orientationName = if (isReversed) "逆位" else "正位"
                     put(
-                        "【${drawn.slot.name}】${card.nameZh} (${card.nameEn})",
+                        "【${drawn.slot.name}】${card.nameZh}",
                         listOf(
                             "朝向：$orientationName",
                             "牌位：${drawn.slot.description}",

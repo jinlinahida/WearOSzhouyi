@@ -357,7 +357,7 @@ private fun LocalModeCardContent(
         interactionSource = toSettingsInteraction,
         colors = BoompalaButtonDefaults.outlinedButtonColors(),
     ) {
-        Text("前往设置开启 SI", style = MaterialTheme.typography.labelSmall)
+        Text("开启 SI", style = MaterialTheme.typography.labelSmall)
     }
 }
 
@@ -385,7 +385,7 @@ private fun UnconfiguredCardContent(
         interactionSource = toSettingsInteraction,
         colors = BoompalaButtonDefaults.buttonColors(),
     ) {
-        Text("前往设置配置", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold)
+        Text("配置秘钥", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold)
     }
 }
 
@@ -561,7 +561,11 @@ private fun IdleCardContent(
             colors = BoompalaButtonDefaults.outlinedButtonColors(),
             contentPadding = BoompalaButtonDefaults.compactContentPadding,
         ) {
-            Text("💡 选取推荐问法", style = MaterialTheme.typography.labelSmall.copy(fontSize = 11.sp))
+            Text(
+                text = "💡 推荐问法",
+                style = MaterialTheme.typography.labelSmall,
+                fontWeight = FontWeight.SemiBold,
+            )
         }
     } else {
         Row(
@@ -578,7 +582,11 @@ private fun IdleCardContent(
                 colors = BoompalaButtonDefaults.outlinedButtonColors(),
                 contentPadding = BoompalaButtonDefaults.compactContentPadding,
             ) {
-                Text("💡 换个问法", style = MaterialTheme.typography.labelSmall.copy(fontSize = 11.sp))
+                Text(
+                    text = "换个问法",
+                    style = MaterialTheme.typography.labelSmall,
+                    fontWeight = FontWeight.SemiBold,
+                )
             }
 
             val clearInteraction = remember { MutableInteractionSource() }
@@ -591,7 +599,11 @@ private fun IdleCardContent(
                 colors = BoompalaButtonDefaults.outlinedButtonColors(),
                 contentPadding = BoompalaButtonDefaults.compactContentPadding,
             ) {
-                Text("清空", style = MaterialTheme.typography.labelSmall.copy(fontSize = 11.sp))
+                Text(
+                    text = "清空",
+                    style = MaterialTheme.typography.labelSmall,
+                    fontWeight = FontWeight.SemiBold,
+                )
             }
         }
     }
@@ -608,7 +620,11 @@ private fun IdleCardContent(
         colors = BoompalaButtonDefaults.buttonColors(),
         contentPadding = BoompalaButtonDefaults.compactContentPadding,
     ) {
-        Text("⚡ 开始 SI 深度解卦", fontWeight = FontWeight.Bold)
+        Text(
+            text = "⚡ SI 解卦",
+            style = MaterialTheme.typography.labelSmall,
+            fontWeight = FontWeight.Bold,
+        )
     }
 }
 
@@ -761,7 +777,7 @@ private fun CompletedCardContent(
         interactionSource = restartInteraction,
         colors = BoompalaButtonDefaults.outlinedButtonColors(),
     ) {
-        Text("重新解读", style = MaterialTheme.typography.labelSmall)
+        Text("重解", style = MaterialTheme.typography.labelSmall)
     }
 }
 
@@ -843,19 +859,37 @@ private fun ErrorCardContent(
 
     Spacer(Modifier.height(4.dp))
 
-    val retryInteraction = remember { MutableInteractionSource() }
-    BoompalaCardButton(
-        onClick = onRetry,
-        modifier = Modifier
-            .fillMaxWidth()
-            .wearPressFeedback(retryInteraction),
-        interactionSource = retryInteraction,
-        colors = BoompalaButtonDefaults.buttonColors(),
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
     ) {
-        Text("重新尝试", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold)
+        val retryInteraction = remember { MutableInteractionSource() }
+        BoompalaCardButton(
+            onClick = onRetry,
+            modifier = Modifier
+                .weight(1f)
+                .wearPressFeedback(retryInteraction),
+            interactionSource = retryInteraction,
+            colors = BoompalaButtonDefaults.buttonColors(),
+        ) {
+            Text("重试", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold)
+        }
+
+        val backInteraction = remember { MutableInteractionSource() }
+        BoompalaCardButton(
+            onClick = onBackToIdle,
+            modifier = Modifier
+                .weight(1f)
+                .wearPressFeedback(backInteraction),
+            interactionSource = backInteraction,
+            colors = BoompalaButtonDefaults.outlinedButtonColors(),
+        ) {
+            Text("返回", style = MaterialTheme.typography.labelSmall)
+        }
     }
 
     if (error is AiError.InvalidApiKey || error is AiError.BadRequest) {
+        Spacer(Modifier.height(4.dp))
         val settingsInteraction = remember { MutableInteractionSource() }
         BoompalaCardButton(
             onClick = onNavigateToSettings,
@@ -867,18 +901,6 @@ private fun ErrorCardContent(
         ) {
             Text("SI 设置", style = MaterialTheme.typography.labelSmall)
         }
-    }
-
-    val backInteraction = remember { MutableInteractionSource() }
-    BoompalaCardButton(
-        onClick = onBackToIdle,
-        modifier = Modifier
-            .fillMaxWidth()
-            .wearPressFeedback(backInteraction),
-        interactionSource = backInteraction,
-        colors = BoompalaButtonDefaults.outlinedButtonColors(),
-    ) {
-        Text("返回", style = MaterialTheme.typography.labelSmall)
     }
 }
 

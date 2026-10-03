@@ -13,6 +13,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -270,37 +271,42 @@ fun PulseMeasureScreen(
                             textAlign = TextAlign.Center,
                         )
                         Spacer(modifier = Modifier.height(12.dp))
-                        val retryNotWornPress = remember { MutableInteractionSource() }
-                        BoompalaCardButton(
-                            onClick = {
-                                restartKey++
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .wearPressFeedback(
-                                    interactionSource = retryNotWornPress,
-                                    hapticEnabled = hapticEnabled,
-                                    intensity = hapticIntensity,
-                                ),
-                            interactionSource = retryNotWornPress,
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(4.dp),
                         ) {
-                            Text("重新把脉")
-                        }
-                        Spacer(modifier = Modifier.height(6.dp))
-                        val backPress = remember { MutableInteractionSource() }
-                        BoompalaCardButton(
-                            onClick = onBack,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .wearPressFeedback(
-                                    interactionSource = backPress,
-                                    hapticEnabled = hapticEnabled,
-                                    intensity = hapticIntensity,
-                                ),
-                            interactionSource = backPress,
-                            colors = BoompalaButtonDefaults.outlinedButtonColors(),
-                        ) {
-                            Text("返回")
+                            val retryNotWornPress = remember { MutableInteractionSource() }
+                            BoompalaCardButton(
+                                onClick = {
+                                    restartKey++
+                                },
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .wearPressFeedback(
+                                        interactionSource = retryNotWornPress,
+                                        hapticEnabled = hapticEnabled,
+                                        intensity = hapticIntensity,
+                                    ),
+                                interactionSource = retryNotWornPress,
+                            ) {
+                                Text("重测")
+                            }
+
+                            val backPress = remember { MutableInteractionSource() }
+                            BoompalaCardButton(
+                                onClick = onBack,
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .wearPressFeedback(
+                                        interactionSource = backPress,
+                                        hapticEnabled = hapticEnabled,
+                                        intensity = hapticIntensity,
+                                    ),
+                                interactionSource = backPress,
+                                colors = BoompalaButtonDefaults.outlinedButtonColors(),
+                            ) {
+                                Text("返回")
+                            }
                         }
                     }
                 }
@@ -372,7 +378,7 @@ fun PulseMeasureScreen(
                                 ),
                             interactionSource = retryPressInteraction,
                         ) {
-                            Text("重新把脉")
+                            Text("重测")
                         }
                     }
                 }
@@ -409,37 +415,42 @@ fun PulseMeasureScreen(
                             textAlign = TextAlign.Center,
                         )
                         Spacer(modifier = Modifier.height(12.dp))
-                        val errorRetryPress = remember { MutableInteractionSource() }
-                        BoompalaCardButton(
-                            onClick = {
-                                restartKey++
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .wearPressFeedback(
-                                    interactionSource = errorRetryPress,
-                                    hapticEnabled = hapticEnabled,
-                                    intensity = hapticIntensity,
-                                ),
-                            interactionSource = errorRetryPress,
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(4.dp),
                         ) {
-                            Text("重新把脉")
-                        }
-                        Spacer(modifier = Modifier.height(6.dp))
-                        val errorBackPress = remember { MutableInteractionSource() }
-                        BoompalaCardButton(
-                            onClick = onBack,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .wearPressFeedback(
-                                    interactionSource = errorBackPress,
-                                    hapticEnabled = hapticEnabled,
-                                    intensity = hapticIntensity,
-                                ),
-                            interactionSource = errorBackPress,
-                            colors = BoompalaButtonDefaults.outlinedButtonColors(),
-                        ) {
-                            Text("返回")
+                            val errorRetryPress = remember { MutableInteractionSource() }
+                            BoompalaCardButton(
+                                onClick = {
+                                    restartKey++
+                                },
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .wearPressFeedback(
+                                        interactionSource = errorRetryPress,
+                                        hapticEnabled = hapticEnabled,
+                                        intensity = hapticIntensity,
+                                    ),
+                                interactionSource = errorRetryPress,
+                            ) {
+                                Text("重测")
+                            }
+
+                            val errorBackPress = remember { MutableInteractionSource() }
+                            BoompalaCardButton(
+                                onClick = onBack,
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .wearPressFeedback(
+                                        interactionSource = errorBackPress,
+                                        hapticEnabled = hapticEnabled,
+                                        intensity = hapticIntensity,
+                                    ),
+                                interactionSource = errorBackPress,
+                                colors = BoompalaButtonDefaults.outlinedButtonColors(),
+                            ) {
+                                Text("返回")
+                            }
                         }
                     }
                 }

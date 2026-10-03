@@ -1,13 +1,16 @@
 package com.boompala.ui
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material3.Button
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.OutlinedButton
@@ -102,32 +105,36 @@ fun MeiHuaTimeScreen(
                 Text("查看此卦")
             }
         }
-        item(key = "meihua-time-recast") {
-            val pressInteraction = remember { MutableInteractionSource() }
-            BoompalaCardButton(
-                onClick = {
-                    onReadingChanged(engine.calculate(Instant.now(), ZoneId.systemDefault()))
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wearPressFeedback(pressInteraction),
-                interactionSource = pressInteraction,
-                colors = BoompalaButtonDefaults.outlinedButtonColors(),
+        item(key = "meihua-time-actions") {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
             ) {
-                Text("重新按当前时间起卦")
-            }
-        }
-        item(key = "meihua-time-back") {
-            val pressInteraction = remember { MutableInteractionSource() }
-            BoompalaCardButton(
-                onClick = onBack,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wearPressFeedback(pressInteraction),
-                interactionSource = pressInteraction,
-                colors = BoompalaButtonDefaults.outlinedButtonColors(),
-            ) {
-                Text("返回首页")
+                val recastInteraction = remember { MutableInteractionSource() }
+                BoompalaCardButton(
+                    onClick = {
+                        onReadingChanged(engine.calculate(Instant.now(), ZoneId.systemDefault()))
+                    },
+                    modifier = Modifier
+                        .weight(1.1f)
+                        .wearPressFeedback(recastInteraction),
+                    interactionSource = recastInteraction,
+                    colors = BoompalaButtonDefaults.outlinedButtonColors(),
+                ) {
+                    Text("重新起卦")
+                }
+
+                val backInteraction = remember { MutableInteractionSource() }
+                BoompalaCardButton(
+                    onClick = onBack,
+                    modifier = Modifier
+                        .weight(0.9f)
+                        .wearPressFeedback(backInteraction),
+                    interactionSource = backInteraction,
+                    colors = BoompalaButtonDefaults.outlinedButtonColors(),
+                ) {
+                    Text("首页")
+                }
             }
         }
     }

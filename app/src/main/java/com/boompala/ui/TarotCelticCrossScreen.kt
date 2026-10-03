@@ -135,7 +135,7 @@ fun TarotCelticCrossScreen(
                         interactionSource = deckInteraction,
                         colors = BoompalaButtonDefaults.outlinedButtonColors(),
                     ) {
-                        Text(if (currentDeckType == DeckType.FULL_78) "切换为仅大牌 (22张)" else "切换为全牌组 (78张)")
+                        Text(if (currentDeckType == DeckType.FULL_78) "22张大牌" else "78张全牌")
                     }
                 }
             }
@@ -152,7 +152,7 @@ fun TarotCelticCrossScreen(
                         interactionSource = reversedInteraction,
                         colors = BoompalaButtonDefaults.outlinedButtonColors(),
                     ) {
-                        Text(if (currentAllowReversed) "切换为仅正位" else "切换为允许逆位")
+                        Text(if (currentAllowReversed) "仅正位" else "允许逆位")
                     }
                 }
             }
@@ -176,7 +176,7 @@ fun TarotCelticCrossScreen(
                         .wearPressFeedback(drawInteraction),
                     interactionSource = drawInteraction,
                 ) {
-                    Text("洗牌并抽牌")
+                    Text("抽牌")
                 }
             }
 
@@ -190,7 +190,7 @@ fun TarotCelticCrossScreen(
                     interactionSource = backInteraction,
                     colors = BoompalaButtonDefaults.outlinedButtonColors(),
                 ) {
-                    Text("返回首页")
+                    Text("首页")
                 }
             }
         }
@@ -241,16 +241,7 @@ fun TarotCelticCrossScreen(
                 )
             }
 
-            if (!isCardFlipped) {
-                item(key = "step-hint-$currentStep") {
-                    Text(
-                        text = "▲ 点击牌背揭晓",
-                        style = MaterialTheme.typography.labelSmall,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth(),
-                    )
-                }
-            } else {
+            if (isCardFlipped) {
                 item(key = "step-revealed-summary-$currentStep") {
                     ResultCard {
                         Text(
@@ -265,45 +256,63 @@ fun TarotCelticCrossScreen(
                     }
                 }
 
-                item(key = "step-next-action-$currentStep") {
-                    val nextInteraction = remember { MutableInteractionSource() }
-                    BoompalaCardButton(
-                        onClick = {
-                            if (currentStep < 9) {
-                                currentStep++
-                            } else {
-                                currentStep = 10 // enter full interpretation view
+                item(key = "step-nav-$currentStep") {
+                    if (currentStep > 0) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(4.dp),
+                        ) {
+                            val prevInteraction = remember { MutableInteractionSource() }
+                            BoompalaCardButton(
+                                onClick = { currentStep-- },
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .wearPressFeedback(prevInteraction),
+                                interactionSource = prevInteraction,
+                                colors = BoompalaButtonDefaults.outlinedButtonColors(),
+                            ) {
+                                Text(
+                                    text = "上一张",
+                                    style = MaterialTheme.typography.labelSmall,
+                                )
                             }
-                        },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wearPressFeedback(nextInteraction),
-                        interactionSource = nextInteraction,
-                    ) {
-                        Text(
-                            if (currentStep < 9) {
-                                "揭晓下一张 (${reading.drawnCards[currentStep + 1].slot.name})"
-                            } else {
-                                "查看十牌完整解读"
-                            },
-                        )
-                    }
-                }
-            }
 
-            // Return to previous card action if not at first card
-            if (currentStep > 0) {
-                item(key = "step-prev-action-$currentStep") {
-                    val prevInteraction = remember { MutableInteractionSource() }
-                    BoompalaCardButton(
-                        onClick = { currentStep-- },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wearPressFeedback(prevInteraction),
-                        interactionSource = prevInteraction,
-                        colors = BoompalaButtonDefaults.outlinedButtonColors(),
-                    ) {
-                        Text("返回上一张")
+                            val nextInteraction = remember { MutableInteractionSource() }
+                            BoompalaCardButton(
+                                onClick = {
+                                    if (currentStep < 9) {
+                                        currentStep++
+                                    } else {
+                                        currentStep = 10
+                                    }
+                                },
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .wearPressFeedback(nextInteraction),
+                                interactionSource = nextInteraction,
+                            ) {
+                                Text(
+                                    text = if (currentStep < 9) "下一张" else "完整解读",
+                                    style = MaterialTheme.typography.labelSmall,
+                                    fontWeight = FontWeight.Bold,
+                                )
+                            }
+                        }
+                    } else {
+                        val nextInteraction = remember { MutableInteractionSource() }
+                        BoompalaCardButton(
+                            onClick = { currentStep = 1 },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wearPressFeedback(nextInteraction),
+                            interactionSource = nextInteraction,
+                        ) {
+                            Text(
+                                text = "下一张",
+                                style = MaterialTheme.typography.labelSmall,
+                                fontWeight = FontWeight.Bold,
+                            )
+                        }
                     }
                 }
             }
@@ -324,7 +333,7 @@ fun TarotCelticCrossScreen(
                     interactionSource = skipInteraction,
                     colors = BoompalaButtonDefaults.outlinedButtonColors(),
                 ) {
-                    Text("直接查看完整解读")
+                    Text("直接解读")
                 }
             }
         }
@@ -504,12 +513,12 @@ fun TarotCelticCrossScreen(
                         fontWeight = FontWeight.Bold,
                     )
                     Text(
-                        text = "${selectedCard.card.nameZh} (${selectedCard.card.nameEn})",
+                        text = selectedCard.card.nameZh,
                         style = MaterialTheme.typography.labelMedium,
                     )
                     DetailField(
                         "状态",
-                        if (isSelectedReversed) "逆位 (Reversed)" else "正位 (Upright)",
+                        if (isSelectedReversed) "逆位" else "正位",
                     )
                     DetailField("牌位意义", selectedCard.slot.description)
                     DetailField("属性", "${selectedCard.card.arcana.displayName} · ${selectedCard.card.element.displayName}")
@@ -569,35 +578,38 @@ fun TarotCelticCrossScreen(
                 }
             }
 
-            item(key = "results-archive") {
-                val archiveInteraction = remember { MutableInteractionSource() }
-                BoompalaCardButton(
-                    onClick = { onArchive(reading) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wearPressFeedback(archiveInteraction),
-                    interactionSource = archiveInteraction,
-                    colors = BoompalaButtonDefaults.outlinedButtonColors(),
+            item(key = "results-actions") {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
                 ) {
-                    Text("归档此结果")
-                }
-            }
+                    val recastInteraction = remember { MutableInteractionSource() }
+                    BoompalaCardButton(
+                        onClick = {
+                            currentStep = 0
+                            flippedList.clear()
+                            repeat(10) { flippedList.add(false) }
+                            onReadingChanged(null)
+                        },
+                        modifier = Modifier
+                            .weight(1f)
+                            .wearPressFeedback(recastInteraction),
+                        interactionSource = recastInteraction,
+                    ) {
+                        Text("重抽")
+                    }
 
-            item(key = "results-recast") {
-                val recastInteraction = remember { MutableInteractionSource() }
-                BoompalaCardButton(
-                    onClick = {
-                        currentStep = 0
-                        flippedList.clear()
-                        repeat(10) { flippedList.add(false) }
-                        onReadingChanged(null)
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wearPressFeedback(recastInteraction),
-                    interactionSource = recastInteraction,
-                ) {
-                    Text("重新抽牌")
+                    val archiveInteraction = remember { MutableInteractionSource() }
+                    BoompalaCardButton(
+                        onClick = { onArchive(reading) },
+                        modifier = Modifier
+                            .weight(1f)
+                            .wearPressFeedback(archiveInteraction),
+                        interactionSource = archiveInteraction,
+                        colors = BoompalaButtonDefaults.outlinedButtonColors(),
+                    ) {
+                        Text("归档")
+                    }
                 }
             }
 
@@ -611,7 +623,7 @@ fun TarotCelticCrossScreen(
                     interactionSource = finishInteraction,
                     colors = BoompalaButtonDefaults.outlinedButtonColors(),
                 ) {
-                    Text("返回首页")
+                    Text("首页")
                 }
             }
         }

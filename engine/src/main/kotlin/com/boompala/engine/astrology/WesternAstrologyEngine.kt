@@ -74,18 +74,22 @@ object WesternAstrologyEngine {
         )
 
         // 5. Element balance (Sun, Moon, Ascendant + 5 planets = 7 or 8 points)
-        val evaluatedSigns = mutableListOf(sunSign, moonSign)
-        if (ascendantPlacement != null) evaluatedSigns.add(ascendantPlacement.sign)
-        planets.forEach { evaluatedSigns.add(it.sign) }
+        val allPlacements = listOfNotNull(sunPlacement, moonPlacement, ascendantPlacement) + planets
+        val fireBodies = allPlacements.filter { it.sign.element == ZodiacElement.FIRE }.map { it.body }
+        val earthBodies = allPlacements.filter { it.sign.element == ZodiacElement.EARTH }.map { it.body }
+        val airBodies = allPlacements.filter { it.sign.element == ZodiacElement.AIR }.map { it.body }
+        val waterBodies = allPlacements.filter { it.sign.element == ZodiacElement.WATER }.map { it.body }
 
         val elementBalance = ElementBalance(
-            fireCount = evaluatedSigns.count { it.element == ZodiacElement.FIRE },
-            earthCount = evaluatedSigns.count { it.element == ZodiacElement.EARTH },
-            airCount = evaluatedSigns.count { it.element == ZodiacElement.AIR },
-            waterCount = evaluatedSigns.count { it.element == ZodiacElement.WATER },
+            fireCount = fireBodies.size,
+            earthCount = earthBodies.size,
+            airCount = airBodies.size,
+            waterCount = waterBodies.size,
+            fireBodies = fireBodies,
+            earthBodies = earthBodies,
+            airBodies = airBodies,
+            waterBodies = waterBodies,
         )
-
-        val allPlacements = listOfNotNull(sunPlacement, moonPlacement, ascendantPlacement) + planets
 
         return WesternChartReading(
             birthDate = birthDate,

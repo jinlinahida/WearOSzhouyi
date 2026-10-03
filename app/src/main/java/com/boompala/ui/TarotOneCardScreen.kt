@@ -80,16 +80,6 @@ fun TarotOneCardScreen(
                 )
             }
 
-            item(key = "tarot-guidance") {
-                ResultCard {
-                    Text(
-                        text = "静心凝神，思考你心中的问题或当下处境，随后点击抽取一张指引之牌。",
-                        style = MaterialTheme.typography.bodyMedium,
-                        textAlign = TextAlign.Center,
-                    )
-                }
-            }
-
             item(key = "tarot-deck-selection") {
                 ResultCard {
                     DetailField("牌组类型", currentDeckType.displayName)
@@ -112,7 +102,7 @@ fun TarotOneCardScreen(
                             interactionSource = deckInteraction,
                             colors = BoompalaButtonDefaults.outlinedButtonColors(),
                         ) {
-                            Text(if (currentDeckType == DeckType.FULL_78) "切换为仅大牌 (22张)" else "切换为全牌组 (78张)")
+                            Text(if (currentDeckType == DeckType.FULL_78) "22张大牌" else "78张全牌")
                         }
                     }
                 }
@@ -130,7 +120,7 @@ fun TarotOneCardScreen(
                         interactionSource = reversedInteraction,
                         colors = BoompalaButtonDefaults.outlinedButtonColors(),
                     ) {
-                        Text(if (currentAllowReversed) "切换为仅正位" else "切换为允许逆位")
+                        Text(if (currentAllowReversed) "仅正位" else "允许逆位")
                     }
                 }
             }
@@ -152,7 +142,7 @@ fun TarotOneCardScreen(
                         .wearPressFeedback(drawInteraction),
                     interactionSource = drawInteraction,
                 ) {
-                    Text("洗牌并抽牌")
+                    Text("抽牌")
                 }
             }
 
@@ -166,7 +156,7 @@ fun TarotOneCardScreen(
                     interactionSource = backInteraction,
                     colors = BoompalaButtonDefaults.outlinedButtonColors(),
                 ) {
-                    Text("返回首页")
+                    Text("首页")
                 }
             }
         } else {
@@ -190,27 +180,18 @@ fun TarotOneCardScreen(
                     )
                 }
 
-                if (!isFlipped) {
-                    item(key = "tarot-flip-hint") {
-                        Text(
-                            text = "▲ 点击牌背翻开牌面",
-                            style = MaterialTheme.typography.labelSmall,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.fillMaxWidth(),
-                        )
-                    }
-                } else {
+                if (isFlipped) {
                     // Result Details
                     item(key = "tarot-card-header") {
                         ResultCard {
                             Text(
-                                text = "${card.nameZh} · ${card.nameEn}",
+                                text = card.nameZh,
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.Bold,
                             )
                             DetailField(
                                 "状态",
-                                if (isReversed) "逆位 (Reversed)" else "正位 (Upright)",
+                                if (isReversed) "逆位" else "正位",
                             )
                             DetailField("类型", "${card.arcana.displayName} · ${card.element.displayName}")
                         }
@@ -265,33 +246,36 @@ fun TarotOneCardScreen(
                         }
                     }
 
-                    item(key = "tarot-archive") {
-                        val archiveInteraction = remember { MutableInteractionSource() }
-                        BoompalaCardButton(
-                            onClick = { onArchive(reading) },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .wearPressFeedback(archiveInteraction),
-                            interactionSource = archiveInteraction,
-                            colors = BoompalaButtonDefaults.outlinedButtonColors(),
+                    item(key = "tarot-actions") {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(4.dp),
                         ) {
-                            Text("归档此结果")
-                        }
-                    }
+                            val recastInteraction = remember { MutableInteractionSource() }
+                            BoompalaCardButton(
+                                onClick = {
+                                    isFlipped = false
+                                    onReadingChanged(null)
+                                },
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .wearPressFeedback(recastInteraction),
+                                interactionSource = recastInteraction,
+                            ) {
+                                Text("重抽")
+                            }
 
-                    item(key = "tarot-recast") {
-                        val recastInteraction = remember { MutableInteractionSource() }
-                        BoompalaCardButton(
-                            onClick = {
-                                isFlipped = false
-                                onReadingChanged(null)
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .wearPressFeedback(recastInteraction),
-                            interactionSource = recastInteraction,
-                        ) {
-                            Text("重新抽牌")
+                            val archiveInteraction = remember { MutableInteractionSource() }
+                            BoompalaCardButton(
+                                onClick = { onArchive(reading) },
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .wearPressFeedback(archiveInteraction),
+                                interactionSource = archiveInteraction,
+                                colors = BoompalaButtonDefaults.outlinedButtonColors(),
+                            ) {
+                                Text("归档")
+                            }
                         }
                     }
 
@@ -305,7 +289,7 @@ fun TarotOneCardScreen(
                             interactionSource = finishInteraction,
                             colors = BoompalaButtonDefaults.outlinedButtonColors(),
                         ) {
-                            Text("返回首页")
+                            Text("首页")
                         }
                     }
                 }
