@@ -204,6 +204,8 @@ SQLite（`boompa_archives.db`）保存**不可变结构化快照**，覆盖六�
 
 ## 数据与许可
 
+**许可分两层**：代码（`app/`、`engine/`、`tools/`、`docs/`）采用 **Apache License 2.0**，正文见根目录 [`LICENSE`](LICENSE)；离线数据与美术资产各自沿用来源许可（CC BY-SA 4.0 / CC0 / 公有领域 / MIT / ISC），**不因代码许可而改变**。全部第三方归属与再分发义务汇总见根目录 [`NOTICE`](NOTICE)。
+
 所有离线资料位于 `engine/src/main/assets/`，均带 `schemaVersion` 与来源标注：
 
 - `yao_text.json` — 64 卦 / 384 爻爻辞、卦辞、彖传、象传，来自公共领域古籍；每条记录携带 `sourceRevision` 与 Wikisource 永久版本 URL，可逐条回溯校对。导入与清洗流程见 `tools/import_wikisource_yao_text.mjs`。
@@ -212,6 +214,7 @@ SQLite（`boompa_archives.db`）保存**不可变结构化快照**，覆盖六�
 - `tarot_cards.json` 与 WebP 牌图 — 1909 年莱德·韦特·史密斯塔罗（Pamela Colman Smith 绘，公共领域）。
 - 许可细节见资产同级 `NOTICE-*.txt`、`docs/licenses/`（含 `6tail-lunar-MIT.txt`）与 `docs/research/` 四篇来源研究文档。
 - 历法依赖 `cn.6tail:lunar`（MIT）。历法输入为设备公历时间，算法内部严格走 `Solar → Lunar → EightChar` 路径。
+- 界面组件依赖 [ShirokoWear UI](https://github.com/jinlinahida/ShirokoWearUI)（`io.github.jinlinahida:shirokowear-ui` 与 `:shirokowear-navigation`，Apache-2.0，许可正文见 `docs/licenses/shirokowear-ui-Apache-2.0.txt`）：触觉引擎与厂商常量路由、按压物理、表冠与缩放滚动容器、卡片与按钮、形变加载器、环境顶光、路由契约与页面转场、流沙首屏的引导层与波形画布均由该库提供。**它只负责表现层，不含任何排盘、命理、脉诊规则或数据**——所有领域计算仍在本仓 `engine/` 内离线确定性完成。当前开发期通过 `settings.gradle.kts` 的 `includeBuild("../ShirokoWearUI")` 走源码轨，发布版坐标解析后切回 Maven Central。
 
 ---
 

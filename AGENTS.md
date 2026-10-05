@@ -92,6 +92,8 @@
 ├── gradle/wrapper/                        # Gradle Wrapper
 ├── CONTEXT.md                             # 六爻领域词汇与术语边界
 ├── README.md                              # 功能、构建、验证和许可概览
+├── LICENSE                                # 代码许可 (Apache-2.0)
+├── NOTICE                                 # 第三方归属总览 (Lucide ISC / ShirokoWear UI / lunar / CC BY-SA 数据)
 ├── settings.gradle.kts                    # 仅 include :app、:engine
 ├── build.gradle.kts                       # 根级插件版本声明
 └── gradle.properties                      # AndroidX、JVM、Gradle 缓存/并行配置
@@ -215,6 +217,7 @@ DivinationResult (已装卦完整领域模型)
 - UI 文本与 Compose 结构改动要保留 40mm 圆屏可操作性、间距、动画、返回逻辑和滚动指示器。
 - 引擎和 repository 保持 Android/UI 无关；资料解析必须验证 schema、来源/许可、非空字段、64 卦唯一性以及 `yao_text.json`（64×6/384 条结构）、`tarot_cards.json`（78 张卡牌结构）。
 - 新增或修改离线资产时同步更新对应 `NOTICE-*.txt`、`docs/research/` 和解析测试。运行时资源必须放在 `engine/src/main/assets/`，不要改成网络加载。
+- **许可两层不可混淆**：代码按根目录 `LICENSE`（Apache-2.0）授权，数据与美术资产按各自来源许可授权（`yao_text.json` 为 CC BY-SA 4.0、再分发衍生文本必须沿用 ShareAlike 并标注来源；塔罗与卦解为 CC0；Lucide 派生图标为 ISC）。**不得**把 Apache-2.0 声称适用于数据资产，也不得因打包了 CC BY-SA 数据而声称代码受 Copyleft 约束。新增/变更任何第三方来源（含图标、字体、视频素材）时同步更新根目录 `NOTICE`。
 - 归档保存完整快照；详情按 `archiveDetailId -> ArchiveRepository.get -> ArchiveSnapshotCodec.decode` 加载。
 - 传感器在页面可见/生命周期恢复时注册，不可见/暂停时注销；使用 `CompassMath` 的规范化和最短圆周平滑，不在 UI 中重写方位公式。
 - 不提交 `.gradle/`、`.kotlin/`、`build/`、`local.properties`、APK 或 IDE 文件。依赖版本以两个 module 的 `build.gradle.kts` 为准。

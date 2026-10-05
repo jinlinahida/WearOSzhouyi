@@ -1,0 +1,134 @@
+Boompala — 第三方归属与许可总览 (NOTICE)
+=====================================================
+
+本文件汇总 Boompala 随附（或内嵌）的第三方材料及其许可条款。
+本仓库自身代码的许可见根目录 `LICENSE`（Apache License 2.0）。
+数据资产的逐条来源与版本记录见 `engine/src/main/assets/NOTICE-*.txt`、
+`docs/licenses/` 与 `docs/research/`；本文件不替代那些声明，只做总览。
+
+
+一、本仓库自身的许可
+-----------------------------------------------------
+- 代码：`app/`、`engine/`、`tools/`、`docs/` 内的规则与架构文档，
+  以及本项目自绘的美术资源 — Apache License 2.0，见 `LICENSE`。
+- 数据：下列离线资料 **不受** 上述代码许可约束，各自许可见第二至第六节。
+  代码、算法与 UI 不会因为打包了 CC BY-SA 数据而自动变为 CC BY-SA。
+
+
+二、Lucide 线条图标 — ISC
+-----------------------------------------------------
+涉及文件：`app/src/main/res/drawable/` 下 14 枚 `ic_*.xml` 线条图标。
+其中 10 枚与 Lucide 同名图标对应（见下表），3 枚仅沿用 stroke 规范、未找到同名图标，
+`ic_muyu.xml` 为本项目自绘（见第八节）。
+
+使用方式说明：本项目的极简线条图标统一遵循 Lucide 的 Stroke 规范
+（24×24 视口、`strokeWidth` 1.8、圆角端点与连接、无填充）。其中部分图标的
+路径几何来自 Lucide 同名图标，并按 Android VectorDrawable 语法改写：
+指令改为相对坐标、圆弧与三次贝塞尔互相折算、`h.01` 端点改写为小圆，
+部分图标另有本地微调或追加元素。
+
+对照基准：npm 包 `lucide-static@0.469.0`。标记含义 —
+`=` 该版本路径逐点一致（仅语法改写，个别数值有末位取整差异）；
+`≈` 对应同一图标，但坐标或曲率与该版本不同（Lucide 后续重绘，或本项目自行调整；未逐版本回溯确认）。
+
+| 本项目文件 | Lucide 图标 | 一致 | 说明 |
+|---|---|---|---|
+| `ic_settings_ai.xml` | `sparkles` | `=` | 主星体与右上小星逐点一致；裁去左下两颗小星 |
+| `ic_settings_about.xml` | `info` | `=` | 外圆与竖线一致；端点圆点改写为小圆 |
+| `ic_settings_home.xml` | `layout-grid` | `≈` | 四圆角方格布局一致；方格尺寸与位置有本地调整 |
+| `ic_settings_compass.xml` | `compass` | `≈` | 外圆一致；指针为该版本圆角针形的直线近似 |
+| `ic_settings_data.xml` | `database` | `≈` | 三段轮廓对应；椭圆改写为三次贝塞尔且整体上下内收 |
+| `ic_settings_language.xml` | `globe` | `≈` | 外圆与赤道线一致；经线弧率与该版本不同 |
+| `ic_visibility.xml` | `eye` | `≈` | 瞳孔一致；眼眶为该版本弧线的贝塞尔近似 |
+| `ic_visibility_off.xml` | `eye-off` | `≈` | 四段路径与斜线对应，数值与该版本不同 |
+| `ic_settings_haptics.xml` | `vibrate` | `≈` | 中央圆角矩形对应；圆角半径、两侧弧线为自绘 |
+| `ic_settings_bazi.xml` | `circle-user-round` | `≈` | 肩部弧逐点一致；头部圆位置上移并追加自绘四角星 |
+| `ic_drag_handle.xml` | — | — | 未在 0.469.0 中找到对应图标；按 Lucide stroke 规范自绘 |
+| `ic_settings_display.xml` | — | — | 同上 |
+| `ic_settings_tarot.xml` | — | — | 同上 |
+
+本项目未内嵌 Lucide 的 SVG 源文件、字体或脚本，仅使用上述改写后的路径几何。
+依 ISC 要求保留的版权与许可声明如下（原文来自 `lucide` / `lucide-static` 仓库）：
+
+    ISC License
+
+    Copyright (c) for portions of Lucide are held by Cole Bemis 2013-2022
+    as part of Feather (MIT). All other copyright (c) for Lucide are held by
+    Lucide Contributors 2022.
+
+    Permission to use, copy, modify, and/or distribute this software for any
+    purpose with or without fee is hereby granted, provided that the above
+    copyright notice and this permission notice appear in all copies.
+
+    THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+    WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+    MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+    ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+    WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+    ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+    OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+上游项目：https://github.com/lucide-icons/lucide
+（其中注明 "portions … as part of Feather (MIT)" 的 Feather 部分为 MIT 许可，
+ 版权人 Cole Bemis；本项目的 attribution 一并保留于上。）
+
+
+三、界面组件库 — ShirokoWear UI，Apache-2.0
+-----------------------------------------------------
+- 坐标：`io.github.jinlinahida:shirokowear-ui` 与 `:shirokowear-navigation`
+- 仓库：https://github.com/jinlinahida/ShirokoWearUI
+- 许可正文：`docs/licenses/shirokowear-ui-Apache-2.0.txt`
+- 提供内容：触感引擎与厂商常量路由、按压物理、表冠与缩放滚动容器、卡片与按钮、
+  形变加载器、环境顶光、路由契约与页面转场、流沙首屏引导层与波形画布。
+- 边界：该库只提供表现层，**不含任何排盘、命理、脉诊规则或数据**；
+  全部领域计算在本仓库 `engine/` 内离线确定性完成。
+
+
+四、历法引擎 — 6tail/lunar，MIT
+-----------------------------------------------------
+- 依赖：`cn.6tail:lunar`（见 `app`/`engine` 的 `build.gradle.kts`）
+- 许可正文：`docs/licenses/6tail-lunar-MIT.txt`
+- 用途：四柱干支与农历计算；调用路径严格为 `Solar → Lunar → EightChar`。
+- 上游：https://github.com/6tail/lunar-java
+
+
+五、《周易》爻辞数据 — CC BY-SA 4.0
+-----------------------------------------------------
+- 文件：`engine/src/main/assets/yao_text.json`（64 卦 / 384 爻爻辞、卦辞、彖传、象传）
+- 来源：中文维基文库《周易》固定修订版本，逐条携带 `sourceRevision` 与永久版本 URL。
+- 原典作品状态为公有领域（PD-old）；数字转录与本项目结构化改编为 CC BY-SA 4.0。
+- 许可：https://creativecommons.org/licenses/by-sa/4.0/
+- **再分发义务**：若在衍生作品中继续分发该数据集或其文本，必须以 CC BY-SA 4.0
+  提供并标注原始来源与修改说明。详见 `engine/src/main/assets/NOTICE-yao-text.txt`
+  与 `docs/research/yao-text-data-source.md`。
+- 算法参考：`bopo/najia`（MIT），详见 `docs/research/liuyao-open-source.md`。
+
+
+六、塔罗数据与牌面 — CC0 1.0 与公有领域原作
+-----------------------------------------------------
+- 文件：`engine/src/main/assets/tarot_cards.json`、`app/src/main/res/drawable-nodpi/tarot_card_*.webp`
+- 英文语料：Mark McElroy《A Guide to Tarot Meanings》/ Darius Kazemi Corpora，CC0 1.0 Universal。
+- 中文牌义与结构化整理：本项目独立翻译与撰写。
+- 牌面图像：1909 年 A. E. Waite 与 P. C. Smith 原作（公有领域），
+  由 LuciellaES 高清修复并以 CC0 1.0 Universal 发布。
+- 六十四卦现代白话释义：`hexagram_interpretations.json`，本项目原创整理，CC0 1.0 Universal。
+- 详见 `engine/src/main/assets/NOTICE-tarot.txt`、`NOTICE-hexagram-interpretations.txt`。
+
+
+七、运行时第三方库
+-----------------------------------------------------
+`app/` 与 `engine/` 依赖的 AndroidX、Jetpack Compose、Compose for Wear、
+Gson、kotlinx 等组件均按 Apache License 2.0 提供；JUnit 为 EPL 1.0（仅测试期，不随 APK 分发）。
+各库的完整许可文本随其 Maven 制品分发。
+
+
+八、本项目自有美术
+-----------------------------------------------------
+`ic_muyu.xml`、`img_muyu.xml`（电子木鱼拟物图形）、`ic_launcher_*`、
+`img_silk_background.png`、`res/raw/video_silk_background.mp4` 为本项目自制资源。
+
+备注：`video_silk_background.mp4` 与 `img_silk_background.png` 的来源记录目前
+只有引入提交 `a1a9c06`，未见外部素材出处；若二者含任何外部素材，需补记来源与许可。
+
+
+最后更新：2026-10-05

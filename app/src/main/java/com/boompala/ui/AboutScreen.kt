@@ -142,6 +142,10 @@ fun AboutScreen(
                     text = "• 塔罗数据：英文语料来自 Mark McElroy / Corpora（CC0 1.0）；中文核心牌义、关键词与占卜指引由 Boompala 项目独立翻译与结构化整理。",
                     style = MaterialTheme.typography.bodySmall,
                 )
+                Text(
+                    text = "• 界面组件：触感、滚动容器、卡片、转场与引导层复用自 ShirokoWear UI（Apache-2.0）。该库只提供表现层，不含任何排盘、命理或脉诊规则与数据；本项目全部易学与命理计算均为本地离线推算。",
+                    style = MaterialTheme.typography.bodySmall,
+                )
             }
         }
 
