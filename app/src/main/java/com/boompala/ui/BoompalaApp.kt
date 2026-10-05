@@ -418,6 +418,8 @@ fun BoompalaApp() {
             settings = settings,
             screenShape = screenShape,
         ) {
+            // 库组件的开关与档位从 local 读取，必须先由本 App 的设置灌入。
+            ShirokoWearBridge(settings = settings, screenShape = screenShape) {
             AppScaffold {
                 TopSpotlightBackground(
                     screen = screen,
@@ -1312,7 +1314,8 @@ fun BoompalaApp() {
                         }
                     }
                 }
-            }
+            } // AppScaffold
+            } // ShirokoWearBridge
         }
     }
 }
