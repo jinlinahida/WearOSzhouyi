@@ -85,6 +85,9 @@ import java.time.YearMonth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import io.github.jinlinahida.shirokowear.ui.ShirokoWearSettingsItem
+import io.github.jinlinahida.shirokowear.ui.ShirokoWearToggleCard
+import io.github.jinlinahida.shirokowear.ui.UnstableShirokoWearApi
 
 private enum class SettingsSection {
     MENU,
@@ -2072,6 +2075,7 @@ fun SettingsScreen(
 }
 }
 
+@OptIn(UnstableShirokoWearApi::class)
 @Composable
 private fun SettingsModuleButton(
     iconRes: Int,
@@ -2080,53 +2084,19 @@ private fun SettingsModuleButton(
     onClick: () -> Unit,
     animationsEnabled: Boolean = true,
 ) {
-    val pressInteraction = remember { MutableInteractionSource() }
-    BoompalaCardButton(
+    ShirokoWearSettingsItem(
+        title = title,
+        subtitle = subtitle,
         onClick = onClick,
-        modifier = Modifier
-            .fillMaxWidth()
-            .wearPressFeedback(pressInteraction),
-        interactionSource = pressInteraction,
-        colors = BoompalaButtonDefaults.buttonColors(),
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 4.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
+        icon = {
             Icon(
                 painter = painterResource(iconRes),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(22.dp),
             )
-            Spacer(modifier = Modifier.width(10.dp))
-            Column(
-                modifier = Modifier.weight(1f),
-                horizontalAlignment = Alignment.Start,
-                verticalArrangement = Arrangement.spacedBy(2.dp),
-            ) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.Bold,
-                    maxLines = 1,
-                    softWrap = false,
-                    overflow = TextOverflow.Ellipsis,
-                )
-                Text(
-                    text = subtitle,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 1,
-                    softWrap = false,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.wearMarquee(animationsEnabled),
-                )
-            }
-        }
-    }
+        },
+    )
 }
 
 @Composable
@@ -2155,6 +2125,7 @@ private fun SelectionButton(
     }
 }
 
+@OptIn(UnstableShirokoWearApi::class)
 @Composable
 private fun ToggleSwitchButton(
     checked: Boolean,
@@ -2163,34 +2134,11 @@ private fun ToggleSwitchButton(
     hapticIntensity: HapticIntensity,
     hapticEnabled: Boolean,
 ) {
-    val context = LocalContext.current
-    val pressInteraction = remember { MutableInteractionSource() }
-    SelectableCardButton(
-        selected = checked,
-        onClick = {
-            val nextState = !checked
-            AppHaptics.toggle(
-                context = context,
-                targetState = nextState,
-                intensity = hapticIntensity,
-                enabled = hapticEnabled,
-            )
-            onCheckedChange(nextState)
-        },
-        contentPadding = BoompalaButtonDefaults.compactContentPadding,
-        modifier = Modifier
-            .fillMaxWidth()
-            .wearPressFeedback(pressInteraction, hapticEnabled = false),
-        interactionSource = pressInteraction,
-    ) {
-        Text(
-            text = text,
-            fontWeight = if (checked) FontWeight.Bold else FontWeight.Normal,
-            maxLines = 1,
-            softWrap = false,
-            overflow = TextOverflow.Ellipsis,
-        )
-    }
+    ShirokoWearToggleCard(
+        checked = checked,
+        onCheckedChange = onCheckedChange,
+        label = text,
+    )
 }
 
 private val SHICHEN_LABELS = listOf(

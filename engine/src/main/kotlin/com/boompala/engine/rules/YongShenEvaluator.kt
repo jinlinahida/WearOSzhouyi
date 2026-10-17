@@ -10,13 +10,14 @@ import com.boompala.engine.model.YaoStatus
 enum class YongShenCategory(
     val displayName: String,
     val targetRelation: SixRelation?,
+    val compactDisplayName: String = displayName,
 ) {
-    SHI_YAO("世爻(自身)", null),
-    WEALTH("财运(妻财)", SixRelation.WEALTH),
-    OFFICER("事业(官鬼)", SixRelation.OFFICER_GHOST),
-    PARENTS("文书/长辈(父母)", SixRelation.PARENTS),
-    OFFSPRING("健康/解忧(子孙)", SixRelation.OFFSPRING),
-    SIBLINGS("同行/竞争(兄弟)", SixRelation.SIBLINGS),
+    SHI_YAO("世爻(自身)", null, "世爻·自身"),
+    WEALTH("财运(妻财)", SixRelation.WEALTH, "妻财·求财"),
+    OFFICER("事业(官鬼)", SixRelation.OFFICER_GHOST, "官鬼·事业"),
+    PARENTS("文书/长辈(父母)", SixRelation.PARENTS, "父母·文书"),
+    OFFSPRING("健康/解忧(子孙)", SixRelation.OFFSPRING, "子孙·健康"),
+    SIBLINGS("同行/竞争(兄弟)", SixRelation.SIBLINGS, "兄弟·同行"),
 }
 
 enum class YongShenStrengthLevel(

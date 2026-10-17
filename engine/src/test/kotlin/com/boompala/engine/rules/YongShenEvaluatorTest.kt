@@ -98,4 +98,21 @@ class YongShenEvaluatorTest {
         assertTrue(evaluation.monthEffect.contains("临月建"))
         assertTrue(evaluation.summary.contains("伏神"))
     }
+
+    @Test
+    fun testYongShenCategoryCompactDisplayNames() {
+        YongShenCategory.entries.forEach { category ->
+            assertTrue("compactDisplayName should not be blank", category.compactDisplayName.isNotBlank())
+            assertTrue(
+                "compactDisplayName should be concise (<= 5 characters) for Wear OS buttons, but was: ${category.compactDisplayName}",
+                category.compactDisplayName.length <= 5
+            )
+        }
+        assertEquals("世爻·自身", YongShenCategory.SHI_YAO.compactDisplayName)
+        assertEquals("妻财·求财", YongShenCategory.WEALTH.compactDisplayName)
+        assertEquals("官鬼·事业", YongShenCategory.OFFICER.compactDisplayName)
+        assertEquals("父母·文书", YongShenCategory.PARENTS.compactDisplayName)
+        assertEquals("子孙·健康", YongShenCategory.OFFSPRING.compactDisplayName)
+        assertEquals("兄弟·同行", YongShenCategory.SIBLINGS.compactDisplayName)
+    }
 }

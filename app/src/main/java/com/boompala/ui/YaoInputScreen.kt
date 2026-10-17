@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
@@ -26,6 +27,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -82,8 +84,20 @@ fun YaoInputScreen(
     }
     var lastToss by remember { mutableStateOf<CoinTossResult?>(null) }
     var isTossing by remember { mutableStateOf(false) }
+    var isConfirmingReset by remember { mutableStateOf(false) }
     val tossAnimProgress = remember { androidx.compose.animation.core.Animatable(0f) }
     val coroutineScope = rememberCoroutineScope()
+
+    LaunchedEffect(isConfirmingReset) {
+        if (isConfirmingReset) {
+            delay(2500)
+            isConfirmingReset = false
+        }
+    }
+
+    LaunchedEffect(inputMode) {
+        isConfirmingReset = false
+    }
 
     // Manual cast state
     var manualNextIndex by remember { mutableStateOf(5) }
@@ -139,6 +153,42 @@ fun YaoInputScreen(
         DivinationInputMode.DIRECT_INPUT ->
             originalPolarities.all { it != null } && changedPolarities.all { it != null }
         DivinationInputMode.NUMBER_CAST -> true
+    }
+
+    val handleGenerate = {
+        val castAt = Instant.now()
+        val zoneId = ZoneId.systemDefault()
+        val input = when (inputMode) {
+            DivinationInputMode.COIN_CAST -> LiuYaoCoinCastingEngine.toHexagramInput(
+                records = coinRecords.filterNotNull(),
+                castAt = castAt,
+                zoneId = zoneId,
+            )
+
+            DivinationInputMode.MANUAL_CAST -> HexagramInput(
+                linesFromBottom = selectedStates.mapIndexed { index, state ->
+                    YaoLineInput(YaoPosition.entries[index], requireNotNull(state))
+                },
+                castAt = castAt,
+                zoneId = zoneId,
+            )
+
+            DivinationInputMode.DIRECT_INPUT -> DirectHexagramInput(
+                originalLinesFromBottom = originalPolarities.toPolarityInputs(),
+                changedLinesFromBottom = changedPolarities.toPolarityInputs(),
+                castAt = castAt,
+                zoneId = zoneId,
+            ).toEngineInput()
+
+            DivinationInputMode.NUMBER_CAST -> com.boompala.engine.liuyao.NumberCastingEngine.castThreeNumbers(
+                numA = selectedUpperIndex + 1,
+                numB = selectedLowerIndex + 1,
+                numC = selectedMovingIndex + 1,
+                castAt = castAt,
+                zoneId = zoneId,
+            )
+        }
+        onGenerate(input)
     }
 
     RotaryScrollColumn(
@@ -298,21 +348,75 @@ fun YaoInputScreen(
                             )
                         }
                     } else {
-                        val resetInteraction = remember { MutableInteractionSource() }
-                        BoompalaCardButton(
-                            onClick = {
-                                for (i in coinRecords.indices) {
-                                    coinRecords[i] = null
-                                }
-                                lastToss = null
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .wearPressFeedback(resetInteraction),
-                            interactionSource = resetInteraction,
-                            colors = BoompalaButtonDefaults.outlinedButtonColors(),
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(4.dp),
                         ) {
-                            Text("重新摇卦", maxLines = 1)
+                            val resetInteraction = remember { MutableInteractionSource() }
+                            val generateInteraction = remember { MutableInteractionSource() }
+
+                            // 次级操作：重新摇卦（需二次确认，防止误触清空）
+                            BoompalaCardButton(
+                                onClick = {
+                                    if (isConfirmingReset) {
+                                        AppHaptics.click(hapticContext, hapticIntensity, hapticEnabled)
+                                        for (i in coinRecords.indices) {
+                                            coinRecords[i] = null
+                                        }
+                                        lastToss = null
+                                        isConfirmingReset = false
+                                    } else {
+                                        AppHaptics.click(hapticContext, hapticIntensity, hapticEnabled)
+                                        isConfirmingReset = true
+                                    }
+                                },
+                                modifier = Modifier
+                                    .weight(0.9f)
+                                    .wearPressFeedback(resetInteraction),
+                                interactionSource = resetInteraction,
+                                colors = if (isConfirmingReset) {
+                                    BoompalaButtonDefaults.buttonColors(
+                                        containerColor = MaterialTheme.colorScheme.error.copy(alpha = 0.25f),
+                                        contentColor = MaterialTheme.colorScheme.error,
+                                    )
+                                } else {
+                                    BoompalaButtonDefaults.outlinedButtonColors()
+                                },
+                                contentPadding = PaddingValues(horizontal = 4.dp, vertical = 4.dp),
+                            ) {
+                                Text(
+                                    text = if (isConfirmingReset) "确认重摇" else "重新摇卦",
+                                    maxLines = 1,
+                                    style = MaterialTheme.typography.labelSmall,
+                                    fontWeight = if (isConfirmingReset) FontWeight.Bold else FontWeight.Normal,
+                                    overflow = TextOverflow.Ellipsis,
+                                )
+                            }
+
+                            // 主操作：生成卦盘（就地承接，连击顺理成章生成排盘）
+                            BoompalaCardButton(
+                                onClick = {
+                                    AppHaptics.click(hapticContext, hapticIntensity, hapticEnabled)
+                                    handleGenerate()
+                                },
+                                enabled = canGenerate && !isGenerating,
+                                modifier = Modifier
+                                    .weight(1.1f)
+                                    .wearPressFeedback(generateInteraction),
+                                interactionSource = generateInteraction,
+                                colors = BoompalaButtonDefaults.buttonColors(
+                                    containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.25f),
+                                    contentColor = MaterialTheme.colorScheme.primary,
+                                ),
+                                contentPadding = PaddingValues(horizontal = 4.dp, vertical = 4.dp),
+                            ) {
+                                Text(
+                                    text = if (isGenerating) "排盘中…" else "生成卦盘",
+                                    maxLines = 1,
+                                    style = MaterialTheme.typography.labelSmall,
+                                    fontWeight = FontWeight.Bold,
+                                )
+                            }
                         }
                     }
                 }
@@ -519,52 +623,20 @@ fun YaoInputScreen(
             }
         }
 
-        item(key = "generate-button") {
-            val pressInteraction = remember { MutableInteractionSource() }
-            BoompalaCardButton(
-                onClick = {
-                    val castAt = Instant.now()
-                    val zoneId = ZoneId.systemDefault()
-                    val input = when (inputMode) {
-                        DivinationInputMode.COIN_CAST -> LiuYaoCoinCastingEngine.toHexagramInput(
-                            records = coinRecords.filterNotNull(),
-                            castAt = castAt,
-                            zoneId = zoneId,
-                        )
-
-                        DivinationInputMode.MANUAL_CAST -> HexagramInput(
-                            linesFromBottom = selectedStates.mapIndexed { index, state ->
-                                YaoLineInput(YaoPosition.entries[index], requireNotNull(state))
-                            },
-                            castAt = castAt,
-                            zoneId = zoneId,
-                        )
-
-                        DivinationInputMode.DIRECT_INPUT -> DirectHexagramInput(
-                            originalLinesFromBottom = originalPolarities.toPolarityInputs(),
-                            changedLinesFromBottom = changedPolarities.toPolarityInputs(),
-                            castAt = castAt,
-                            zoneId = zoneId,
-                        ).toEngineInput()
-
-                        DivinationInputMode.NUMBER_CAST -> com.boompala.engine.liuyao.NumberCastingEngine.castThreeNumbers(
-                            numA = selectedUpperIndex + 1,
-                            numB = selectedLowerIndex + 1,
-                            numC = selectedMovingIndex + 1,
-                            castAt = castAt,
-                            zoneId = zoneId,
-                        )
-                    }
-                    onGenerate(input)
-                },
-                enabled = canGenerate && !isGenerating,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = metrics.itemSpacing / 2)
-                    .wearPressFeedback(pressInteraction),
-                interactionSource = pressInteraction,
-            ) {
-                Text(if (isGenerating) "排盘中…" else "生成卦盘")
+        if (inputMode != DivinationInputMode.COIN_CAST) {
+            item(key = "generate-button") {
+                val pressInteraction = remember { MutableInteractionSource() }
+                BoompalaCardButton(
+                    onClick = handleGenerate,
+                    enabled = canGenerate && !isGenerating,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = metrics.itemSpacing / 2)
+                        .wearPressFeedback(pressInteraction),
+                    interactionSource = pressInteraction,
+                ) {
+                    Text(if (isGenerating) "排盘中…" else "生成卦盘")
+                }
             }
         }
 

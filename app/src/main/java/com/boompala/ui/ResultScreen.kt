@@ -34,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.wear.compose.material3.MaterialTheme
@@ -288,12 +289,16 @@ fun LiuYaoResultContent(
                                         .weight(1f)
                                         .wearPressFeedback(pressInteraction),
                                     interactionSource = pressInteraction,
+                                    contentPadding = PaddingValues(horizontal = 4.dp, vertical = 4.dp),
                                 ) {
                                     Text(
-                                        text = category.displayName,
+                                        text = category.compactDisplayName,
                                         style = MaterialTheme.typography.labelSmall,
                                         fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
                                         maxLines = 1,
+                                        softWrap = false,
+                                        overflow = TextOverflow.Ellipsis,
+                                        modifier = Modifier.wearMarquee(animationsEnabled),
                                     )
                                 }
                             }
@@ -308,11 +313,14 @@ fun LiuYaoResultContent(
                     borderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f),
                 ) {
                     Text(
-                        text = "用神 · ${eval.category.displayName}",
+                        text = "用神 · ${eval.category.compactDisplayName}",
                         style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.Bold,
                         maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.wearMarquee(animationsEnabled),
                     )
                     Spacer(Modifier.height(2.dp))
                     Text(eval.summary, style = MaterialTheme.typography.bodySmall)
