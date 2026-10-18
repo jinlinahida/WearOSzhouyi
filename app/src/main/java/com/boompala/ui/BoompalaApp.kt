@@ -30,7 +30,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.snapshotFlow
 import androidx.wear.compose.foundation.SwipeToDismissValue
 import androidx.wear.compose.foundation.rememberSwipeToDismissBoxState
-import androidx.wear.compose.material3.SwipeToDismissBox
+import androidx.wear.compose.foundation.LocalReduceMotion
+import androidx.wear.compose.navigation.SwipeDismissableNavHost
+import androidx.wear.compose.navigation.composable
+import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
+import androidx.wear.compose.navigation.rememberSwipeDismissableNavHostState
+import androidx.wear.compose.navigation.currentBackStackEntryAsState
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.material3.Text
@@ -198,9 +203,13 @@ fun BoompalaApp() {
     val screenShape = settings.resolvedScreenShape(configuration.isScreenRound)
     val homeListState = rememberScalingLazyListState()
     val scope = rememberCoroutineScope()
-    var screen by remember {
-        mutableStateOf(if (!settings.hasCompletedOnboarding) AppScreen.WELCOME else AppScreen.HOME)
-    }
+    val swipeToDismissBoxState = rememberSwipeToDismissBoxState()
+    val navHostState = rememberSwipeDismissableNavHostState(swipeToDismissBoxState)
+    val navController = rememberSwipeDismissableNavController()
+    val currentBackStackEntry by navController.currentBackStackEntryAsState()
+    val screen = currentBackStackEntry?.destination?.route?.let {
+        runCatching { AppScreen.valueOf(it) }.getOrNull()
+    } ?: if (!settings.hasCompletedOnboarding) AppScreen.WELCOME else AppScreen.HOME
     var welcomeReturnScreen by remember { mutableStateOf(AppScreen.HOME) }
     var reading by remember { mutableStateOf<GeneratedReading?>(null) }
     var meiHuaReading by remember { mutableStateOf<MeiHuaTimeReading?>(null) }
@@ -269,79 +278,48 @@ fun BoompalaApp() {
     val isFirstRunWelcome = screen == AppScreen.WELCOME && !settings.hasCompletedOnboarding
     val effectiveBackDestination = if (screen == AppScreen.WELCOME) welcomeReturnScreen else backDestination
 
-    // 页面转场动画状态：前进推入与返回视差复位各自独立，避免互相打断。
-    val forwardEnterAnimatable = remember { Animatable(1f) }
-    val popEnterAnimatable = remember { Animatable(1f) }
-    var lastTransitionPop by remember { mutableStateOf(false) }
-
-    // 前进导航：动画进行中被打断时从当前进度平滑接续，否则先同步 snap 到初始位移再切屏，
-    // 避免新页面首帧闪现最终状态。
-    val navigateTo = remember(scope, settings) {
+    // 前进导航：由 Wear Compose SwipeDismissableNavHost 原生驱动栈推入与进场动画
+    val navigateTo = remember(navController) {
         { target: AppScreen ->
-            if (target != screen) {
-                lastTransitionPop = false
-                scope.launch {
-                    if (settings.animationsEnabled) {
-                        // 动画进行中被打断时不重置，由 animateTo 从当前进度平滑接续。
-                        if (!forwardEnterAnimatable.isRunning) {
-                            forwardEnterAnimatable.snapTo(0f)
-                        }
-                        forwardEnterAnimatable.animateTo(
-                            targetValue = 1f,
-                            animationSpec = tween(durationMillis = 300, easing = EmphasizedDecelEasing),
-                        )
-                    } else {
-                        forwardEnterAnimatable.snapTo(1f)
-                    }
-                }
-                screen = target
+            if (target.name != navController.currentDestination?.route) {
+                navController.navigate(target.name)
             }
         }
     }
 
-    // 统一返回入口：WELCOME 回到打开它的页面，ARCHIVE_TAG 回到归档来源页，其余按 backDestination 返回。
-    // animate=false 用于滑动返回手势完成后的收尾（手势本身已提供退出动效）。
-    val goBack = remember(scope, settings) {
-        { animate: Boolean ->
-            val target = when (screen) {
-                AppScreen.WELCOME -> welcomeReturnScreen
-                AppScreen.ARCHIVE_TAG -> archiveReturnScreen
-                else -> screen.backDestination()
+    // 统一返回入口：执行 popBackStack 并协同清理占卜/测算临时会话
+    val goBack = remember(navController, welcomeReturnScreen) {
+        { _: Boolean ->
+            generationId++
+            meiHuaGenerationId++
+            isGenerating = false
+            if (screen == AppScreen.TAROT_ONE_CARD) {
+                tarotReading = null
             }
-            if (target != null && target != screen) {
-                generationId++
-                meiHuaGenerationId++
-                isGenerating = false
-                if (screen == AppScreen.TAROT_ONE_CARD) {
-                    tarotReading = null
+            if (screen == AppScreen.TAROT_THREE_CARD) {
+                tarotThreeReading = null
+            }
+            if (screen == AppScreen.TAROT_HOLY_TRIANGLE) {
+                tarotHolyTriangleReading = null
+            }
+            if (screen == AppScreen.TAROT_CELTIC_CROSS) {
+                tarotCelticCrossReading = null
+            }
+            if (!navController.popBackStack()) {
+                if (screen == AppScreen.WELCOME) {
+                    navController.navigate(welcomeReturnScreen.name)
                 }
-                if (screen == AppScreen.TAROT_THREE_CARD) {
-                    tarotThreeReading = null
-                }
-                if (screen == AppScreen.TAROT_HOLY_TRIANGLE) {
-                    tarotHolyTriangleReading = null
-                }
-                if (screen == AppScreen.TAROT_CELTIC_CROSS) {
-                    tarotCelticCrossReading = null
-                }
-                lastTransitionPop = true
-                scope.launch {
-                    if (settings.animationsEnabled && animate) {
-                        // 动画进行中被打断时不重置，由 animateTo 从当前进度平滑接续。
-                        if (!popEnterAnimatable.isRunning) {
-                            popEnterAnimatable.snapTo(0f)
-                        }
-                        popEnterAnimatable.animateTo(
-                            targetValue = 1f,
-                            animationSpec = tween(durationMillis = 300, easing = EmphasizedDecelEasing),
-                        )
-                    } else {
-                        popEnterAnimatable.snapTo(1f)
-                    }
-                }
-                screen = target
             }
         }
+    }
+
+    // 离开特定模块时自动回收生成与选牌状态
+    LaunchedEffect(screen) {
+        if (screen != AppScreen.TAROT_ONE_CARD) tarotReading = null
+        if (screen != AppScreen.TAROT_THREE_CARD) tarotThreeReading = null
+        if (screen != AppScreen.TAROT_HOLY_TRIANGLE) tarotHolyTriangleReading = null
+        if (screen != AppScreen.TAROT_CELTIC_CROSS) tarotCelticCrossReading = null
+        if (screen != AppScreen.YAO_INPUT && screen != AppScreen.RESULT) isGenerating = false
     }
 
     val onSixYaoClick = remember(navigateTo) { { navigateTo(AppScreen.YAO_INPUT) } }
@@ -404,7 +382,8 @@ fun BoompalaApp() {
         }
     }
 
-    BackHandler(enabled = !isFirstRunWelcome && effectiveBackDestination != null) {
+    val canGoBack = !isFirstRunWelcome && (navController.previousBackStackEntry != null || effectiveBackDestination != null)
+    BackHandler(enabled = canGoBack) {
         AppHaptics.back(
             context = context,
             intensity = settings.hapticIntensity,
@@ -961,7 +940,11 @@ fun BoompalaApp() {
                                         settingsRepository.setOnboardingCompleted(true)
                                     }
                                 }
-                                navigateTo(welcomeReturnScreen)
+                                if (!navController.popBackStack()) {
+                                    navController.navigate(welcomeReturnScreen.name) {
+                                        popUpTo(AppScreen.WELCOME.name) { inclusive = true }
+                                    }
+                                }
                             },
                             onBack = if (welcomeReturnScreen != AppScreen.HOME) {
                                 { goBack(true) }
@@ -1233,12 +1216,10 @@ fun BoompalaApp() {
                     }
                 }
 
-                val swipeToDismissBoxState = rememberSwipeToDismissBoxState()
                 val swipeEnabled = !isFirstRunWelcome &&
-                    effectiveBackDestination != null &&
+                    (navController.previousBackStackEntry != null || effectiveBackDestination != null) &&
                     !settingsInnerBackAvailable &&
                     !tarotCelticCrossInnerBackAvailable
-                val screenWidthPx = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp.toPx() }
 
                 // 监听滑动返回手势判定：在用户手势跨过有效阈值的瞬间即刻激发返回触感，
                 // 彻底消除等待 300ms 退出动画完全播完后才滞后补震的严重脱节问题
@@ -1256,60 +1237,20 @@ fun BoompalaApp() {
                 }
 
                 CompositionLocalProvider(
+                    LocalReduceMotion provides !settings.animationsEnabled,
                     LocalHapticFeedbackEnabled provides settings.hapticFeedbackEnabled,
                     LocalHapticIntensity provides settings.hapticIntensity,
                 ) {
-                    SwipeToDismissBox(
-                        state = swipeToDismissBoxState,
+                    SwipeDismissableNavHost(
+                        navController = navController,
+                        startDestination = if (!settings.hasCompletedOnboarding) AppScreen.WELCOME.name else AppScreen.HOME.name,
                         modifier = Modifier.fillMaxSize(),
                         userSwipeEnabled = swipeEnabled,
-                        backgroundKey = effectiveBackDestination ?: AppScreen.HOME,
-                        contentKey = screen,
-                        backgroundScrimColor = Color.Transparent,
-                        contentScrimColor = Color.Transparent,
-                        onDismissed = {
-                            // 触觉已在手势判定跨过阈值的瞬间 (targetValue == Dismissed) 即刻触发，此处仅负责逻辑返回收尾
-                            goBack(false)
-                        },
-                    ) { isBackground ->
-                        if (isBackground) {
-                            val bgScreen = effectiveBackDestination ?: AppScreen.HOME
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .graphicsLayer {
-                                        if (forwardEnterAnimatable.value < 1f) {
-                                            val progress = forwardEnterAnimatable.value
-                                            translationX = -0.20f * screenWidthPx * (1f - progress)
-                                            // 背景压暗幅度收窄，减少整屏亮度拖影闪烁。
-                                            alpha = 0.75f + 0.25f * progress
-                                        }
-                                    }
-                            ) {
-                                screenContent(bgScreen)
-                            }
-                        } else {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .graphicsLayer {
-                                        if (lastTransitionPop) {
-                                            // 返回：父页从左侧滑入复位，与前进的右滑入方向成镜像。
-                                            if (popEnterAnimatable.value < 1f) {
-                                                val progress = popEnterAnimatable.value
-                                                translationX = -0.30f * screenWidthPx * (1f - progress)
-                                                // 淡入先于位移完成，避免半透明幽灵感。
-                                                alpha = (progress * 2f).coerceAtMost(1f)
-                                            }
-                                        } else if (forwardEnterAnimatable.value < 1f) {
-                                            val progress = forwardEnterAnimatable.value
-                                            translationX = screenWidthPx * (1f - progress)
-                                            // 淡入先于位移完成，避免半透明幽灵感。
-                                            alpha = (progress * 2f).coerceAtMost(1f)
-                                        }
-                                    }
-                            ) {
-                                screenContent(screen)
+                        state = navHostState,
+                    ) {
+                        AppScreen.entries.forEach { appScreen ->
+                            composable(appScreen.name) {
+                                screenContent(appScreen)
                             }
                         }
                     }
