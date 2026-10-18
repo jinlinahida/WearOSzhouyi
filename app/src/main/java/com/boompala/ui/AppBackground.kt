@@ -31,6 +31,8 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 
+import androidx.compose.ui.graphics.graphicsLayer
+
 /**
  * 默认与特殊界面的顶部光照环境色规范。
  */
@@ -63,10 +65,10 @@ internal fun resolveSpotlightColor(screen: AppScreen): Color = when (screen) {
 }
 
 /**
- * 严格复刻自 Re-WearBili 的顶部环境光背景（Top Spotlight Ambient Background）。
+ * 顶部环境光背景（Top Spotlight Ambient Background），对齐 wearfinder 原厂漫反射规范。
  * - 纯黑底色保证 OLED 屏幕省电特性；
  * - 顶部居中半球状径向渐变，形成柔和自然的漫反射顶光；
- * - 支持呼吸光晕与页面色彩平滑过渡。
+ * - graphicsLayer 零延迟偏移与常态呼吸光晕，杜绝布局时序异步抖动。
  */
 @Composable
 internal fun TopSpotlightBackground(
@@ -82,7 +84,7 @@ internal fun TopSpotlightBackground(
     val animatedColor by if (animationsEnabled) {
         animateColorAsState(
             targetValue = targetColor,
-            animationSpec = tween(durationMillis = 600, easing = LinearOutSlowInEasing),
+            animationSpec = tween(durationMillis = 500, easing = LinearOutSlowInEasing),
             label = "spotlightColorTransition",
         )
     } else {
@@ -93,9 +95,12 @@ internal fun TopSpotlightBackground(
     val breathingAlpha by if (animationsEnabled) {
         infiniteTransition.animateFloat(
             initialValue = 1f,
-            targetValue = 0.35f,
+            targetValue = if (isGenerating) 0.35f else 0.75f,
             animationSpec = infiniteRepeatable(
-                animation = tween(easing = EaseInOutCubic, durationMillis = 1200),
+                animation = tween(
+                    easing = EaseInOutCubic,
+                    durationMillis = if (isGenerating) 1200 else 2000,
+                ),
                 repeatMode = RepeatMode.Reverse,
             ),
             label = "spotlightBreathingAlpha",
@@ -104,31 +109,28 @@ internal fun TopSpotlightBackground(
         remember { mutableFloatStateOf(1f) }
     }
 
-    val currentAlpha = if (isGenerating) ambientAlpha * breathingAlpha else ambientAlpha
-    val localDensity = LocalDensity.current
-    var circleHeight by remember { mutableStateOf(0.dp) }
+    val currentAlpha = ambientAlpha * breathingAlpha
 
     Box(
         modifier = modifier
             .fillMaxSize()
             .background(backgroundColor),
     ) {
-        // 顶部光晕半圆：几何定位严格对齐 Re-WearBili
+        // 顶部光晕半圆：使用 graphicsLayer 渲染层变换，杜绝异步尺寸计算延迟
         Box(
             modifier = Modifier
-                .offset(y = circleHeight * -0.5f)
                 .fillMaxWidth()
                 .aspectRatio(1f)
-                .alpha(currentAlpha)
+                .graphicsLayer {
+                    translationY = -size.height * 0.5f
+                    alpha = currentAlpha
+                }
                 .background(
                     shape = CircleShape,
                     brush = Brush.radialGradient(
                         listOf(animatedColor, Color.Transparent),
                     ),
-                )
-                .onSizeChanged {
-                    circleHeight = with(localDensity) { it.height.toDp() }
-                },
+                ),
         )
         content()
     }

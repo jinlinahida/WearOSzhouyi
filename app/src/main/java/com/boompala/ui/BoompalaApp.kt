@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,7 +31,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.snapshotFlow
 import androidx.wear.compose.foundation.SwipeToDismissValue
 import androidx.wear.compose.foundation.rememberSwipeToDismissBoxState
-import androidx.wear.compose.foundation.LocalReduceMotion
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
@@ -400,10 +400,10 @@ fun BoompalaApp() {
             // 库组件的开关与档位从 local 读取，必须先由本 App 的设置灌入。
             ShirokoWearBridge(settings = settings, screenShape = screenShape) {
             AppScaffold {
-                TopSpotlightBackground(
-                    screen = screen,
-                    isGenerating = isGenerating,
-                    animationsEnabled = settings.animationsEnabled,
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.Black),
                 ) {
                     val screenContent: @Composable (AppScreen) -> Unit = { currentScreen ->
                     when (currentScreen) {
@@ -1237,7 +1237,6 @@ fun BoompalaApp() {
                 }
 
                 CompositionLocalProvider(
-                    LocalReduceMotion provides !settings.animationsEnabled,
                     LocalHapticFeedbackEnabled provides settings.hapticFeedbackEnabled,
                     LocalHapticIntensity provides settings.hapticIntensity,
                 ) {
@@ -1250,7 +1249,13 @@ fun BoompalaApp() {
                     ) {
                         AppScreen.entries.forEach { appScreen ->
                             composable(appScreen.name) {
-                                screenContent(appScreen)
+                                TopSpotlightBackground(
+                                    screen = appScreen,
+                                    isGenerating = isGenerating,
+                                    animationsEnabled = settings.animationsEnabled,
+                                ) {
+                                    screenContent(appScreen)
+                                }
                             }
                         }
                     }
