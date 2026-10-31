@@ -201,4 +201,19 @@ class AiDivinationCardTest {
         userQuestion = ""
         assertEquals("", userQuestion)
     }
+
+    @Test
+    fun `default questions for all topics provide focused and contextual prompts`() {
+        AiDivinationTopic.entries.forEach { topic ->
+            val defaultQuestion = getDefaultQuestionForTopic(topic)
+            assertTrue("Default question for $topic should not be blank", defaultQuestion.isNotBlank())
+            assertFalse("Default question should not be generic", defaultQuestion == "请结合当前卦象综合解读。")
+
+            val presets = getPresetQuestionsForTopic(topic)
+            assertTrue("Preset questions for $topic should have at least 3 items", presets.size >= 3)
+            presets.forEach { preset ->
+                assertTrue("Preset question should not be blank", preset.isNotBlank())
+            }
+        }
+    }
 }

@@ -133,7 +133,7 @@ fun AiDivinationCard(
 
     val startDivination: () -> Unit = {
         val topic = selectedTopic
-        val question = userQuestion.trim().ifBlank { "请结合当前卦象综合解读。" }
+        val question = userQuestion.trim().ifBlank { getDefaultQuestionForTopic(topic) }
         if (onStartDivination != null) {
             onStartDivination(topic, question)
         } else {
@@ -915,35 +915,44 @@ private fun getFriendlyErrorMessage(error: AiError): String = when (error) {
     is AiError.Unknown -> "SI 解卦暂时失败，请稍后重试。"
 }
 
-private fun getPresetQuestionsForTopic(topic: AiDivinationTopic): List<String> = when (topic) {
+internal fun getDefaultQuestionForTopic(topic: AiDivinationTopic): String = when (topic) {
+    AiDivinationTopic.CAREER -> "结合当前官鬼与世爻格局，全面推断近期工作职场、升迁调动或求职的前景、阻力与转机。"
+    AiDivinationTopic.WEALTH -> "结合当前妻财与子孙格局，全面推断近期求财投资的得失顺逆、财源走势与破耗风险。"
+    AiDivinationTopic.RELATIONSHIP -> "结合当前世应生克与用神动静，全面推断感情缘分发展走向、彼此心意与关系契机。"
+    AiDivinationTopic.HEALTH -> "结合当前子孙福神与官鬼病症，全面推断近期身心健康态势、病势起伏与调理关键期。"
+    AiDivinationTopic.STUDY -> "结合当前父母文书与官鬼功名，全面推断近期学业考证、答辩录取的成败前景与发力重心。"
+    AiDivinationTopic.GENERAL -> "以世爻为主体审视大局，全面推断当前所处阶段的运势走势、核心契机与潜在隐患。"
+}
+
+internal fun getPresetQuestionsForTopic(topic: AiDivinationTopic): List<String> = when (topic) {
     AiDivinationTopic.GENERAL -> listOf(
-        "结合当前卦象推断近期运势走向",
-        "近期需要注意哪些潜在隐患？",
-        "当前所处阶段的转折契机在何处？",
+        "推断近期综合运势走向与转机在何时？",
+        "近期需要严防哪些暗藏的隐患与阻力？",
+        "当前所处阶段应当乘势进取还是退守隐忍？",
     )
     AiDivinationTopic.CAREER -> listOf(
-        "近期工作求职或升迁是否顺利？",
-        "当前岗位是否有变动或发展机会？",
-        "在团队合作中应如何把握进退？",
+        "近期工作求职、调岗或晋升能否如愿落实？",
+        "当前岗位发展前景如何，是否有贵人相助？",
+        "职场中是否存在小人竞争或阻力，如何破局？",
     )
     AiDivinationTopic.WEALTH -> listOf(
-        "近期求财投资是否有收益？",
-        "当前项目或生意财运走势如何？",
-        "近期是否有破耗需注意防范？",
+        "近期投资、项目合作或回款能否顺利得利？",
+        "当前财运走势如何，近期是否暗藏破财风险？",
+        "何时求财最为顺遂，哪方渠道最有收益？",
     )
     AiDivinationTopic.RELATIONSHIP -> listOf(
-        "当前感情婚姻缘分发展如何？",
-        "近期感情关系是否会有转机？",
-        "彼此沟通应注意哪些心结？",
+        "双方感情发展走向如何，能否修成正果？",
+        "近期彼此关系是否有转机，心结何在？",
+        "对方对我的真实心意与态度如何？",
     )
     AiDivinationTopic.HEALTH -> listOf(
-        "近期身体健康与平安运势如何？",
-        "当下的不适何时能够调理好转？",
-        "身心调理需要侧重哪些方面？",
+        "近期身体状况如何，目前的病痛何时能愈？",
+        "身心调养应当着重从哪些方面入手？",
+        "出行与日常作息有哪些平安注意事项？",
     )
     AiDivinationTopic.STUDY -> listOf(
-        "接下来的考试学业能否顺利通过？",
-        "进修考证与答辩前景如何？",
-        "备考阶段当如何保持心力？",
+        "接下来的考试考核或考研考证能否顺利通过？",
+        "进修选拔与面试发挥前景如何，何时见分晓？",
+        "当前备考发力重心在何处，如何克服瓶颈？",
     )
 }

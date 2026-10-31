@@ -67,8 +67,10 @@ class AiPromptBuilderTest {
         assertTrue("System prompt should enforce 4 sections", prompt.systemPrompt.contains("【卦象依据】"))
         assertTrue("System prompt should enforce 4 sections", prompt.systemPrompt.contains("【趋势分析】"))
         assertTrue("System prompt should enforce 4 sections", prompt.systemPrompt.contains("【建议】"))
-        assertTrue("System prompt should mention Wear OS limit", prompt.systemPrompt.contains("300～500"))
+        assertTrue("System prompt should mention Wear OS limit", prompt.systemPrompt.contains("400～650"))
         assertTrue("System prompt should forbid fabrication", prompt.systemPrompt.contains("严禁虚构"))
+        assertTrue("System prompt should require timing/yingqi", prompt.systemPrompt.contains("必断应期"))
+        assertTrue("System prompt should reject chicken soup", prompt.systemPrompt.contains("拒绝鸡汤"))
 
         // User prompt checks
         assertTrue(prompt.userPrompt.contains("火水未济"))
@@ -90,6 +92,14 @@ class AiPromptBuilderTest {
         // Check moving lines
         assertTrue(prompt.context.movingLinesSummary.any { it.contains("初爻发动") })
         assertTrue(prompt.context.movingLinesSummary.any { it.contains("四爻发动") })
+        assertTrue(
+            "Moving lines summary should contain action mechanism",
+            prompt.context.movingLinesSummary.any { it.contains("回头") || it.contains("动化") }
+        )
+        assertTrue(
+            "YongShen description should contain Shi-Yong relation",
+            prompt.context.yongShenDescription.contains("世用关系")
+        )
     }
 
     @Test

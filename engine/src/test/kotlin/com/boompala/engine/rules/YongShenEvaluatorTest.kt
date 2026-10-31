@@ -115,4 +115,44 @@ class YongShenEvaluatorTest {
         assertEquals("子孙·健康", YongShenCategory.OFFSPRING.compactDisplayName)
         assertEquals("兄弟·同行", YongShenCategory.SIBLINGS.compactDisplayName)
     }
+
+    @Test
+    fun testYongShenShiYongAndTimingAndOriginHostileFeatures() {
+        // 乾为天：世在六爻(戌土)，初爻为子水妻财
+        val timeInfo = DivinationTimeInfo(
+            gregorianDateTime = ZonedDateTime.ofInstant(castAt, zoneId),
+            lunarDate = "丙午年 九月初一 申时",
+            lunarYearGanzhi = Ganzhi(HeavenlyStem.BING, EarthlyBranch.WU),
+            lunarMonth = 9,
+            lunarDay = 1,
+            yearGanzhi = Ganzhi(HeavenlyStem.BING, EarthlyBranch.WU),
+            monthGanzhi = Ganzhi(HeavenlyStem.WU, EarthlyBranch.XU),
+            dayGanzhi = Ganzhi(HeavenlyStem.JIA, EarthlyBranch.ZI), // 甲子日，戌亥空
+            hourGanzhi = Ganzhi(HeavenlyStem.REN, EarthlyBranch.SHEN),
+        )
+        val engine = LiuYaoEngine(
+            calendar = { _, _ -> timeInfo },
+            lineTexts = LineTextRepository { _, _ -> "" },
+        )
+
+        val input = HexagramInput(
+            linesFromBottom = YaoPosition.entries.map {
+                YaoLineInput(position = it, state = YaoState.YOUNG_YANG)
+            },
+            castAt = castAt,
+            zoneId = zoneId,
+        )
+        val result = engine.calculate(input)
+
+        // 测求财(妻财寅木)，世爻为上九戌土。用神寅木克世爻戌土 -> 用克世爻
+        val wealthEval = YongShenEvaluator.evaluate(result, YongShenCategory.WEALTH)
+        assertNotNull(wealthEval)
+        assertTrue("Shi-Yong relation should be detected", wealthEval!!.shiYongRelation!!.contains("用克世爻"))
+        // 妻财用神的原神为子孙(子孙生妻财)，忌神为兄弟(兄弟克妻财)
+        assertTrue("Origin and hostile relation should be populated", wealthEval.originAndHostileInfo!!.contains("原神为【子孙】"))
+        assertTrue("Origin and hostile relation should be populated", wealthEval.originAndHostileInfo!!.contains("忌神为【兄弟】"))
+        // 应期线索
+        assertNotNull(wealthEval.timingClue)
+        assertTrue(wealthEval.timingClue!!.isNotBlank())
+    }
 }
