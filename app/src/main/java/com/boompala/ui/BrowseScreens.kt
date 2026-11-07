@@ -94,11 +94,19 @@ fun BrowseHomeScreen(
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.wearMarquee(),
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
                     )
                     Text(
                         text = "查看全部卦象与爻辞",
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.wearMarquee(),
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
                     )
                 }
             }
@@ -123,11 +131,19 @@ fun BrowseHomeScreen(
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.wearMarquee(),
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
                     )
                     Text(
                         text = "78张大/小阿卡纳与牌义",
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.wearMarquee(),
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
                     )
                 }
             }
@@ -152,11 +168,19 @@ fun BrowseHomeScreen(
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.wearMarquee(),
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
                     )
                     Text(
                         text = "了解传统文化体系",
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.wearMarquee(),
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
                     )
                 }
             }
@@ -181,11 +205,19 @@ fun BrowseHomeScreen(
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.wearMarquee(),
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
                     )
                     Text(
                         text = "阴阳五行、八卦、干支",
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.wearMarquee(),
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
                     )
                 }
             }
@@ -200,7 +232,13 @@ fun BrowseHomeScreen(
                     interactionSource = backInteraction,
                     colors = BoompalaButtonDefaults.outlinedButtonColors(),
                 ) {
-                    Text("首页")
+                    Text(
+                        text = "首页",
+                        modifier = Modifier.wearMarquee(),
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
+                    )
                 }
             }
     }
@@ -246,11 +284,19 @@ fun HexagramBrowserScreen(
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.wearMarquee(),
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
                     )
                     Text(
                         text = "${h.upperTrigram.displayName}上${h.lowerTrigram.displayName}下 · $meaning",
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.wearMarquee(),
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
                     )
                 }
             }
@@ -265,7 +311,13 @@ fun HexagramBrowserScreen(
                 interactionSource = pressInteraction,
                 colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) {
-                Text("返回")
+                Text(
+                    text = "返回",
+                    modifier = Modifier.wearMarquee(),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
+                )
             }
         }
     }
@@ -291,15 +343,13 @@ fun HexagramDetailScreen(
             ScreenTitle(
                 text = "${hex.order}. ${hex.name}",
                 style = MaterialTheme.typography.titleMedium,
-                marquee = animationsEnabled,
-                animationsEnabled = animationsEnabled,
             )
         }
 
         item {
             ResultCard {
                 Text("卦象结构", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
-                DetailField("上下取象", "${hex.upperTrigram.displayName}上 · ${hex.lowerTrigram.displayName}下")
+                DetailField("上下取象", "${hex.upperTrigram.displayName}上 · ${hex.lowerTrigram.displayName}下", marquee = true)
                 Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                     Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
                         hex.linePolaritiesFromBottom().asReversed().forEachIndexed { i, _ ->
@@ -315,7 +365,7 @@ fun HexagramDetailScreen(
                 Text("卦辞与释义", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
                 DetailField("经典卦辞", classics?.guaText ?: "暂无可靠卦辞")
                 DetailField("核心释义", interpretation?.coreMeaning ?: "暂无离线解释")
-                DetailField("卦序与排盘", "卦序：第 ${hex.order} 卦 · 卦宫资料沿用纳甲排盘规则")
+                DetailField("卦序与排盘", "卦序：第 ${hex.order} 卦 · 卦宫资料沿用纳甲排盘规则", marquee = true)
             }
         }
 
@@ -342,7 +392,7 @@ fun HexagramDetailScreen(
                 Text("断易参考", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
                 DetailField("决策建议", interpretation?.advice ?: "暂无基础解释")
                 interpretation?.keywords?.let {
-                    DetailField("核心关键词", it.joinToString("、"))
+                    DetailField("核心关键词", it.joinToString("、"), marquee = true)
                 }
             }
         }
@@ -350,7 +400,7 @@ fun HexagramDetailScreen(
         item {
             ResultCard {
                 Text("相关知识", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
-                DetailField("八卦取象", "上卦：${hex.upperTrigram.displayName}卦（${hex.upperTrigram.palace.displayName}）；下卦：${hex.lowerTrigram.displayName}卦（${hex.lowerTrigram.palace.displayName}）")
+                DetailField("八卦取象", "上卦：${hex.upperTrigram.displayName}卦（${hex.upperTrigram.palace.displayName}）；下卦：${hex.lowerTrigram.displayName}卦（${hex.lowerTrigram.palace.displayName}）", marquee = true)
             }
         }
 
@@ -364,7 +414,13 @@ fun HexagramDetailScreen(
                 interactionSource = pressInteraction,
                 colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) {
-                Text("返回")
+                Text(
+                    text = "返回",
+                    modifier = Modifier.wearMarquee(),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
+                )
             }
         }
     }
@@ -436,7 +492,10 @@ fun TarotBrowserScreen(
                         Text(
                             text = title,
                             fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
+                            modifier = Modifier.wearMarquee(),
                             maxLines = 1,
+                            softWrap = false,
+                            overflow = TextOverflow.Ellipsis,
                         )
                     }
                 }
@@ -462,11 +521,19 @@ fun TarotBrowserScreen(
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.wearMarquee(),
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
                     )
                     Text(
                         text = "${card.arcana.displayName} · ${card.keywordsZh.take(3).joinToString(" · ")}",
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.wearMarquee(),
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
                     )
                 }
             }
@@ -481,7 +548,13 @@ fun TarotBrowserScreen(
                 interactionSource = pressInteraction,
                 colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) {
-                Text("返回")
+                Text(
+                    text = "返回",
+                    modifier = Modifier.wearMarquee(),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
+                )
             }
         }
     }
@@ -504,8 +577,6 @@ fun TarotCardDetailScreen(
             ScreenTitle(
                 text = card.nameZh,
                 style = MaterialTheme.typography.titleMedium,
-                marquee = animationsEnabled,
-                animationsEnabled = animationsEnabled,
             )
         }
 
@@ -527,17 +598,17 @@ fun TarotCardDetailScreen(
         item {
             ResultCard {
                 Text("卡牌属性", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
-                DetailField("位阶编号", card.rankName)
-                DetailField("大/小阿卡纳", card.arcana.displayName)
-                DetailField("所属花色", card.suit.displayName)
-                DetailField("对应元素", card.element.displayName)
+                DetailField("位阶编号", card.rankName, marquee = true)
+                DetailField("大/小阿卡纳", card.arcana.displayName, marquee = true)
+                DetailField("所属花色", card.suit.displayName, marquee = true)
+                DetailField("对应元素", card.element.displayName, marquee = true)
             }
         }
 
         item {
             ResultCard {
                 Text("核心关键词", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
-                DetailField("关键词", card.keywordsZh.joinToString(" · "))
+                DetailField("关键词", card.keywordsZh.joinToString(" · "), marquee = true)
             }
         }
 
@@ -574,7 +645,13 @@ fun TarotCardDetailScreen(
                 interactionSource = backInteraction,
                 colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) {
-                Text("返回")
+                Text(
+                    text = "返回",
+                    modifier = Modifier.wearMarquee(),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
+                )
             }
         }
     }
@@ -605,6 +682,10 @@ fun KnowledgeListScreen(
                     text = category,
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
+                    modifier = Modifier.wearMarquee(),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
             items(values, key = { it.id }) { a ->
@@ -627,11 +708,19 @@ fun KnowledgeListScreen(
                             style = MaterialTheme.typography.titleSmall,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.wearMarquee(),
+                            maxLines = 1,
+                            softWrap = false,
+                            overflow = TextOverflow.Ellipsis,
                         )
                         Text(
                             text = a.summary,
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.wearMarquee(),
+                            maxLines = 1,
+                            softWrap = false,
+                            overflow = TextOverflow.Ellipsis,
                         )
                     }
                 }
@@ -647,7 +736,13 @@ fun KnowledgeListScreen(
                 interactionSource = pressInteraction,
                 colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) {
-                Text("返回")
+                Text(
+                    text = "返回",
+                    modifier = Modifier.wearMarquee(),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
+                )
             }
         }
     }
@@ -670,8 +765,6 @@ fun KnowledgeDetailScreen(
             ScreenTitle(
                 text = article.title,
                 style = MaterialTheme.typography.titleMedium,
-                marquee = animationsEnabled,
-                animationsEnabled = animationsEnabled,
             )
         }
         item {
@@ -696,7 +789,13 @@ fun KnowledgeDetailScreen(
                 interactionSource = pressInteraction,
                 colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) {
-                Text("返回")
+                Text(
+                    text = "返回",
+                    modifier = Modifier.wearMarquee(),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
+                )
             }
         }
     }

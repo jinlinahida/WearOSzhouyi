@@ -57,7 +57,7 @@ import com.boompala.settings.HapticIntensity
  * - 当文本未超出容器可用宽度时：完全静止，零动画渲染开销；
  * - 当文本超出容器宽度时：平滑向左循环滚动；
  * - 页面进入或首尾循环时停留 1.2 秒，阅读体验从容稳定；
- * - 当动画开关关闭时，平滑降级为普通修饰符。
+ * - 与界面普通装饰动画开关解绑，作为手表端单行防溢出与防孤字折行的核心排版保护始终生效。
  */
 fun Modifier.wearMarquee(
     animationsEnabled: Boolean = true,
@@ -65,15 +65,11 @@ fun Modifier.wearMarquee(
     repeatDelayMillis: Int = 1200,
     iterations: Int = Int.MAX_VALUE,
 ): Modifier {
-    return if (animationsEnabled) {
-        this.basicMarquee(
-            iterations = iterations,
-            initialDelayMillis = initialDelayMillis,
-            repeatDelayMillis = repeatDelayMillis,
-        )
-    } else {
-        this
-    }
+    return this.basicMarquee(
+        iterations = iterations,
+        initialDelayMillis = initialDelayMillis,
+        repeatDelayMillis = repeatDelayMillis,
+    )
 }
 
 /**
@@ -403,6 +399,7 @@ fun DetailField(
             maxLines = 1,
             softWrap = false,
             overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.wearMarquee(),
         )
         Text(
             text = value,
@@ -413,6 +410,34 @@ fun DetailField(
             modifier = if (marquee) Modifier.wearMarquee(animationsEnabled) else Modifier,
         )
     }
+}
+
+/**
+ * 专为 Wear OS 单行文本打造的跑马灯 Text 组件：
+ * - 强制单行不折行；
+ * - 超出屏幕宽度时平滑跑马灯滚动，未超出时零开销静止；
+ * - 彻底避免手表小屏幕上短文本截断或换行后只留 1~2 个孤字的问题。
+ */
+@Composable
+fun MarqueeText(
+    text: String,
+    modifier: Modifier = Modifier,
+    style: TextStyle = MaterialTheme.typography.bodySmall,
+    color: Color = Color.Unspecified,
+    fontWeight: FontWeight? = null,
+    textAlign: TextAlign? = null,
+) {
+    Text(
+        text = text,
+        modifier = modifier.wearMarquee(),
+        color = color,
+        fontWeight = fontWeight,
+        textAlign = textAlign,
+        style = style,
+        maxLines = 1,
+        softWrap = false,
+        overflow = TextOverflow.Ellipsis,
+    )
 }
 
 /**
@@ -602,9 +627,9 @@ fun ScreenTitle(
     color: Color = Color.Unspecified,
     fontWeight: FontWeight? = null,
     textAlign: TextAlign = LocalUiMetrics.current.titleTextAlign,
-    maxLines: Int = Int.MAX_VALUE,
-    overflow: TextOverflow = TextOverflow.Clip,
-    marquee: Boolean = false,
+    maxLines: Int = 1,
+    overflow: TextOverflow = TextOverflow.Ellipsis,
+    marquee: Boolean = true,
     animationsEnabled: Boolean = true,
 ) {
     Text(

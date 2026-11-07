@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material3.Button
 import androidx.wear.compose.material3.MaterialTheme
@@ -85,7 +86,7 @@ fun TarotHolyTriangleScreen(
 
             item(key = "holy-triangle-deck-selection") {
                 ResultCard {
-                    DetailField("抽牌牌库", if (currentDeckType == DeckType.FULL_78) "78张全牌" else "22张大阿卡纳")
+                    DetailField("抽牌牌库", if (currentDeckType == DeckType.FULL_78) "78张全牌" else "22张大阿卡纳", marquee = true)
                     val deckInteraction = remember { MutableInteractionSource() }
                     BoompalaCardButton(
                         onClick = {
@@ -97,14 +98,20 @@ fun TarotHolyTriangleScreen(
                         interactionSource = deckInteraction,
                         colors = BoompalaButtonDefaults.outlinedButtonColors(),
                     ) {
-                        Text(if (currentDeckType == DeckType.FULL_78) "22张大牌" else "78张全牌")
+                        Text(
+                            text = if (currentDeckType == DeckType.FULL_78) "22张大牌" else "78张全牌",
+                            modifier = Modifier.wearMarquee(),
+                            maxLines = 1,
+                            softWrap = false,
+                            overflow = TextOverflow.Ellipsis,
+                        )
                     }
                 }
             }
 
             item(key = "holy-triangle-reversed-selection") {
                 ResultCard {
-                    DetailField("逆位规则", if (currentAllowReversed) "允许逆位" else "仅正位")
+                    DetailField("逆位规则", if (currentAllowReversed) "允许逆位" else "仅正位", marquee = true)
                     val reversedInteraction = remember { MutableInteractionSource() }
                     BoompalaCardButton(
                         onClick = { currentAllowReversed = !currentAllowReversed },
@@ -114,7 +121,13 @@ fun TarotHolyTriangleScreen(
                         interactionSource = reversedInteraction,
                         colors = BoompalaButtonDefaults.outlinedButtonColors(),
                     ) {
-                        Text(if (currentAllowReversed) "仅正位" else "允许逆位")
+                        Text(
+                            text = if (currentAllowReversed) "仅正位" else "允许逆位",
+                            modifier = Modifier.wearMarquee(),
+                            maxLines = 1,
+                            softWrap = false,
+                            overflow = TextOverflow.Ellipsis,
+                        )
                     }
                 }
             }
@@ -138,7 +151,13 @@ fun TarotHolyTriangleScreen(
                         .wearPressFeedback(drawInteraction),
                     interactionSource = drawInteraction,
                 ) {
-                    Text("抽牌")
+                    Text(
+                        text = "抽牌",
+                        modifier = Modifier.wearMarquee(),
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
+                    )
                 }
             }
 
@@ -152,7 +171,13 @@ fun TarotHolyTriangleScreen(
                     interactionSource = backInteraction,
                     colors = BoompalaButtonDefaults.outlinedButtonColors(),
                 ) {
-                    Text("首页")
+                    Text(
+                        text = "首页",
+                        modifier = Modifier.wearMarquee(),
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
+                    )
                 }
             }
         }
@@ -303,14 +328,26 @@ fun TarotHolyTriangleScreen(
                                     text = drawn.slot.name,
                                     style = MaterialTheme.typography.labelSmall,
                                     fontWeight = FontWeight.SemiBold,
+                                    modifier = Modifier.wearMarquee(),
+                                    maxLines = 1,
+                                    softWrap = false,
+                                    overflow = TextOverflow.Ellipsis,
                                 )
                                 Text(
                                     text = drawn.card.nameZh,
                                     style = MaterialTheme.typography.bodySmall,
+                                    modifier = Modifier.wearMarquee(),
+                                    maxLines = 1,
+                                    softWrap = false,
+                                    overflow = TextOverflow.Ellipsis,
                                 )
                                 Text(
                                     text = if (drawn.orientation == TarotOrientation.REVERSED) "逆位" else "正位",
                                     style = MaterialTheme.typography.labelSmall,
+                                    modifier = Modifier.wearMarquee(),
+                                    maxLines = 1,
+                                    softWrap = false,
+                                    overflow = TextOverflow.Ellipsis,
                                 )
                             }
                         }
@@ -330,13 +367,18 @@ fun TarotHolyTriangleScreen(
                             text = "【${drawnCard.slot.name}】· ${card.nameZh}",
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
+                            modifier = Modifier.wearMarquee(),
+                            maxLines = 1,
+                            softWrap = false,
+                            overflow = TextOverflow.Ellipsis,
                         )
                         DetailField(
                             "状态",
                             if (isReversed) "逆位" else "正位",
+                            marquee = true,
                         )
-                        DetailField("牌位意义", drawnCard.slot.description)
-                        DetailField("卡牌属性", "${card.arcana.displayName} · ${card.element.displayName}")
+                        DetailField("牌位意义", drawnCard.slot.description, marquee = true)
+                        DetailField("卡牌属性", "${card.arcana.displayName} · ${card.element.displayName}", marquee = true)
                     }
                 }
 
@@ -370,6 +412,10 @@ fun TarotHolyTriangleScreen(
                         Text(
                             text = card.keywordsZh.joinToString(" · "),
                             style = MaterialTheme.typography.bodyMedium,
+                            modifier = Modifier.wearMarquee(),
+                            maxLines = 1,
+                            softWrap = false,
+                            overflow = TextOverflow.Ellipsis,
                         )
                     }
                 }
@@ -427,7 +473,13 @@ fun TarotHolyTriangleScreen(
                             .wearPressFeedback(recastInteraction),
                         interactionSource = recastInteraction,
                     ) {
-                        Text("重抽")
+                        Text(
+                            text = "重抽",
+                            modifier = Modifier.wearMarquee(),
+                            maxLines = 1,
+                            softWrap = false,
+                            overflow = TextOverflow.Ellipsis,
+                        )
                     }
 
                     val archiveInteraction = remember { MutableInteractionSource() }
@@ -439,7 +491,13 @@ fun TarotHolyTriangleScreen(
                         interactionSource = archiveInteraction,
                         colors = BoompalaButtonDefaults.outlinedButtonColors(),
                     ) {
-                        Text("归档")
+                        Text(
+                            text = "归档",
+                            modifier = Modifier.wearMarquee(),
+                            maxLines = 1,
+                            softWrap = false,
+                            overflow = TextOverflow.Ellipsis,
+                        )
                     }
                 }
             }
@@ -454,7 +512,13 @@ fun TarotHolyTriangleScreen(
                     interactionSource = finishInteraction,
                     colors = BoompalaButtonDefaults.outlinedButtonColors(),
                 ) {
-                    Text("首页")
+                    Text(
+                        text = "首页",
+                        modifier = Modifier.wearMarquee(),
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
+                    )
                 }
             }
         }

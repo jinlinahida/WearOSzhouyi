@@ -280,4 +280,81 @@ class PulseAlgorithmTest {
         val result = TcmPulseClassifier.classify(metrics, hour24 = 10, measuredWaveform = measured)
         assertEquals(measured, result.measuredWaveform)
     }
+
+    @Test
+    fun testHealthyRsaWithHighPnn50IsNotClassifiedAsJieDai() {
+        // 健康年轻人生理性呼吸性窦性心律不齐 (pNN50 = 25%, RMSSD = 35.0ms, BPM = 72, 无突发早搏/漏搏)
+        val rsaMetrics = PulseFeatureMetrics(
+            heartRateBpm = 72.0,
+            regularityPercent = 92.0,
+            rmssdMs = 35.0,
+            pnn50Percent = 25.0,
+            ectopicBeatCount = 0,
+            isRawPpg = false,
+        )
+        val result = TcmPulseClassifier.classify(rsaMetrics)
+        // 应判定为平脉 (PING)，绝不误判为结代脉 (JIE_DAI)
+        assertEquals(PulseCategory.PING, result.category)
+    }
+
+    @Test
+    fun testEctopicBeatsAccuratelyDetectedAndClassifiedAsJieDai() {
+        // 模拟正常心跳中插入 2 次期前早搏与代偿长间歇
+        val normalIbi = 800.0
+        val ibis = mutableListOf<Double>()
+        for (i in 0 until 6) ibis.add(normalIbi)
+        // 早搏 + 代偿
+        ibis.add(520.0) // < 0.78 * 800
+        ibis.add(1080.0) // > 1.20 * 800
+        for (i in 0 until 6) ibis.add(normalIbi)
+        // 漏搏长间歇
+        ibis.add(1300.0) // > 1.45 * 800
+        for (i in 0 until 6) ibis.add(normalIbi)
+
+        val ectopicCount = PulseFeatureExtractor.countEctopicBeats(ibis)
+        assertTrue("应至少检测到 2 次期前或漏搏事件，实际: $ectopicCount", ectopicCount >= 2)
+
+        val metrics = PulseFeatureMetrics(
+            heartRateBpm = 75.0,
+            regularityPercent = 85.0,
+            rmssdMs = 32.0,
+            ectopicBeatCount = ectopicCount,
+            isRawPpg = false,
+        )
+        val result = TcmPulseClassifier.classify(metrics)
+        assertEquals(PulseCategory.JIE_DAI, result.category)
+    }
+
+    @Test
+    fun testAllTwelveCategoriesReachableUnderBeatSeries() {
+        val categories = listOf(
+            // JIE_DAI
+            PulseFeatureMetrics(heartRateBpm = 75.0, regularityPercent = 85.0, ectopicBeatCount = 2, isRawPpg = false),
+            // HONG
+            PulseFeatureMetrics(heartRateBpm = 98.0, regularityPercent = 95.0, rmssdMs = 42.0, isRawPpg = false),
+            // SHU
+            PulseFeatureMetrics(heartRateBpm = 98.0, regularityPercent = 95.0, rmssdMs = 25.0, isRawPpg = false),
+            // XI
+            PulseFeatureMetrics(heartRateBpm = 54.0, regularityPercent = 95.0, rmssdMs = 12.0, isRawPpg = false),
+            // CHI
+            PulseFeatureMetrics(heartRateBpm = 54.0, regularityPercent = 95.0, rmssdMs = 28.0, isRawPpg = false),
+            // XIAN
+            PulseFeatureMetrics(heartRateBpm = 74.0, regularityPercent = 95.0, rmssdMs = 18.0, isRawPpg = false),
+            // HUA
+            PulseFeatureMetrics(heartRateBpm = 76.0, regularityPercent = 95.0, rmssdMs = 48.0, isRawPpg = false),
+            // FU
+            PulseFeatureMetrics(heartRateBpm = 82.0, regularityPercent = 95.0, rmssdMs = 35.0, isRawPpg = false),
+            // CHEN
+            PulseFeatureMetrics(heartRateBpm = 62.0, regularityPercent = 95.0, rmssdMs = 18.0, isRawPpg = false),
+            // RU
+            PulseFeatureMetrics(heartRateBpm = 72.0, regularityPercent = 95.0, rmssdMs = 25.0, isRawPpg = false),
+            // HUAN
+            PulseFeatureMetrics(heartRateBpm = 62.0, regularityPercent = 95.0, rmssdMs = 30.0, isRawPpg = false),
+            // PING
+            PulseFeatureMetrics(heartRateBpm = 72.0, regularityPercent = 95.0, rmssdMs = 35.0, isRawPpg = false),
+        ).map { TcmPulseClassifier.classify(it).category }
+
+        assertEquals(12, categories.distinct().size)
+        assertEquals(PulseCategory.entries.toSet(), categories.toSet())
+    }
 }

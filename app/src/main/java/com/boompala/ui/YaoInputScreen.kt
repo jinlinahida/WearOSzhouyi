@@ -264,7 +264,10 @@ fun YaoInputScreen(
                                 style = MaterialTheme.typography.labelMedium,
                                 fontWeight = FontWeight.Bold,
                                 color = if (allCoinsCast) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
+                                modifier = Modifier.wearMarquee(),
                                 maxLines = 1,
+                                softWrap = false,
+                                overflow = TextOverflow.Ellipsis,
                             )
                             if (lastToss != null) {
                                 val stateDesc = when (lastToss!!.sum) {
@@ -279,7 +282,10 @@ fun YaoInputScreen(
                                     style = MaterialTheme.typography.labelSmall,
                                     fontWeight = FontWeight.Bold,
                                     color = if (lastToss!!.state.isChanging) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                                    modifier = Modifier.wearMarquee(),
                                     maxLines = 1,
+                                    softWrap = false,
+                                    overflow = TextOverflow.Ellipsis,
                                 )
                             }
                         }
@@ -344,7 +350,10 @@ fun YaoInputScreen(
                         ) {
                             Text(
                                 text = if (isTossing) "正在摇卦…" else "摇 ${YaoPosition.entries[currentLineIndex].displayName}",
+                                modifier = Modifier.wearMarquee(),
                                 maxLines = 1,
+                                softWrap = false,
+                                overflow = TextOverflow.Ellipsis,
                             )
                         }
                     } else {
@@ -386,9 +395,11 @@ fun YaoInputScreen(
                             ) {
                                 Text(
                                     text = if (isConfirmingReset) "确认重摇" else "重新摇卦",
-                                    maxLines = 1,
                                     style = MaterialTheme.typography.labelSmall,
                                     fontWeight = if (isConfirmingReset) FontWeight.Bold else FontWeight.Normal,
+                                    modifier = Modifier.wearMarquee(),
+                                    maxLines = 1,
+                                    softWrap = false,
                                     overflow = TextOverflow.Ellipsis,
                                 )
                             }
@@ -412,9 +423,12 @@ fun YaoInputScreen(
                             ) {
                                 Text(
                                     text = if (isGenerating) "排盘中…" else "生成卦盘",
-                                    maxLines = 1,
                                     style = MaterialTheme.typography.labelSmall,
                                     fontWeight = FontWeight.Bold,
+                                    modifier = Modifier.wearMarquee(),
+                                    maxLines = 1,
+                                    softWrap = false,
+                                    overflow = TextOverflow.Ellipsis,
                                 )
                             }
                         }
@@ -457,9 +471,11 @@ fun YaoInputScreen(
                     ) {
                         Text(
                             text = position.displayName,
-                            modifier = Modifier.weight(0.8f),
+                            modifier = Modifier.weight(0.8f).wearMarquee(),
                             style = MaterialTheme.typography.labelSmall,
                             maxLines = 1,
+                            softWrap = false,
+                            overflow = TextOverflow.Ellipsis,
                         )
                         val isSelected = selected != null
                         SelectableCardButton(
@@ -481,6 +497,7 @@ fun YaoInputScreen(
                                 text = selected?.displayName ?: "未选择",
                                 style = MaterialTheme.typography.labelSmall,
                                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+                                modifier = Modifier.wearMarquee(),
                                 maxLines = 1,
                                 softWrap = false,
                                 overflow = TextOverflow.Ellipsis,
@@ -496,9 +513,9 @@ fun YaoInputScreen(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(metrics.itemSpacing),
                     ) {
-                        Text("爻位", modifier = Modifier.weight(0.7f), style = MaterialTheme.typography.labelSmall, maxLines = 1)
-                        Text("本卦", modifier = Modifier.weight(1f), style = MaterialTheme.typography.labelSmall, maxLines = 1)
-                        Text("变卦", modifier = Modifier.weight(1f), style = MaterialTheme.typography.labelSmall, maxLines = 1)
+                        Text("爻位", modifier = Modifier.weight(0.7f).wearMarquee(), style = MaterialTheme.typography.labelSmall, maxLines = 1, softWrap = false, overflow = TextOverflow.Ellipsis)
+                        Text("本卦", modifier = Modifier.weight(1f).wearMarquee(), style = MaterialTheme.typography.labelSmall, maxLines = 1, softWrap = false, overflow = TextOverflow.Ellipsis)
+                        Text("变卦", modifier = Modifier.weight(1f).wearMarquee(), style = MaterialTheme.typography.labelSmall, maxLines = 1, softWrap = false, overflow = TextOverflow.Ellipsis)
                     }
                 }
                 itemsIndexed(
@@ -513,9 +530,11 @@ fun YaoInputScreen(
                     ) {
                         Text(
                             position.displayName,
-                            modifier = Modifier.weight(0.7f),
+                            modifier = Modifier.weight(0.7f).wearMarquee(),
                             style = MaterialTheme.typography.labelSmall,
                             maxLines = 1,
+                            softWrap = false,
+                            overflow = TextOverflow.Ellipsis,
                         )
                         PolarityButton(
                             position = position,
@@ -601,14 +620,21 @@ fun YaoInputScreen(
                                 text = "本卦 $originalHexName",
                                 style = MaterialTheme.typography.titleSmall,
                                 fontWeight = FontWeight.Bold,
+                                modifier = Modifier.weight(1f).wearMarquee(),
                                 maxLines = 1,
+                                softWrap = false,
+                                overflow = TextOverflow.Ellipsis,
                             )
+                            Spacer(Modifier.width(4.dp))
                             Text(
                                 text = "▶ 变卦 $changedHexName",
                                 style = MaterialTheme.typography.titleSmall,
                                 fontWeight = FontWeight.Bold,
                                 color = Color(0xFFFFD700),
+                                modifier = Modifier.weight(1f).wearMarquee(),
                                 maxLines = 1,
+                                softWrap = false,
+                                overflow = TextOverflow.Ellipsis,
                             )
                         }
                         Spacer(Modifier.height(2.dp))
@@ -616,7 +642,10 @@ fun YaoInputScreen(
                             text = "动爻：${YaoPosition.entries[selectedMovingIndex].displayName} · ${if (originalCode[selectedMovingIndex] == '1') "阳动变阴" else "阴动变阳"}",
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.wearMarquee(),
                             maxLines = 1,
+                            softWrap = false,
+                            overflow = TextOverflow.Ellipsis,
                         )
                     }
                 }
@@ -838,6 +867,7 @@ private fun ModeButton(
             text = mode.displayName,
             style = MaterialTheme.typography.labelSmall,
             fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
+            modifier = Modifier.wearMarquee(),
             maxLines = 1,
             softWrap = false,
             overflow = TextOverflow.Ellipsis,
@@ -870,6 +900,7 @@ private fun PolarityButton(
             text = polarity?.displayName ?: "未选",
             style = MaterialTheme.typography.labelSmall,
             fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+            modifier = Modifier.wearMarquee(),
             maxLines = 1,
             softWrap = false,
             overflow = TextOverflow.Ellipsis,

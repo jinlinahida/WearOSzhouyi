@@ -985,10 +985,12 @@ fun SettingsScreen(
                                         DetailField(
                                             label = stringResource(R.string.settings_bazi_gender),
                                             value = profile.gender.titleZh,
+                                            marquee = true,
                                         )
                                         DetailField(
                                             label = "生肖属相",
                                             value = profile.shengXiao,
+                                            marquee = true,
                                         )
                                         DetailField(
                                             label = stringResource(R.string.settings_bazi_birth_date),
@@ -1044,6 +1046,7 @@ fun SettingsScreen(
                                             DetailField(
                                                 label = stringResource(R.string.settings_bazi_pillar_hour),
                                                 value = stringResource(R.string.settings_bazi_hour_unknown),
+                                                marquee = true,
                                             )
                                         }
                                     }
@@ -1066,7 +1069,10 @@ fun SettingsScreen(
                                     ) {
                                         Text(
                                             text = stringResource(R.string.settings_bazi_edit),
+                                            modifier = Modifier.wearMarquee(),
                                             maxLines = 1,
+                                            softWrap = false,
+                                            overflow = TextOverflow.Ellipsis,
                                         )
                                     }
                                 }
@@ -1084,7 +1090,10 @@ fun SettingsScreen(
                                         Text(
                                             text = stringResource(R.string.settings_bazi_clear),
                                             color = MaterialTheme.colorScheme.error,
+                                            modifier = Modifier.wearMarquee(),
                                             maxLines = 1,
+                                            softWrap = false,
+                                            overflow = TextOverflow.Ellipsis,
                                         )
                                     }
                                 }
@@ -1123,6 +1132,7 @@ fun SettingsScreen(
                                                 text = "乾造",
                                                 style = MaterialTheme.typography.bodySmall,
                                                 fontWeight = if (maleSelected) FontWeight.Bold else FontWeight.Normal,
+                                                modifier = Modifier.wearMarquee(),
                                                 maxLines = 1,
                                                 softWrap = false,
                                                 overflow = TextOverflow.Ellipsis,
@@ -1143,6 +1153,7 @@ fun SettingsScreen(
                                                 text = "坤造",
                                                 style = MaterialTheme.typography.bodySmall,
                                                 fontWeight = if (femaleSelected) FontWeight.Bold else FontWeight.Normal,
+                                                modifier = Modifier.wearMarquee(),
                                                 maxLines = 1,
                                                 softWrap = false,
                                                 overflow = TextOverflow.Ellipsis,
@@ -1171,6 +1182,7 @@ fun SettingsScreen(
                                             text = stringResource(R.string.settings_bazi_birth_date),
                                             style = MaterialTheme.typography.labelSmall,
                                             color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                            modifier = Modifier.wearMarquee(),
                                             maxLines = 1,
                                             softWrap = false,
                                             overflow = TextOverflow.Ellipsis,
@@ -1180,6 +1192,7 @@ fun SettingsScreen(
                                             style = MaterialTheme.typography.titleMedium,
                                             fontWeight = FontWeight.Bold,
                                             color = MaterialTheme.colorScheme.primary,
+                                            modifier = Modifier.wearMarquee(),
                                             maxLines = 1,
                                             softWrap = false,
                                             overflow = TextOverflow.Ellipsis,
@@ -1207,6 +1220,7 @@ fun SettingsScreen(
                                             text = stringResource(R.string.settings_bazi_birth_hour),
                                             style = MaterialTheme.typography.labelSmall,
                                             color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                            modifier = Modifier.wearMarquee(),
                                             maxLines = 1,
                                             softWrap = false,
                                             overflow = TextOverflow.Ellipsis,
@@ -1216,6 +1230,7 @@ fun SettingsScreen(
                                             style = MaterialTheme.typography.titleMedium,
                                             fontWeight = FontWeight.Bold,
                                             color = MaterialTheme.colorScheme.primary,
+                                            modifier = Modifier.wearMarquee(),
                                             maxLines = 1,
                                             softWrap = false,
                                             overflow = TextOverflow.Ellipsis,
@@ -1278,7 +1293,10 @@ fun SettingsScreen(
                                     Text(
                                         text = stringResource(R.string.settings_bazi_save),
                                         fontWeight = FontWeight.Bold,
+                                        modifier = Modifier.wearMarquee(),
                                         maxLines = 1,
+                                        softWrap = false,
+                                        overflow = TextOverflow.Ellipsis,
                                     )
                                 }
                             }
@@ -1296,7 +1314,10 @@ fun SettingsScreen(
                                     ) {
                                         Text(
                                             text = stringResource(R.string.action_cancel),
+                                            modifier = Modifier.wearMarquee(),
                                             maxLines = 1,
+                                            softWrap = false,
+                                            overflow = TextOverflow.Ellipsis,
                                         )
                                     }
                                 }
@@ -1315,7 +1336,10 @@ fun SettingsScreen(
                             ) {
                                 Text(
                                     text = stringResource(R.string.action_back),
+                                    modifier = Modifier.wearMarquee(),
                                     maxLines = 1,
+                                    softWrap = false,
+                                    overflow = TextOverflow.Ellipsis,
                                 )
                             }
                         }
@@ -1651,7 +1675,10 @@ fun SettingsScreen(
                             Text(
                                 text = stringResource(R.string.settings_ai_mode_local),
                                 fontWeight = if (isLocal) FontWeight.Bold else FontWeight.Normal,
+                                modifier = Modifier.wearMarquee(),
                                 maxLines = 1,
+                                softWrap = false,
+                                overflow = TextOverflow.Ellipsis,
                             )
                         }
 
@@ -1665,7 +1692,10 @@ fun SettingsScreen(
                             Text(
                                 text = stringResource(R.string.settings_ai_mode_online),
                                 fontWeight = if (isOnline) FontWeight.Bold else FontWeight.Normal,
+                                modifier = Modifier.wearMarquee(),
                                 maxLines = 1,
+                                softWrap = false,
+                                overflow = TextOverflow.Ellipsis,
                             )
                         }
                     }
@@ -1692,7 +1722,10 @@ fun SettingsScreen(
                                     Text(
                                         text = provider.displayName,
                                         fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+                                        modifier = Modifier.wearMarquee(),
                                         maxLines = 1,
+                                        softWrap = false,
+                                        overflow = TextOverflow.Ellipsis,
                                     )
                                 }
                             }
@@ -1704,6 +1737,7 @@ fun SettingsScreen(
                             DetailField(
                                 label = stringResource(R.string.settings_ai_model),
                                 value = settings.effectiveAiModel.ifBlank { "默认" },
+                                marquee = true,
                             )
                             val keyDisplay = if (settings.isAiConfigured) {
                                 stringResource(R.string.settings_ai_key_configured, settings.maskedApiKey())
@@ -1713,11 +1747,13 @@ fun SettingsScreen(
                             DetailField(
                                 label = stringResource(R.string.settings_ai_api_key),
                                 value = keyDisplay,
+                                marquee = true,
                             )
                             if (settings.effectiveAiBaseUrl.isNotBlank()) {
                                 DetailField(
                                     label = "Base URL",
                                     value = settings.effectiveAiBaseUrl,
+                                    marquee = true,
                                 )
                             }
                         }
@@ -1735,6 +1771,10 @@ fun SettingsScreen(
                             Text(
                                 text = stringResource(R.string.settings_ai_sync_button),
                                 fontWeight = FontWeight.Bold,
+                                modifier = Modifier.wearMarquee(),
+                                maxLines = 1,
+                                softWrap = false,
+                                overflow = TextOverflow.Ellipsis,
                             )
                         }
                     }
@@ -1749,7 +1789,13 @@ fun SettingsScreen(
                             interactionSource = testInteraction,
                             colors = BoompalaButtonDefaults.outlinedButtonColors(),
                         ) {
-                            Text(stringResource(R.string.settings_ai_test_button))
+                            Text(
+                                text = stringResource(R.string.settings_ai_test_button),
+                                modifier = Modifier.wearMarquee(),
+                                maxLines = 1,
+                                softWrap = false,
+                                overflow = TextOverflow.Ellipsis,
+                            )
                         }
                     }
 
@@ -1769,6 +1815,10 @@ fun SettingsScreen(
                                 Text(
                                     text = stringResource(R.string.settings_ai_clear_key),
                                     color = MaterialTheme.colorScheme.error,
+                                    modifier = Modifier.wearMarquee(),
+                                    maxLines = 1,
+                                    softWrap = false,
+                                    overflow = TextOverflow.Ellipsis,
                                 )
                             }
                         }
@@ -2049,8 +2099,8 @@ fun SettingsScreen(
 
                         item(key = "sync-address-card") {
                             ResultCard {
-                                DetailField(label = "局域网", value = "${info.ip}:${info.port}")
-                                DetailField(label = "凭证", value = info.token)
+                                DetailField(label = "局域网", value = "${info.ip}:${info.port}", marquee = true)
+                                DetailField(label = "凭证", value = info.token, marquee = true)
                             }
                         }
 
@@ -2118,6 +2168,7 @@ private fun SelectionButton(
         Text(
             text = text,
             fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
+            modifier = Modifier.wearMarquee(),
             maxLines = 1,
             softWrap = false,
             overflow = TextOverflow.Ellipsis,
@@ -2234,6 +2285,7 @@ private fun ShichenPicker(
                     } else {
                         MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                     },
+                    modifier = Modifier.wearMarquee(),
                     maxLines = 1,
                     softWrap = false,
                     overflow = TextOverflow.Ellipsis,
@@ -2252,7 +2304,10 @@ private fun ShichenPicker(
                 Text(
                     text = "✓ 确定",
                     fontWeight = FontWeight.Bold,
+                    modifier = Modifier.wearMarquee(),
                     maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
         }

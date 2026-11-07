@@ -44,6 +44,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.wear.compose.material3.Icon
@@ -67,6 +68,7 @@ import com.boompala.ui.BoompalaCardButton
 import com.boompala.ui.ExpressiveShapeMorphingLoader
 import com.boompala.ui.ResultCard
 import com.boompala.ui.SelectableCardButton
+import com.boompala.ui.wearMarquee
 import com.boompala.ui.wearPressFeedback
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
@@ -432,7 +434,10 @@ private fun IdleCardContent(
                                 text = topic.displayName,
                                 style = MaterialTheme.typography.labelSmall,
                                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+                                modifier = Modifier.wearMarquee(),
                                 maxLines = 1,
+                                softWrap = false,
+                                overflow = TextOverflow.Ellipsis,
                             )
                         }
                     }

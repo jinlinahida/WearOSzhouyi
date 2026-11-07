@@ -163,6 +163,7 @@ fun <T> BoompalaWheelPicker(
                         fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
                         color = if (isSelected) Color(0xFFFFD700) else MaterialTheme.colorScheme.onSurfaceVariant,
                         textAlign = TextAlign.Center,
+                        modifier = Modifier.wearMarquee(),
                         maxLines = 1,
                         softWrap = false,
                         overflow = TextOverflow.Ellipsis,

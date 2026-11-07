@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.wear.compose.material3.Button
@@ -83,28 +84,54 @@ fun CompassScreen(
                         ?: "等待${northLabel}方向数据",
                     style = MaterialTheme.typography.titleMedium,
                     textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth().wearMarquee(),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
                 )
-                Text(statusText, style = MaterialTheme.typography.labelSmall, textAlign = TextAlign.Center)
+                Text(
+                    text = statusText,
+                    style = MaterialTheme.typography.labelSmall,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth().wearMarquee(),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
+                )
             }
         }
         item(key = "reading-card") {
             ResultCard {
-                Text("当前方位 · ${northLabel}", style = MaterialTheme.typography.titleSmall)
-                DetailField("精确角度", reading?.let { String.format(Locale.US, "%.1f° · %s", it.degrees, it.eightDirection) } ?: "暂无")
-                DetailField("参照基准", if (trueNorthEnabled) "地理真北 (偏角 $declinationLabel)" else "天然地磁北")
-                DetailField("朝向山位", reading?.let { "${it.mountain.name}山 · ${it.mountain.element} · ${it.mountain.yinYang.displayName}" } ?: "暂无")
-                DetailField("坐山朝向", reading?.let { "坐${it.sittingMountain.name}山，向${it.mountain.name}山" } ?: "暂无")
-                DetailField("后天八卦", reading?.let { "${it.trigram.symbol}${it.trigram.name}卦 · ${it.trigram.direction} · ${it.trigram.element}" } ?: "暂无")
+                Text(
+                    text = "当前方位 · ${northLabel}",
+                    style = MaterialTheme.typography.titleSmall,
+                    modifier = Modifier.wearMarquee(),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                DetailField("精确角度", reading?.let { String.format(Locale.US, "%.1f° · %s", it.degrees, it.eightDirection) } ?: "暂无", marquee = true)
+                DetailField("参照基准", if (trueNorthEnabled) "地理真北 (偏角 $declinationLabel)" else "天然地磁北", marquee = true)
+                DetailField("朝向山位", reading?.let { "${it.mountain.name}山 · ${it.mountain.element} · ${it.mountain.yinYang.displayName}" } ?: "暂无", marquee = true)
+                DetailField("坐山朝向", reading?.let { "坐${it.sittingMountain.name}山，向${it.mountain.name}山" } ?: "暂无", marquee = true)
+                DetailField("后天八卦", reading?.let { "${it.trigram.symbol}${it.trigram.name}卦 · ${it.trigram.direction} · ${it.trigram.element}" } ?: "暂无", marquee = true)
             }
         }
         item(key = "period-card") {
             ResultCard {
-                Text("元运九星", style = MaterialTheme.typography.titleSmall)
-                DetailField("当前元运", "${period.displayName}（${period.startYear}–${period.endYear}）")
-                DetailField("当运主星", "${period.rulingStar.displayName} · ${period.rulingStar.element} · ${period.rulingStar.trigram}宫")
+                Text(
+                    text = "元运九星",
+                    style = MaterialTheme.typography.titleSmall,
+                    modifier = Modifier.wearMarquee(),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                DetailField("当前元运", "${period.displayName}（${period.startYear}–${period.endYear}）", marquee = true)
+                DetailField("当运主星", "${period.rulingStar.displayName} · ${period.rulingStar.element} · ${period.rulingStar.trigram}宫", marquee = true)
                 reading?.let {
                     val palaceStar = YuanYunData.stars[it.trigram.luoShuNumber - 1]
-                    DetailField("本方原宫", "${palaceStar.displayName} · ${YuanYunData.status(palaceStar.number, period.number)}")
+                    DetailField("本方原宫", "${palaceStar.displayName} · ${YuanYunData.status(palaceStar.number, period.number)}", marquee = true)
                     Text("简评：${palaceStar.neutralMeaning}。${YuanYunData.periodSummary(period)}。", style = MaterialTheme.typography.bodySmall)
                 }
             }
@@ -118,7 +145,15 @@ fun CompassScreen(
                     .fillMaxWidth()
                     .wearPressFeedback(lockInteraction),
                 interactionSource = lockInteraction,
-            ) { Text(if (locked) "实时测量" else "锁定方位") }
+            ) {
+                Text(
+                    text = if (locked) "实时测量" else "锁定方位",
+                    modifier = Modifier.wearMarquee(),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
         }
         item(key = "calibration") {
             ResultCard {
@@ -135,7 +170,15 @@ fun CompassScreen(
                     .wearPressFeedback(backInteraction),
                 interactionSource = backInteraction,
                 colors = BoompalaButtonDefaults.outlinedButtonColors(),
-            ) { Text("首页") }
+            ) {
+                Text(
+                    text = "首页",
+                    modifier = Modifier.wearMarquee(),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
         }
     }
 }

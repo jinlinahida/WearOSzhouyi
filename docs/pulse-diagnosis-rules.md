@@ -55,20 +55,20 @@ HRV 时域特征提取与辨证计算
 
 ## 3. 十二经典脉象判定标准
 
-| 脉象分类 | 核心物理 / 真实 HRV 时域判定条件 | 临床体征释义 |
-| :--- | :--- | :--- |
-| **平脉 (Ping)** | $68 \le \text{BPM} \le 82$, $25\text{ms} \le \text{RMSSD} \le 42\text{ms}$ | 节律从容，有神有胃有根，脏腑冲和 |
-| **滑脉 (Hua)** | $66 \le \text{BPM} \le 95$, $\text{RMSSD} \ge 42\text{ms}$ 或 $(h_3/h_1 \ge 0.52 \land h_2/h_1 \le 0.44)$ | 往来流利，应指圆滑，如珠走盘 |
-| **弦脉 (Xian)** | $\text{BPM} \ge 68 \land \text{RMSSD} \le 22\text{ms}$ 或 $(K \ge 0.40 \land h_2/h_1 \ge 0.48)$ | 端直以长，如按琴弦，血管张力增高 |
-| **迟脉 (Chi)** | $\text{BPM} < 58$, $\text{RMSSD} \ge 20\text{ms}$ | 一息不足四至，阳气不足或阴寒内盛 |
-| **数脉 (Shu)** | $\text{BPM} > 95$, $\text{RMSSD} < 40\text{ms}$ | 一息五至以上，热邪内蕴或虚热内生 |
-| **洪脉 (Hong)** | $\text{BPM} > 95 \land (\text{RMSSD} \ge 40\text{ms} \lor (\text{isRawPpg} \land K \ge 0.42))$ | 来盛去衰，滔滔满指，火热炽盛 |
-| **缓脉 (Huan)** | $58 \le \text{BPM} \le 68$, $22\text{ms} \le \text{RMSSD} \le 42\text{ms}$ | 怠缓和柔，一息四至，脾胃气和 |
-| **浮脉 (Fu)** | $75 \le \text{BPM} \le 95 \land 28\text{ms} \le \text{RMSSD} \le 42\text{ms} \land 0.34 \le K \le 0.40$ | 升越于表，举之有余，按之稍减 |
-| **沉脉 (Chen)** | $58 \le \text{BPM} \le 70 \land 18\text{ms} \le \text{RMSSD} \le 28\text{ms} \land 0.24 \le K \le 0.30$ | 深潜入内，轻取不应，重按乃得 |
-| **濡脉 (Ru)** | $\text{BPM} < 75 \land (K \le 0.32 \land h_2/h_1 \le 0.36 \lor (\text{RMSSD} \in [18,28]\text{ms} \land K \le 0.32))$ | 浮而细软，如絮在水，气虚夹湿 |
-| **细脉 (Xi)** | $\text{BPM} < 68 \land (K \le 0.28 \lor \text{RMSSD} < 20\text{ms})$ 且脉力微弱 | 脉细如线，应指明显，阴血亏虚 |
-| **结代脉 (Jie Dai)** | $\text{Regularity} < 75\%$ 或 $\text{pNN50} \ge 12\%$（突发期前搏动停顿） | 脉来歇止，缓/数而偶有一止，气血不续 |
+| 脉象分类 | 核心物理 / 真实 HRV 时域判定条件 (isRawPpg = false) | 附加真实 PPG 波形判定条件 (isRawPpg = true) | 临床体征释义 |
+| :--- | :--- | :--- | :--- |
+| **结代脉 (Jie Dai)** | $\text{EctopicBeats} \ge 2 \lor (\text{EctopicBeats} \ge 1 \land \text{Regularity} < 78\%) \lor \text{Regularity} < 68\%$ | 同左 | 脉来歇止，缓/数而偶有一止，气血不续（基于真实早搏/漏搏突变） |
+| **洪脉 (Hong)** | $\text{BPM} > 95 \land \text{RMSSD} \ge 38\text{ms}$ | 或 $(\text{BPM} > 90 \land K \ge 0.42 \land h_1 \ge 0.90)$ | 来盛去衰，滔滔满指，火热炽盛 |
+| **数脉 (Shu)** | $\text{BPM} > 95 \land \text{RMSSD} < 38\text{ms}$ | 同左 | 一息六至，脉流急促 |
+| **细脉 (Xi)** | $(\text{BPM} < 58 \land \text{RMSSD} < 20\text{ms}) \lor (58 \le \text{BPM} < 72 \land \text{RMSSD} < 15\text{ms})$ | 或 $(K \le 0.28 \land \text{RMSSD} < 20\text{ms})$ | 脉细如线，应指明显，阴血亏虚 |
+| **迟脉 (Chi)** | $\text{BPM} < 58 \land \text{RMSSD} \ge 20\text{ms}$ | 同左 | 一息三至，阳气不足或阴寒内盛 |
+| **弦脉 (Xian)** | $\text{BPM} \ge 68 \land 15\text{ms} \le \text{RMSSD} \le 22\text{ms}$ | 或 $(K \ge 0.40 \land h_2/h_1 \ge 0.48)$ | 端直以长，如按琴弦，血管张力增高 |
+| **滑脉 (Hua)** | $68 \le \text{BPM} \le 95 \land \text{RMSSD} \ge 45\text{ms}$ | 或 $(h_3/h_1 \ge 0.52 \land h_2/h_1 \le 0.44)$ | 往来流利，应指圆滑，如珠走盘 |
+| **浮脉 (Fu)** | $78 \le \text{BPM} \le 95 \land 28\text{ms} < \text{RMSSD} < 45\text{ms}$ | 或 $(74 \le \text{BPM} \le 95 \land 0.34 \le K \le 0.40 \land h_2/h_1 \le 0.40)$ | 升越于表，举之有余，按之稍减 |
+| **沉脉 (Chen)** | $(58 \le \text{BPM} < 64 \land 15\text{ms} \le \text{RMSSD} < 24\text{ms}) \lor (64 \le \text{BPM} < 68 \land 15\text{ms} \le \text{RMSSD} < 22\text{ms})$ | 或 $(58 \le \text{BPM} \le 70 \land 0.22 \le K \le 0.30)$ | 深潜入内，轻取不应，重按乃得 |
+| **濡脉 (Ru)** | $64 \le \text{BPM} < 78 \land 22\text{ms} \le \text{RMSSD} \le 28\text{ms}$ | 或 $(\text{BPM} < 78 \land K \le 0.32 \land h_2/h_1 \le 0.35)$ | 浮而细软，如絮在水，气虚夹湿 |
+| **缓脉 (Huan)** | $58 \le \text{BPM} < 68 \land \text{RMSSD} \ge 24\text{ms}$ | 同左 | 怠缓和柔，一息四至，脾胃气和 |
+| **平脉 (Ping)** | 其余标准常态区间（如 $68 \le \text{BPM} < 78 \land 28\text{ms} \le \text{RMSSD} < 45\text{ms}$） | 同左 | 节律从容，有神有胃有根，脏腑冲和 |
 
 ---
 

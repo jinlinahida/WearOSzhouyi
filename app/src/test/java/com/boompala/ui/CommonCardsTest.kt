@@ -46,4 +46,10 @@ class CommonCardsTest {
         assertEquals(androidx.compose.ui.text.style.TextAlign.Start, squareMetrics.titleTextAlign)
         assertEquals(16.dp, squareMetrics.horizontalPadding)
     }
+
+    @Test
+    fun wearMarqueeModifierCanBeInstantiated() {
+        val modifier = androidx.compose.ui.Modifier.wearMarquee()
+        org.junit.Assert.assertNotNull(modifier)
+    }
 }

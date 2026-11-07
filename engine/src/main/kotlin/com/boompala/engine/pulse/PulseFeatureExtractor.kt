@@ -154,6 +154,8 @@ object PulseFeatureExtractor {
 
         // 6. 脉搏波面积波形系数 K 值（平均值占矩形面积比例）
         val kValue = avgWaveform.average().coerceIn(0.20, 0.60)
+        val validIbisMs = validIbis.map { it * 1000.0 }
+        val ectopicCount = countEctopicBeats(validIbisMs)
 
         return PulseFeatureMetrics(
             heartRateBpm = bpm,
@@ -167,6 +169,7 @@ object PulseFeatureExtractor {
             h3Ratio = h3 / h1,
             h2Ratio = h2 / h1,
             isRawPpg = isRawPpg,
+            ectopicBeatCount = ectopicCount,
             quality = PulseDataQuality(
                 validBeatCount = peaks.size,
                 coveragePercent = 100.0,
@@ -290,28 +293,16 @@ object PulseFeatureExtractor {
             0.0
         }
 
-        // 6. 心律规整度判定
+        // 6. 心律规整度与期前/漏搏突变判定
         val meanIbi = if (ibisMs.isNotEmpty()) ibisMs.average() else 800.0
         val variance = if (ibisMs.isNotEmpty()) {
             ibisMs.map { (it - meanIbi) * (it - meanIbi) }.average()
         } else 0.0
         val stdDev = sqrt(variance)
         val cv = if (meanIbi > 0) stdDev / meanIbi else 0.0
-        val regularity = (100.0 - (cv * 120.0) - (pnn50 * 0.5)).coerceIn(30.0, 100.0)
-
-        // 7. 形态学模拟估算 (根据 RMSSD 与心率动态调整波形系数)
-        val isWiry = rmssd <= 22.0 && meanBpm >= 68.0
-        val isSlippery = rmssd >= 42.0 && meanBpm in 66.0..95.0
-        val isRu = rmssd in 18.0..30.0 && meanBpm in 58.0..74.0
-        val kValue = when {
-            isWiry -> 0.42
-            isSlippery -> 0.38
-            isRu -> 0.30
-            meanBpm < 60.0 -> 0.28
-            else -> 0.35
-        }
-        val h2Ratio = if (isWiry) 0.50 else if (isRu) 0.34 else 0.38
-        val h3Ratio = if (isSlippery) 0.55 else 0.48
+        // 纯基于变异系数 CV 评估规整度，避免将健康生理性 RSA (pNN50 >= 12%) 误扣
+        val regularity = (100.0 - (cv * 150.0)).coerceIn(30.0, 100.0)
+        val ectopicCount = countEctopicBeats(ibisMs)
 
         return PulseFeatureMetrics(
             heartRateBpm = meanBpm,
@@ -319,14 +310,56 @@ object PulseFeatureExtractor {
             rmssdMs = rmssd,
             pnn50Percent = pnn50,
             h1 = 1.0,
-            h2 = h2Ratio,
-            h3 = h3Ratio,
-            kValue = kValue,
-            h3Ratio = h3Ratio,
-            h2Ratio = h2Ratio,
+            h2 = 0.38,
+            h3 = 0.50,
+            kValue = 0.35,
+            h3Ratio = 0.50,
+            h2Ratio = 0.38,
             isRawPpg = false,
+            ectopicBeatCount = ectopicCount,
             quality = quality,
         )
+    }
+
+    /**
+     * 检测逐搏间期序列中的期前收缩（早搏代偿）与漏搏（长停顿）事件数。
+     * 区分正常呼吸渐变窦性律动与突发性节律歇止。
+     */
+    fun countEctopicBeats(ibisMs: List<Double>): Int {
+        if (ibisMs.size < 4) return 0
+        var ectopicCount = 0
+        for (i in ibisMs.indices) {
+            val window = mutableListOf<Double>()
+            val start = (i - 2).coerceAtLeast(0)
+            val end = (i + 2).coerceAtMost(ibisMs.size - 1)
+            for (j in start..end) {
+                if (j != i) {
+                    window.add(ibisMs[j])
+                }
+            }
+            if (window.isEmpty()) continue
+            window.sort()
+            val localMedian = if (window.size % 2 == 1) {
+                window[window.size / 2]
+            } else {
+                (window[window.size / 2 - 1] + window[window.size / 2]) / 2.0
+            }
+
+            val current = ibisMs[i]
+            // 1. 漏搏/长歇止 (Pause): 当前 IBI 突变拉长 > 1.45 倍局部中位间期
+            val isPause = current > 1.45 * localMedian
+            // 2. 早搏伴代偿 (Premature + Compensatory): 当前 IBI 显著提前 (< 0.78 * localMedian) 且下一跳代偿间期拉长 (> 1.20 * localMedian)
+            val isPrematureWithCompensation = if (i + 1 < ibisMs.size) {
+                current < 0.78 * localMedian && ibisMs[i + 1] > 1.20 * localMedian
+            } else {
+                false
+            }
+
+            if (isPause || isPrematureWithCompensation) {
+                ectopicCount++
+            }
+        }
+        return ectopicCount
     }
 
     private fun findLocalMinIndex(signal: DoubleArray, start: Int, end: Int): Int? {

@@ -119,7 +119,7 @@ fun TarotCelticCrossScreen(
 
             item(key = "celtic-cross-deck-selection") {
                 ResultCard {
-                    DetailField("抽牌牌库", if (currentDeckType == DeckType.FULL_78) "78张全牌" else "22张大阿卡纳")
+                    DetailField("抽牌牌库", if (currentDeckType == DeckType.FULL_78) "78张全牌" else "22张大阿卡纳", marquee = true)
                     val deckInteraction = remember { MutableInteractionSource() }
                     BoompalaCardButton(
                         onClick = {
@@ -135,14 +135,20 @@ fun TarotCelticCrossScreen(
                         interactionSource = deckInteraction,
                         colors = BoompalaButtonDefaults.outlinedButtonColors(),
                     ) {
-                        Text(if (currentDeckType == DeckType.FULL_78) "22张大牌" else "78张全牌")
+                        Text(
+                            text = if (currentDeckType == DeckType.FULL_78) "22张大牌" else "78张全牌",
+                            modifier = Modifier.wearMarquee(),
+                            maxLines = 1,
+                            softWrap = false,
+                            overflow = TextOverflow.Ellipsis,
+                        )
                     }
                 }
             }
 
             item(key = "celtic-cross-reversed-selection") {
                 ResultCard {
-                    DetailField("逆位规则", if (currentAllowReversed) "允许逆位" else "仅正位")
+                    DetailField("逆位规则", if (currentAllowReversed) "允许逆位" else "仅正位", marquee = true)
                     val reversedInteraction = remember { MutableInteractionSource() }
                     BoompalaCardButton(
                         onClick = { currentAllowReversed = !currentAllowReversed },
@@ -152,7 +158,13 @@ fun TarotCelticCrossScreen(
                         interactionSource = reversedInteraction,
                         colors = BoompalaButtonDefaults.outlinedButtonColors(),
                     ) {
-                        Text(if (currentAllowReversed) "仅正位" else "允许逆位")
+                        Text(
+                            text = if (currentAllowReversed) "仅正位" else "允许逆位",
+                            modifier = Modifier.wearMarquee(),
+                            maxLines = 1,
+                            softWrap = false,
+                            overflow = TextOverflow.Ellipsis,
+                        )
                     }
                 }
             }
@@ -176,7 +188,13 @@ fun TarotCelticCrossScreen(
                         .wearPressFeedback(drawInteraction),
                     interactionSource = drawInteraction,
                 ) {
-                    Text("抽牌")
+                    Text(
+                        text = "抽牌",
+                        modifier = Modifier.wearMarquee(),
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
+                    )
                 }
             }
 
@@ -190,7 +208,13 @@ fun TarotCelticCrossScreen(
                     interactionSource = backInteraction,
                     colors = BoompalaButtonDefaults.outlinedButtonColors(),
                 ) {
-                    Text("首页")
+                    Text(
+                        text = "首页",
+                        modifier = Modifier.wearMarquee(),
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
+                    )
                 }
             }
         }
@@ -384,15 +408,18 @@ fun TarotCelticCrossScreen(
                                 text = "${idx + 1}.${drawn.slot.name}",
                                 style = MaterialTheme.typography.labelSmall,
                                 fontWeight = if (isCurrent) FontWeight.Bold else FontWeight.Medium,
+                                modifier = Modifier.weight(1.1f, fill = false).wearMarquee(),
                                 maxLines = 1,
+                                softWrap = false,
                                 overflow = TextOverflow.Ellipsis,
-                                modifier = Modifier.weight(1.1f, fill = false),
                             )
                             Text(
                                 text = "${drawn.card.nameZh}(${if (isRev) "逆" else "正"})",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = if (isCurrent) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
+                                modifier = Modifier.wearMarquee(),
                                 maxLines = 1,
+                                softWrap = false,
                                 overflow = TextOverflow.Ellipsis,
                             )
                         }
@@ -428,15 +455,18 @@ fun TarotCelticCrossScreen(
                                 text = "${actualIdx + 1}.${drawn.slot.name}",
                                 style = MaterialTheme.typography.labelSmall,
                                 fontWeight = if (isCurrent) FontWeight.Bold else FontWeight.Medium,
+                                modifier = Modifier.weight(1.1f, fill = false).wearMarquee(),
                                 maxLines = 1,
+                                softWrap = false,
                                 overflow = TextOverflow.Ellipsis,
-                                modifier = Modifier.weight(1.1f, fill = false),
                             )
                             Text(
                                 text = "${drawn.card.nameZh}(${if (isRev) "逆" else "正"})",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = if (isCurrent) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
+                                modifier = Modifier.wearMarquee(),
                                 maxLines = 1,
+                                softWrap = false,
                                 overflow = TextOverflow.Ellipsis,
                             )
                         }
@@ -499,7 +529,10 @@ fun TarotCelticCrossScreen(
                         text = "◄ 左右滑动切牌 (${pagerState.currentPage + 1}/10) ►",
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(top = 4.dp),
+                        modifier = Modifier.padding(top = 4.dp).wearMarquee(),
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
                     )
                 }
             }
@@ -511,17 +544,26 @@ fun TarotCelticCrossScreen(
                         text = "【${pagerState.currentPage + 1}. ${selectedCard.slot.name}】",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
+                        modifier = Modifier.wearMarquee(),
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
                     )
                     Text(
                         text = selectedCard.card.nameZh,
                         style = MaterialTheme.typography.labelMedium,
+                        modifier = Modifier.wearMarquee(),
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
                     )
                     DetailField(
                         "状态",
                         if (isSelectedReversed) "逆位" else "正位",
+                        marquee = true,
                     )
-                    DetailField("牌位意义", selectedCard.slot.description)
-                    DetailField("属性", "${selectedCard.card.arcana.displayName} · ${selectedCard.card.element.displayName}")
+                    DetailField("牌位意义", selectedCard.slot.description, marquee = true)
+                    DetailField("属性", "${selectedCard.card.arcana.displayName} · ${selectedCard.card.element.displayName}", marquee = true)
                 }
             }
 
@@ -535,6 +577,10 @@ fun TarotCelticCrossScreen(
                     Text(
                         text = selectedCard.card.keywordsZh.joinToString(" · "),
                         style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.wearMarquee(),
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
                     )
                 }
             }
@@ -596,7 +642,13 @@ fun TarotCelticCrossScreen(
                             .wearPressFeedback(recastInteraction),
                         interactionSource = recastInteraction,
                     ) {
-                        Text("重抽")
+                        Text(
+                            text = "重抽",
+                            modifier = Modifier.wearMarquee(),
+                            maxLines = 1,
+                            softWrap = false,
+                            overflow = TextOverflow.Ellipsis,
+                        )
                     }
 
                     val archiveInteraction = remember { MutableInteractionSource() }
@@ -608,7 +660,13 @@ fun TarotCelticCrossScreen(
                         interactionSource = archiveInteraction,
                         colors = BoompalaButtonDefaults.outlinedButtonColors(),
                     ) {
-                        Text("归档")
+                        Text(
+                            text = "归档",
+                            modifier = Modifier.wearMarquee(),
+                            maxLines = 1,
+                            softWrap = false,
+                            overflow = TextOverflow.Ellipsis,
+                        )
                     }
                 }
             }
@@ -623,7 +681,13 @@ fun TarotCelticCrossScreen(
                     interactionSource = finishInteraction,
                     colors = BoompalaButtonDefaults.outlinedButtonColors(),
                 ) {
-                    Text("首页")
+                    Text(
+                        text = "首页",
+                        modifier = Modifier.wearMarquee(),
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
+                    )
                 }
             }
         }

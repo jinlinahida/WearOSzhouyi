@@ -11,6 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.wear.compose.material3.ButtonColors
 import androidx.wear.compose.material3.Text
 import com.boompala.R
@@ -242,8 +243,11 @@ private fun HomeFeatureButton(
     ) {
         Text(
             text = text,
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.weight(1f).wearMarquee(),
             textAlign = TextAlign.Start,
+            maxLines = 1,
+            softWrap = false,
+            overflow = TextOverflow.Ellipsis,
         )
     }
 }

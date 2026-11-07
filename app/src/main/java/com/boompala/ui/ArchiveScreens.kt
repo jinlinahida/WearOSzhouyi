@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material3.*
 import com.boompala.R
@@ -90,7 +91,10 @@ fun ArchiveListScreen(
                         Text(
                             text = t,
                             fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
+                            modifier = Modifier.wearMarquee(),
                             maxLines = 1,
+                            softWrap = false,
+                            overflow = TextOverflow.Ellipsis,
                         )
                     }
                 }
@@ -123,7 +127,10 @@ fun ArchiveListScreen(
                             Text(
                                 text = t,
                                 fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
+                                modifier = Modifier.wearMarquee(),
                                 maxLines = 1,
+                                softWrap = false,
+                                overflow = TextOverflow.Ellipsis,
                             )
                         }
                     }
@@ -160,11 +167,22 @@ fun ArchiveListScreen(
                         Box(Modifier.padding(end = 8.dp).size(10.dp).background(Color(r.color), RoundedCornerShape(50)))
                     }
                     Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.Start) {
-                        Text(r.name, style = MaterialTheme.typography.titleSmall)
+                        Text(
+                            text = r.name,
+                            style = MaterialTheme.typography.titleSmall,
+                            modifier = Modifier.wearMarquee(),
+                            maxLines = 1,
+                            softWrap = false,
+                            overflow = TextOverflow.Ellipsis,
+                        )
                         Text(
                             text = "${r.source.displayName} · ${r.summary}",
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.wearMarquee(),
+                            maxLines = 1,
+                            softWrap = false,
+                            overflow = TextOverflow.Ellipsis,
                         )
                     }
                 }
@@ -180,7 +198,13 @@ fun ArchiveListScreen(
                 interactionSource = pressInteraction,
                 colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) {
-                Text(stringResource(R.string.action_back_home))
+                Text(
+                    text = stringResource(R.string.action_back_home),
+                    modifier = Modifier.wearMarquee(),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
+                )
             }
         }
     }
@@ -214,9 +238,16 @@ fun ArchiveDetailScreen(
     ) {
         item {
             ResultCard {
-                Text(record.name, style = MaterialTheme.typography.titleMedium)
-                DetailField(stringResource(R.string.archive_field_summary), "${record.source.displayName} · ${record.summary}")
-                DetailField(stringResource(R.string.archive_field_cast_time), castAtText)
+                Text(
+                    text = record.name,
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.wearMarquee(),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                DetailField(stringResource(R.string.archive_field_summary), "${record.source.displayName} · ${record.summary}", marquee = true)
+                DetailField(stringResource(R.string.archive_field_cast_time), castAtText, marquee = true)
                 if (record.note.isNotBlank()) {
                     DetailField(stringResource(R.string.archive_field_note), record.note)
                 }
@@ -228,7 +259,15 @@ fun ArchiveDetailScreen(
             snapshot.sections.forEach { (title, lines) ->
                 item {
                     ResultCard {
-                        Text(title, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
+                        Text(
+                            text = title,
+                            style = MaterialTheme.typography.labelLarge,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.wearMarquee(),
+                            maxLines = 1,
+                            softWrap = false,
+                            overflow = TextOverflow.Ellipsis,
+                        )
                         lines.forEach { Text(it, style = MaterialTheme.typography.bodySmall) }
                     }
                 }
@@ -248,7 +287,13 @@ fun ArchiveDetailScreen(
                     interactionSource = editInteraction,
                     colors = BoompalaButtonDefaults.outlinedButtonColors(),
                 ) {
-                    Text(stringResource(R.string.archive_action_edit))
+                    Text(
+                        text = stringResource(R.string.archive_action_edit),
+                        modifier = Modifier.wearMarquee(),
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
+                    )
                 }
 
                 val backInteraction = remember { MutableInteractionSource() }
@@ -260,7 +305,13 @@ fun ArchiveDetailScreen(
                     interactionSource = backInteraction,
                     colors = BoompalaButtonDefaults.outlinedButtonColors(),
                 ) {
-                    Text(stringResource(R.string.action_back))
+                    Text(
+                        text = stringResource(R.string.action_back),
+                        modifier = Modifier.wearMarquee(),
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
+                    )
                 }
             }
         }
@@ -274,7 +325,14 @@ fun ArchiveDetailScreen(
                 interactionSource = deleteInteraction,
                 colors = BoompalaButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error),
             ) {
-                Text(stringResource(R.string.archive_action_delete), color = MaterialTheme.colorScheme.error)
+                Text(
+                    text = stringResource(R.string.archive_action_delete),
+                    color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.wearMarquee(),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
+                )
             }
         }
     }
@@ -323,8 +381,12 @@ fun ArchiveDetailScreen(
                     ),
                 ) {
                     Text(
-                        stringResource(R.string.action_delete),
+                        text = stringResource(R.string.action_delete),
                         color = MaterialTheme.colorScheme.error,
+                        modifier = Modifier.wearMarquee(),
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
                     )
                 }
             },
@@ -336,7 +398,13 @@ fun ArchiveDetailScreen(
                     interactionSource = dismissInteraction,
                     colors = BoompalaButtonDefaults.outlinedButtonColors(),
                 ) {
-                    Text(stringResource(R.string.action_cancel))
+                    Text(
+                        text = stringResource(R.string.action_cancel),
+                        modifier = Modifier.wearMarquee(),
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
+                    )
                 }
             },
         )
@@ -385,7 +453,10 @@ private fun ArchiveEditDialog(
                                 Text(
                                     text = label,
                                     fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
+                                    modifier = Modifier.wearMarquee(),
                                     maxLines = 1,
+                                    softWrap = false,
+                                    overflow = TextOverflow.Ellipsis,
                                 )
                             }
                         }
@@ -401,7 +472,13 @@ private fun ArchiveEditDialog(
                 modifier = Modifier.wearPressFeedback(saveInteraction),
                 interactionSource = saveInteraction,
             ) {
-                Text(stringResource(R.string.action_save))
+                Text(
+                    text = stringResource(R.string.action_save),
+                    modifier = Modifier.wearMarquee(),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
+                )
             }
         },
         dismissButton = {
@@ -412,7 +489,13 @@ private fun ArchiveEditDialog(
                 interactionSource = cancelInteraction,
                 colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) {
-                Text(stringResource(R.string.action_cancel))
+                Text(
+                    text = stringResource(R.string.action_cancel),
+                    modifier = Modifier.wearMarquee(),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
+                )
             }
         },
     )
@@ -487,6 +570,10 @@ fun ArchiveTagScreen(
                             Text(
                                 text = if (selected) "✓ $label" else label,
                                 fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
+                                modifier = Modifier.wearMarquee(),
+                                maxLines = 1,
+                                softWrap = false,
+                                overflow = TextOverflow.Ellipsis,
                             )
                         }
                     }
@@ -513,7 +600,13 @@ fun ArchiveTagScreen(
                     .wearPressFeedback(saveInteraction),
                 interactionSource = saveInteraction,
             ) {
-                Text(stringResource(R.string.archive_save_btn))
+                Text(
+                    text = stringResource(R.string.archive_save_btn),
+                    modifier = Modifier.wearMarquee(),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
+                )
             }
         }
         item {
@@ -526,7 +619,13 @@ fun ArchiveTagScreen(
                 interactionSource = cancelInteraction,
                 colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) {
-                Text(stringResource(R.string.action_cancel))
+                Text(
+                    text = stringResource(R.string.action_cancel),
+                    modifier = Modifier.wearMarquee(),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
+                )
             }
         }
     }

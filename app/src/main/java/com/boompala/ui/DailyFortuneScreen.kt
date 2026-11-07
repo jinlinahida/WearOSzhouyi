@@ -149,10 +149,21 @@ fun DailyFortuneScreen(
             Column(
                 verticalArrangement = Arrangement.spacedBy(metrics.itemSpacing / 2),
             ) {
-                Text(gregorianText, style = MaterialTheme.typography.bodySmall)
                 Text(
-                    "农历${reading.lunarDateText} · ${reading.dayGanzhi.displayName}日 · 日干属${reading.dayStemElement.displayName}",
+                    text = gregorianText,
                     style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.wearMarquee(),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                Text(
+                    text = "农历${reading.lunarDateText} · ${reading.dayGanzhi.displayName}日 · 日干属${reading.dayStemElement.displayName}",
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.wearMarquee(),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
         }
@@ -167,7 +178,7 @@ fun DailyFortuneScreen(
                         maxLines = 1,
                         softWrap = false,
                         overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.wearMarquee(animationsEnabled),
+                        modifier = Modifier.wearMarquee(),
                     )
                     Text(
                         text = "【${personalFortune.shiShenName}】${personalFortune.themeTitle}",
@@ -177,7 +188,7 @@ fun DailyFortuneScreen(
                         maxLines = 1,
                         softWrap = false,
                         overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.wearMarquee(animationsEnabled),
+                        modifier = Modifier.wearMarquee(),
                     )
                     Text(
                         text = personalFortune.themeAdvice,
@@ -186,12 +197,12 @@ fun DailyFortuneScreen(
                     DetailField(
                         label = "专属平衡色",
                         value = "${personalFortune.balanceColor.displayName} · 幸运数 ${personalFortune.balanceNumbers.joinToString("、")}",
+                        marquee = true,
                     )
                     DetailField(
                         label = "卦日感应",
                         value = personalFortune.hexagramResonance,
                         marquee = true,
-                        animationsEnabled = animationsEnabled,
                     )
                 }
             }
@@ -272,11 +283,15 @@ fun DailyFortuneScreen(
                 verticalArrangement = Arrangement.spacedBy(metrics.itemSpacing / 2),
             ) {
                 Text(
-                    stringResource(
+                    text = stringResource(
                         if (isTomorrow) R.string.daily_fortune_tomorrow_day_hexagram else R.string.daily_fortune_day_hexagram,
                         reading.dayHexagramName,
                     ),
                     style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.wearMarquee(),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
                 )
                 val summary = reading.hexagramSummary
                 if (summary != null) {
@@ -293,11 +308,15 @@ fun DailyFortuneScreen(
             item(key = "day-line") {
                 ResultCard {
                     Text(
-                        stringResource(
+                        text = stringResource(
                             if (isTomorrow) R.string.daily_fortune_tomorrow_day_line else R.string.daily_fortune_day_line,
                             reading.dayLinePosition.displayName,
                         ),
                         style = MaterialTheme.typography.titleSmall,
+                        modifier = Modifier.wearMarquee(),
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
                     )
                     Text(lineText, style = MaterialTheme.typography.bodySmall)
                 }
@@ -311,9 +330,9 @@ fun DailyFortuneScreen(
                     ),
                     style = MaterialTheme.typography.titleSmall,
                 )
-                DetailField(stringResource(R.string.daily_fortune_lucky_color), reading.luckyColor.displayName)
-                DetailField(stringResource(R.string.daily_fortune_support_color), reading.supportColor.displayName)
-                DetailField(stringResource(R.string.daily_fortune_avoid_color), reading.avoidColor.displayName)
+                DetailField(stringResource(R.string.daily_fortune_lucky_color), reading.luckyColor.displayName, marquee = true)
+                DetailField(stringResource(R.string.daily_fortune_support_color), reading.supportColor.displayName, marquee = true)
+                DetailField(stringResource(R.string.daily_fortune_avoid_color), reading.avoidColor.displayName, marquee = true)
             }
         }
         if (reading.luckyNumbers.isNotEmpty()) {
@@ -330,8 +349,9 @@ fun DailyFortuneScreen(
                     Text(stringResource(R.string.daily_fortune_directions), style = MaterialTheme.typography.titleSmall)
                     reading.directions.forEach { direction ->
                         DetailField(
-                            direction.deity.displayName,
-                            "${direction.direction.directionText}方 · ${direction.description}",
+                            label = direction.deity.displayName,
+                            value = "${direction.direction.directionText}方 · ${direction.description}",
+                            marquee = true,
                         )
                     }
                 }
@@ -343,8 +363,12 @@ fun DailyFortuneScreen(
                     Text(stringResource(R.string.daily_fortune_hours), style = MaterialTheme.typography.titleSmall)
                     reading.hours.forEach { hour ->
                         Text(
-                            "${hour.branch.displayName}时 · ${hour.periodText} · ${hour.deityName}",
+                            text = "${hour.branch.displayName}时 · ${hour.periodText} · ${hour.deityName}",
                             style = MaterialTheme.typography.bodySmall,
+                            modifier = Modifier.wearMarquee(),
+                            maxLines = 1,
+                            softWrap = false,
+                            overflow = TextOverflow.Ellipsis,
                         )
                     }
                 }
@@ -357,10 +381,10 @@ fun DailyFortuneScreen(
                     style = MaterialTheme.typography.titleSmall,
                 )
                 if (reading.jianChu.suitable.isNotEmpty()) {
-                    DetailField(stringResource(R.string.daily_fortune_suitable), reading.jianChu.suitable.joinToString("、"))
+                    DetailField(stringResource(R.string.daily_fortune_suitable), reading.jianChu.suitable.joinToString("、"), marquee = true)
                 }
                 if (reading.jianChu.avoid.isNotEmpty()) {
-                    DetailField(stringResource(R.string.daily_fortune_avoid), reading.jianChu.avoid.joinToString("、"))
+                    DetailField(stringResource(R.string.daily_fortune_avoid), reading.jianChu.avoid.joinToString("、"), marquee = true)
                 }
             }
         }
@@ -380,7 +404,13 @@ fun DailyFortuneScreen(
                 interactionSource = pressInteraction,
                 colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) {
-                Text(stringResource(R.string.action_back_home))
+                Text(
+                    text = stringResource(R.string.action_back_home),
+                    modifier = Modifier.wearMarquee(),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
+                )
             }
         }
     }

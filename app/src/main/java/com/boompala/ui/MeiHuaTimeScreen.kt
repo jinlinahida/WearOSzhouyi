@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material3.Button
 import androidx.wear.compose.material3.MaterialTheme
@@ -59,19 +60,20 @@ fun MeiHuaTimeScreen(
         }
         item(key = "meihua-time-info") {
             ResultCard {
-                DetailField("公历", gregorian)
-                DetailField("农历", fixedReading.timeInfo.lunarDate)
-                DetailField("当前时辰", fixedReading.timeInfo.hourGanzhi.earthlyBranch.displayName + "时")
+                DetailField("公历", gregorian, marquee = true)
+                DetailField("农历", fixedReading.timeInfo.lunarDate, marquee = true)
+                DetailField("当前时辰", fixedReading.timeInfo.hourGanzhi.earthlyBranch.displayName + "时", marquee = true)
                 DetailField(
-                    "参与数字",
-                    "年${fixedReading.numbers.yearBranch} 月${fixedReading.numbers.lunarMonth} " +
+                    label = "参与数字",
+                    value = "年${fixedReading.numbers.yearBranch} 月${fixedReading.numbers.lunarMonth} " +
                         "日${fixedReading.numbers.lunarDay} 时${fixedReading.numbers.hourBranch}",
+                    marquee = true,
                 )
             }
         }
         item(key = "meihua-time-preview") {
             ResultCard {
-                DetailField("上卦", fixedReading.upperTrigram.displayName)
+                DetailField("上卦", fixedReading.upperTrigram.displayName, marquee = true)
                 fixedReading.upperTrigram.linesFromBottom.indices.reversed().forEach { index ->
                     HexagramLine(
                         trigramLineDisplayAt(
@@ -80,7 +82,7 @@ fun MeiHuaTimeScreen(
                         ),
                     )
                 }
-                DetailField("下卦", fixedReading.lowerTrigram.displayName)
+                DetailField("下卦", fixedReading.lowerTrigram.displayName, marquee = true)
                 fixedReading.lowerTrigram.linesFromBottom.indices.reversed().forEach { index ->
                     HexagramLine(
                         trigramLineDisplayAt(
@@ -89,8 +91,8 @@ fun MeiHuaTimeScreen(
                         ),
                     )
                 }
-                DetailField("动爻", fixedReading.movingPosition.displayName)
-                DetailField("本卦", fixedReading.original.name)
+                DetailField("动爻", fixedReading.movingPosition.displayName, marquee = true)
+                DetailField("本卦", fixedReading.original.name, marquee = true)
             }
         }
         item(key = "meihua-time-view") {
@@ -102,7 +104,13 @@ fun MeiHuaTimeScreen(
                     .wearPressFeedback(pressInteraction),
                 interactionSource = pressInteraction,
             ) {
-                Text("查看此卦")
+                Text(
+                    text = "查看此卦",
+                    modifier = Modifier.wearMarquee(),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
+                )
             }
         }
         item(key = "meihua-time-actions") {
@@ -121,7 +129,13 @@ fun MeiHuaTimeScreen(
                     interactionSource = recastInteraction,
                     colors = BoompalaButtonDefaults.outlinedButtonColors(),
                 ) {
-                    Text("重新起卦")
+                    Text(
+                        text = "重新起卦",
+                        modifier = Modifier.wearMarquee(),
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
+                    )
                 }
 
                 val backInteraction = remember { MutableInteractionSource() }
@@ -133,7 +147,13 @@ fun MeiHuaTimeScreen(
                     interactionSource = backInteraction,
                     colors = BoompalaButtonDefaults.outlinedButtonColors(),
                 ) {
-                    Text("首页")
+                    Text(
+                        text = "首页",
+                        modifier = Modifier.wearMarquee(),
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
+                    )
                 }
             }
         }

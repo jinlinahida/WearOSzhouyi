@@ -249,8 +249,8 @@ fun LiuYaoResultContent(
         // ResultScreen: shared chrome owns only the Wear scrolling shell.
         item(key = "calendar-time") {
             ResultCard {
-                DetailField("公历", castTime)
-                DetailField("农历", result.timeInfo.lunarDate)
+                DetailField("公历", castTime, marquee = true)
+                DetailField("农历", result.timeInfo.lunarDate, marquee = true)
             }
         }
         item(key = "ai-divination") {
@@ -360,10 +360,25 @@ fun LiuYaoResultContent(
             FourPillarsCard(result)
         }
         item(key = "moving-summary") {
-            Text(movingSummary, style = MaterialTheme.typography.bodyMedium, maxLines = 1)
+            Text(
+                text = movingSummary,
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.wearMarquee(),
+                maxLines = 1,
+                softWrap = false,
+                overflow = TextOverflow.Ellipsis,
+            )
         }
         item(key = "original-yao-section-title") {
-            Text("本卦装卦", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1)
+            Text(
+                text = "本卦装卦",
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.wearMarquee(),
+                maxLines = 1,
+                softWrap = false,
+                overflow = TextOverflow.Ellipsis,
+            )
         }
         items(
             items = originalYaoCards,
@@ -377,7 +392,10 @@ fun LiuYaoResultContent(
                     text = "变卦装卦 · ${changed.name}",
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.wearMarquee(),
                     maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
             items(
@@ -436,7 +454,14 @@ private fun HexagramSummaryCard(
 ) {
     val displayModel = hexagram.toDisplayModel()
     ResultCard {
-        Text("$title：${hexagram.name}", style = MaterialTheme.typography.titleSmall)
+        Text(
+            text = "$title：${hexagram.name}",
+            style = MaterialTheme.typography.titleSmall,
+            modifier = Modifier.wearMarquee(),
+            maxLines = 1,
+            softWrap = false,
+            overflow = TextOverflow.Ellipsis,
+        )
         if (hexagram.statuses.isNotEmpty()) {
             Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                 hexagram.statuses.forEach { status ->
@@ -445,17 +470,29 @@ private fun HexagramSummaryCard(
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.Bold,
+                        modifier = Modifier.wearMarquee(),
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
                     )
                 }
             }
         }
         Text(
-            "卦宫：${hexagram.palace.displayName} · ${hexagram.element.displayName}",
+            text = "卦宫：${hexagram.palace.displayName} · ${hexagram.element.displayName}",
             style = MaterialTheme.typography.bodySmall,
+            modifier = Modifier.wearMarquee(),
+            maxLines = 1,
+            softWrap = false,
+            overflow = TextOverflow.Ellipsis,
         )
         Text(
-            "世应：${hexagram.shiPosition.displayName}/${hexagram.yingPosition.displayName}",
+            text = "世应：${hexagram.shiPosition.displayName}/${hexagram.yingPosition.displayName}",
             style = MaterialTheme.typography.bodySmall,
+            modifier = Modifier.wearMarquee(),
+            maxLines = 1,
+            softWrap = false,
+            overflow = TextOverflow.Ellipsis,
         )
         Text("卦象", style = MaterialTheme.typography.labelSmall)
         displayModel.linesFromBottom.indices.reversed().forEach { index ->
@@ -469,8 +506,20 @@ private fun FourPillarsCard(result: DivinationResult) {
     val timeInfo = result.timeInfo
     ResultCard {
         Text("四柱", style = MaterialTheme.typography.titleSmall)
-        Text("年柱：${timeInfo.yearGanzhi.displayName}    月柱：${timeInfo.monthGanzhi.displayName}")
-        Text("日柱：${timeInfo.dayGanzhi.displayName}    时柱：${timeInfo.hourGanzhi.displayName}")
+        Text(
+            text = "年柱：${timeInfo.yearGanzhi.displayName}    月柱：${timeInfo.monthGanzhi.displayName}",
+            modifier = Modifier.wearMarquee(),
+            maxLines = 1,
+            softWrap = false,
+            overflow = TextOverflow.Ellipsis,
+        )
+        Text(
+            text = "日柱：${timeInfo.dayGanzhi.displayName}    时柱：${timeInfo.hourGanzhi.displayName}",
+            modifier = Modifier.wearMarquee(),
+            maxLines = 1,
+            softWrap = false,
+            overflow = TextOverflow.Ellipsis,
+        )
     }
 }
 
@@ -513,28 +562,46 @@ private fun YaoDetailCard(card: YaoCardData, animationsEnabled: Boolean = true) 
     ResultCard(modifier = glowModifier) {
         HexagramLine(card.lineDisplay)
         Text(
-            "${card.position.displayName} · ${card.yinYang} · ${card.motion}" + if (isYongShen) " [用神]" else "",
+            text = "${card.position.displayName} · ${card.yinYang} · ${card.motion}" + if (isYongShen) " [用神]" else "",
             style = MaterialTheme.typography.titleSmall,
             color = if (isYongShen) Color(0xFFFFD700) else if (isMoving) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
+            modifier = Modifier.wearMarquee(),
+            maxLines = 1,
+            softWrap = false,
+            overflow = TextOverflow.Ellipsis,
         )
         card.changeDescription?.let { description ->
-            Text(description, style = MaterialTheme.typography.labelMedium)
+            Text(
+                text = description,
+                style = MaterialTheme.typography.labelMedium,
+                modifier = Modifier.wearMarquee(),
+                maxLines = 1,
+                softWrap = false,
+                overflow = TextOverflow.Ellipsis,
+            )
         }
         card.shiYing?.let { marker ->
-            Text(marker, style = MaterialTheme.typography.labelMedium)
+            Text(
+                text = marker,
+                style = MaterialTheme.typography.labelMedium,
+                modifier = Modifier.wearMarquee(),
+                maxLines = 1,
+                softWrap = false,
+                overflow = TextOverflow.Ellipsis,
+            )
         }
-        DetailField(label = "六神", value = card.sixSpirit)
-        DetailField(label = "六亲", value = card.sixRelation)
-        DetailField(label = "天干地支", value = card.ganzhi)
-        DetailField(label = "五行", value = card.element)
+        DetailField(label = "六神", value = card.sixSpirit, marquee = true)
+        DetailField(label = "六亲", value = card.sixRelation, marquee = true)
+        DetailField(label = "天干地支", value = card.ganzhi, marquee = true)
+        DetailField(label = "五行", value = card.element, marquee = true)
         card.fuShenDisplay?.let { fuShenText ->
-            DetailField(label = "伏神", value = fuShenText)
+            DetailField(label = "伏神", value = fuShenText, marquee = true)
         }
         if (card.statusBadges.isNotEmpty()) {
-            DetailField(label = "神煞/状态", value = card.statusBadges.joinToString(" · "))
+            DetailField(label = "神煞/状态", value = card.statusBadges.joinToString(" · "), marquee = true)
         }
         if (card.isVoid) {
-            DetailField(label = "旬空", value = "空亡")
+            DetailField(label = "旬空", value = "空亡", marquee = true)
         }
         card.lineText?.let { lineText ->
             Text("动爻爻辞", style = MaterialTheme.typography.labelMedium)

@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material3.Button
 import androidx.wear.compose.material3.MaterialTheme
@@ -82,7 +83,7 @@ fun TarotOneCardScreen(
 
             item(key = "tarot-deck-selection") {
                 ResultCard {
-                    DetailField("牌组类型", currentDeckType.displayName)
+                    DetailField("牌组类型", currentDeckType.displayName, marquee = true)
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(metrics.itemSpacing),
@@ -102,7 +103,13 @@ fun TarotOneCardScreen(
                             interactionSource = deckInteraction,
                             colors = BoompalaButtonDefaults.outlinedButtonColors(),
                         ) {
-                            Text(if (currentDeckType == DeckType.FULL_78) "22张大牌" else "78张全牌")
+                            Text(
+                                text = if (currentDeckType == DeckType.FULL_78) "22张大牌" else "78张全牌",
+                                modifier = Modifier.wearMarquee(),
+                                maxLines = 1,
+                                softWrap = false,
+                                overflow = TextOverflow.Ellipsis,
+                            )
                         }
                     }
                 }
@@ -110,7 +117,7 @@ fun TarotOneCardScreen(
 
             item(key = "tarot-reversed-selection") {
                 ResultCard {
-                    DetailField("逆位规则", if (currentAllowReversed) "允许逆位" else "仅正位")
+                    DetailField("逆位规则", if (currentAllowReversed) "允许逆位" else "仅正位", marquee = true)
                     val reversedInteraction = remember { MutableInteractionSource() }
                     BoompalaCardButton(
                         onClick = { currentAllowReversed = !currentAllowReversed },
@@ -120,7 +127,13 @@ fun TarotOneCardScreen(
                         interactionSource = reversedInteraction,
                         colors = BoompalaButtonDefaults.outlinedButtonColors(),
                     ) {
-                        Text(if (currentAllowReversed) "仅正位" else "允许逆位")
+                        Text(
+                            text = if (currentAllowReversed) "仅正位" else "允许逆位",
+                            modifier = Modifier.wearMarquee(),
+                            maxLines = 1,
+                            softWrap = false,
+                            overflow = TextOverflow.Ellipsis,
+                        )
                     }
                 }
             }
@@ -142,7 +155,13 @@ fun TarotOneCardScreen(
                         .wearPressFeedback(drawInteraction),
                     interactionSource = drawInteraction,
                 ) {
-                    Text("抽牌")
+                    Text(
+                        text = "抽牌",
+                        modifier = Modifier.wearMarquee(),
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
+                    )
                 }
             }
 
@@ -156,7 +175,13 @@ fun TarotOneCardScreen(
                     interactionSource = backInteraction,
                     colors = BoompalaButtonDefaults.outlinedButtonColors(),
                 ) {
-                    Text("首页")
+                    Text(
+                        text = "首页",
+                        modifier = Modifier.wearMarquee(),
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
+                    )
                 }
             }
         } else {
@@ -188,12 +213,17 @@ fun TarotOneCardScreen(
                                 text = card.nameZh,
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.Bold,
+                                modifier = Modifier.wearMarquee(),
+                                maxLines = 1,
+                                softWrap = false,
+                                overflow = TextOverflow.Ellipsis,
                             )
                             DetailField(
                                 "状态",
                                 if (isReversed) "逆位" else "正位",
+                                marquee = true,
                             )
-                            DetailField("类型", "${card.arcana.displayName} · ${card.element.displayName}")
+                            DetailField("类型", "${card.arcana.displayName} · ${card.element.displayName}", marquee = true)
                         }
                     }
 
@@ -207,6 +237,10 @@ fun TarotOneCardScreen(
                             Text(
                                 text = card.keywordsZh.joinToString(" · "),
                                 style = MaterialTheme.typography.bodyMedium,
+                                modifier = Modifier.wearMarquee(),
+                                maxLines = 1,
+                                softWrap = false,
+                                overflow = TextOverflow.Ellipsis,
                             )
                         }
                     }
@@ -262,7 +296,13 @@ fun TarotOneCardScreen(
                                     .wearPressFeedback(recastInteraction),
                                 interactionSource = recastInteraction,
                             ) {
-                                Text("重抽")
+                                Text(
+                                    text = "重抽",
+                                    modifier = Modifier.wearMarquee(),
+                                    maxLines = 1,
+                                    softWrap = false,
+                                    overflow = TextOverflow.Ellipsis,
+                                )
                             }
 
                             val archiveInteraction = remember { MutableInteractionSource() }
@@ -274,7 +314,13 @@ fun TarotOneCardScreen(
                                 interactionSource = archiveInteraction,
                                 colors = BoompalaButtonDefaults.outlinedButtonColors(),
                             ) {
-                                Text("归档")
+                                Text(
+                                    text = "归档",
+                                    modifier = Modifier.wearMarquee(),
+                                    maxLines = 1,
+                                    softWrap = false,
+                                    overflow = TextOverflow.Ellipsis,
+                                )
                             }
                         }
                     }
@@ -289,7 +335,13 @@ fun TarotOneCardScreen(
                             interactionSource = finishInteraction,
                             colors = BoompalaButtonDefaults.outlinedButtonColors(),
                         ) {
-                            Text("首页")
+                            Text(
+                                text = "首页",
+                                modifier = Modifier.wearMarquee(),
+                                maxLines = 1,
+                                softWrap = false,
+                                overflow = TextOverflow.Ellipsis,
+                            )
                         }
                     }
                 }

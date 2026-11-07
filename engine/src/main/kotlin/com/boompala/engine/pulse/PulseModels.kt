@@ -48,6 +48,7 @@ data class PulseFeatureMetrics(
     val h3Ratio: Double = 0.50,
     val h2Ratio: Double = 0.38,
     val isRawPpg: Boolean = false,
+    val ectopicBeatCount: Int = 0,
     val quality: PulseDataQuality = PulseDataQuality(),
 )
 

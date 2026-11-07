@@ -148,13 +148,20 @@ fun DestinyChartMenuScreen(
                             text = "公历 ${selectedDate.year}年${selectedDate.monthValue}月${selectedDate.dayOfMonth}日 · ${SHICHEN_NAMES[selectedShichenIndex].substringBefore(" ·")}",
                             style = MaterialTheme.typography.bodySmall,
                             fontWeight = FontWeight.Bold,
+                            modifier = Modifier.wearMarquee(),
+                            maxLines = 1,
+                            softWrap = false,
+                            overflow = TextOverflow.Ellipsis,
                         )
                         if (lunarDateText.isNotBlank()) {
                             Text(
                                 text = "农历 $lunarDateText · ${selectedGender.titleZh}",
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                modifier = Modifier.wearMarquee(settings.animationsEnabled),
+                                modifier = Modifier.wearMarquee(),
+                                maxLines = 1,
+                                softWrap = false,
+                                overflow = TextOverflow.Ellipsis,
                             )
                         }
                         Spacer(modifier = Modifier.height(3.dp))
@@ -172,7 +179,14 @@ fun DestinyChartMenuScreen(
                                 contentPadding = PaddingValues(vertical = 5.dp, horizontal = 4.dp),
                                 colors = BoompalaButtonDefaults.outlinedButtonColors(),
                             ) {
-                                Text("修改生辰", style = MaterialTheme.typography.labelSmall, maxLines = 1)
+                                Text(
+                                    text = "修改生辰",
+                                    style = MaterialTheme.typography.labelSmall,
+                                    modifier = Modifier.wearMarquee(),
+                                    maxLines = 1,
+                                    softWrap = false,
+                                    overflow = TextOverflow.Ellipsis,
+                                )
                             }
 
                             val genderInter = remember { MutableInteractionSource() }
@@ -187,7 +201,14 @@ fun DestinyChartMenuScreen(
                                 contentPadding = PaddingValues(vertical = 5.dp, horizontal = 4.dp),
                                 colors = BoompalaButtonDefaults.outlinedButtonColors(),
                             ) {
-                                Text(selectedGender.titleZh, style = MaterialTheme.typography.labelSmall, maxLines = 1)
+                                Text(
+                                    text = selectedGender.titleZh,
+                                    style = MaterialTheme.typography.labelSmall,
+                                    modifier = Modifier.wearMarquee(),
+                                    maxLines = 1,
+                                    softWrap = false,
+                                    overflow = TextOverflow.Ellipsis,
+                                )
                             }
                         }
                     }
@@ -320,14 +341,14 @@ fun BaziDetailScreen(
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.wearMarquee(animationsEnabled),
+                    modifier = Modifier.wearMarquee(),
                 )
                 if (profile.lunarDateText.isNotBlank()) {
-                    DetailField(label = "农历生辰", value = profile.lunarDateText)
+                    DetailField(label = "农历生辰", value = profile.lunarDateText, marquee = true)
                 }
-                DetailField(label = "四柱干支", value = profile.fourPillarsText)
-                DetailField(label = "生肖属相", value = profile.shengXiao)
-                DetailField(label = "胎元 · 命宫", value = "${profile.taiYuan} · ${profile.mingGong}")
+                DetailField(label = "四柱干支", value = profile.fourPillarsText, marquee = true)
+                DetailField(label = "生肖属相", value = profile.shengXiao, marquee = true)
+                DetailField(label = "胎元 · 命宫", value = "${profile.taiYuan} · ${profile.mingGong}", marquee = true)
             }
         }
 
@@ -366,6 +387,10 @@ fun BaziDetailScreen(
                                 color = if (isDay) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary,
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 11.sp,
+                                modifier = Modifier.wearMarquee(),
+                                maxLines = 1,
+                                softWrap = false,
+                                overflow = TextOverflow.Ellipsis,
                             )
                             Spacer(modifier = Modifier.height(2.dp))
                             Text(
@@ -385,19 +410,30 @@ fun BaziDetailScreen(
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 fontSize = 10.sp,
+                                modifier = Modifier.wearMarquee(),
+                                maxLines = 1,
+                                softWrap = false,
+                                overflow = TextOverflow.Ellipsis,
                             )
                             Text(
                                 text = pillar.naYin,
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
                                 fontSize = 9.sp,
+                                modifier = Modifier.wearMarquee(),
                                 maxLines = 1,
+                                softWrap = false,
+                                overflow = TextOverflow.Ellipsis,
                             )
                             Text(
                                 text = pillar.diShi,
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
                                 fontSize = 9.sp,
+                                modifier = Modifier.wearMarquee(),
+                                maxLines = 1,
+                                softWrap = false,
+                                overflow = TextOverflow.Ellipsis,
                             )
                         }
                     }
@@ -448,6 +484,10 @@ fun BaziDetailScreen(
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.Bold,
+                    modifier = Modifier.wearMarquee(),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
             val currentYear = LocalDate.now().year
@@ -543,7 +583,7 @@ fun WesternChartScreen(
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.wearMarquee(animationsEnabled),
+                    modifier = Modifier.wearMarquee(),
                 )
                 Spacer(modifier = Modifier.height(4.dp))
 
@@ -557,11 +597,19 @@ fun WesternChartScreen(
                         text = "太阳 ☉ ${reading.sun.sign.displayNameZh}",
                         style = MaterialTheme.typography.bodySmall,
                         fontWeight = FontWeight.Bold,
+                        modifier = Modifier.weight(1f, fill = false).wearMarquee(),
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
                     )
                     Text(
                         text = "第${reading.sun.houseNumber}宫 · ${reading.sun.formattedDegree}",
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.wearMarquee(),
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
                     )
                 }
 
@@ -576,11 +624,19 @@ fun WesternChartScreen(
                         text = "月亮 ☽ ${reading.moon.sign.displayNameZh}",
                         style = MaterialTheme.typography.bodySmall,
                         fontWeight = FontWeight.Bold,
+                        modifier = Modifier.weight(1f, fill = false).wearMarquee(),
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
                     )
                     Text(
                         text = "第${reading.moon.houseNumber}宫 · ${reading.moon.formattedDegree}",
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.wearMarquee(),
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
                     )
                 }
 
@@ -596,11 +652,19 @@ fun WesternChartScreen(
                             text = "上升 ASC ${asc.sign.displayNameZh}",
                             style = MaterialTheme.typography.bodySmall,
                             fontWeight = FontWeight.Bold,
+                            modifier = Modifier.weight(1f, fill = false).wearMarquee(),
+                            maxLines = 1,
+                            softWrap = false,
+                            overflow = TextOverflow.Ellipsis,
                         )
                         Text(
                             text = "第${asc.houseNumber}宫 · ${asc.formattedDegree}",
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.wearMarquee(),
+                            maxLines = 1,
+                            softWrap = false,
+                            overflow = TextOverflow.Ellipsis,
                         )
                     }
                 }
@@ -620,6 +684,10 @@ fun WesternChartScreen(
                     text = eb.balanceSummaryZh,
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Bold,
+                    modifier = Modifier.wearMarquee(),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
                 )
                 Spacer(modifier = Modifier.height(4.dp))
 
@@ -648,12 +716,18 @@ fun WesternChartScreen(
                                 style = MaterialTheme.typography.labelSmall,
                                 fontWeight = FontWeight.Bold,
                                 color = Color(elem.colorHex),
+                                modifier = Modifier.wearMarquee(),
+                                maxLines = 1,
+                                softWrap = false,
+                                overflow = TextOverflow.Ellipsis,
                             )
                             Text(
                                 text = bodiesText,
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.weight(1f, fill = false).wearMarquee(),
                                 maxLines = 1,
+                                softWrap = false,
                                 overflow = TextOverflow.Ellipsis,
                             )
                         }
@@ -683,11 +757,19 @@ fun WesternChartScreen(
                             text = "${p.body.displayNameZh} ${p.body.symbol}",
                             style = MaterialTheme.typography.bodySmall,
                             fontWeight = FontWeight.Bold,
+                            modifier = Modifier.weight(1f, fill = false).wearMarquee(),
+                            maxLines = 1,
+                            softWrap = false,
+                            overflow = TextOverflow.Ellipsis,
                         )
                         Text(
                             text = "${p.sign.displayNameZh} · 第${p.houseNumber}宫 (${p.formattedDegree})",
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.wearMarquee(),
+                            maxLines = 1,
+                            softWrap = false,
+                            overflow = TextOverflow.Ellipsis,
                         )
                     }
                 }
@@ -702,7 +784,13 @@ fun WesternChartScreen(
                 interactionSource = backInter,
                 colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) {
-                Text(stringResource(R.string.action_back))
+                Text(
+                    text = stringResource(R.string.action_back),
+                    modifier = Modifier.wearMarquee(),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
+                )
             }
         }
     }
@@ -754,14 +842,20 @@ fun NumerologyDetailScreen(
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().wearMarquee(),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
                 )
                 Text(
                     text = reading.lifePathInfo.keywordsZh,
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.primary,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().wearMarquee(),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
                 )
                 Text(
                     text = reading.lifePathInfo.descriptionZh,
@@ -781,9 +875,9 @@ fun NumerologyDetailScreen(
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Column(modifier = Modifier.fillMaxWidth()) {
-                    DetailField(label = "生日数", value = reading.birthdayNumber.toString())
-                    DetailField(label = "态度数", value = reading.attitudeNumber.toString())
-                    DetailField(label = "流年数", value = reading.personalYearNumber.toString())
+                    DetailField(label = "生日数", value = reading.birthdayNumber.toString(), marquee = true)
+                    DetailField(label = "态度数", value = reading.attitudeNumber.toString(), marquee = true)
+                    DetailField(label = "流年数", value = reading.personalYearNumber.toString(), marquee = true)
                 }
             }
         }
@@ -837,7 +931,7 @@ fun NumerologyDetailScreen(
                 }
 
                 reading.loShuGrid.lines.filter { it.isComplete }.forEach { line ->
-                    DetailField(label = "✓ ${line.nameZh}", value = line.descriptionZh)
+                    DetailField(label = "✓ ${line.nameZh}", value = line.descriptionZh, marquee = true)
                 }
                 if (reading.loShuGrid.lines.none { it.isComplete }) {
                     Text(
@@ -857,7 +951,13 @@ fun NumerologyDetailScreen(
                 interactionSource = backInter,
                 colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) {
-                Text(stringResource(R.string.action_back))
+                Text(
+                    text = stringResource(R.string.action_back),
+                    modifier = Modifier.wearMarquee(),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
+                )
             }
         }
     }
@@ -901,29 +1001,63 @@ fun BoneWeightDetailScreen(
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().wearMarquee(),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
                 )
                 Text(
                     text = reading.lunarDateText,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().wearMarquee(),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
-                    Text("年骨：${reading.yearWeightQian}钱", style = MaterialTheme.typography.labelSmall)
-                    Text("月骨：${reading.monthWeightQian}钱", style = MaterialTheme.typography.labelSmall)
+                    Text(
+                        text = "年骨：${reading.yearWeightQian}钱",
+                        style = MaterialTheme.typography.labelSmall,
+                        modifier = Modifier.wearMarquee(),
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                    Text(
+                        text = "月骨：${reading.monthWeightQian}钱",
+                        style = MaterialTheme.typography.labelSmall,
+                        modifier = Modifier.wearMarquee(),
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
+                    )
                 }
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
-                    Text("日骨：${reading.dayWeightQian}钱", style = MaterialTheme.typography.labelSmall)
-                    Text("时骨：${reading.hourWeightQian}钱", style = MaterialTheme.typography.labelSmall)
+                    Text(
+                        text = "日骨：${reading.dayWeightQian}钱",
+                        style = MaterialTheme.typography.labelSmall,
+                        modifier = Modifier.wearMarquee(),
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                    Text(
+                        text = "时骨：${reading.hourWeightQian}钱",
+                        style = MaterialTheme.typography.labelSmall,
+                        modifier = Modifier.wearMarquee(),
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
+                    )
                 }
             }
         }
@@ -970,7 +1104,13 @@ fun BoneWeightDetailScreen(
                 interactionSource = backInter,
                 colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) {
-                Text(stringResource(R.string.action_back))
+                Text(
+                    text = stringResource(R.string.action_back),
+                    modifier = Modifier.wearMarquee(),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
+                )
             }
         }
     }
@@ -1011,10 +1151,14 @@ fun NineStarDetailScreen(
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.wearMarquee(),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
                 )
-                DetailField(label = "本命卦象", value = reading.yearStar.trigramZh)
-                DetailField(label = "守护五行", value = reading.yearStar.element.displayName)
-                DetailField(label = "吉旺方位", value = reading.yearStar.luckyDirectionsZh)
+                DetailField(label = "本命卦象", value = reading.yearStar.trigramZh, marquee = true)
+                DetailField(label = "守护五行", value = reading.yearStar.element.displayName, marquee = true)
+                DetailField(label = "吉旺方位", value = reading.yearStar.luckyDirectionsZh, marquee = true)
                 Text(
                     text = reading.yearStar.personalityZh,
                     style = MaterialTheme.typography.bodySmall,
@@ -1035,9 +1179,13 @@ fun NineStarDetailScreen(
                     text = reading.monthStar.nameZh,
                     style = MaterialTheme.typography.bodySmall,
                     fontWeight = FontWeight.Bold,
+                    modifier = Modifier.wearMarquee(),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
                 )
-                DetailField(label = "月命卦象", value = reading.monthStar.trigramZh)
-                DetailField(label = "气场特质", value = reading.monthStar.natureZh)
+                DetailField(label = "月命卦象", value = reading.monthStar.trigramZh, marquee = true)
+                DetailField(label = "气场特质", value = reading.monthStar.natureZh, marquee = true)
             }
         }
 
@@ -1052,6 +1200,10 @@ fun NineStarDetailScreen(
                     text = reading.energyThemeZh,
                     style = MaterialTheme.typography.bodySmall,
                     fontWeight = FontWeight.Bold,
+                    modifier = Modifier.wearMarquee(),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
         }
@@ -1064,7 +1216,13 @@ fun NineStarDetailScreen(
                 interactionSource = backInter,
                 colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) {
-                Text(stringResource(R.string.action_back))
+                Text(
+                    text = stringResource(R.string.action_back),
+                    modifier = Modifier.wearMarquee(),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
+                )
             }
         }
     }
@@ -1100,8 +1258,10 @@ private fun DestinyShichenPicker(
                 text = "选择出生时辰",
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(top = 4.dp, bottom = 2.dp),
+                modifier = Modifier.padding(top = 4.dp, bottom = 2.dp).wearMarquee(),
                 maxLines = 1,
+                softWrap = false,
+                overflow = TextOverflow.Ellipsis,
             )
             Picker(
                 state = pickerState,
@@ -1123,6 +1283,7 @@ private fun DestinyShichenPicker(
                     } else {
                         MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                     },
+                    modifier = Modifier.wearMarquee(),
                     maxLines = 1,
                     softWrap = false,
                     overflow = TextOverflow.Ellipsis,
@@ -1141,7 +1302,10 @@ private fun DestinyShichenPicker(
                 Text(
                     text = "✓ 确定",
                     fontWeight = FontWeight.Bold,
+                    modifier = Modifier.wearMarquee(),
                     maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
         }

@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.remember
@@ -28,6 +29,7 @@ import com.boompala.ui.LocalUiMetrics
 import com.boompala.ui.ResultCard
 import com.boompala.ui.RotaryScrollColumn
 import com.boompala.ui.ScreenTitle
+import com.boompala.ui.wearMarquee
 import com.boompala.ui.wearPressFeedback
 
 /**
@@ -77,11 +79,19 @@ fun PulseResultScreen(
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.wearMarquee(),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
                 )
                 Text(
                     text = result.category.natureSummary,
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.wearMarquee(),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
         }
@@ -132,13 +142,21 @@ fun PulseResultScreen(
                 }
                 Text(
                     text = if (hasMeasuredWaveform) {
-                        "实测脉图 (20s) · ${result.category.classicPhrase}"
+                        if (result.metrics.isRawPpg) {
+                            "实测光电脉图 (20s) · ${result.category.classicPhrase}"
+                        } else {
+                            "实测心搏节律图 (20s) · ${result.category.classicPhrase}"
+                        }
                     } else {
                         "脉象特征 · ${result.category.classicPhrase}"
                     },
                     style = MaterialTheme.typography.labelSmall,
                     fontWeight = FontWeight.Bold,
                     color = Color(0xFF00E5A3),
+                    modifier = Modifier.wearMarquee(),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
                 )
                 Text(
                     text = profile.featureDescription,
@@ -154,11 +172,19 @@ fun PulseResultScreen(
                     text = "【宜】 ${profile.dosList.joinToString(" · ")}",
                     style = MaterialTheme.typography.bodySmall,
                     color = Color(0xFF00E5A3),
+                    modifier = Modifier.wearMarquee(),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
                 )
                 Text(
                     text = "【忌】 ${profile.dontsList.joinToString(" · ")}",
                     style = MaterialTheme.typography.bodySmall,
                     color = Color(0xFFFF6B6B),
+                    modifier = Modifier.wearMarquee(),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
         }
@@ -182,6 +208,10 @@ fun PulseResultScreen(
                             style = MaterialTheme.typography.bodySmall,
                             fontWeight = FontWeight.SemiBold,
                             color = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.wearMarquee(),
+                            maxLines = 1,
+                            softWrap = false,
+                            overflow = TextOverflow.Ellipsis,
                         )
                         Text(
                             text = syndrome.symptoms,
@@ -262,6 +292,7 @@ fun PulseResultScreen(
                 DetailField(
                     label = "时辰经络 · ${result.meridianInfo.earthlyBranch} (${result.meridianInfo.timeRangeText})",
                     value = "${result.meridianInfo.meridianName}当令",
+                    marquee = true,
                 )
                 Text(
                     text = result.meridianInfo.healthGuidance,
@@ -288,7 +319,13 @@ fun PulseResultScreen(
                 interactionSource = archivePressInteraction,
                 colors = BoompalaButtonDefaults.outlinedButtonColors(),
             ) {
-                Text("归档")
+                Text(
+                    text = "归档",
+                    modifier = Modifier.wearMarquee(),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
+                )
             }
         }
     }

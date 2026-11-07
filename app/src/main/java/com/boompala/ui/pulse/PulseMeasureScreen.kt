@@ -385,11 +385,16 @@ fun PulseMeasureScreen(
 
                 is PulseSensorState.Error -> {
                     val isTimeout = currentState.reason == "wear_timeout"
-                    val title = if (isTimeout) "感应超时" else "传感器未就绪"
-                    val desc = if (isTimeout) {
-                        "未检测到手腕脉搏，请佩戴紧实后重试"
-                    } else {
-                        "未能启动手表传感器，请重试"
+                    val isUnsupported = currentState.reason == "sensor_unsupported"
+                    val title = when {
+                        isTimeout -> "感应超时"
+                        isUnsupported -> "传感器不支持"
+                        else -> "传感器未就绪"
+                    }
+                    val desc = when {
+                        isTimeout -> "未检测到手腕脉搏，请佩戴紧实后重试"
+                        isUnsupported -> "当前手表未配备硬件逐搏或光电脉搏传感器，无法进行客观把脉"
+                        else -> "未能启动手表传感器，请重试"
                     }
 
                     val scrollState = rememberScrollState()

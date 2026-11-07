@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material3.Button
 import androidx.wear.compose.material3.MaterialTheme
@@ -35,16 +36,51 @@ fun XiaoLiuRenScreen(engine: XiaoLiuRenEngine, initial: XiaoLiuRenReading?, rota
                 style = MaterialTheme.typography.titleMedium,
             )
         }
-        item { ResultCard { DetailField("公历", fmt.format(reading.timeInfo.gregorianDateTime)); DetailField("农历", reading.timeInfo.lunarDate); DetailField("当前时辰", reading.timeInfo.hourGanzhi.earthlyBranch.displayName + "时"); DetailField("起课数据", "月${reading.timeInfo.lunarMonth} 日${reading.timeInfo.lunarDay} 时${reading.timeInfo.hourGanzhi.earthlyBranch.index + 1}") } }
-        item { ResultCard { Text("六宫次序"); XiaoLiuRenPalace.entries.forEach { p -> Text(if (p == reading.finalPalace) "▶ ${p.displayName} · 课成" else p.displayName) } } }
-        item { ResultCard { DetailField("月宫", reading.monthPalace.displayName); DetailField("日宫", reading.dayPalace.displayName); DetailField("时宫/最终", reading.finalPalace.displayName); Text(reading.finalPalace.meaning) } }
+        item {
+            ResultCard {
+                DetailField("公历", fmt.format(reading.timeInfo.gregorianDateTime), marquee = true)
+                DetailField("农历", reading.timeInfo.lunarDate, marquee = true)
+                DetailField("当前时辰", reading.timeInfo.hourGanzhi.earthlyBranch.displayName + "时", marquee = true)
+                DetailField("起课数据", "月${reading.timeInfo.lunarMonth} 日${reading.timeInfo.lunarDay} 时${reading.timeInfo.hourGanzhi.earthlyBranch.index + 1}", marquee = true)
+            }
+        }
+        item {
+            ResultCard {
+                Text("六宫次序")
+                XiaoLiuRenPalace.entries.forEach { p ->
+                    Text(
+                        text = if (p == reading.finalPalace) "▶ ${p.displayName} · 课成" else p.displayName,
+                        modifier = Modifier.wearMarquee(),
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
+            }
+        }
+        item {
+            ResultCard {
+                DetailField("月宫", reading.monthPalace.displayName, marquee = true)
+                DetailField("日宫", reading.dayPalace.displayName, marquee = true)
+                DetailField("时宫/最终", reading.finalPalace.displayName, marquee = true)
+                Text(reading.finalPalace.meaning)
+            }
+        }
         item {
             val pressInteraction = remember { MutableInteractionSource() }
             BoompalaCardButton(
                 onClick = { onReading(engine.calculate(Instant.now(), ZoneId.systemDefault())) },
                 modifier = Modifier.fillMaxWidth().wearPressFeedback(pressInteraction),
                 interactionSource = pressInteraction,
-            ) { Text("重新起课") }
+            ) {
+                Text(
+                    text = "重新起课",
+                    modifier = Modifier.wearMarquee(),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
         }
         item {
             Row(
@@ -57,7 +93,15 @@ fun XiaoLiuRenScreen(engine: XiaoLiuRenEngine, initial: XiaoLiuRenReading?, rota
                     modifier = Modifier.weight(1f).wearPressFeedback(archiveInteraction),
                     interactionSource = archiveInteraction,
                     colors = BoompalaButtonDefaults.outlinedButtonColors(),
-                ) { Text("归档") }
+                ) {
+                    Text(
+                        text = "归档",
+                        modifier = Modifier.wearMarquee(),
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
 
                 val backInteraction = remember { MutableInteractionSource() }
                 BoompalaCardButton(
@@ -65,7 +109,15 @@ fun XiaoLiuRenScreen(engine: XiaoLiuRenEngine, initial: XiaoLiuRenReading?, rota
                     modifier = Modifier.weight(1f).wearPressFeedback(backInteraction),
                     interactionSource = backInteraction,
                     colors = BoompalaButtonDefaults.outlinedButtonColors(),
-                ) { Text("首页") }
+                ) {
+                    Text(
+                        text = "首页",
+                        modifier = Modifier.wearMarquee(),
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
             }
         }
     }
